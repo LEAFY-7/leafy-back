@@ -31,6 +31,12 @@ spring:
     # true로 설정하면 데이터베이스 연결 시점에 초기화함
     defer-datasource-initialization: true
 
+# mybatis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+
 logging:
   level:
     root: info
