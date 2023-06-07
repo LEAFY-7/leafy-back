@@ -1,8 +1,8 @@
 package bucheon.leafy.application.repository;
 
-import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
 }
