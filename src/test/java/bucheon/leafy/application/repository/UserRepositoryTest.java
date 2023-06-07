@@ -3,6 +3,7 @@ package bucheon.leafy.application.repository;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,19 @@ class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
+
+    @Autowired
+    UserImageRepository userImageRepository;
+
+    @AfterEach
+    void tearDown(){
+        addressRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+        userImageRepository.deleteAllInBatch();
+    }
 
     @Test
     @DisplayName("유저 정보 저장하기")
