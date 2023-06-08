@@ -25,7 +25,7 @@ public class Board extends BaseDeleteEntity {
 
     private Boolean isHide;
 
-    @OneToOne
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL)
     private BoardLike boardLike;
 
     @JoinColumn(name = "board_id")
@@ -36,15 +36,20 @@ public class Board extends BaseDeleteEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BoardTag> boardTags = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
+
+
     @Builder
     private Board(String title, String contents, Boolean isHide, BoardLike boardLike,
-                 List<BoardComment> boardComments, List<BoardTag> boardTags) {
+                 List<BoardComment> boardComments, List<BoardTag> boardTags, BoardType boardType) {
         this.title = title;
         this.contents = contents;
         this.isHide = isHide;
         this.boardLike = boardLike;
         this.boardComments = boardComments;
         this.boardTags = boardTags;
+        this.boardType = boardType;
     }
 
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +20,7 @@ public class User extends BaseDeleteEntity {
     private Long id;
 
     private String customerId;
+
     private String password;
 
     private String email;
@@ -31,8 +33,11 @@ public class User extends BaseDeleteEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> address = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserImage userImage;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @Builder
     private User(String customerId, String password, String email, String nickName,
@@ -44,6 +49,11 @@ public class User extends BaseDeleteEntity {
         this.phone = phone;
         this.address = address;
         this.userImage = userImage;
+        this.userRole = UserRole.NORMAL;
+    }
+
+    public void giveRole(){
+        this.userRole = UserRole.ADMIN;
     }
 
 }
