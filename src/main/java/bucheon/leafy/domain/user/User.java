@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.user.dto.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -41,7 +42,8 @@ public class User extends BaseDeleteEntity {
 
     @Builder
     private User(String customerId, String password, String email, String nickName,
-                 String phone, List<Address> address, UserImage userImage) {
+                 String phone, List<Address> address, UserImage userImage, UserRole userRole) {
+
         this.customerId = customerId;
         this.password = password;
         this.email = email;
@@ -49,7 +51,29 @@ public class User extends BaseDeleteEntity {
         this.phone = phone;
         this.address = address;
         this.userImage = userImage;
-        this.userRole = UserRole.NORMAL;
+        this.userRole = userRole;
+
+    }
+
+    public static User of(SignUpRequest signUpRequest) {
+        Address address = Address.of(signUpRequest);
+        UserImage userImage = UserImage.of(signUpRequest);
+
+        return User.builder()
+                .customerId(signUpRequest.getCustomerId())
+                .password(signUpRequest.getPassword())
+                .email(signUpRequest.getEmail())
+                .nickName(signUpRequest.getNickName())
+                .phone(signUpRequest.getPhone())
+                .address(List.of(address))
+                .userImage(userImage)
+                .userRole(UserRole.NORMAL)
+                .build();
+
+    }
+
+    public void changePassword(String encodePassword){
+        this.password = encodePassword;
     }
 
     public void giveRole(){
