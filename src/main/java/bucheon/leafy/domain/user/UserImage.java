@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.user.dto.request.SignUpRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,10 @@ public class UserImage {
         this.image = image;
     }
 
+    // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
+    public static UserImage of(SignUpRequest signUpRequest) {
+        return UserImage.builder()
+                .image(signUpRequest.getUserImage())
+                .build();
+    }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
-public class UserPrincipal implements UserDetails {
+public class AuthUser implements UserDetails {
 
     private final User user;
 
@@ -36,21 +36,21 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !user.getIsDelete();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getIsDelete();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !user.getIsDelete();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getIsDelete();
     }
 }
