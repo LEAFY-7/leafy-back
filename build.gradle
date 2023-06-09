@@ -36,6 +36,11 @@ dependencies {
 
 	// Validation
 	implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.0.Final'
+    implementation 'com.philihp:weblabora:3.0.1'
+	implementation 'com.philihp:weblabora:3.0.1'
+	implementation 'com.philihp:weblabora:3.0.1'
+	implementation 'com.philihp:weblabora:3.0.1'
+	testImplementation 'junit:junit:4.13.1'
 
     // DB
 	runtimeOnly 'com.mysql:mysql-connector-j'
