@@ -1,67 +1,98 @@
 package bucheon.leafy.config;
 
+import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.application.service.AuthoritiesUserService;
+import bucheon.leafy.config.jwt.JwtAuthenticationFilter;
+import bucheon.leafy.config.jwt.JwtAuthorizationFilter;
+import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final AuthoritiesUserService authoritiesUserService;
+    private final UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.headers()
-                .frameOptions()
-                .disable()
-                .and()
-                .csrf()
-                .disable();
+        http.httpBasic().disable(); // basic authentication filter 비활성화
+        http.csrf().disable();
 
-        http.cors()
-                .and().authorizeRequests();
+        // remember-me
+        http.rememberMe().disable();
 
+        // stateless
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // jwt filter
+        http.addFilterBefore(
+                new JwtAuthenticationFilter(authenticationManager()),
+                UsernamePasswordAuthenticationFilter.class
+        ).addFilterBefore(
+                new JwtAuthorizationFilter(userRepository),
+                BasicAuthenticationFilter.class
+        );
+
+        http.httpBasic().disable();
+        http.csrf();
+        http.rememberMe();
         http.authorizeRequests()
-                .antMatchers("/**")
+                .antMatchers("/", "/user/sign-in", "/user/sign-up")
                 .permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
+                .anyRequest()
+                .authenticated();
+
+        http.formLogin()
+                .loginPage("/sing-in")
                 .defaultSuccessUrl("/")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/logout")
-                .invalidateHttpSession(true);
+                .permitAll();
+
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/sign-out"))
+                .logoutSuccessUrl("/");
     }
 
-    // 시큐리티 CORS 섹션을 참고하자
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
+
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // 모든 도메인에서 접근 허용
-        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
-        configuration.addAllowedHeader("*"); // 모든 헤더 허용
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @Override
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            AuthUser user = authoritiesUserService.findAuthUserByEmail(username);
+            if (user == null) {
+                throw new UserNotFoundException();
+            }
+            return user;
+        };
     }
-
 }

@@ -1,6 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.dto.request.SignInRequest;
 import bucheon.leafy.domain.user.dto.request.SignUpRequest;
@@ -29,6 +30,8 @@ public class AuthoritiesUserService {
         return ResponseEntity.status(200).body("회원가입 완료");
     }
 
+
+
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
@@ -43,4 +46,12 @@ public class AuthoritiesUserService {
 
         throw new PasswordNotMatchedException();
     }
+
+    public AuthUser findAuthUserByEmail(String email) {
+        User user = userRepository.findByUserEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        AuthUser authUser = new AuthUser(user);
+        return authUser;
+    }
+
 }

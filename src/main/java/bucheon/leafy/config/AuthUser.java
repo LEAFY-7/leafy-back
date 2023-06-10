@@ -19,7 +19,7 @@ public class AuthUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // 아이디별 권한 설정 여기서 실행하면됨!!
+
 
         return authorities;
     }
@@ -31,7 +31,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getCustomerId();
+        return user.getEmail();
     }
 
     @Override

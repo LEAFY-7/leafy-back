@@ -20,8 +20,6 @@ public class User extends BaseDeleteEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customerId;
-
     private String password;
 
     private String email;
@@ -41,10 +39,9 @@ public class User extends BaseDeleteEntity {
     private UserRole userRole;
 
     @Builder
-    private User(String customerId, String password, String email, String nickName,
-                 String phone, List<Address> address, UserImage userImage, UserRole userRole) {
+    private User(String password, String email, String nickName, String phone,
+                 List<Address> address, UserImage userImage, UserRole userRole) {
 
-        this.customerId = customerId;
         this.password = password;
         this.email = email;
         this.nickName = nickName;
@@ -60,7 +57,6 @@ public class User extends BaseDeleteEntity {
         UserImage userImage = UserImage.of(signUpRequest);
 
         return User.builder()
-                .customerId(signUpRequest.getCustomerId())
                 .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .nickName(signUpRequest.getNickName())

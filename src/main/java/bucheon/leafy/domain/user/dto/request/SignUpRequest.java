@@ -12,15 +12,12 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class SignUpRequest {
 
-        @NotBlank(message = "id를 입력해주세요")
-        private String customerId;
-
-        @NotBlank(message = "비밀번호를 입력해주세요")
-        private String password;
-
         @NotBlank(message = "이메일을 입력해주세요")
         @Email(message = "이메일 형식을 맞춰주세요")
         private String email;
+
+        @NotBlank(message = "비밀번호를 입력해주세요")
+        private String password;
 
         @NotBlank(message = "넥네임을 입력해주세요")
         private String nickName;
@@ -43,11 +40,10 @@ public class SignUpRequest {
         private String userImage;
 
         @Builder
-        private SignUpRequest(String customerId, String password, String email, String nickName,
+        private SignUpRequest(String password, String email, String nickName,
                              String phone, String zipcode, String street, String lot,
                              String detail, String reference, String userImage) {
 
-                this.customerId = customerId;
                 this.password = password;
                 this.email = email;
                 this.nickName = nickName;
