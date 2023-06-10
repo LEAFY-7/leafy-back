@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.board.Board;
 import bucheon.leafy.domain.user.dto.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
@@ -29,6 +30,9 @@ public class User extends BaseDeleteEntity {
     private String nickName;
 
     private String phone;
+
+    @OneToMany()
+    private List<Board> boards = new ArrayList<>();
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

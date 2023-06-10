@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -42,7 +43,7 @@ public class Board extends BaseDeleteEntity {
 
     @Builder
     private Board(String title, String contents, Boolean isHide, BoardLike boardLike,
-                 List<BoardComment> boardComments, List<BoardTag> boardTags, BoardType boardType) {
+                  List<BoardComment> boardComments, List<BoardTag> boardTags, BoardType boardType) {
         this.title = title;
         this.contents = contents;
         this.isHide = isHide;
