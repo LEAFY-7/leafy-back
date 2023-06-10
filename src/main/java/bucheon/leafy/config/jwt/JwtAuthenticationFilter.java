@@ -27,17 +27,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * 로그인 인증 시도
      */
     @Override
-    public Authentication attemptAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request,
+                                                HttpServletResponse response) throws AuthenticationException {
 
         // 로그인할 때 입력한 username 과 password 를 가지고 authenticationToken 를 생성한다.
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 request.getParameter("username"),
                 request.getParameter("password"),
-                new ArrayList<>()
-        );
+                new ArrayList<>());
 
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -47,12 +44,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      * JWT Token을 생성해서 쿠키에 넣는다.
      */
     @Override
-    protected void successfulAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain chain,
-            Authentication authResult
-    ) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult ) throws IOException {
+
         User user = (User) authResult.getPrincipal();
         String token = JwtUtils.createToken(user);
 
@@ -65,11 +61,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException failed
-    ) throws IOException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed ) throws IOException {
+
         response.sendRedirect("/user/sign-in");
     }
 

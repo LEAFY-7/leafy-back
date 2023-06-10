@@ -4,6 +4,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.application.service.AuthoritiesUserService;
 import bucheon.leafy.config.jwt.JwtAuthenticationFilter;
 import bucheon.leafy.config.jwt.JwtAuthorizationFilter;
+import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -28,7 +29,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AuthoritiesUserService authoritiesUserService;
+
     private final UserRepository userRepository;
 
     @Bean
@@ -68,14 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();
 
-        http.formLogin()
-                .loginPage("/sing-in")
-                .defaultSuccessUrl("/")
-                .permitAll();
-
-        http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/sign-out"))
-                .logoutSuccessUrl("/");
+//        http.formLogin()
+//                .loginPage("/user/sing-in")
+//                .defaultSuccessUrl("/")
+//                .permitAll();
+//
+//        http.logout()
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/sign-out"))
+//                .logoutSuccessUrl("/");
     }
 
     @Override
@@ -88,11 +89,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsService() {
         return username -> {
-            AuthUser user = authoritiesUserService.findAuthUserByEmail(username);
-            if (user == null) {
-                throw new UserNotFoundException();
-            }
-            return user;
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(UserNotFoundException::new);
+
+            return new AuthUser(user);
         };
     }
 }

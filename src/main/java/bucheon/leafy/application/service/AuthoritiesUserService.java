@@ -31,13 +31,12 @@ public class AuthoritiesUserService {
     }
 
 
-
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 
     public ResponseEntity signIn(SignInRequest signInRequest) {
-        User user = userRepository.findByCustomerId(signInRequest.getCustomerId())
+        User user = userRepository.findByEmail(signInRequest.getEmail())
                 .orElseThrow(UserNotFoundException::new);
 
         if (passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())){
@@ -45,13 +44,6 @@ public class AuthoritiesUserService {
         }
 
         throw new PasswordNotMatchedException();
-    }
-
-    public AuthUser findAuthUserByEmail(String email) {
-        User user = userRepository.findByUserEmail(email)
-                .orElseThrow(UserNotFoundException::new);
-        AuthUser authUser = new AuthUser(user);
-        return authUser;
     }
 
 }

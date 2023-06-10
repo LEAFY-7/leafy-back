@@ -34,7 +34,6 @@ class UserControllerTest {
 
         //given
         SignUpRequest request = SignUpRequest.builder()
-                .customerId("abcd")
                 .password("1234")
                 .email("abcd1234@gmail.com")
                 .nickName("김찬우")
