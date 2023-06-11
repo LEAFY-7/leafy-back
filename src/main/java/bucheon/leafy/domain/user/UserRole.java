@@ -11,4 +11,14 @@ public enum UserRole {
 
     private final String title;
 
+    public static UserRole getRole(String userRole){
+        if (userRole.equals("ADMIN")) {
+            return ADMIN;
+        }
+        else if (userRole.equals("NORMAL")) {
+                return NORMAL;
+        }
+       throw new IllegalArgumentException("잘못된 데이터가 넘어왔습니다.");
+    }
+
 }

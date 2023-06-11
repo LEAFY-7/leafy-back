@@ -1,8 +1,8 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.AuthoritiesUserService;
-import bucheon.leafy.domain.user.dto.request.SignInRequest;
-import bucheon.leafy.domain.user.dto.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.SignInRequest;
+import bucheon.leafy.domain.user.request.SignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +37,9 @@ public class UserController {
     @Operation(summary = "로그인")
     @PostMapping("/sign-in")
     public ResponseEntity signIn(@RequestBody @Valid SignInRequest signInRequest){
-        return authoritiesUserService.signIn(signInRequest);
+        ResponseEntity responseEntity = authoritiesUserService.signIn(signInRequest);
+
+        return responseEntity;
     }
 
     @Operation(summary = "로그아웃")
@@ -45,6 +50,12 @@ public class UserController {
             return ResponseEntity.ok("로그아웃 성공");
         }
         return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+    }
+
+    @Operation(summary = "인증 테스트")
+    @PostMapping("/auth/test")
+    public ResponseEntity test(HttpServletRequest request) {
+        return ResponseEntity.badRequest().body(HttpStatus.OK);
     }
 
 }

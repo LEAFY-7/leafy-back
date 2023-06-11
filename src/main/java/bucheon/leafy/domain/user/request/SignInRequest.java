@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.user.dto.request;
+package bucheon.leafy.domain.user.request;
 
 import lombok.Data;
 
