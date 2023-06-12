@@ -14,34 +14,26 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notice extends BaseDeleteEntity {
+public class NoticeComment extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    private String contents;
-
-    @Enumerated(EnumType.STRING)
-    private NoticeStatus noticeStatus;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    private String comment;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id")
-    private List<NoticeComment> noticeComments = new ArrayList<>();
+    @JoinColumn(name = "notice_comment_id")
+    private List<NoticeReply> noticeReplies = new ArrayList<>();
 
     @Builder
-    private Notice(String title, String contents, NoticeStatus noticeStatus,
-                   User user, List<NoticeComment> noticeComments) {
-
-        this.title = title;
-        this.contents = contents;
-        this.noticeStatus = noticeStatus;
+    private NoticeComment(User user, String comment, List<NoticeReply> noticeReplies) {
         this.user = user;
-        this.noticeComments = noticeComments;
+        this.comment = comment;
+        this.noticeReplies = noticeReplies;
     }
 }
+
