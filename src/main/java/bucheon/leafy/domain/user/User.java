@@ -62,7 +62,7 @@ public class User extends BaseDeleteEntity {
                 .phone(signUpRequest.getPhone())
                 .address(List.of(address))
                 .userImage(userImage)
-                .userRole(UserRole.NORMAL)
+                .userRole(UserRole.MEMBER)
                 .build();
 
     }

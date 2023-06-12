@@ -1,11 +1,13 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.AuthoritiesUserService;
+import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,7 @@ public class UserController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    @Operation(summary = "로그인")
     @PostMapping("/sign-in")
     public ResponseEntity<TokenResponse> authorize(@Valid @RequestBody SignInRequest signInRequest) {
 
@@ -49,12 +52,18 @@ public class UserController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        String authority = authentication.getAuthorities().stream()
+                .map(g -> g.getAuthority()).findFirst()
+                .orElseThrow(UserNotFoundException::new);
+
+        String role = authority.replace("ROLE_", "");
+
         String jwt = tokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenResponse(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenResponse(jwt, role), httpHeaders, HttpStatus.OK);
     }
 
     @Operation(summary = "회원가입")
@@ -75,9 +84,15 @@ public class UserController {
 
     @Operation(summary = "인증 테스트")
     @PostMapping("/auth/test")
-    @PreAuthorize("hasAnyRole('ROLE_NORMAL', 'ROLE_ADMIN')")
-    public ResponseEntity test(HttpServletRequest request) {
-        return ResponseEntity.badRequest().body(HttpStatus.OK);
+    public ResponseEntity test() {
+        return ResponseEntity.ok().body(HttpStatus.OK);
+    }
+
+    @Operation(summary = "인증 테스트")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PostMapping("/test")
+    public ResponseEntity test2() {
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
 }
