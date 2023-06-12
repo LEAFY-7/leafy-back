@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.board.Board;
 import bucheon.leafy.domain.user.dto.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
@@ -18,6 +19,7 @@ import java.util.List;
 public class User extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="user_id")
     private Long id;
 
     private String customerId;

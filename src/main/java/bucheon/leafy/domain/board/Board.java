@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.board;
 
+import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,6 +18,7 @@ public class Board extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long id;
 
     private String title;
@@ -24,6 +26,7 @@ public class Board extends BaseDeleteEntity {
     private String contents;
 
     private Boolean isHide;
+
 
     @OneToOne(mappedBy = "board", cascade = CascadeType.ALL)
     private BoardLike boardLike;
