@@ -38,6 +38,11 @@ mybatis:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mappers/*.xml
 
+jwt:
+  header: Authorization
+  secret: aW5jaGVvbi1hbmQtYnVjaGVvbi1sZWFmeS1wcm9qZWN0LWphdmEtc3ByaW5nLWJhY2tlbmQtcmVhY3QtYW5kLXR5cGVzcGlyLWZyb250 ZW5kLWp3dC1zZWNyZXQta2V5
+  token-validity-in-seconds: 86400
+
 logging:
   level:
     root: info
