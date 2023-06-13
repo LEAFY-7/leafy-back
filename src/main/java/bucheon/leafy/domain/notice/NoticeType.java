@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum NoticeStatus {
+public enum NoticeType {
 
     NOTICE("공지"), HOLD("질문 대기"), DONE("답변 완료");
 

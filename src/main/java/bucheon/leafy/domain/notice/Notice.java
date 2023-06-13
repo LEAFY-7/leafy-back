@@ -16,16 +16,17 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notice extends BaseDeleteEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
 
     private String contents;
 
+    private Boolean isHide;
+
     @Enumerated(EnumType.STRING)
-    private NoticeStatus noticeStatus;
+    private NoticeType noticeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -35,13 +36,14 @@ public class Notice extends BaseDeleteEntity {
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
     @Builder
-    private Notice(String title, String contents, NoticeStatus noticeStatus,
-                   User user, List<NoticeComment> noticeComments) {
+    private Notice(String title, String contents, NoticeType noticeType,
+                   User user, List<NoticeComment> noticeComments, Boolean isHide) {
 
         this.title = title;
         this.contents = contents;
-        this.noticeStatus = noticeStatus;
+        this.noticeType = noticeType;
         this.user = user;
         this.noticeComments = noticeComments;
+        this.isHide = isHide;
     }
 }
