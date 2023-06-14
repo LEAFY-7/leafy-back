@@ -3,14 +3,15 @@ package bucheon.leafy.domain.qna.controller;
 import bucheon.leafy.domain.qna.domain.PageHandler;
 import bucheon.leafy.domain.qna.domain.QnaDto;
 import bucheon.leafy.domain.qna.domain.SearchCondition;
-import bucheon.leafy.domain.qna.service.QnaService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import bucheon.leafy.domain.qna.service.QnaService;
+import bucheon.leafy.domain.qna.service.QnaServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +21,18 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
-@Controller
-@RequestMapping("/")
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/qna")
 public class QnaController {
 
-    @Autowired
-    QnaService qnaService;
+   private QnaService qnaService;
 
-    @PostMapping("/")
+    @PostMapping("/modify")
     public String modify(QnaDto qnaDto, SearchCondition sc, RedirectAttributes rattr, Model m, HttpSession session) {
-        String user_id = (String)session.getAttribute("id");
-        qnaDto.setUser_id(user_id);
+        String userId = (String)session.getAttribute("id");
+        qnaDto.setUserId(userId);
 
         try {
             if (qnaService.modify(qnaDto)!= 1)
@@ -46,20 +48,20 @@ public class QnaController {
         }
     }
 
-    @GetMapping("/")
-    public String user_id(Model m) {
+    @GetMapping("/write")
+    public String userId(Model m) {
         m.addAttribute("mode", "new");
         return "";
     }
 
-    @PostMapping("/")
-    public String user_id(QnaDto qnaDto, RedirectAttributes rattr, Model m, HttpSession session) {
-        String user_id = (String)session.getAttribute("id");
-        qnaDto.setUser_id(user_id);
+    @PostMapping("/write")
+    public String userId(QnaDto qnaDto, RedirectAttributes rattr, Model m, HttpSession session) {
+        String userId = (String)session.getAttribute("id");
+        qnaDto.setUserId(userId);
 
         try {
-            if (qnaService.user_id(qnaDto) != 1)
-                throw new Exception("User_id failed.");
+            if (qnaService.write(qnaDto) != 1)
+                throw new Exception("userId failed.");
 
             rattr.addFlashAttribute("msg", "WRT_OK");
             return"";
@@ -72,10 +74,10 @@ public class QnaController {
         }
     }
 
-    @GetMapping("/")
-    public String read(Integer bno, SearchCondition sc, RedirectAttributes rattr, Model m) {
+    @GetMapping("/read")
+    public String read(Integer id, SearchCondition sc, RedirectAttributes rattr, Model m) {
         try {
-            QnaDto qnaDto = qnaService.read(bno);
+            QnaDto qnaDto = qnaService.read(id);
             m.addAttribute(qnaDto);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,13 +88,13 @@ public class QnaController {
         return "";
     }
 
-    @PostMapping("/")
-    public String remove(Integer bno, SearchCondition sc, RedirectAttributes rattr, HttpSession session) {
-        String user_id = (String)session.getAttribute("id");
+    @PostMapping("/remove")
+    public String remove(Integer id, SearchCondition sc, RedirectAttributes rattr, HttpSession session) {
+        String userId = (String)session.getAttribute("id");
         String msg = "DEL_OK";
 
         try {
-            if(qnaService.remove(bno, user_id)!=1)
+            if(qnaService.remove(id, userId)!=1) //삭제버튼 본인or 관리자 || qnaService.remove(id,admin ) 메소드 새로 만들어야 될듯
                 throw new Exception("Delete failed.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,18 +105,18 @@ public class QnaController {
         return"";//
     }
 
-    @GetMapping("/")
+    @GetMapping("/list")
     public String list(Model m, SearchCondition sc, HttpServletRequest request) {
         if(!loginCheck(request))
             return "redirect://"+request.getRequestURL();  // 로그인을 안했으면 로그인 화면으로 이동
 
         try {
-            int totalCnt = qnaService.getSearchResultCnt(sc);
+            int totalCnt = qnaService.getsearchResultCntQna(sc);//
             m.addAttribute("totalCnt", totalCnt);
 
             PageHandler pageHandler = new PageHandler(totalCnt, sc);
 
-            List<QnaDto> list = qnaService.getSearchResultPage(sc);
+            List<QnaDto> list = qnaService.getsearchSelectPageQna(sc);//
             m.addAttribute("list", list);
             m.addAttribute("ph", pageHandler);
 

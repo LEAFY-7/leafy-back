@@ -29,7 +29,7 @@ public class User extends BaseDeleteEntity {
 
     private String phone;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> address = new ArrayList<>();
 

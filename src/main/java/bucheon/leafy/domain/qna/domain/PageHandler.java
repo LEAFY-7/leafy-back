@@ -1,13 +1,14 @@
 package bucheon.leafy.domain.qna.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.util.UriComponentsBuilder;
-
+@Getter
+@Setter
+@ToString
 public class PageHandler {
-    private SearchCondition sc;
-    //    private int pageSize = 10; // 한 페이지당 게시물 갯수
-//    private int page; // 현재 페이지
-//    private String  option;
-//    private String  keyword;
+    private SearchCondition sc; // page, pageSize, option, keyword 여기로 받는다
     public  final int NAV_SIZE = 10; // page navigation size
     private int totalCnt; // 게시물의 총 갯수
     private int totalPage; // 전체 페이지의 갯수
@@ -28,7 +29,7 @@ public class PageHandler {
         this.totalCnt = totalCnt;
         this.sc = sc;
 
-        doPaging(totalCnt, sc);
+        doPaging(totalCnt, sc); //호출해서 페이징 처리
     }
 
     private void doPaging(int totalCnt, SearchCondition sc) {
@@ -40,19 +41,19 @@ public class PageHandler {
         this.showNext = endPage!=totalPage;
     }
 
-    public String getQueryString() {
+    public String getQueryString() {    //페이지 지정해주지 않으면 이걸 쓰고
         return getQueryString(this.sc.getPage());
     }
-
-    public String getQueryString(Integer page) {
+    public String getQueryString(Integer page) { //페이지 받아서 세팅? 이해잘 안감
         // ?page=10&pageSize=10&option=A&keyword=title
-        return UriComponentsBuilder.newInstance()
+        return UriComponentsBuilder.newInstance()   //- urlComponentsBuilder 는 UriBuilder 의 인터페이스 클래스, StringBuffer 방식에 비해 간결해졌으며 scheme, host, path, queryParam으로 URI 구조를 한눈에 파악할 수 있다.
                 .queryParam("page",     page)
                 .queryParam("pageSize", sc.getPageSize())
                 .queryParam("option",   sc.getOption())
                 .queryParam("keyword",  sc.getKeyword())
-                .build().toString();
-    }
+                .build().toString();    //toString으로 변환
+    }//searchCondition의 컨트롤러가 매게변수 받고 목록으로 돌아갈때 값들을 유지하기위해서
+     // ?page=10&pageSize=10&option=A&keyword=title
 
     void print() {
         System.out.println("page="+ sc.getPage());

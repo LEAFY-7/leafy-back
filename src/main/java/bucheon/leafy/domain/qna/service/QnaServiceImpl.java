@@ -1,65 +1,59 @@
 package bucheon.leafy.domain.qna.service;
 
-import bucheon.leafy.domain.qna.dao.QnaDao;
+import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.domain.qna.domain.QnaDto;
 import bucheon.leafy.domain.qna.domain.SearchCondition;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 import java.util.Map;
 
+
 @Service
+@RequiredArgsConstructor
 public class QnaServiceImpl implements QnaService {
-    @Autowired
-    QnaDao qnaDao;
 
-    @Override
+    private final QnaMapper qnaMapper;
+
     public int getCount() throws Exception {
-        return qnaDao.count();
+        return qnaMapper.countQna();
+    }
+    public int remove(Integer id, String userId) throws Exception {
+        return qnaMapper.deleteQna(id, userId);
     }
 
     @Override
-    public int remove(Integer bno, String user_id) throws Exception {
-        return qnaDao.delete(bno, user_id);
+    public int write(QnaDto QnaDto) throws Exception {
+        return qnaMapper.insertQna(QnaDto);
     }
 
-    @Override
-    public int user_id(QnaDto qnaDto) throws Exception {
-        return qnaDao.insert(qnaDto);
+    public int userId(QnaDto qnaDto) throws Exception {
+        return qnaMapper.insertQna(qnaDto);
     }
-
-    @Override
     public List<QnaDto> getList() throws Exception {
-        return qnaDao.selectAll();
+        return qnaMapper.selectAllQna();
     }
-
-    @Override
-    public QnaDto read(Integer bno) throws Exception {
-        QnaDto qnaDto = qnaDao.select(bno);
-        qnaDao.increaseViewCnt(bno);
-
+    public QnaDto read(Integer id) throws Exception {
+        QnaDto qnaDto = qnaMapper.selectQna(id);
+        qnaMapper.increaseViewCntQna(id);
         return qnaDto;
     }
-
-    @Override
     public List<QnaDto> getPage(Map map) throws Exception {
-        return qnaDao.selectPage(map);
+        return qnaMapper.selectPageQna(map);
     }
-
-    @Override
     public int modify(QnaDto qnaDto) throws Exception {
-        return qnaDao.update(qnaDto);
+        return qnaMapper.updateQna(qnaDto);
     }
 
     @Override
-    public int getSearchResultCnt(SearchCondition sc) throws Exception {
-        return qnaDao.searchResultCnt(sc);
+    public int getsearchResultCntQna(SearchCondition sc) throws Exception {
+        return qnaMapper.searchResultCntQna(sc);
     }
 
     @Override
-    public List<QnaDto> getSearchResultPage(SearchCondition sc) throws Exception {
-        return qnaDao.searchSelectPage(sc);
+    public List<QnaDto> getsearchSelectPageQna(SearchCondition sc) throws Exception {
+        return qnaMapper.searchSelectPageQna(sc);
     }
 }

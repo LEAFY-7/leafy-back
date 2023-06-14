@@ -1,17 +1,21 @@
 package bucheon.leafy.domain.qna.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static java.lang.Math.*;
 import static java.util.Objects.requireNonNullElse;
 
+@Getter
+@Setter
+@ToString
 public class SearchCondition {
     private Integer page = 1;
     private Integer pageSize = DEFAULT_PAGE_SIZE;
     private String  option = "";
     private String  keyword = "";
-//    private Integer  offset;
-
     public static final int MIN_PAGE_SIZE = 5;
     public static final int DEFAULT_PAGE_SIZE = 10;
     public static final int MAX_PAGE_SIZE = 50;
@@ -34,7 +38,6 @@ public class SearchCondition {
     }
 
     public String getQueryString(Integer page) {
-        // ?page=10&pageSize=10&option=A&keyword=title
         return UriComponentsBuilder.newInstance()
                 .queryParam("page",     page)
                 .queryParam("pageSize", pageSize)
@@ -57,7 +60,6 @@ public class SearchCondition {
     public void setPageSize(Integer pageSize) {
         this.pageSize = requireNonNullElse(pageSize, DEFAULT_PAGE_SIZE);
 
-        // MIN_PAGE_SIZE <= pageSize <= MAX_PAGE_SIZE
         this.pageSize = max(MIN_PAGE_SIZE, min(this.pageSize, MAX_PAGE_SIZE));
     }
 
@@ -73,13 +75,11 @@ public class SearchCondition {
         return keyword;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
+    public void setKeyword(String keyword) { this.keyword = keyword; }
 
     public Integer getOffset() {
         return (page-1)*pageSize;
-    }
+    }   // offset받기위해
 
     @Override
     public String toString() {
