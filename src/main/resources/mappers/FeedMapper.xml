@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
+
+    <select id="findFeedFirst" resultType="Feed">
+        select *
+        from feed
+        where is_hide = false
+          and is_delete = false
+        ORDER BY feed_id DESC
+            LIMIT 10;
+    </select>
+
+    <select id="findFeedScroll" resultType="Feed" parameterType="java.lang.Long">
+        select *
+            from feed
+            where is_hide = false
+              and is_delete = false
+              and feed_id &lt;= #{id}
+            ORDER BY feed_id DESC
+            LIMIT 10;
+    </select>
+
+    <select id="findFeedById" resultType="Feed" parameterType="java.lang.Long">
+        select *
+            from feed
+            where feed_id = #{id}
+              and is_hide = false
+              and is_delete = false;
+    </select>
+
+    <insert id="saveFeed" parameterType="Feed" useGeneratedKeys="true" keyProperty="id">
+        insert into feed (title,contents,is_hide,is_delete) values (#{title}, #{contents}, #{isHide}, #{isDelete})
+    </insert>
+
+    <update id="editFeed"  parameterType="Feed">
+        update feed set title = #{title}, contents = #{contents}, is_hide = #{isHide}, ,is_delete = #{isDelete}, modified_at = sysdate where feed_id = #{feed_id}
+    </update>
+
+    <delete id="hardDeleteFeed"  parameterType="java.lang.Long">
+        delete from feed where feed_id = #{id}
+    </delete>
+
+    <update id="softDeleteFeed" parameterType="java.lang.Long">
+        update feed set is_delete = true where feed_id = #{id}
+    </update>
+
+</mapper>

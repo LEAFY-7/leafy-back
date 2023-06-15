@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.board;
+package bucheon.leafy.domain.feed;
 
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardComment extends BaseDeleteEntity {
+public class FeedComment extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class BoardComment extends BaseDeleteEntity {
     private String comment;
 
     @Builder
-    private BoardComment(String comment) {
+    private FeedComment(String comment) {
         this.comment = comment;
     }
 }

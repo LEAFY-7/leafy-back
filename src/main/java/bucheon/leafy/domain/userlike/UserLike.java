@@ -1,6 +1,6 @@
 package bucheon.leafy.domain.userlike;
 
-import bucheon.leafy.domain.board.Board;
+import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseEntity;
 import lombok.AccessLevel;
@@ -22,11 +22,11 @@ public class UserLike extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
+    private Feed feed;
 
     @Builder
-    private UserLike(User user, Board board) {
+    private UserLike(User user, Feed feed) {
         this.user = user;
-        this.board = board;
+        this.feed = feed;
     }
 }
