@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.board;
+package bucheon.leafy.domain.feed;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,19 +11,19 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-public class BoardLike {
+public class FeedLike {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "feed_id")
+    private Feed feed;
 
     private Long likeCount;
 
     @Builder
-    private BoardLike(Long likeCount) {
+    private FeedLike(Long likeCount) {
         this.likeCount = likeCount;
     }
 }

@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.board;
+package bucheon.leafy.domain.feed;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-public class BoardTag {
+public class FeedTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class BoardTag {
     private String tag;
 
     @Builder
-    public BoardTag(String tag) {
+    public FeedTag(String tag) {
         this.tag = tag;
     }
 

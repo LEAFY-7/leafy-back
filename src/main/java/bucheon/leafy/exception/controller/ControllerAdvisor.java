@@ -1,5 +1,6 @@
 package bucheon.leafy.exception.controller;
 
+import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.exception.GlobalException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.exception.dto.ExceptionResponse;
@@ -46,6 +47,19 @@ public class ControllerAdvisor {
         Map<String,String> error = new HashMap<>();
         e.getAllErrors().forEach(c -> error.put(((FieldError) c).getField(), c.getDefaultMessage()));
         return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(FeedNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleFeedNotFoundException(FeedNotFoundException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
     }
 
 }
