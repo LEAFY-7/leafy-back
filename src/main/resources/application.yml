@@ -14,6 +14,7 @@ spring:
       # 예를들어, create로 설정하면 if exist drop table 해주고 다시 생성해줌
       # 로컬, 개발에서는 create, update 해도되지만 운영에서는 none으로 설정해야함
       ddl-auto: none
+#      ddl-auto: create
     properties:
       hibernate:
         # 쿼리 출력할때 format에 맞출지 여부
@@ -36,6 +37,11 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mappers/*.xml
+
+jwt:
+  header: Authorization
+  secret: aW5jaGVvbi1hbmQtYnVjaGVvbi1sZWFmeS1wcm9qZWN0LWphdmEtc3ByaW5nLWJhY2tlbmQtcmVhY3QtYW5kLXR5cGVzcGlyLWZyb250ZW5kLWp3dC1zZWNyZXQta2V5
+  token-validity-in-seconds: 86400
 
 logging:
   level:

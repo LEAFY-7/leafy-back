@@ -3,6 +3,7 @@ package bucheon.leafy.config;
 import bucheon.leafy.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -15,12 +16,14 @@ public class AuthUser implements UserDetails {
 
     private final User user;
 
+    public User getUser(){
+        return this.user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-
-        // 아이디별 권한 설정 여기서 실행하면됨!!
-
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().toString()));
         return authorities;
     }
 
@@ -31,7 +34,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getCustomerId();
+        return user.getEmail();
     }
 
     @Override

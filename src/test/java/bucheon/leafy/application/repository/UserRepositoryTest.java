@@ -49,7 +49,6 @@ class UserRepositoryTest {
                 .build();
 
         User user = User.builder()
-                .customerId("아이디")
                 .address(List.of(address))
                 .userImage(image)
                 .email("email@email.com")

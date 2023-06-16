@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -21,14 +23,27 @@ public class Notice extends BaseDeleteEntity {
 
     private String contents;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Boolean isHide;
+
+    @Enumerated(EnumType.STRING)
+    private NoticeType noticeType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id")
+    private List<NoticeComment> noticeComments = new ArrayList<>();
+
     @Builder
-    private Notice(String title, String contents, User user) {
+    private Notice(String title, String contents, NoticeType noticeType,
+                   User user, List<NoticeComment> noticeComments, Boolean isHide) {
+
         this.title = title;
         this.contents = contents;
+        this.noticeType = noticeType;
         this.user = user;
+        this.noticeComments = noticeComments;
+        this.isHide = isHide;
     }
-
 }
