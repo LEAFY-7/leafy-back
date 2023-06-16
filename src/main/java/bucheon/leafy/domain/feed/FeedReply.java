@@ -6,36 +6,28 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedComment extends BaseDeleteEntity {
+public class FeedReply extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name="reply_id")
     private Long id;
 
-    private String comment;
-
-    private Boolean isDelete;
+    private String reply;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "comment_id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedReply> feedReply;
-
     @Builder
-    private FeedComment(String comment, Boolean isDelete) {
-
-        this.comment = comment;
-        this.isDelete = isDelete;
+    private FeedReply(String reply) {
+        this.reply = reply;
     }
 }

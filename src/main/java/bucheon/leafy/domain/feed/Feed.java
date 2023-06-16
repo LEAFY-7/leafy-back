@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.feed;
 
+import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,37 +23,41 @@ public class Feed extends BaseDeleteEntity {
 
     private String title;
 
-    private String contents;
+    private String content;
 
     private Boolean isHide;
 
     private Boolean isDelete;
+
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
     private FeedLike feedLike;
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedComment> feedComments = new ArrayList<>();
+    private List<FeedComment> feedComment = new ArrayList<>();
 
-    @JoinColumn(name = "feedid")
+    @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTag> feedTags = new ArrayList<>();
+    private List<FeedTag> feedTag = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private FeedType feedType;
 
 
     @Builder
-    private Feed(String title, String contents, Boolean isHide,Boolean isDelete, FeedLike feedLike,
-                  List<FeedComment> feedComments, List<FeedTag> feedTags, FeedType feedType) {
+    private Feed(String title, String content, Boolean isHide,Boolean isDelete, FeedLike feedLike,
+                  List<FeedComment> feedComment, List<FeedTag> feedTag, FeedType feedType) {
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.isHide = isHide;
         this.isDelete = isDelete;
         this.feedLike = feedLike;
-        this.feedComments = feedComments;
-        this.feedTags = feedTags;
+        this.feedComment = feedComment;
+        this.feedTag = feedTag;
         this.feedType = feedType;
     }
 

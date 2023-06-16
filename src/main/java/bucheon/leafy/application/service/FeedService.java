@@ -15,12 +15,12 @@ import java.util.Optional;
 public class FeedService {
     private final FeedMapper mapper;
 
-    public List<Feed> getFeedList() {
-        return mapper.findFeedFirst();
+    public List<Feed> getFeeds() {
+        return mapper.findFeedListFirst();
     }
 
-    public List<Feed> getFeedList(Long id) {
-        return mapper.findFeedScroll(id);
+    public List<Feed> getFeeds(Long id) {
+        return mapper.findFeedListScroll(id);
     }
 
     public Feed getFeedById(Long id) {

@@ -10,9 +10,9 @@ import java.util.List;
 @Mapper
 public interface FeedMapper {
 
-    public List<Feed> findFeedFirst();
+    public List<Feed> findFeedListFirst();
 
-    public List<Feed> findFeedScroll(Long id);
+    public List<Feed> findFeedListScroll(Long id);
 
     // 사용자가 특정 feed_id로 조회했을 시 해당 feed가 없을수도 있기때문에 optional 사용
     public Feed findFeedById(Long id);

@@ -22,9 +22,9 @@ public class FeedController {
         List<Feed> feedList;
 
         if( lastFeedId == null) {
-            feedList = service.getFeedList();
+            feedList = service.getFeeds();
         } else {
-            feedList = service.getFeedList(lastFeedId);
+            feedList = service.getFeeds(lastFeedId);
         }
         return ResponseEntity.ok().body(feedList);
     }
