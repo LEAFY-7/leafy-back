@@ -2,12 +2,12 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.domain.feed.Feed;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/feeds")
@@ -39,7 +39,7 @@ public class FeedController {
 
     // 게시글 등록
     @PostMapping
-    public ResponseEntity<Long> saveFeed(@RequestBody Feed feed) {
+    public ResponseEntity<Long> saveFeed(@RequestBody FeedRequest feed) {
         Long savedId = service.saveFeed(feed);
 
         return ResponseEntity.ok().body(savedId);
@@ -47,7 +47,8 @@ public class FeedController {
 
     // 게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateFeed(@PathVariable("id") Long id, @RequestBody Feed feed) {
+    public ResponseEntity<Long> updateFeed(@PathVariable("id") Long id,
+                                           @RequestBody FeedRequest feed) {
         Long updatedId = service.updateFeed(feed);
 
         return ResponseEntity.ok().body(updatedId);

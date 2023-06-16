@@ -1,6 +1,5 @@
-package bucheon.leafy.domain.notice;
+package bucheon.leafy.domain.qna;
 
-import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
@@ -9,11 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NoticeReply extends BaseDeleteEntity {
+public class QnaComment extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,15 +23,17 @@ public class NoticeReply extends BaseDeleteEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Feed feed;
-
     private String comment;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_comment_id")
+    private List<QnaReply> noticeReplies = new ArrayList<>();
+
     @Builder
-    private NoticeReply(User user, Feed feed, String comment) {
+    private QnaComment(User user, String comment, List<QnaReply> noticeReplies) {
         this.user = user;
-        this.feed = feed;
         this.comment = comment;
+        this.noticeReplies = noticeReplies;
     }
 }
+

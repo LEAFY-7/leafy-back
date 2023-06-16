@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.feed;
 
-import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,10 +27,6 @@ public class Feed extends BaseDeleteEntity {
     private Boolean isHide;
 
     private Boolean isDelete;
-
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
     private FeedLike feedLike;

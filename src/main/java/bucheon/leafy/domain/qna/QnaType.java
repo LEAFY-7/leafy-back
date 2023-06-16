@@ -1,13 +1,13 @@
-package bucheon.leafy.domain.notice;
+package bucheon.leafy.domain.qna;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum NoticeType {
+public enum QnaType {
 
-    NOTICE("공지"), HOLD("질문 대기"), DONE("답변 완료");
+    HOLD("질문 대기"), DONE("답변 완료");
 
 
     private final String text;

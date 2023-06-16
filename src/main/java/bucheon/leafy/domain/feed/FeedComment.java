@@ -32,10 +32,12 @@ public class FeedComment extends BaseDeleteEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedReply> feedReply;
 
+
+
     @Builder
     private FeedComment(String comment, Boolean isDelete) {
-
         this.comment = comment;
         this.isDelete = isDelete;
     }
+
 }

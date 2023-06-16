@@ -8,13 +8,14 @@ import java.util.List;
 @Mapper
 public interface FeedCommentMapper {
 
-    public List<FeedComment> findCommentList();
+    List<FeedComment> findCommentList();
 
-    public void saveComment(FeedComment feedComment);
+    void saveComment(FeedComment feedComment);
 
-    public void editComment(FeedComment feedComment);
+    void editComment(FeedComment feedComment);
 
-    public void hardDeleteComment();
-    public int softDeleteComment(Long id);
+    void hardDeleteComment();
+
+    int softDeleteComment(Long id);
 
 }

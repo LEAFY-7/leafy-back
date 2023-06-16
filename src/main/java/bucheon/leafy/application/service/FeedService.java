@@ -2,6 +2,7 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.domain.feed.Feed;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.exception.FeedNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +24,18 @@ public class FeedService {
         return mapper.findFeedListScroll(id);
     }
 
+
     public Feed getFeedById(Long id) {
-        Optional<Feed> optFeed = Optional.of(mapper.findFeedById(id));
-
-        Feed feed = optFeed.orElseThrow(FeedNotFoundException::new);
-
-        return feed;
+        return mapper.findFeedById(id).orElseThrow(FeedNotFoundException::new);
     }
 
-    public Long saveFeed(Feed feed) {
+    public Long saveFeed(FeedRequest feed) {
         Long id = mapper.saveFeed(feed);
 
         return id;
     }
 
-    public Long updateFeed(Feed feed) {
+    public Long updateFeed(FeedRequest feed) {
         mapper.editFeed(feed);
 
         Long id = feed.getId();
@@ -46,7 +44,6 @@ public class FeedService {
     }
 
     public boolean deleteFeed(Long id) {
-
         return mapper.softDeleteFeed(id) == 1;
     }
 }
