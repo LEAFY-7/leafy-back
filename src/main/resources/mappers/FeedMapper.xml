@@ -5,7 +5,7 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
-    <select id="findFeedFirst" resultType="Feed">
+    <select id="findFeedListFirst" resultType="Feed">
         select *
         from feed
         where is_hide = false
@@ -14,7 +14,7 @@
             LIMIT 10;
     </select>
 
-    <select id="findFeedScroll" resultType="Feed" parameterType="java.lang.Long">
+    <select id="findFeedListScroll" resultType="Feed" parameterType="java.lang.Long">
         select *
             from feed
             where is_hide = false
@@ -33,11 +33,11 @@
     </select>
 
     <insert id="saveFeed" parameterType="Feed" useGeneratedKeys="true" keyProperty="id">
-        insert into feed (title,contents,is_hide,is_delete) values (#{title}, #{contents}, #{isHide}, #{isDelete})
+        insert into feed (title,content,user_id,is_hide,is_delete,created_at,modified_at) values (#{title}, #{content}, #{user.id}, false, false, sysdate(), sysdate())
     </insert>
 
     <update id="editFeed"  parameterType="Feed">
-        update feed set title = #{title}, contents = #{contents}, is_hide = #{isHide}, ,is_delete = #{isDelete}, modified_at = sysdate where feed_id = #{feed_id}
+        update feed set title = #{title}, content = #{content}, modified_at = sysdate() where feed_id = #{id}
     </update>
 
     <delete id="hardDeleteFeed"  parameterType="java.lang.Long">
@@ -47,5 +47,4 @@
     <update id="softDeleteFeed" parameterType="java.lang.Long">
         update feed set is_delete = true where feed_id = #{id}
     </update>
-
 </mapper>

@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.dto.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
