@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
@@ -11,32 +9,33 @@
         where is_hide = false
           and is_delete = false
         ORDER BY feed_id DESC
-            LIMIT 10;
+        LIMIT 10;
     </select>
 
     <select id="findFeedListScroll" resultType="Feed" parameterType="java.lang.Long">
         select *
-            from feed
-            where is_hide = false
-              and is_delete = false
-              and feed_id &lt;= #{id}
-            ORDER BY feed_id DESC
-            LIMIT 10;
+        from feed
+        where is_hide = false
+          and is_delete = false
+          and feed_id &lt;= #{id}
+        ORDER BY feed_id DESC
+        LIMIT 10;
     </select>
 
     <select id="findFeedById" resultType="Feed" parameterType="java.lang.Long">
         select *
-            from feed
-            where feed_id = #{id}
-              and is_hide = false
-              and is_delete = false;
+        from feed
+        where feed_id = #{id}
+          and is_hide = false
+          and is_delete = false;
     </select>
 
-    <insert id="saveFeed" parameterType="Feed" useGeneratedKeys="true" keyProperty="id">
-        insert into feed (title,content,user_id,is_hide,is_delete,created_at,modified_at) values (#{title}, #{content}, #{user.id}, false, false, sysdate(), sysdate())
+    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyProperty="id">
+        insert into feed (title,content,user_id,is_hide,is_delete,created_at,modified_at)
+        values (#{title}, #{content}, #{user.id}, false, false, sysdate(), sysdate())
     </insert>
 
-    <update id="editFeed"  parameterType="Feed">
+    <update id="editFeed" parameterType="FeedRequest">
         update feed set title = #{title}, content = #{content}, modified_at = sysdate() where feed_id = #{id}
     </update>
 
@@ -47,4 +46,5 @@
     <update id="softDeleteFeed" parameterType="java.lang.Long">
         update feed set is_delete = true where feed_id = #{id}
     </update>
+
 </mapper>

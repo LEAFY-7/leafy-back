@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.user;
 
 import bucheon.leafy.domain.feed.Feed;
-import bucheon.leafy.domain.user.dto.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,6 +31,10 @@ public class User extends BaseDeleteEntity {
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Feed> feeds = new ArrayList<>();
+
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> address = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -40,17 +44,17 @@ public class User extends BaseDeleteEntity {
     private UserRole userRole;
 
     @Builder
-    private User(String password, String email, String nickName, String phone,
+    private User(String password, String email, String nickName, String phone, List<Feed> feeds,
                  List<Address> address, UserImage userImage, UserRole userRole) {
 
         this.password = password;
         this.email = email;
         this.nickName = nickName;
         this.phone = phone;
+        this.feeds = feeds;
         this.address = address;
         this.userImage = userImage;
         this.userRole = userRole;
-
     }
 
     public static User of(SignUpRequest signUpRequest) {
