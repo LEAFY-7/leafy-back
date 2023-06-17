@@ -19,26 +19,33 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     private final QnaReplyMapper qnaReplyMapper;
 
     @Override
-    public int remove(Integer rid, Integer reply_reply, String user_id) throws Exception {
-        int rowCnt = qnaMapper.updateCommentCnt(reply_reply, -1);
+    public int getCount(Integer cid) throws Exception {
+        return qnaReplyMapper.count(cid);
+    }
+    @Override
+    @Transactional()
+    public int remove(Integer cid, Integer bno, String user_id) throws Exception {
+        int rowCnt = qnaMapper.updateCommentCnt(bno, -1);
         System.out.println("updateCommentCnt - rowCnt = " + rowCnt);
-        rowCnt = qnaReplyMapper.delete(rid, user_id);
+        rowCnt = qnaReplyMapper.delete(cid, user_id);
         System.out.println("rowCnt = " + rowCnt);
         return rowCnt;
     }
     @Override
+    @Transactional
     public int write(QnaReplyDto qnaReplyDto) throws Exception {
-        qnaMapper.updateCommentCnt( qnaReplyDto.getReply_reply(),1);
+        qnaMapper.updateCommentCnt( qnaReplyDto.getRid(),1);
+//                throw new Exception("test");
         return qnaReplyMapper.insert(qnaReplyDto);
     }
     @Override
-    public List<QnaReplyDto> getList(Integer rid) throws Exception {
-        return qnaReplyMapper.selectAll(rid);
+    public List<QnaReplyDto> getList(Integer cid) throws Exception {
+//        throw new Exception("test");
+        return qnaReplyMapper.selectAll(cid);
     }
-
     @Override
-    public QnaReplyDto read(Integer rid) throws Exception {
-        return qnaReplyMapper.select(rid);
+    public QnaReplyDto read(Integer cid) throws Exception {
+        return qnaReplyMapper.select(cid);
     }
     @Override
     public int modify(QnaReplyDto qnaReplyDto) throws Exception {

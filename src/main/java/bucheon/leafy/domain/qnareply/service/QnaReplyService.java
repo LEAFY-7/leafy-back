@@ -9,9 +9,10 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface QnaReplyService {
+    int getCount(Integer cid) throws Exception;
     int write(QnaReplyDto qnaReplyDto) throws Exception;
-    int remove(Integer rid, Integer reply_reply, String user_id) throws Exception;
-    List<QnaReplyDto> getList(Integer rid) throws Exception;
-    QnaReplyDto read(Integer reply_reply) throws Exception;
+    int remove(Integer cid, Integer bno, String user_id) throws Exception;
+    List<QnaReplyDto> getList(Integer cid) throws Exception;
+    QnaReplyDto read(Integer cid) throws Exception;
     int modify(QnaReplyDto qnaReplyDto) throws Exception;
 }

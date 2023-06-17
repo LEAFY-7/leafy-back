@@ -26,7 +26,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/qna")
 public class QnaController {
+
    private QnaService qnaService;
+
     @PostMapping("/modify")
     public String modify(QnaDto qnaDto, SearchCondition sc, RedirectAttributes rattr, Model m, HttpSession session) {
         String userId = (String)session.getAttribute("id");
@@ -126,7 +128,7 @@ public class QnaController {
             m.addAttribute("totalCnt", 0);
         }
 
-        return"/list"; //"" 로그인을 한 상태이면, 게시판 화면으로 이동
+        return""; //"" 로그인을 한 상태이면, 게시판 화면으로 이동
     }
 
     private boolean loginCheck(HttpServletRequest request) {
