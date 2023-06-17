@@ -1,8 +1,6 @@
 package bucheon.leafy.exception.controller;
 
-import bucheon.leafy.exception.FeedNotFoundException;
-import bucheon.leafy.exception.GlobalException;
-import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.dto.ExceptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,8 +14,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class ControllerAdvisor {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> memberNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(FollowNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> followNotFoundException(FollowNotFoundException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()
@@ -29,8 +27,21 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<ExceptionResponse> blogException(GlobalException e) {
+    @ExceptionHandler(ExistException.class)
+    public ResponseEntity<ExceptionResponse> existException(ExistException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> userNotFoundException(UserNotFoundException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()

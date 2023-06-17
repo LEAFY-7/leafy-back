@@ -1,7 +1,8 @@
 package bucheon.leafy.exception.enums;
 
-public enum ExceptionKey {
+public interface ExceptionKey {
 
-    EMAIL, ID;
+    final String EMAIL = "이메일";
+    final String ID = "아이디";
 
 }
