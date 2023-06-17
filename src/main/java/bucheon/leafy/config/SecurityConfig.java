@@ -47,17 +47,13 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/sign**").permitAll()
+                .antMatchers("/v1/users/sign**").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
-                // enable h2-console
-                .headers().frameOptions().sameOrigin()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
