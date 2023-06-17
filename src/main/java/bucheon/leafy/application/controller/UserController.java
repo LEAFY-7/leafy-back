@@ -28,7 +28,7 @@ import javax.validation.Valid;
 
 @Tag(name = "회원정보")
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 

@@ -5,11 +5,9 @@ import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.exception.FeedNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,9 @@
  package bucheon.leafy.application.controller;
 
  import bucheon.leafy.application.service.FollowService;
+ import bucheon.leafy.application.service.UserService;
  import bucheon.leafy.config.AuthUser;
+ import bucheon.leafy.domain.follow.response.FollowersResponse;
  import bucheon.leafy.domain.user.User;
  import io.swagger.v3.oas.annotations.Operation;
  import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,22 +15,38 @@
  import org.springframework.security.core.annotation.AuthenticationPrincipal;
  import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "팔로우")
+ import java.util.List;
+
+ @Tag(name = "팔로우")
 @RestController
-@RequestMapping("/v1/follow")
+@RequestMapping("/v1/follows")
 @RequiredArgsConstructor
 public class FollowController {
 
+    private final UserService userService;
     private final FollowService followService;
 
-    @Operation(summary = "팔로워 리스트")
-    @GetMapping
+
+    @Operation(summary = "나를 팔로우한 회원들")
+    @GetMapping("/followers")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity getFollowers(@AuthenticationPrincipal AuthUser authUser,
                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
 
         User user = authUser.getUser();
-        return followService.getFollowers(user, pageable);
+        List<FollowersResponse> result = followService.getFollowers(user, pageable);
+        return ResponseEntity.status(200).body(result);
+    }
+
+    @Operation(summary = "내가 팔로우한 회원들")
+    @GetMapping("/followings")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    public ResponseEntity getFollowings(@AuthenticationPrincipal AuthUser authUser,
+                                       @PageableDefault(page = 0, size = 20) Pageable pageable) {
+
+        User user = authUser.getUser();
+        List<FollowersResponse> result = followService.getFollowings(user, pageable);
+        return ResponseEntity.status(200).body(result);
     }
 
     @Operation(summary = "팔로우")
@@ -50,6 +68,5 @@ public class FollowController {
         User user = authUser.getUser();
         return followService.unfollow(user, userId);
     }
-
 
 }
