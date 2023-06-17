@@ -18,9 +18,11 @@ public class Follow extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 나, 본인
     @ManyToOne(fetch = FetchType.LAZY)
     private User follower;
 
+    // 내가 팔로우하는 대상
     @ManyToOne(fetch = FetchType.LAZY)
     private User following;
 
@@ -28,6 +30,13 @@ public class Follow extends BaseEntity {
     private Follow(User follower, User following) {
         this.follower = follower;
         this.following = following;
+    }
+
+    public static Follow of(User user, User followTarget) {
+        return Follow.builder()
+                .follower(user)
+                .following(followTarget)
+                .build();
     }
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/feeds")
+@RequestMapping("/v1/feeds")
 @RequiredArgsConstructor
 public class FeedController {
 
