@@ -1,13 +1,12 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.application.service.AuthoritiesUserService;
+import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
-import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +28,11 @@ import javax.validation.Valid;
 
 @Tag(name = "회원정보")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final AuthoritiesUserService authoritiesUserService;
+    private final UserService authoritiesUserService;
 
     private final TokenProvider tokenProvider;
 
@@ -66,6 +62,12 @@ public class UserController {
         return new ResponseEntity<>(new TokenResponse(jwt, role), httpHeaders, HttpStatus.OK);
     }
 
+    @Operation(summary = "아이디 중복체크")
+    @GetMapping("/check")
+    public ResponseEntity check(@RequestParam String email) {
+        return authoritiesUserService.duplicationIdCheck(email);
+    }
+
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
@@ -80,12 +82,6 @@ public class UserController {
             return ResponseEntity.ok("로그아웃 성공");
         }
         return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
-    }
-
-    @Operation(summary = "인증 테스트")
-    @PostMapping("/auth/test")
-    public ResponseEntity test() {
-        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
     @Operation(summary = "인증 테스트")
