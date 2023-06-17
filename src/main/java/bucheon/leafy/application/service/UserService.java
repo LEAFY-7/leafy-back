@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthoritiesUserService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -33,4 +33,12 @@ public class AuthoritiesUserService {
         return ResponseEntity.status(200).body("회원가입 완료");
     }
 
+    public ResponseEntity duplicationIdCheck(String email) {
+        userRepository.findByEmail(email)
+                .ifPresent(u -> {
+                    throw new ExistException(ExceptionKey.EMAIL);
+                });
+
+        return ResponseEntity.status(200).body("아이디가 사용 가능합니다.");
+    }
 }

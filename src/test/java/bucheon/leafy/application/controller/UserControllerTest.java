@@ -1,6 +1,6 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.application.service.AuthoritiesUserService;
+import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ class UserControllerTest {
     protected ObjectMapper objectMapper;
 
     @MockBean
-    protected AuthoritiesUserService authoritiesUserService;
+    protected UserService authoritiesUserService;
 
     @Test
     @DisplayName("사용자가 회원가입을 요청했다")
