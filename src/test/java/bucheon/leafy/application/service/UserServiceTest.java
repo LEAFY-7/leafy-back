@@ -1,22 +1,23 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
 import bucheon.leafy.exception.ExistException;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
 import java.util.List;
 
 
-@SpringBootTest
-class UserServiceTest {
+class UserServiceTest extends IntegrationTestSupport {
 
     @Autowired
     UserService userService;
