@@ -1,25 +1,35 @@
-package bucheon.leafy.application.repository;
+package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
+import bucheon.leafy.application.repository.AddressRepository;
+import bucheon.leafy.application.repository.FollowRepository;
+import bucheon.leafy.application.repository.UserImageRepository;
+import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.follow.Follow;
+import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
-import bucheon.leafy.exception.FollowNotFoundException;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @Transactional
-class FollowRepositoryTest extends IntegrationTestSupport {
+class FollowServiceTest extends IntegrationTestSupport {
+
+    @Autowired
+    FollowService followService;
 
     @Autowired
     FollowRepository followRepository;
@@ -42,15 +52,61 @@ class FollowRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("페이징 처리를 적용하여 최신순으로 사용자(나)가 팔로우한 회원들을 조회한다.")
-    void testFindAllByFollower(){
+    @DisplayName("사용자가 다른 회원을 팔로우 한다.")
+    void testFollow(){
+        //given
+        User user1 = createUser("ekxk1234@naver.com", "정철희");
+        User user2 = createUser("abcd@gmail.com", "홍길동");
+        userRepository.saveAll( List.of(user1, user2) );
+
+        //when
+        ResponseEntity result = followService.follow(user1, user2.getId());
+        List<Follow> follows = followRepository.findAll();
+
+        //then
+        assertThat(result.getStatusCodeValue())
+                .isEqualTo(200);
+
+        assertThat(result.getBody())
+                .isEqualTo("팔로우 성공");
+
+        assertThat(follows).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("사용자가 다른 회원을 언팔로우 한다.")
+    void testUnfollow(){
+        //given
+        User user1 = createUser("ekxk1234@naver.com", "정철희");
+        User user2 = createUser("abcd@gmail.com", "홍길동");
+        userRepository.saveAll( List.of(user1, user2) );
+
+        followRepository.save( Follow.of(user1, user2) );
+
+        //when
+        ResponseEntity result = followService.unfollow(user1, user2.getId());
+        List<Follow> follows = followRepository.findAll();
+
+        //then
+        assertThat(result.getStatusCodeValue())
+                .isEqualTo(200);
+
+        assertThat(result.getBody())
+                .isEqualTo("언팔로우 성공");
+
+        assertThat(follows).hasSize(0);
+    }
+
+    @Test
+    @DisplayName("내가 팔로우한 회원들의 정보를 조회한다")
+    void testGetFollowings(){
         //given
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         PageRequest pageable = PageRequest.of(0, 3, sort);
 
         User user1 = createUser("ekxk1234@naver.com", "정철희");
         User user2 = createUser("abcd@gmail.com", "홍길동");
-        User user3 = createUser("qwer@gmail.com", "강호동");
+        User user3 = createUser("qwer@gmail.com", "이수근");
         User user4 = createUser("zxcv@naver.com", "유재석");
         User user5 = createUser("tyui@gmail.com", "강호동");
 
@@ -60,32 +116,33 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         Follow follow2 = Follow.of(user1, user3);
         Follow follow3 = Follow.of(user1, user4);
         Follow follow4 = Follow.of(user1, user5);
-        List<Follow> followList = List.of(follow1, follow2, follow3, follow4);
 
+        List<Follow> followList = List.of(follow1, follow2, follow3, follow4);
         followRepository.saveAll(followList);
 
         //when
-        List<Follow> followers = followRepository.findAllByFollower(user1, pageable);
+        List<FollowersResponse> followers = followService.getFollowings(user1, pageable);
 
         //then
-        assertThat( followers.size() ).isLessThan( followList.size() );
-
         assertThat(followers).hasSize(pageable.getPageSize())
-                .extracting("following")
-                .contains(user5, user4, user3);
-
+                .extracting("email", "nickName", "image")
+                .contains(
+                        new Tuple("tyui@gmail.com", "강호동" ,"이미지"),
+                        new Tuple("zxcv@naver.com", "유재석" ,"이미지"),
+                        new Tuple("qwer@gmail.com", "이수근" ,"이미지")
+                );
     }
 
     @Test
-    @DisplayName("페이징 처리를 적용하여 최신순으로 사용자(나)를 팔로우한 회원들을 조회한다.")
-    void testFindAllByFollowing(){
+    @DisplayName("나를 팔로우한 회원들의 정보를 조회한다")
+    void testGetFollowers(){
         //given
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        PageRequest pageable = PageRequest.of(0, 4, sort);
+        PageRequest pageable = PageRequest.of(0, 3, sort);
 
         User user1 = createUser("ekxk1234@naver.com", "정철희");
         User user2 = createUser("abcd@gmail.com", "홍길동");
-        User user3 = createUser("qwer@gmail.com", "강호동");
+        User user3 = createUser("qwer@gmail.com", "이수근");
         User user4 = createUser("zxcv@naver.com", "유재석");
         User user5 = createUser("tyui@gmail.com", "강호동");
 
@@ -95,39 +152,22 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         Follow follow2 = Follow.of(user3, user1);
         Follow follow3 = Follow.of(user4, user1);
         Follow follow4 = Follow.of(user5, user1);
-        List<Follow> followList = List.of(follow1, follow2, follow3, follow4);
 
+        List<Follow> followList = List.of(follow1, follow2, follow3, follow4);
         followRepository.saveAll(followList);
 
         //when
-        List<Follow> followers = followRepository.findAllByFollowing(user1, pageable);
+        List<FollowersResponse> followers = followService.getFollowers(user1, pageable);
 
         //then
-        assertThat( followers.size() ).isEqualTo( followList.size() );
-
         assertThat(followers).hasSize(pageable.getPageSize())
-                .extracting("follower")
-                .contains(user5, user4, user3, user2);
+                .extracting("email", "nickName", "image")
+                .contains(
+                        new Tuple("tyui@gmail.com", "강호동" ,"이미지"),
+                        new Tuple("zxcv@naver.com", "유재석" ,"이미지"),
+                        new Tuple("qwer@gmail.com", "이수근" ,"이미지")
+                );
 
-    }
-
-    @Test
-    @DisplayName("팔로우한 회원과 팔로우 당한 회원을 정보로 팔로우 테이블에서 조회한다.")
-    void testFindByFollowerAndFollowing(){
-        //given
-        User user1 = createUser("ekxk1234@naver.com", "정철희");
-        User user2 = createUser("abcd@gmail.com", "홍길동");
-        userRepository.saveAll( List.of(user1, user2) );
-
-        followRepository.save( Follow.of(user1, user2) );
-
-        //when
-        Follow follow = followRepository.findByFollowerAndFollowing(user1, user2)
-                .orElseThrow(FollowNotFoundException::new);
-
-        //then
-        assertThat(follow.getFollower()).isEqualTo(user1);
-        assertThat(follow.getFollowing()).isEqualTo(user2);
     }
 
 
@@ -153,5 +193,6 @@ class FollowRepositoryTest extends IntegrationTestSupport {
                 .password("비밀번호")
                 .build();
     }
+
 
 }

@@ -24,35 +24,33 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     // 나를 팔로우 한 사람들
-    public ResponseEntity getFollowers(User user, Pageable pageable) {
+    public List<FollowersResponse> getFollowers(User user, Pageable pageable) {
         List<Follow> followers = followRepository.findAllByFollowing(user, pageable);
 
+        // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
         List<Long> ids = followers.stream()
                 .map(f -> f.getFollower().getId()).collect(Collectors.toList());
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
-        List<FollowersResponse> result = followUsers.stream()
+        return followUsers.stream()
                 .map(f -> FollowersResponse.of(f))
                 .collect(Collectors.toList());
-
-        return ResponseEntity.status(200).body(result);
     }
 
     // 내가 팔로우 한 사람들
-    public ResponseEntity getFollowings(User user, Pageable pageable) {
+    public List<FollowersResponse> getFollowings(User user, Pageable pageable) {
         List<Follow> followers = followRepository.findAllByFollower(user, pageable);
 
+        // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
         List<Long> ids = followers.stream()
-                .map(f -> f.getFollower().getId()).collect(Collectors.toList());
+                .map(f -> f.getFollowing().getId()).collect(Collectors.toList());
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
-        List<FollowersResponse> result = followUsers.stream()
+        return followUsers.stream()
                 .map(f -> FollowersResponse.of(f))
                 .collect(Collectors.toList());
-
-        return ResponseEntity.status(200).body(result);
     }
 
     public ResponseEntity follow(User user, Long userId) {
