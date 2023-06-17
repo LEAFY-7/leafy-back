@@ -23,8 +23,24 @@ public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-
+    // 나를 팔로우 한 사람들
     public ResponseEntity getFollowers(User user, Pageable pageable) {
+        List<Follow> followers = followRepository.findAllByFollowing(user, pageable);
+
+        List<Long> ids = followers.stream()
+                .map(f -> f.getFollower().getId()).collect(Collectors.toList());
+
+        List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
+
+        List<FollowersResponse> result = followUsers.stream()
+                .map(f -> FollowersResponse.of(f))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(200).body(result);
+    }
+
+    // 내가 팔로우 한 사람들
+    public ResponseEntity getFollowings(User user, Pageable pageable) {
         List<Follow> followers = followRepository.findAllByFollower(user, pageable);
 
         List<Long> ids = followers.stream()
