@@ -17,9 +17,7 @@ public class QnaServiceImpl implements QnaService {
 
     private final QnaMapper qnaMapper;
 
-    public int getCount() throws Exception {
-        return qnaMapper.countQna();
-    }
+    @Override
     public int remove(Integer id, String userId) throws Exception {
         return qnaMapper.deleteQna(id, userId);
     }
@@ -29,20 +27,19 @@ public class QnaServiceImpl implements QnaService {
         return qnaMapper.insertQna(QnaDto);
     }
 
-    public int userId(QnaDto qnaDto) throws Exception {
-        return qnaMapper.insertQna(qnaDto);
-    }
+    @Override
     public List<QnaDto> getList() throws Exception {
         return qnaMapper.selectAllQna();
     }
+
+    @Override
     public QnaDto read(Integer id) throws Exception {
         QnaDto qnaDto = qnaMapper.selectQna(id);
         qnaMapper.increaseViewCntQna(id);
         return qnaDto;
     }
-    public List<QnaDto> getPage(Map map) throws Exception {
-        return qnaMapper.selectPageQna(map);
-    }
+
+    @Override
     public int modify(QnaDto qnaDto) throws Exception {
         return qnaMapper.updateQna(qnaDto);
     }

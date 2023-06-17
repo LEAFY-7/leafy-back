@@ -9,16 +9,13 @@ import java.util.Map;
 
 @Mapper
 public interface QnaMapper {
-
-    int countQna() throws Exception;
-    int deleteAllQna() throws ExportException;
     QnaDto selectQna(Integer id) throws Exception;
     int deleteQna(Integer id, String userId) throws Exception;
     int insertQna(QnaDto dto) throws Exception;
     int updateQna(QnaDto dto) throws Exception;
     int increaseViewCntQna(Integer id) throws Exception;
-    List<QnaDto> selectPageQna(Map map) throws Exception;
     List<QnaDto> selectAllQna() throws Exception;
+    int deleteAllQna() throws ExportException;
     int searchResultCntQna(SearchCondition sc) throws Exception;
     List<QnaDto> searchSelectPageQna(SearchCondition sc) throws Exception;
     int updateCommentCnt(Integer bno, int i) throws Exception;
