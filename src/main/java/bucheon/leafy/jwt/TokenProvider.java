@@ -1,5 +1,9 @@
 package bucheon.leafy.jwt;
 
+import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.user.User;
+import bucheon.leafy.exception.UserNotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider implements InitializingBean {
 
+    private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
@@ -31,9 +35,11 @@ public class TokenProvider implements InitializingBean {
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+            UserRepository userRepository) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -71,9 +77,12 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        User user = userRepository.findByEmail(claims.getSubject())
+                .orElseThrow(UserNotFoundException::new);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        AuthUser authUser = new AuthUser(user);
+
+        return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
     }
 
     public boolean validateToken(String token) {
