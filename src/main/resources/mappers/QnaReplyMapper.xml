@@ -6,42 +6,42 @@
 <mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
     <delete id="deleteAllReply">
-        DELETE FROM reply
+        DELETE FROM comment
     </delete>
 
     <select id="count" parameterType="int" resultType="int">
-        SELECT count(*) FROM reply
-        WHERE  rid = #{rid}
+        SELECT count(*) FROM comment
+        WHERE  id = #{id}
     </select>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM reply WHERE rid = #{rid} AND user_id = #{user_id}
+        DELETE FROM comment WHERE cid = #{cid} AND user_id = #{user_id}
     </delete>
 
     <insert id="insert" parameterType="QnaReplyDto">
-        INSERT INTO reply
-            (reply_reply, user_id, reply, created_at, modifyed_at)
+        INSERT INTO comment
+            (id, pcno, comment, user_id, reg_date, up_date)
         VALUES
-            (#{reply_reply}, #{user_id}, #{reply}, now(), now())
+            (#{id}, #{pcno}, #{comment}, #{user_id}, now(), now())
     </insert>
 
     <select id="selectAll" parameterType="int" resultType="QnaReplyDto">
-        SELECT reply_reply, rid,  reply, user_id, created_at, modifyed_at
-        FROM reply
-        WHERE reply_reply = #{reply_reply}
-        ORDER BY created_at ASC, rid ASC
+        SELECT cno, id, pcno, user_id, user_id, reg_date, up_date
+        FROM comment
+        WHERE id = #{bno}
+        ORDER BY reg_date ASC, cid ASC
     </select>
 
     <select id="select" parameterType="int" resultType="QnaReplyDto">
-        SELECT reply_reply, rid, reply, user_id, created_at, modifyed_at
-        FROM reply
-        WHERE rid = #{rid}
+        SELECT cid, id, pcno, user_id, user_id, reg_date, up_date
+        FROM comment
+        WHERE cid = #{cid}
     </select>
 
     <update id="update" parameterType="QnaReplyDto">
-        UPDATE reply
+        UPDATE comment
         SET user_id = #{user_id}
-          , modifyed_at = now()
-        WHERE rid = #{rid} and user_id = #{user_id}
+          , up_date = now()
+        WHERE cid = #{cid} and user_id = #{user_id}
     </update>
 </mapper>

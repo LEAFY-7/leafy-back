@@ -15,4 +15,6 @@ public interface QnaReplyMapper {
     List<QnaReplyDto> selectAll(Integer cid) throws Exception;
     QnaReplyDto select(Integer cid) throws Exception;
     int update(QnaReplyDto dto) throws Exception;
+    int updateCommentCnt(Integer bno, int i);
+    int increaseviewcntQnaReply(Integer id);
 }
