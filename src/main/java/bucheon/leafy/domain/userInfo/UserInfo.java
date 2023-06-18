@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.userlike;
+package bucheon.leafy.domain.userInfo;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLike extends BaseEntity {
+public class UserInfo extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,8 +25,17 @@ public class UserLike extends BaseEntity {
     private Feed feed;
 
     @Builder
-    private UserLike(User user, Feed feed) {
+    private UserInfo(User user, Feed feed) {
         this.user = user;
         this.feed = feed;
     }
+
+    public static UserInfo of(User user, Feed feed){
+        return UserInfo.builder()
+                .user(user)
+                .feed(feed)
+                .build();
+    }
+
 }
+

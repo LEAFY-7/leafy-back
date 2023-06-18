@@ -1,19 +1,18 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
+import bucheon.leafy.domain.user.request.SignInRequest;
+import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
-import bucheon.leafy.domain.user.request.SignInRequest;
-import bucheon.leafy.domain.user.request.SignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -32,7 +31,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService authoritiesUserService;
+    private final UserService userService;
 
     private final TokenProvider tokenProvider;
 
@@ -65,13 +64,13 @@ public class UserController {
     @Operation(summary = "아이디 중복체크")
     @GetMapping("/check")
     public ResponseEntity check(@RequestParam String email) {
-        return authoritiesUserService.duplicationIdCheck(email);
+        return userService.duplicationIdCheck(email);
     }
 
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        return authoritiesUserService.signUp(signUpRequest);
+        return userService.signUp(signUpRequest);
     }
 
     @Operation(summary = "로그아웃")
@@ -82,13 +81,6 @@ public class UserController {
             return ResponseEntity.ok("로그아웃 성공");
         }
         return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
-    }
-
-    @Operation(summary = "인증 테스트")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PostMapping("/test")
-    public ResponseEntity test2() {
-        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
 }

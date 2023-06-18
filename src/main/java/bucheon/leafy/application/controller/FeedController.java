@@ -3,12 +3,14 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.request.FeedRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "피드")
 @RestController
 @RequestMapping("/v1/feeds")
 @RequiredArgsConstructor

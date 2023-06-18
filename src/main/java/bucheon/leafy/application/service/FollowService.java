@@ -24,12 +24,16 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     // 나를 팔로우 한 사람들
-    public List<FollowersResponse> getFollowers(User user, Pageable pageable) {
+    public List<FollowersResponse> getFollowers(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
         List<Follow> followers = followRepository.findAllByFollowing(user, pageable);
 
         // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
         List<Long> ids = followers.stream()
-                .map(f -> f.getFollower().getId()).collect(Collectors.toList());
+                .map(f -> f.getFollower().getId())
+                .collect(Collectors.toList());
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
@@ -39,12 +43,16 @@ public class FollowService {
     }
 
     // 내가 팔로우 한 사람들
-    public List<FollowersResponse> getFollowings(User user, Pageable pageable) {
+    public List<FollowersResponse> getFollowings(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
         List<Follow> followers = followRepository.findAllByFollower(user, pageable);
 
         // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
         List<Long> ids = followers.stream()
-                .map(f -> f.getFollowing().getId()).collect(Collectors.toList());
+                .map(f -> f.getFollowing().getId())
+                .collect(Collectors.toList());
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
@@ -53,8 +61,11 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity follow(User user, Long userId) {
-        User followTarget = userRepository.findById(userId)
+    public ResponseEntity follow(Long userId, Long targetUserId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        User followTarget = userRepository.findById(targetUserId)
                 .orElseThrow(UserNotFoundException::new);
 
         Follow follow = Follow.of(user, followTarget);
@@ -63,8 +74,11 @@ public class FollowService {
         return ResponseEntity.status(200).body("팔로우 성공");
     }
 
-    public ResponseEntity unfollow(User user, Long userId) {
-        User followTarget = userRepository.findById(userId)
+    public ResponseEntity unfollow(Long userId, Long targetUserId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        User followTarget = userRepository.findById(targetUserId)
                 .orElseThrow(UserNotFoundException::new);
 
         Follow follow = followRepository.findByFollowerAndFollowing(user, followTarget)

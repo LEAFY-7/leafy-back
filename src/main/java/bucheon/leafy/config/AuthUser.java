@@ -20,6 +20,10 @@ public class AuthUser implements UserDetails {
         return this.user;
     }
 
+    public Long getUserId(){
+        return this.user.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
