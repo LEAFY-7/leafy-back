@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedLike {
+public class FeedLikeCount {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,16 +24,16 @@ public class FeedLike {
     private AtomicLong likeCount;
 
     @Builder
-    private FeedLike(Feed feed, AtomicLong likeCount) {
+    private FeedLikeCount(Feed feed, AtomicLong likeCount) {
         this.feed = feed;
         this.likeCount = likeCount;
 
     }
 
-    public static FeedLike of(Feed feed) {
-        return FeedLike.builder()
+    public static FeedLikeCount of(Feed feed) {
+        return FeedLikeCount.builder()
                 .feed(feed)
-                .likeCount( feed.getFeedLike().getLikeCount() )
+                .likeCount( feed.getFeedLikeCount().getLikeCount() )
                 .build();
     }
 

@@ -29,31 +29,37 @@ public class Feed extends BaseDeleteEntity {
     private Boolean isDelete;
 
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
-    private FeedLike feedLike;
+    private FeedLikeCount feedLikeCount;
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedComment> feedComment = new ArrayList<>();
+    private List<FeedComment> feedComments = new ArrayList<>();
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTag> feedTag = new ArrayList<>();
+    private List<FeedTag> feedTags = new ArrayList<>();
+
+    @JoinColumn(name = "feed_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FeedImage> feedImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private FeedType feedType;
 
 
     @Builder
-    private Feed(String title, String content, Boolean isHide,Boolean isDelete, FeedLike feedLike,
-                  List<FeedComment> feedComment, List<FeedTag> feedTag, FeedType feedType) {
+    private Feed(String title, String content, Boolean isHide,Boolean isDelete,
+                 FeedLikeCount feedLikeCount, List<FeedComment> feedComments,
+                 List<FeedTag> feedTags, FeedType feedType, List<FeedImage> feedImages) {
         this.title = title;
         this.content = content;
         this.isHide = isHide;
         this.isDelete = isDelete;
-        this.feedLike = feedLike;
-        this.feedComment = feedComment;
-        this.feedTag = feedTag;
+        this.feedLikeCount = feedLikeCount;
+        this.feedComments = feedComments;
+        this.feedTags = feedTags;
         this.feedType = feedType;
+        this.feedImages = feedImages;
     }
 
 }
