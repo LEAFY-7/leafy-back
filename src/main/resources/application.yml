@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://database-leafy.cdszancjyz3s.ap-northeast-2.rds.amazonaws.com:3306/database-leafy?useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 100
+        use_sql_comments: true
+    open-in-view: false
+    defer-datasource-initialization: true
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mappers/*.xml
+  type-aliases-package: bucheon.leafy.domain.feed
+
+jwt:
+  header: Authorization
+  secret: aW5jaGVvbi1hbmQtYnVjaGVvbi1sZWFmeS1wcm9qZWN0LWphdmEtc3ByaW5nLWJhY2tlbmQtcmVhY3QtYW5kLXR5cGVzcGlyLWZyb250ZW5kLWp3dC1zZWNyZXQta2V5
+  token-validity-in-seconds: 86400
+
+
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: error
