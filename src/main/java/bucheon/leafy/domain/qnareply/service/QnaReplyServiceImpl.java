@@ -25,7 +25,7 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     @Override
     @Transactional()
     public int remove(Integer cid, Integer bno, String user_id) throws Exception {
-        int rowCnt = qnaMapper.updateCommentCnt(bno, -1);
+        int rowCnt = qnaMapper.updateReplyCnt(bno, -1);
         System.out.println("updateCommentCnt - rowCnt = " + rowCnt);
         rowCnt = qnaReplyMapper.delete(cid, user_id);
         System.out.println("rowCnt = " + rowCnt);
@@ -34,13 +34,12 @@ public class QnaReplyServiceImpl implements QnaReplyService {
     @Override
     @Transactional
     public int write(QnaReplyDto qnaReplyDto) throws Exception {
-        qnaMapper.updateCommentCnt( qnaReplyDto.getRid(),1);
-//                throw new Exception("test");
+        qnaMapper.updateReplyCnt( qnaReplyDto.getRid(),1);
         return qnaReplyMapper.insert(qnaReplyDto);
     }
     @Override
     public List<QnaReplyDto> getList(Integer cid) throws Exception {
-//        throw new Exception("test");
+
         return qnaReplyMapper.selectAll(cid);
     }
     @Override

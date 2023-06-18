@@ -9,7 +9,6 @@
             SELECT count(*) FROM qna
         </select>
 
-
         <delete id="deleteAllQna">
             DELETE FROM qna
         </delete>
@@ -26,13 +25,13 @@
         </insert>
 
         <select id="selectAllQna" resultType="QnaDto">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
+            SELECT id, title, contents, id, view_cnt, reply_cnt, created_at
             FROM qna
             ORDER BY created_at DESC, id DESC
         </select>
 
         <sql id="selectFromQnA">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
+            SELECT id, title, contents, id, view_cnt, reply_cnt, created_at
             FROM qna
         </sql>
 
@@ -57,7 +56,7 @@
 
         <update id="updateCommentCntQna" parameterType="map">
             UPDATE qna
-            SET   comment_cnt = comment_cnt + #{cnt}
+            SET   reply_cnt = reply_cnt + #{cnt}
             WHERE id = #{id}
         </update>
 
@@ -82,9 +81,9 @@
         </sql>
 
         <select id="searchSelectPageQna" parameterType="SearchCondition" resultType="QnaDto">
-            SELECT id, title, contents, user_id, view_cnt, comment_cnt, created_at
+            SELECT id, title, contents, user_id, view_cnt, reply_cnt, created_at
             FROM qna
-            WHERE truef
+            WHERE true
             <include refid="searchCondition"/>
             ORDER BY created_at DESC, id DESC
             LIMIT #{offset}, #{pateSize}
