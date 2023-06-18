@@ -1,6 +1,6 @@
- package bucheon.leafy.application.controller;
+package bucheon.leafy.application.controller;
 
- import bucheon.leafy.application.service.FollowService;
+import bucheon.leafy.application.service.FollowService;
  import bucheon.leafy.application.service.UserService;
  import bucheon.leafy.config.AuthUser;
  import bucheon.leafy.domain.follow.response.FollowersResponse;
@@ -17,24 +17,21 @@
 
  import java.util.List;
 
- @Tag(name = "팔로우")
+@Tag(name = "팔로우")
 @RestController
 @RequestMapping("/v1/follows")
 @RequiredArgsConstructor
 public class FollowController {
 
-    private final UserService userService;
     private final FollowService followService;
-
 
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity getFollowers(@AuthenticationPrincipal AuthUser authUser,
                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
-
-        User user = authUser.getUser();
-        List<FollowersResponse> result = followService.getFollowers(user, pageable);
+        Long userId = authUser.getUserId();
+        List<FollowersResponse> result = followService.getFollowers(userId, pageable);
         return ResponseEntity.status(200).body(result);
     }
 
@@ -43,9 +40,8 @@ public class FollowController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity getFollowings(@AuthenticationPrincipal AuthUser authUser,
                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
-
-        User user = authUser.getUser();
-        List<FollowersResponse> result = followService.getFollowings(user, pageable);
+        Long userId = authUser.getUserId();
+        List<FollowersResponse> result = followService.getFollowings(userId, pageable);
         return ResponseEntity.status(200).body(result);
     }
 
@@ -53,20 +49,18 @@ public class FollowController {
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity follow(@AuthenticationPrincipal AuthUser authUser,
-                                 @PathVariable("id") Long userId) {
-
-        User user = authUser.getUser();
-        return followService.follow(user, userId);
+                                 @PathVariable("id") Long targetUserId) {
+        Long userId = authUser.getUserId();
+        return followService.follow(userId, targetUserId);
     }
 
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity unfollow(@AuthenticationPrincipal AuthUser authUser,
-                                   @PathVariable("id") Long userId) {
-
-        User user = authUser.getUser();
-        return followService.unfollow(user, userId);
+                                   @PathVariable("id") Long targetUserId) {
+        Long userId = authUser.getUserId();
+        return followService.unfollow(userId, targetUserId);
     }
 
 }
