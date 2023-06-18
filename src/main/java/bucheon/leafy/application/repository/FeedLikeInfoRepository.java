@@ -2,13 +2,13 @@ package bucheon.leafy.application.repository;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.userInfo.UserInfo;
+import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+public interface FeedLikeInfoRepository extends JpaRepository<FeedLikeInfo, Long> {
 
-    Optional<UserInfo> findByUserAndFeed(User user, Feed feed);
+    Optional<FeedLikeInfo> findByUserAndFeed(User user, Feed feed);
 
 }

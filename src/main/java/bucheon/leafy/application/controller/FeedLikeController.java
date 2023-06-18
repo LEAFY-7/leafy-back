@@ -2,7 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedLikeService;
 import bucheon.leafy.application.service.FeedService;
-import bucheon.leafy.application.service.UserInfoService;
+import bucheon.leafy.application.service.FeedLikeInfoService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.Feed;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +19,7 @@ public class FeedLikeController {
 
     private final FeedService feedService;
     private final FeedLikeService feedLikeService;
-    private final UserInfoService userLikeService;
+    private final FeedLikeInfoService userLikeService;
 
     @PostMapping
     public ResponseEntity like(@AuthenticationPrincipal AuthUser user,
