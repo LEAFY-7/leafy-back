@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.leafyApi.response;
+package bucheon.leafy.domain.leafyApi;
 
 import bucheon.leafy.domain.search.FlowerGubn;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 @Data
-public class LeafyApiResponse {
+public class LeafyApiDto {
 
     private String saleDate;
     private FlowerGubn flowerGubn;
@@ -18,8 +18,8 @@ public class LeafyApiResponse {
     private int avgAmt;
 
     @Builder
-    private LeafyApiResponse(String saleDate, FlowerGubn flowerGubn, String pumName,
-                             String goodName, String lv, int maxAmt, int minAmt, int avgAmt){
+    private LeafyApiDto(String saleDate, FlowerGubn flowerGubn, String pumName,
+                        String goodName, String lv, int maxAmt, int minAmt, int avgAmt){
         this.saleDate = saleDate;
         this.flowerGubn = flowerGubn;
         this.pumName = pumName;
