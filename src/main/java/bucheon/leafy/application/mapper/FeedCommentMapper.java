@@ -1,6 +1,7 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.feed.FeedComment;
+import bucheon.leafy.domain.feed.dto.request.FeedCommentRequest;
+import bucheon.leafy.domain.feed.dto.response.FeedCommentResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -8,14 +9,13 @@ import java.util.List;
 @Mapper
 public interface FeedCommentMapper {
 
-    List<FeedComment> findCommentList();
+    List<FeedCommentResponse> findCommentList(Long feedId);
 
-    void saveComment(FeedComment feedComment);
+    Long saveComment(FeedCommentRequest request);
 
-    void editComment(FeedComment feedComment);
+    int editComment(FeedCommentRequest request);
 
-    void hardDeleteComment();
-
-    int softDeleteComment(Long id);
+    void hardDeleteComment(Long feedId, Long commentId);
+    int softDeleteComment(Long feedId, Long commentId);
 
 }
