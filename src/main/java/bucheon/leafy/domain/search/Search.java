@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Entity
@@ -18,29 +19,27 @@ public class Search extends BaseDeleteEntity {
     @Column(name = "search_id")
     private Long id;
 
+    @NotNull
     private String saleDate;
-
-    @Enumerated(EnumType.STRING)
-    private FlowerGubn flowerGubn;
-
+    @NotNull
+    private String flowerGubn;
+    @NotNull
     private String pumName;
-
+    @NotNull
     private String goodName;
-
+    @NotNull
     private String lv;
-
+    @NotNull
     private int maxAmt;
-
+    @NotNull
     private int minAmt;
-
+    @NotNull
     private int avgAmt;
-
-    private Boolean isDelete;
 
 
     @Builder
-    private Search(String saleDate, FlowerGubn flowerGubn, String pumName,
-                   String goodName, String lv, int maxAmt, int minAmt, int avgAmt,Boolean isDelete) {
+    private Search(String saleDate, String flowerGubn, String pumName,
+                   String goodName, String lv, int maxAmt, int minAmt) {
         this.saleDate = saleDate;
         this.flowerGubn = flowerGubn;
         this.pumName = pumName;
@@ -49,7 +48,6 @@ public class Search extends BaseDeleteEntity {
         this.maxAmt = maxAmt;
         this.minAmt = minAmt;
         this.avgAmt = avgAmt;
-        this.isDelete = isDelete;
     }
 
 }

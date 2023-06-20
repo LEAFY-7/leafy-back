@@ -6,13 +6,20 @@
     <select id="findSearchByPumName" resultType="bucheon.leafy.domain.search.response.SearchResponse">
         select *
         from search
-        where pum_name = #{pumName}
-            and sale_date = DATE(DATE_SUB(now(), INTERVAL 1 DAY))
+        where (pum_name = #{searchName) or good_name =#{searchName})
+          and sale_date = (select max(sale_date) from search)
+        order by good_name
     </select>
 
     <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyApi.LeafyApiDto">
-        insert into search(avg_amt, flower_gubn, good_name, lv, max_amt, min_amt, pum_name, sale_date)
-        values (#{avgAmt}, #{flowerGubn}, #{goodName}, #{lv}, #{maxAmt}, #{minAmt}, #{pumName}, #{saleDate})
+        insert into search(avg_amt, flower_gubn, good_name, lv, max_amt, min_amt, pum_name, sale_date, created_at, modified_at)
+        values (#{avgAmt}, #{flowerGubn}, #{goodName}, #{lv}, #{maxAmt}, #{minAmt}, #{pumName}, #{saleDate}, sysdate(), sysdate())
     </insert>
+
+    <delete id="deleteSearch">
+        delete
+        from search
+        where date(DATE_SUB(NOW(), INTERVAL 7 DAY)) > date(created_at)
+    </delete>
 
 </mapper>

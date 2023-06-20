@@ -13,13 +13,16 @@ public class SearchService {
 
     private final SearchMapper searchMapper;
 
-    public ResponseEntity getSearch(String pumName) {
-        //todo 조회결과 null 일때 어떻게 내려줄지 고민
-        return ResponseEntity.status(200).body(searchMapper.findSearchByPumName(pumName));
+    public ResponseEntity getSearch(String searchName) {
+        if(searchMapper.findSearchByPumName(searchName).size() == 0){
+            return ResponseEntity.status(200).body("최근 7일간 경매내역이 없습니다.");
+        }
+        return ResponseEntity.status(200).body(searchMapper.findSearchByPumName(searchName));
     }
 
     @Transactional
-    public int SaveSearch(LeafyApiDto req){
-        return searchMapper.SaveSearch(req);
-    }
+    public int SaveSearch(LeafyApiDto req){return searchMapper.SaveSearch(req);}
+
+    @Transactional
+    public int deleteSearch() {return searchMapper.deleteSearch();}
 }

@@ -21,8 +21,8 @@ public class SearchController {
 
     @Operation(summary = "식물 검색")
     @GetMapping
-    public ResponseEntity getSearch(@RequestParam String pumName) {
-        return searchService.getSearch(pumName);
+    public ResponseEntity getSearch(@RequestParam String searchName) {
+        return searchService.getSearch(searchName);
 
     }
 
