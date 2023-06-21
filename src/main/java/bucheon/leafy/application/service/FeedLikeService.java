@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,11 +27,9 @@ public class FeedLikeService {
     private final FeedLikeRepository feedLikeRepository;
     private final FeedLikeInfoRepository feedLikeInfoRepository;
 
-
     public void saveLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
@@ -40,7 +40,6 @@ public class FeedLikeService {
     public void deleteLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
@@ -48,25 +47,26 @@ public class FeedLikeService {
         deleteLikeInfo(user, feed);
     }
 
-    private void increaseLikeCount(Feed feed) {
-        FeedLikeCount feedLikeCount = FeedLikeCount.of(feed);
+    public void increaseLikeCount(Feed feed) {
+        AtomicLong likeCount = feed.getFeedLikeCount().getLikeCount();
+        FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
         feedLikeCount.like();
         feedLikeRepository.save(feedLikeCount);
     }
 
-    private void decreaseLikeCount(Feed feed) {
-        FeedLikeCount feedLikeCount = FeedLikeCount.of(feed);
+    public void decreaseLikeCount(Feed feed) {
+        AtomicLong likeCount = feed.getFeedLikeCount().getLikeCount();
+        FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
         feedLikeCount.likeCancel();
         feedLikeRepository.save(feedLikeCount);
     }
 
-    private void saveLikeInfo(User user, Feed feed) {
+    public void saveLikeInfo(User user, Feed feed) {
         FeedLikeInfo userLike = FeedLikeInfo.of(user, feed);
         feedLikeInfoRepository.save(userLike);
     }
 
-
-    private void deleteLikeInfo(User user, Feed feed) {
+    public void deleteLikeInfo(User user, Feed feed) {
         FeedLikeInfo userLike = feedLikeInfoRepository.findByUserAndFeed(user, feed)
                 .orElseThrow(UserLikeNotFoundException::new);
         feedLikeInfoRepository.delete(userLike);
