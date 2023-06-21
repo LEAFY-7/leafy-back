@@ -5,8 +5,10 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.follow.Follow;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.FollowNotFoundException;
 import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.enums.ExceptionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bucheon.leafy.exception.enums.ExceptionKey.FOLLOW;
 
 @Service
 @Transactional
@@ -61,6 +65,11 @@ public class FollowService {
 
         User followTarget = userRepository.findById(targetUserId)
                 .orElseThrow(UserNotFoundException::new);
+
+        followRepository.findByFollowerAndFollowing(user, followTarget)
+                .ifPresent(f -> {
+                    throw new ExistException(FOLLOW);
+                });
 
         Follow follow = Follow.of(user, followTarget);
 
