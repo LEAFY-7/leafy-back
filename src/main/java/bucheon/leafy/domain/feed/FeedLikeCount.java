@@ -24,16 +24,14 @@ public class FeedLikeCount {
     private AtomicLong likeCount;
 
     @Builder
-    private FeedLikeCount(Feed feed, AtomicLong likeCount) {
+    private FeedLikeCount(AtomicLong likeCount) {
         this.feed = feed;
         this.likeCount = likeCount;
-
     }
 
-    public static FeedLikeCount of(Feed feed) {
+    public static FeedLikeCount of(AtomicLong likeCount) {
         return FeedLikeCount.builder()
-                .feed(feed)
-                .likeCount( feed.getFeedLikeCount().getLikeCount() )
+                .likeCount(likeCount)
                 .build();
     }
 
