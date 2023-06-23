@@ -28,7 +28,7 @@ public class FeedComment extends BaseDeleteEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "reply_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedReply> feedReply;
 

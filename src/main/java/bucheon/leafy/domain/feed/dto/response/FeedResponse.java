@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class FeedResponse {
     private Long feed_id;
     private Long user_id;

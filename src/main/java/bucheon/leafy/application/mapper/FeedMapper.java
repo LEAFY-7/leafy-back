@@ -19,9 +19,12 @@ public interface FeedMapper {
     // 사용자가 특정 feed_id로 조회했을 시 해당 feed가 없을수도 있기때문에 optional 사용
     Optional<FeedResponse> findFeedById(Long id);
 
+    // insert 후 auto-incremented 필드값이 반환됨
     Long saveFeed(FeedRequest request);
 
     int editFeed(FeedRequest request);
+
+    void deleteAllFeeds();
 
     void hardDeleteFeed(Long id);
     int softDeleteFeed(Long id);

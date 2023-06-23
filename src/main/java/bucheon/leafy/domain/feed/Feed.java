@@ -31,11 +31,11 @@ public class Feed extends BaseDeleteEntity {
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
     private FeedLikeCount feedLikeCount;
 
-    @JoinColumn(name = "feed_id")
+    @JoinColumn(name = "comment_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedComment> feedComments = new ArrayList<>();
 
-    @JoinColumn(name = "feed_id")
+    @JoinColumn(name = "tag_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedTag> feedTags = new ArrayList<>();
 
