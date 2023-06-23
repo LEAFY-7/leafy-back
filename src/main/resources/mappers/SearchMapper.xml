@@ -3,14 +3,14 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.SearchMapper">
 
-    <select id="findSearchByPumName" resultType="bucheon.leafy.domain.search.response.SearchResponse">
+    <select id="findSearchByPumName" resultType="SearchResponse">
         select *
         from search
         where pum_name = #{pumName}
             and sale_date = DATE(DATE_SUB(now(), INTERVAL 1 DAY))
     </select>
 
-    <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyApi.LeafyApiDto">
+    <insert id="SaveSearch" parameterType="LeafyApiDto">
         insert into search(avg_amt, flower_gubn, good_name, lv, max_amt, min_amt, pum_name, sale_date)
         values (#{avgAmt}, #{flowerGubn}, #{goodName}, #{lv}, #{maxAmt}, #{minAmt}, #{pumName}, #{saleDate})
     </insert>

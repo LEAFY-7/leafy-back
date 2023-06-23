@@ -2,10 +2,12 @@ package bucheon.leafy.domain.feed.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class FeedCommentResponse {
     private Long comment_id;
     private Long user_id;
@@ -14,9 +16,6 @@ public class FeedCommentResponse {
     private Boolean is_delete;
     private Date modified_at;
 
-    public FeedCommentResponse() {
-
-    }
 
     @Builder
     private FeedCommentResponse(Long comment_id, Long user_id, Long feed_id, String comment, Boolean is_delete, Date modified_at) {

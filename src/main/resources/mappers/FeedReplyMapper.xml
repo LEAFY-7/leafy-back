@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedReplyMapper">
-    <select id="findReplyList" resultType="bucheon.leafy.domain.feed.dto.response.FeedReplyResponse">
+    <select id="findReplyList" resultType="FeedReplyResponse">
         select * from feed_reply where is_delete = false
     </select>
 </mapper>
