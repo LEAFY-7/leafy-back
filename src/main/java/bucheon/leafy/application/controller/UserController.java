@@ -63,13 +63,13 @@ public class UserController {
 
     @Operation(summary = "아이디 중복체크")
     @GetMapping("/check")
-    public ResponseEntity check(@RequestParam String email) {
-        return userService.duplicationIdCheck(email);
+    public ResponseEntity<String> check(@RequestParam String email) {
+        return  userService.duplicationIdCheck(email);
     }
 
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
+    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
         return userService.signUp(signUpRequest);
     }
 
