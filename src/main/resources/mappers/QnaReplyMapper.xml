@@ -9,11 +9,6 @@
         DELETE FROM comment
     </delete>
 
-    <select id="count" parameterType="int" resultType="int">
-        SELECT count(*) FROM comment
-        WHERE  id = #{id}
-    </select>
-
     <delete id="delete" parameterType="map">
         DELETE FROM comment WHERE cid = #{cid} AND user_id = #{user_id}
     </delete>

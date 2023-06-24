@@ -3,51 +3,46 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
+    <mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
 
-        <select id="countQna" resultType="int">
-            SELECT count(*) FROM qna
-        </select>
-
-
-        <delete id="deleteAllQna">
+        <delete id="deleteAll">
             DELETE FROM qna
         </delete>
 
-        <delete id="deleteQna" parameterType="map">
+        <delete id="delete" parameterType="map">
             DELETE FROM qna WHERE id = #{id} and user_user_id = #{user_user_id}
         </delete>
 
-        <insert id="insertQna" parameterType="bucheon.leafy.domain.qna.domain.QnaDto">
+        <insert id="insert" parameterType="QnaCommentDto">
             INSERT INTO qna
                 (title, contents, id, qan_status)
             VALUES
                 (#{title}, #{contents}, #{id}, #{qan_status})
         </insert>
 
-        <select id="selectAllQna" resultType="bucheon.leafy.domain.qna.domain.QnaDto">
+        <select id="selectAll" resultType="QnaCommentDto">
             SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
             FROM qna
             ORDER BY created_at DESC, id DESC
         </select>
 
-        <sql id="selectFromQnA">
+        <sql id="selectFrom">
             SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
             FROM qna
         </sql>
 
-        <select id="selectQna" parameterType="int" resultType="bucheon.leafy.domain.qna.domain.QnaDto">
-            <include refid="selectFromQnA"/>
+        <select id="select" parameterType="int" resultType="QnaCommentDto">
+            <include refid="selectFrom"/>
             WHERE id = #{id}
         </select>
 
-        <select id="selectPageQna" parameterType="map" resultType="bucheon.leafy.domain.qna.domain.QnaDto">
-            <include refid="selectFromQnA"/>
+        <select id="selectPage" parameterType="map" resultType="QnaCommentDto">
+            <include refid="selectFrom"/>
             ORDER BY created_at DESC, id DESC
             LIMIT #{offset}, #{pageSize}
         </select>
 
-        <update id="updateQna" parameterType="bucheon.leafy.domain.qna.domain.QnaDto">
+        <update id="update" parameterType="QnaCommentDto">
             UPDATE qna
             SET   title = #{title}
               , contents = #{contents}
@@ -55,17 +50,7 @@
             WHERE user_user_id = #{user_user_id}
         </update>
 
-        <update id="updateCommentCntQna" parameterType="map">
-            UPDATE qna
-            SET   comment_cnt = comment_cnt + #{cnt}
-            WHERE id = #{id}
-        </update>
 
-        <update id="increaseViewCntQna" parameterType="int">
-            UPDATE qna
-            SET   view_cnt = view_cnt + 1
-            WHERE id = #{id}
-        </update>
         <sql id="searchCondition">
             <choose>
                 <when test='option=="T"'>
@@ -81,7 +66,7 @@
             </choose>
         </sql>
 
-        <select id="searchSelectPageQna" parameterType="SearchCondition" resultType="bucheon.leafy.domain.qna.domain.QnaDto">
+        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaCommentDto">
             SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
             FROM qna
             WHERE true
@@ -90,10 +75,4 @@
             LIMIT #{offset}, #{pateSize}
         </select>
 
-        <select id="searchResultCntQna" parameterType="SearchCondition" resultType="int">
-            SELECT count(*)
-            FROM qna
-            WHERE true
-            <include refid="searchCondition"/>
-        </select>
     </mapper>
