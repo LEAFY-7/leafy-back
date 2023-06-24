@@ -1,11 +1,9 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.domain.qna.domain.PageHandler;
-import bucheon.leafy.domain.qna.domain.QnaDto;
-import bucheon.leafy.domain.qna.domain.SearchCondition;
-
-import bucheon.leafy.domain.qna.service.QnaService;
-import bucheon.leafy.domain.qna.service.QnaServiceImpl;
+import bucheon.leafy.domain.qna.PageHandler;
+import bucheon.leafy.domain.qna.QnaDto;
+import bucheon.leafy.domain.qna.SearchCondition;
+import bucheon.leafy.application.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,12 +109,12 @@ public class QnaController {
             return "redirect://"+request.getRequestURL();  // 로그인을 안했으면 로그인 화면으로 이동
 
         try {
-            int totalCnt = qnaService.getsearchResultCntQna(sc);//
-            m.addAttribute("totalCnt", totalCnt);
+//            int totalCnt = qnaService.getsearchResultCnt(sc);//
+//            m.addAttribute("totalCnt", totalCnt);
 
-            PageHandler pageHandler = new PageHandler(totalCnt, sc);
+            PageHandler pageHandler = new PageHandler(asdf,sc);
 
-            List<QnaDto> list = qnaService.getsearchSelectPageQna(sc);//
+            List<QnaDto> list = qnaService.getsearchSelectPage(sc);//
             m.addAttribute("list", list);
             m.addAttribute("ph", pageHandler);
 

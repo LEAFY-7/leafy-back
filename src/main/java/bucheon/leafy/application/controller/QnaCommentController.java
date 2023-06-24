@@ -1,32 +1,34 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.domain.qnareply.QnaReplyDto;
-import bucheon.leafy.application.service.QnaReplyService;
+import bucheon.leafy.application.service.QnaCommentService;
+import bucheon.leafy.domain.qna.QnaCommentDto;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-public class QnaReplyController {
+public class QnaCommentController {
 
     @Autowired
-    QnaReplyService qnaReplyService;
+    QnaCommentService qnaCommentService;
     // 댓글을 수정하는 메서드
     @PatchMapping("/user_id/{cid}")   // /ch4/comments/26  PATCH
-    public ResponseEntity<String> modify(@PathVariable Integer cid, @RequestBody QnaReplyDto dto) {
+    public ResponseEntity<String> modify(@PathVariable Integer cid, @RequestBody QnaCommentDto dto) {
 //        String user_id = (String)session.getAttribute("id");
         Integer user_id = 1111;
-        dto.setUser_id(user_id);
+        dto.se(user_id);
         System.out.println("dto = " + dto);
 
         try {
-            if(qnaReplyService.modify(dto)!=1)
+            if(qnaCommentService.modify(dto)!=1)
                 throw new Exception("Write failed.");
 
             return new ResponseEntity<>("MOD_OK", HttpStatus.OK);
@@ -36,7 +38,7 @@ public class QnaReplyController {
         }
     }
     @PostMapping("/user_id")   // /ch4/comments?id=1085  POST
-    public ResponseEntity<String> write(@RequestBody QnaReplyDto dto, Integer cid, HttpSession session) {
+    public ResponseEntity<String> write(@RequestBody QnaCommentDto dto, Integer cid, HttpSession session) {
 //        String user_id = (String)session.getAttribute("id");
         Integer user_id = 1111;
         dto.se(user_id);
@@ -44,7 +46,7 @@ public class QnaReplyController {
         System.out.println("dto = " + dto);
 
         try {
-            if(qnaReplyService.write(dto)!=1)
+            if(qnaCommentService.write(dto)!=1)
                 throw new Exception("Write failed.");
 
             return new ResponseEntity<>("WRT_OK", HttpStatus.OK);
@@ -61,7 +63,7 @@ public class QnaReplyController {
         String user_id = "asdf";
 
         try {
-            int rowCnt = qnaReplyService.r(cid, cid, user_id);
+            int rowCnt = qnaCommentService.(cid, cid, user_id);
 
             if(rowCnt!=1)
                 throw new Exception("Delete Failed");
@@ -72,31 +74,31 @@ public class QnaReplyController {
             return new ResponseEntity<>("DEL_ERR", HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/read")
-    public String read(Integer cid, RedirectAttributes rattr, Model m) {
-
-        try {
-            QnaReplyDto qnaReplyDto = qnaReplyService.read(cid);
-            m.addAttribute(qnaReplyDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            rattr.addFlashAttribute("msg", "READ_ERR");
-            return"";
-        }
-
-        return "";
-    }
+//    @GetMapping("/read")
+//    public String read(Integer cid, RedirectAttributes rattr, Model m) {
+//
+//        try {
+//            QnaCommentDto qnaCommentDto = qnaCommentService.read(cid);
+//            m.addAttribute(qnaCommentDto);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            rattr.addFlashAttribute("msg", "READ_ERR");
+//            return"";
+//        }
+//        QnaCommentDto qnaCommentMapper
+//        return "";
+//    }
 
     // 지정된 게시물의 모든 댓글을 가져오는 메서드
     @GetMapping("/user_id")  // /comments?id=1080   GET
-    public ResponseEntity<List<QnaReplyDto>> list(Integer cid) {
-        List<QnaReplyDto> list = null;
+    public ResponseEntity<List<QnaCommentDto>> list(Integer cid) {
+        List<QnaCommentDto> list = null;
         try {
-            list = qnaReplyService.getList(cid);
-            return new ResponseEntity<List<QnaReplyDto>>(list, HttpStatus.OK);  // 200
+            list = qnaCommentService.getList(cid);
+            return new ResponseEntity<List<QnaCommentDto>>(list, HttpStatus.OK);  // 200
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<List<QnaReplyDto>>(HttpStatus.BAD_REQUEST); // 400
+            return new ResponseEntity<List<QnaCommentDto>>(HttpStatus.BAD_REQUEST); // 400
         }
     }
 

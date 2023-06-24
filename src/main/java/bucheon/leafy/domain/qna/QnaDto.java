@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.qna.domain;
+package bucheon.leafy.domain.qna;
 
 import lombok.*;
 

@@ -5,12 +5,8 @@
 
     <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
-        <select id="countQna" resultType="int">
-            SELECT count(*) FROM qna
-        </select>
 
-
-        <delete id="deleteAllQna">
+        <delete id="deleteAll">
             DELETE FROM qna
         </delete>
 
@@ -18,36 +14,36 @@
             DELETE FROM qna WHERE id = #{id} and id = #{id}
         </delete>
 
-        <insert id="insertQna" parameterType="QnaDto">
+        <insert id="insert" parameterType="QnaDto">
             INSERT INTO qna
                 (title, contents, id)
             VALUES
                 (#{title}, #{contents}, #{id})
         </insert>
 
-        <select id="selectAllQna" resultType="QnaDto">
+        <select id="selectAll" resultType="QnaDto">
             SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
             FROM qna
             ORDER BY created_at DESC, id DESC
         </select>
 
-        <sql id="selectFromQnA">
+        <sql id="selectFrom">
             SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
             FROM qna
         </sql>
 
-        <select id="selectQna" parameterType="int" resultType="QnaDto">
-            <include refid="selectFromQnA"/>
+        <select id="select" parameterType="int" resultType="QnaDto">
+            <include refid="selectFrom"/>
             WHERE id = #{id}
         </select>
 
-        <select id="selectPageQna" parameterType="map" resultType="QnaDto">
-            <include refid="selectFromQnA"/>
+        <select id="selectPage" parameterType="map" resultType="QnaDto">
+            <include refid="selectFrom"/>
             ORDER BY created_at DESC, id DESC
             LIMIT #{offset}, #{pageSize}
         </select>
 
-        <update id="updateQna" parameterType="QnaDto">
+        <update id="update" parameterType="QnaDto">
             UPDATE qna
             SET   title = #{title}
               , contents = #{contents}
@@ -55,17 +51,7 @@
             WHERE user_id = #{user_id}
         </update>
 
-        <update id="updateCommentCntQna" parameterType="map">
-            UPDATE qna
-            SET   comment_cnt = comment_cnt + #{cnt}
-            WHERE id = #{id}
-        </update>
 
-        <update id="increaseViewCntQna" parameterType="int">
-            UPDATE qna
-            SET   view_cnt = view_cnt + 1
-            WHERE id = #{id}
-        </update>
         <sql id="searchCondition">
             <choose>
                 <when test='option=="T"'>
@@ -81,7 +67,7 @@
             </choose>
         </sql>
 
-        <select id="searchSelectPageQna" parameterType="SearchCondition" resultType="QnaDto">
+        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaDto">
             SELECT id, title, contents, user_id, view_cnt, comment_cnt, created_at
             FROM qna
             WHERE truef
@@ -90,7 +76,7 @@
             LIMIT #{offset}, #{pateSize}
         </select>
 
-        <select id="searchResultCntQna" parameterType="SearchCondition" resultType="int">
+        <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
             SELECT count(*)
             FROM qna
             WHERE true

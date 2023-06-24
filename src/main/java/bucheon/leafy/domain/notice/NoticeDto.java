@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.notice.domain;
+package bucheon.leafy.domain.notice;
 
 import lombok.Data;
 

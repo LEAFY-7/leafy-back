@@ -1,7 +1,7 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.domain.qnareply.QnaReplyDto;
 import bucheon.leafy.application.service.QnaReplyService;
+import bucheon.leafy.domain.qnareply.QnaReplyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,9 @@ public class QnaReplyController {
     @Autowired
     QnaReplyService qnaReplyService;
     // 댓글을 수정하는 메서드
-    @PatchMapping("/user_id/{cid}")   // /ch4/comments/26  PATCH
+    @PatchMapping("/user_id/{cid}")
     public ResponseEntity<String> modify(@PathVariable Integer cid, @RequestBody QnaReplyDto dto) {
-//        String user_id = (String)session.getAttribute("id");
+
         Integer user_id = 1111;
         dto.setUser_id(user_id);
         System.out.println("dto = " + dto);
@@ -37,7 +37,7 @@ public class QnaReplyController {
     }
     @PostMapping("/user_id")   // /ch4/comments?id=1085  POST
     public ResponseEntity<String> write(@RequestBody QnaReplyDto dto, Integer cid, HttpSession session) {
-//        String user_id = (String)session.getAttribute("id");
+
         Integer user_id = 1111;
         dto.se(user_id);
         dto.setRid(cid);
@@ -45,7 +45,7 @@ public class QnaReplyController {
 
         try {
             if(qnaReplyService.write(dto)!=1)
-                throw new Exception("Write failed.");
+                throw new RuntimeException("Write failed.");
 
             return new ResponseEntity<>("WRT_OK", HttpStatus.OK);
         } catch (Exception e) {
@@ -57,14 +57,14 @@ public class QnaReplyController {
     // 지정된 댓글을 삭제하는 메서드
     @DeleteMapping("/user_id/{cid}")  // DELETE /comments/1?id=1085  <-- 삭제할 댓글 번호
     public ResponseEntity<String> remove(@PathVariable Integer cid,  HttpSession session) {
-//        String user_id = (String)session.getAttribute("id");
+
         String user_id = "asdf";
 
         try {
             int rowCnt = qnaReplyService.r(cid, cid, user_id);
 
             if(rowCnt!=1)
-                throw new Exception("Delete Failed");
+                throw new RuntimeException("Delete Failed");
 
             return new ResponseEntity<>("DEL_OK", HttpStatus.OK);
         } catch (Exception e) {
