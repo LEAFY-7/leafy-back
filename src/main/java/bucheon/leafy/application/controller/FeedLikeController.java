@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedLikeService;
 import bucheon.leafy.config.AuthUser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ public class FeedLikeController {
     private final FeedLikeService feedLikeService;
 
     @PostMapping
-    public ResponseEntity like(@AuthenticationPrincipal AuthUser user,
+    @Operation(summary = "좋아요 등록")
+    public ResponseEntity<String> like(@AuthenticationPrincipal AuthUser user,
                                       @PathVariable("id") Long feedId) {
 
         Long userId = user.getUserId();
@@ -27,7 +29,8 @@ public class FeedLikeController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteLike(@AuthenticationPrincipal AuthUser user,
+    @Operation(summary = "좋아요 삭제")
+    public ResponseEntity<String> deleteLike(@AuthenticationPrincipal AuthUser user,
                                       @PathVariable("id") Long feedId) {
 
         Long userId = user.getUserId();

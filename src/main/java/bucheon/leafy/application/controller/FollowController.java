@@ -26,7 +26,7 @@ public class FollowController {
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity getFollowers(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<List<FollowersResponse>> getFollowers(@AuthenticationPrincipal AuthUser authUser,
                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
         List<FollowersResponse> result = followService.getFollowers(userId, pageable);
@@ -36,7 +36,7 @@ public class FollowController {
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity getFollowings(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<List<FollowersResponse>> getFollowings(@AuthenticationPrincipal AuthUser authUser,
                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
         List<FollowersResponse> result = followService.getFollowings(userId, pageable);
@@ -46,7 +46,7 @@ public class FollowController {
     @Operation(summary = "팔로우")
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity follow(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> follow(@AuthenticationPrincipal AuthUser authUser,
                                  @PathVariable("id") Long targetUserId) {
 
         Long userId = authUser.getUserId();
@@ -58,7 +58,7 @@ public class FollowController {
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity unfollow(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> unfollow(@AuthenticationPrincipal AuthUser authUser,
                                    @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
         followService.unfollow(userId, targetUserId);
