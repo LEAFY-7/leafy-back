@@ -1,41 +1,27 @@
 spring:
   datasource:
-<<<<<<< HEAD
-    url: jdbc:mysql://localhost:3306/leafy
-    username: castello
-=======
-#    url: jdbc:mysql://database-test.cdszancjyz3s.ap-northeast-2.rds.amazonaws.com:3306/database-leafy?useSSL=false
-#    username: root
-#    password: leafy1234
-#    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:log4jdbc:mysql://localhost:3306/leafy
     username: root
->>>>>>> 4148f77 (application 수정)
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
- jpa:
+jpa:
+ hibernate:
+   ddl-auto: create
+ properties:
    hibernate:
-     ddl-auto: create
-   properties:
-     hibernate:
-       format_sql: true
-       show_sql: true
-       default_batch_fetch_size: 100
-       use_sql_comments: true
-   open-in-view: false
+     format_sql: true
+     show_sql: true
+     default_batch_fetch_size: 100
+     use_sql_comments: true
+ open-in-view: false
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mappers/*.xml
-<<<<<<< HEAD
-=======
-#  type-aliases-package: bucheon.leafy.domain.feed
-#  type-aliases-package: bucheon.leafy.domain
->>>>>>> 4148f77 (application 수정)
 
- sql:
+sql:
    init:
      mode: never
 
