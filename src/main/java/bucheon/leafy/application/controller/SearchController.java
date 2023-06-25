@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "식물 검색!!!!!!!!!!!!!!!!!!!")
+@Tag(name = "식물 검색!!!!")
 @RestController
 @RequestMapping("/v1/search")
 @RequiredArgsConstructor
