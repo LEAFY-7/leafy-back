@@ -30,7 +30,7 @@ jobs:
         shell: bash
 
       - name: Clean Build with Gradle
-        run: ./gradlew clean build --no-test
+        run: ./gradlew clean build -x test
         shell: bash
 
       - name: Configure AWS credentials
