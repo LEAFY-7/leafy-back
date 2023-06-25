@@ -1,15 +1,14 @@
 package bucheon.leafy.domain.leafyApi;
 
-import bucheon.leafy.domain.search.FlowerGubn;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 
-@Data
+@Getter
+@Setter
 public class LeafyApiDto {
 
     private String saleDate;
-    private FlowerGubn flowerGubn;
+    private String flowerGubn;
     private String pumName;
     private String goodName;
     private String lv;
@@ -18,7 +17,7 @@ public class LeafyApiDto {
     private int avgAmt;
 
     @Builder
-    private LeafyApiDto(String saleDate, FlowerGubn flowerGubn, String pumName,
+    public LeafyApiDto(String saleDate, String flowerGubn, String pumName,
                         String goodName, String lv, int maxAmt, int minAmt, int avgAmt){
         this.saleDate = saleDate;
         this.flowerGubn = flowerGubn;

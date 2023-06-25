@@ -2,7 +2,6 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.leafyApi.LeafyApiDto;
-import bucheon.leafy.domain.search.FlowerGubn;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ class SearchServiceTest extends IntegrationTestSupport {
     private LeafyApiDto createSearch() {
         return LeafyApiDto.builder()
                 .saleDate("2023-06-18")
-                .flowerGubn(FlowerGubn.CUT_FLOWERS)
+                .flowerGubn("절화")
                 .pumName("장미")
                 .goodName("블론디")
                 .lv("특3")
