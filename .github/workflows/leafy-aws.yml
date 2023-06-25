@@ -48,11 +48,6 @@ jobs:
           --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
           --source .
 
-      - name: Access RDS MySQL
-        run: mysql -h database-leafy.cdszancjyz3s.ap-northeast-2.rds.amazonaws.com -P 3306 -u root -p
-        env:
-          MYSQL_PASSWORD: ${{ env.RDS_PASSWORD }}
-
       - name: Code Deploy
         run: |
           aws deploy create-deployment \
