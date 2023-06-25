@@ -64,7 +64,7 @@ public class UserController {
     @Operation(summary = "아이디 중복체크")
     @GetMapping("/check")
     public ResponseEntity<String> check(@RequestParam String email) {
-        return  userService.duplicationIdCheck(email);
+        return userService.duplicationIdCheck(email);
     }
 
     @Operation(summary = "회원가입")

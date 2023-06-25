@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedImageService;
 import bucheon.leafy.domain.feed.dto.request.FeedImageRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "피드 이미지")
 @RestController
 @RequestMapping("/v1/feeds/{feedId}")
 @RequiredArgsConstructor

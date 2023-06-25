@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "피드 좋아요!")
+@Tag(name = "피드 좋아요!!!!!!!")
 @RestController
 @RequestMapping("/v1/feeds/{id}/like")
 @RequiredArgsConstructor
