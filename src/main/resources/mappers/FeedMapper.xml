@@ -3,41 +3,29 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
-    <select id="findFeedListFirst" resultType="Feed">
-        select *
-        from feed
-        where is_hide = false
-          and is_delete = false
-        ORDER BY feed_id DESC
-        LIMIT 10;
+    <select id="findFeedListFirst" resultType="FeedResponse">
+        select * from feed where is_hide = false and is_delete = false ORDER BY feed_id DESC LIMIT 10;
     </select>
 
-    <select id="findFeedListScroll" resultType="Feed" parameterType="java.lang.Long">
-        select *
-        from feed
-        where is_hide = false
-          and is_delete = false
-          and feed_id &lt;= #{id}
-        ORDER BY feed_id DESC
-        LIMIT 10;
+    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="java.lang.Long">
+        select * from feed where is_hide = false and is_delete = false and feed_id &lt;= #{id} ORDER BY feed_id DESC LIMIT 10;
     </select>
 
-    <select id="findFeedById" resultType="Feed" parameterType="java.lang.Long">
-        select *
-        from feed
-        where feed_id = #{id}
-          and is_hide = false
-          and is_delete = false;
+    <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long">
+        select * from feed where feed_id = #{id} and is_hide = false and is_delete = false;
     </select>
 
-    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyProperty="id">
-        insert into feed (title,content,user_id,is_hide,is_delete,created_at,modified_at)
-        values (#{title}, #{content}, #{user.id}, false, false, sysdate(), sysdate())
+    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyProperty="feed_id">
+        insert into feed (user_id,title,content,is_hide,is_delete,created_at,modified_at) values (#{user_id}, #{title}, #{content}, #{is_hide}, false, now(), now())
     </insert>
 
-    <update id="editFeed" parameterType="FeedRequest">
-        update feed set title = #{title}, content = #{content}, modified_at = sysdate() where feed_id = #{id}
+    <update id="editFeed"  parameterType="FeedRequest">
+        update feed set title = #{title}, content = #{content}, modified_at = now() where feed_id = #{feed_id}
     </update>
+
+    <delete id="deleteAllFeeds">
+        delete from feed
+    </delete>
 
     <delete id="hardDeleteFeed"  parameterType="java.lang.Long">
         delete from feed where feed_id = #{id}
@@ -46,5 +34,4 @@
     <update id="softDeleteFeed" parameterType="java.lang.Long">
         update feed set is_delete = true where feed_id = #{id}
     </update>
-
 </mapper>

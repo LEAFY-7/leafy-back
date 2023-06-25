@@ -37,7 +37,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                // token을 사용하는 방식이기 때문에 csrf를 disable
                 .csrf().disable()
 
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
@@ -48,6 +48,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/v1/users/sign**").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                .antMatchers("/v1/search/**").permitAll()
+                .antMatchers("/v1/feeds/**").permitAll()
+                .antMatchers("/v1/feeds/{id}/like/**").authenticated()
                 .anyRequest().authenticated()
 
                 .and()

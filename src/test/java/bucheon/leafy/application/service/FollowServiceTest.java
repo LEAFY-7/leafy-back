@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -60,16 +59,10 @@ class FollowServiceTest extends IntegrationTestSupport {
         userRepository.saveAll( List.of(user1, user2) );
 
         //when
-        ResponseEntity result = followService.follow(user1.getId(), user2.getId());
+        followService.follow(user1.getId(), user2.getId());
         List<Follow> follows = followRepository.findAll();
 
         //then
-        assertThat(result.getStatusCodeValue())
-                .isEqualTo(200);
-
-        assertThat(result.getBody())
-                .isEqualTo("팔로우 성공");
-
         assertThat(follows).hasSize(1);
     }
 
@@ -84,16 +77,10 @@ class FollowServiceTest extends IntegrationTestSupport {
         followRepository.save( Follow.of(user1, user2) );
 
         //when
-        ResponseEntity result = followService.unfollow(user1.getId(), user2.getId());
+        followService.unfollow(user1.getId(), user2.getId());
         List<Follow> follows = followRepository.findAll();
 
         //then
-        assertThat(result.getStatusCodeValue())
-                .isEqualTo(200);
-
-        assertThat(result.getBody())
-                .isEqualTo("언팔로우 성공");
-
         assertThat(follows).hasSize(0);
     }
 
