@@ -11,6 +11,7 @@ import java.util.Map;
 @Mapper
 public interface QnaMapper {
 
+    int count() throws Exception;
     int deleteAll() throws ExportException;
     QnaDto select(Integer id) throws Exception;
     int delete(Integer id, Integer user_user_id) throws Exception;
@@ -18,7 +19,8 @@ public interface QnaMapper {
     int update(QnaDto dto) throws Exception;
     List<QnaDto> selectPage(Map map) throws Exception;
     List<QnaDto> selectAll() throws Exception;
+    int searchResultCnt(SearchCondition sc) throws Exception;
     List<QnaDto> searchSelectPage(SearchCondition sc) throws Exception;
-    List<QnaDto> searchResultCnt(SearchCondition sc) throws Exception;
+
 
 }
