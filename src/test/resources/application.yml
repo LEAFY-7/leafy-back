@@ -33,3 +33,8 @@ jwt:
   header: Authorization
   secret: aW5jaGVvbi1hbmQtYnVjaGVvbi1sZWFmeS1wcm9qZWN0LWphdmEtc3ByaW5nLWJhY2tlbmQtcmVhY3QtYW5kLXR5cGVzcGlyLWZyb250ZW5kLWp3dC1zZWNyZXQta2V5
   token-validity-in-seconds: 86400
+
+leafy:
+  api:
+    serviceKey: F445D25F38CE455C976577FB9869F826
+
