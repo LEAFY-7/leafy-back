@@ -1,38 +1,56 @@
-#name: CI/CD Pipeline
-#
-#on:
-#  push:
-#    branches:
-#      - main
-#
-#jobs:
-#  deploy:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v2
-#
-#      - name: Configure AWS credentials
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: your-aws-region
-#
-#      - name: Deploy to EC2
-#        run: |
-#          # Your deployment script or commands here
-#          # For example, you can use SSH to connect to your EC2 instance and deploy your code
-#        # Example using AWS CLI to deploy to S3:
-#        #  aws s3 sync . s3://your-bucket-name
-#
-#      - name: Deploy to RDS
-#        run: |
-#          # Your database deployment script or commands here
-#          # Connect to your RDS instance and execute SQL scripts, migrations, etc.
-#
-#      - name: Clean up
-#        run: |
-#          # Any clean up or finalization steps here
-#          # For example, closing SSH connections or releasing resources
+name: Leafy-Ci-Cd
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  S3_BUCKET_NAME: bucket-leafy
+  RESOURCE_PATH: ./src/main/resources/application.yml
+  CODE_DEPLOY_APPLICATION_NAME : my-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: my-codedeploy-deployment-group
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Clean Build with Gradle
+        run: ./gradlew clean build
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Upload to AWS S3
+        run: |
+          aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source .
+
+      - name: Code Deploy
+        run: |
+          aws deploy create-deployment \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
