@@ -1,10 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
-import bucheon.leafy.application.repository.AddressRepository;
-import bucheon.leafy.application.repository.FollowRepository;
-import bucheon.leafy.application.repository.UserImageRepository;
-import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.application.repository.*;
 import bucheon.leafy.domain.follow.Follow;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.Address;
@@ -42,11 +39,15 @@ class FollowServiceTest extends IntegrationTestSupport {
     @Autowired
     private UserImageRepository userImageRepository;
 
+    @Autowired
+    private FeedRepository feedRepository;
+
     @AfterEach
     void tearDown(){
         userImageRepository.deleteAllInBatch();
         addressRepository.deleteAllInBatch();
         followRepository.deleteAllInBatch();
+        feedRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 
