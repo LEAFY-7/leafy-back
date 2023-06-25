@@ -1,41 +1,47 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedLikeService;
+import bucheon.leafy.application.service.FeedService;
+import bucheon.leafy.application.service.FeedLikeInfoService;
 import bucheon.leafy.config.AuthUser;
-import io.swagger.v3.oas.annotations.Operation;
+import bucheon.leafy.domain.feed.Feed;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "피드 좋아요!")
+@Tag(name = "피드 좋아요")
 @RestController
 @RequestMapping("/v1/feeds/{id}/like")
 @RequiredArgsConstructor
 public class FeedLikeController {
 
+    private final FeedService feedService;
     private final FeedLikeService feedLikeService;
+    private final FeedLikeInfoService userLikeService;
 
     @PostMapping
-    @Operation(summary = "좋아요 등록")
-    public ResponseEntity<String> like(@AuthenticationPrincipal AuthUser user,
-                                      @PathVariable("id") Long feedId) {
-
+    public ResponseEntity like(@AuthenticationPrincipal AuthUser user,
+                                      @PathVariable("id") Long id) {
         Long userId = user.getUserId();
-        feedLikeService.saveLike(userId, feedId);
 
+        Feed feed = feedService.getFeedById(id);
+        feedLikeService.saveLike(feed);
+
+        userLikeService.saveLikeInfo(userId, feed);
         return ResponseEntity.ok().body("성공적으로 실행되었습니다.");
     }
 
     @DeleteMapping
-    @Operation(summary = "좋아요 삭제")
-    public ResponseEntity<String> deleteLike(@AuthenticationPrincipal AuthUser user,
-                                      @PathVariable("id") Long feedId) {
-
+    public ResponseEntity deleteLike(@AuthenticationPrincipal AuthUser user,
+                                      @PathVariable("id") Long id) {
         Long userId = user.getUserId();
-        feedLikeService.deleteLike(userId, feedId);
 
+        Feed feed = feedService.getFeedById(id);
+        feedLikeService.deleteLike(feed);
+
+        userLikeService.deleteLikeInfo(userId, feed);
         return ResponseEntity.ok().body("성공적으로 실행되었습니다.");
     }
 

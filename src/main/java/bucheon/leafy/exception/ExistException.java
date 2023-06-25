@@ -1,5 +1,7 @@
 package bucheon.leafy.exception;
 
+import bucheon.leafy.exception.enums.ExceptionKey;
+
 public class ExistException extends GlobalException {
     private static String MESSAGE = "이미 존재하는 %s입니다.";
 
