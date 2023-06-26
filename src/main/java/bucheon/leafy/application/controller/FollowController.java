@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "팔로우!!!!!!!")
+@Tag(name = "팔로우")
 @RestController
 @RequestMapping("/v1/follows")
 @RequiredArgsConstructor
