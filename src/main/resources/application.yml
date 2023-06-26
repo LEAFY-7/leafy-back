@@ -9,7 +9,7 @@ spring:
         mode: never
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -21,11 +21,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-<<<<<<< HEAD
   mapper-locations: classpath*:/mappers/*.xml
-  type-aliases-package: bucheon.leafy.*
-=======
-  mapper-locations: classpath:mappers/*.xml
   type-aliases-package: bucheon.leafy.*
 
 logging:
@@ -36,7 +32,6 @@ logging:
     jdbc.audit: off
     jdbc.resultset: off
     jdbc.connection: off
->>>>>>> 0e6ce4f137f9f833c34f4b3af6520c5e9cfe90b5
 
 jwt:
   header: Authorization
