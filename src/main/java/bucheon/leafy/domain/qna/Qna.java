@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,6 +25,10 @@ public class Qna extends BaseDeleteEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
+
+    @JoinColumn(name = "Qna_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<QnaComment> qnaComments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private QnaStatus qnaStatus;
