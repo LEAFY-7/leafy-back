@@ -25,15 +25,16 @@ public class QnaComment extends BaseDeleteEntity {
 
     private String comment;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "qna_comment_id")
-    private List<QnaReply> qnaReplies = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "qna_comment_id")
+//    private List<QnaReply> qnaReplies = new ArrayList<>();
+//    , List<QnaReply> qnaReplies
 
     @Builder
-    private QnaComment(User user, String comment, List<QnaReply> qnaReplies) {
+    private QnaComment(User user, String comment) {
         this.user = user;
         this.comment = comment;
-        this.qnaReplies = qnaReplies;
+//        this.qnaReplies = qnaReplies;
     }
 }
 

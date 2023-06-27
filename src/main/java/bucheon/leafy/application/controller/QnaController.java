@@ -4,12 +4,11 @@ import bucheon.leafy.domain.qna.PageHandler;
 import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.domain.qna.SearchCondition;
 import bucheon.leafy.application.service.QnaService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,15 +21,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/qna")
+@RequestMapping("/v1/qna")
 public class QnaController {
 
-   private QnaService qnaService;
-
-    @PostMapping("/modify")
+    private QnaService qnaService;
+    @Operation(summary = "Qna/Notice게시판 수정하기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PostMapping("/modify/{user_user_id}")
     public String modify(QnaDto qnaDto, SearchCondition sc, RedirectAttributes rattr, Model m, HttpSession session) {
-        String userId = (String)session.getAttribute("id");
-        qnaDto.setUserId(userId);
+        Integer user_user_id = (Integer)session.getAttribute("id");
+        qnaDto.setUser_user_id(user_user_id);
 
         try {
             if (qnaService.modify(qnaDto)!= 1)
@@ -45,17 +45,19 @@ public class QnaController {
             return "";
         }
     }
-
-    @GetMapping("/write")
-    public String userId(Model m) {
+    @Operation(summary = "Qna/Notice게시판 쓰기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @GetMapping("/write/{user_user_id}")
+    public String write(Model m) {
         m.addAttribute("mode", "new");
-        return "";
+        return "qna";
     }
-
-    @PostMapping("/write")
-    public String userId(QnaDto qnaDto, RedirectAttributes rattr, Model m, HttpSession session) {
-        String userId = (String)session.getAttribute("id");
-        qnaDto.setUserId(userId);
+    @Operation(summary = "Qna/Notice게시판 쓰기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @PostMapping("/write/{user_user_id}")
+    public String write(QnaDto qnaDto, RedirectAttributes rattr, Model m, HttpSession session) {
+        Integer user_user_id = (Integer)session.getAttribute("id");
+        qnaDto.setUser_user_id(user_user_id);
 
         try {
             if (qnaService.write(qnaDto) != 1)
@@ -71,8 +73,9 @@ public class QnaController {
             return"";
         }
     }
-
-    @GetMapping("/read")
+    @Operation(summary = "Qna/Notice게시판 읽기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @GetMapping("/read/{user_user_id}")
     public String read(Integer id, SearchCondition sc, RedirectAttributes rattr, Model m) {
         try {
             QnaDto qnaDto = qnaService.read(id);
@@ -85,14 +88,15 @@ public class QnaController {
 
         return "";
     }
-
-    @PostMapping("/remove")
+    @Operation(summary = "Qna/Notice게시판 삭제하기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @DeleteMapping("/remove/{id}")
     public String remove(Integer id, SearchCondition sc, RedirectAttributes rattr, HttpSession session) {
-        String userId = (String)session.getAttribute("id");
+        Integer user_user_id = (Integer)session.getAttribute("id");
         String msg = "DEL_OK";
 
         try {
-            if(qnaService.remove(id, userId)!=1) //삭제버튼 본인or 관리자 || qnaService.remove(id,admin ) 메소드 새로 만들어야 될듯
+            if(qnaService.remove(id, user_user_id)!=1) //삭제버튼 본인or 관리자 || qnaService.remove(id,admin ) 메소드 새로 만들어야 될듯
                 throw new Exception("Delete failed.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,19 +106,19 @@ public class QnaController {
         rattr.addFlashAttribute("msg", msg);
         return"";//
     }
-
+    @Operation(summary = "Qna/Notice게시판 리스트")
     @GetMapping("/list")
     public String list(Model m, SearchCondition sc, HttpServletRequest request) {
         if(!loginCheck(request))
             return "redirect://"+request.getRequestURL();  // 로그인을 안했으면 로그인 화면으로 이동
 
         try {
-//            int totalCnt = qnaService.getsearchResultCnt(sc);//
-//            m.addAttribute("totalCnt", totalCnt);
+            int totalCnt = qnaService.getSearchResultCnt(sc);//
+            m.addAttribute("totalCnt", totalCnt);
 
-            PageHandler pageHandler = new PageHandler(asdf,sc);
+            PageHandler pageHandler = new PageHandler(totalCnt,sc);
 
-            List<QnaDto> list = qnaService.getsearchSelectPage(sc);//
+            List<QnaDto> list = qnaService.getSearchSelectPage(sc);//
             m.addAttribute("list", list);
             m.addAttribute("ph", pageHandler);
 
