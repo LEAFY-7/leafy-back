@@ -1,6 +1,8 @@
 package bucheon.leafy.domain.user;
 
 import bucheon.leafy.domain.feed.Feed;
+import bucheon.leafy.domain.notice.Notice;
+import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.*;
@@ -42,9 +44,18 @@ public class User extends BaseDeleteEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Qna> qna = new ArrayList<>();
+
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Notice> notices = new ArrayList<>();
+
     @Builder
-    private User(String password, String email, String nickName, String phone, List<Feed> feeds,
-                 List<Address> address, UserImage userImage, UserRole userRole) {
+    private User(String password, String email, String nickName, String phone,
+                 List<Feed> feeds, List<Address> address, UserImage userImage,
+                 UserRole userRole,  List<Qna> qna, List<Notice> notices) {
 
         this.password = password;
         this.email = email;
@@ -54,6 +65,8 @@ public class User extends BaseDeleteEntity {
         this.address = address;
         this.userImage = userImage;
         this.userRole = userRole;
+        this.qna = qna;
+        this.notices = notices;
     }
 
     public static User of(SignUpRequest signUpRequest) {
