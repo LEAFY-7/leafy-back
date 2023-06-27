@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.qna;
 
-import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,20 +22,16 @@ public class Qna extends BaseDeleteEntity {
 
     private String contents;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private User user;
-
-    @JoinColumn(name = "Qna_id")
+    @JoinColumn(name = "qna_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QnaComment> qnaComments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private QnaStatus qnaStatus;
 
-    private Qna(String title, String contents, User user, QnaStatus qnaStatus) {
+    private Qna(String title, String contents, QnaStatus qnaStatus) {
         this.title = title;
         this.contents = contents;
-        this.user = user;
         this.qnaStatus = qnaStatus;
     }
 

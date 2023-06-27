@@ -1,8 +1,9 @@
 package bucheon.leafy.domain.qna;
 
-import lombok.*;
+import lombok.Data;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
 
 @Data
 public class QnaDto {

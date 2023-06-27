@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.notice;
 
-import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,20 +24,17 @@ public class Notice extends BaseDeleteEntity {
 
     private Boolean isHide;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
     @Builder
-    private Notice(String title, String contents, User user,
-                   List<NoticeComment> noticeComments, Boolean isHide) {
+    private Notice(String title, String contents,
+                   List<NoticeComment> noticeComments,
+                   Boolean isHide) {
 
         this.title = title;
         this.contents = contents;
-        this.user = user;
         this.noticeComments = noticeComments;
         this.isHide = isHide;
     }
