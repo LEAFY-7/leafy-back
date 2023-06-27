@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.qna;
+package bucheon.leafy.domain.qna.domain;
 
 import lombok.*;
 
@@ -109,3 +109,5 @@ public class QnaDto {
 }
 
 
+
+}

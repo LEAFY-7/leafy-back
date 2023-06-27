@@ -32,8 +32,9 @@ public class QnaService {
         return qnaMapper.delete(id, user_user_id);
     }
 
-    public int write(QnaDto qnaDto) throws Exception {
-        return qnaMapper.insert(qnaDto);
+    @Override
+    public int write(QnaDto QnaDto) throws Exception {
+        return qnaMapper.insertQna(QnaDto);
     }
 
     public List<QnaDto> getList() throws Exception {

@@ -1,47 +1,47 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.FeedMapper;
-import bucheon.leafy.domain.feed.dto.request.FeedRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedResponse;
-import bucheon.leafy.exception.FeedDataAccessException;
+import bucheon.leafy.domain.feed.Feed;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.exception.FeedNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class FeedService {
     private final FeedMapper mapper;
 
-    public List<FeedResponse> getFeeds() {
+    public List<Feed> getFeeds() {
         return mapper.findFeedListFirst();
     }
 
-    public List<FeedResponse> getFeeds(Long feedId) {
-        return mapper.findFeedListScroll(feedId);
+    public List<Feed> getFeeds(Long id) {
+        return mapper.findFeedListScroll(id);
     }
 
-    public FeedResponse getFeedById(Long feedId) {
-        return mapper.findFeedById(feedId).orElseThrow(FeedNotFoundException::new);
+
+    public Feed getFeedById(Long id) {
+        return mapper.findFeedById(id).orElseThrow(FeedNotFoundException::new);
     }
 
-    public Long saveFeed(FeedRequest request) {
-        return mapper.saveFeed(request);
+    public Long saveFeed(FeedRequest feed) {
+        Long id = mapper.saveFeed(feed);
+
+        return id;
     }
 
-    public Long updateFeed(Long feedId, FeedRequest request) {
-        request.setFeed_id(feedId);
-        if( mapper.editFeed(request) == 1 ) {
-            return feedId;
-        } else {
-            throw new FeedDataAccessException();
-        }
+    public Long updateFeed(FeedRequest feed) {
+        mapper.editFeed(feed);
+
+        Long id = feed.getId();
+
+        return id;
     }
 
-    public boolean deleteFeed(Long feedId) { return mapper.softDeleteFeed(feedId) == 1; }
-
+    public boolean deleteFeed(Long id) {
+        return mapper.softDeleteFeed(id) == 1;
+    }
 }
