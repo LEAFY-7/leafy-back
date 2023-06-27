@@ -19,9 +19,11 @@ public class NoticeReply extends BaseDeleteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @JoinColumn(name = "feed_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Feed feed;
 
@@ -33,4 +35,5 @@ public class NoticeReply extends BaseDeleteEntity {
         this.feed = feed;
         this.comment = comment;
     }
+
 }

@@ -18,9 +18,11 @@ public class FeedLikeInfo extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @JoinColumn(name = "feed_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Feed feed;
 
