@@ -3,55 +3,55 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
+<mapper namespace="bucheon.leafy.application.mapper.NoticeMapper">
 
     <select id="count" resultType="int">
-        SELECT count(*) FROM qna
+        SELECT count(*) FROM notice
     </select>
 
     <delete id="deleteForAdmin">
-        DELETE FROM qna where id = #{id}
+        DELETE FROM notice where id = #{id}
     </delete>
 
     <delete id="deleteAll">
-        DELETE FROM qna
+        DELETE FROM notice
     </delete>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM qna WHERE id = #{id} and user_id = #{user_id}
+        DELETE FROM notice WHERE id = #{id} and user_id = #{user_id}
     </delete>
 
-    <insert id="insert" parameterType="QnaDto">
-        INSERT INTO qna
+    <insert id="insert" parameterType="NoticeDto">
+        INSERT INTO notice
         (id, created_at, modified_at, is_delete , contents, qna_status, title, user_id)
         VALUES
             (#{id}, now(), now(), #{is_delete}, #{contents}, #{qna_status}, #{title}, #{user_id})
     </insert>
 
-    <select id="selectAll" resultType="QnaDto">
+    <select id="selectAll" resultType="NoticeDto">
         SELECT *
-        FROM qna
+        FROM notice
         ORDER BY created_at DESC, id DESC
     </select>
 
     <sql id="selectFrom">
         SELECT id, created_at, modified_at, is_delete , contents, qna_status, title, user_id
-        FROM qna
+        FROM notice
     </sql>
 
-    <select id="select" parameterType="int" resultType="QnaDto">
+    <select id="select" parameterType="int" resultType="NoticeDto">
         <include refid="selectFrom"/>
         WHERE id = #{id}
     </select>
 
-    <select id="selectPage" parameterType="map" resultType="QnaDto">
+    <select id="selectPage" parameterType="map" resultType="NoticeDto">
         <include refid="selectFrom"/>
         ORDER BY created_at DESC, id DESC
         LIMIT #{offset}, #{pageSize}
     </select>
 
-    <update id="update" parameterType="QnaDto">
-        UPDATE qna
+    <update id="update" parameterType="NoticeDto">
+        UPDATE notice
         SET   title = #{title}
           , contents = #{contents}
           , modified_at = now()
@@ -75,9 +75,9 @@
         </choose>
     </sql>
 
-    <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaDto">
+    <select id="searchSelectPage" parameterType="SearchCondition" resultType="NoticeDto">
         SELECT *
-        FROM qna
+        FROM notice
         WHERE true
         <include refid="searchCondition"/>
         ORDER BY created_at DESC, id DESC
@@ -86,7 +86,7 @@
 
     <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
         SELECT count(*)
-        FROM qna
+        FROM notice
         WHERE true
         <include refid="searchCondition"/>
     </select>
@@ -98,7 +98,7 @@
     </update>
 
     <update id="updateCommentCnt" parameterType="map">
-        UPDATE qna
+        UPDATE notice
         SET   comment_cnt = comment_cnt + #{cnt}
         WHERE id = #{id}
     </update>

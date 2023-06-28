@@ -10,7 +10,7 @@
         </delete>
 
         <delete id="delete" parameterType="map">
-            DELETE FROM qna WHERE id = #{id} and user_user_id = #{user_user_id}
+            DELETE FROM qna WHERE id = #{id} and user_id = #{user_id}
         </delete>
 
         <insert id="insert" parameterType="QnaCommentDto">
@@ -21,13 +21,13 @@
         </insert>
 
         <select id="selectAll" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
+            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
             FROM qna
             ORDER BY created_at DESC, id DESC
         </select>
 
         <sql id="selectFrom">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
+            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
             FROM qna
         </sql>
 
@@ -47,7 +47,7 @@
             SET   title = #{title}
               , contents = #{contents}
               , modified_at = now()
-            WHERE user_user_id = #{user_user_id}
+            WHERE user_id = #{user_id}
         </update>
 
 
@@ -57,7 +57,7 @@
                     AND title LIKE concat('%', #{keyword}, '%')
                 </when>
                 <when test='option=="U"'>
-                    AND user_user_id LIKE concat('%', #{keyword}, '%')
+                    AND user_id LIKE concat('%', #{keyword}, '%')
                 </when>
                 <otherwise>
                     AND (title   LIKE concat('%', #{keyword}, '%')
@@ -67,7 +67,7 @@
         </sql>
 
         <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
+            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
             FROM qna
             WHERE true
             <include refid="searchCondition"/>

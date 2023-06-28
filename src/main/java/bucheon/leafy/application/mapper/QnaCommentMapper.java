@@ -18,10 +18,8 @@ public interface QnaCommentMapper {
     int delete(Integer id, String userId) throws Exception;
     int insert(QnaCommentDto dto) throws Exception;
     int update(QnaCommentDto dto) throws Exception;
-
     List<QnaCommentDto> selectPage(Map map) throws Exception;
     List<QnaCommentDto> selectAll() throws Exception;
-
     List<QnaCommentDto> searchSelectPage(SearchCondition sc) throws Exception;
 
 }
