@@ -70,7 +70,7 @@ public class FeedServiceTest {
 
         //given
         FeedRequest request = FeedRequest.builder()
-                .user_id(userId)
+                .userId(userId)
                 .title("새제목")
                 .content("새내용")
                 .is_hide(false)
@@ -91,7 +91,7 @@ public class FeedServiceTest {
 //        Long userId = user.get().getId();
 //
 //        FeedRequest request1 = FeedRequest.builder()
-//                .user_id(userId)
+//                .userId(userId)
 //                .title("새제목")
 //                .content("새내용")
 //                .is_hide(false)

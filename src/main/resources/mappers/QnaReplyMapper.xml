@@ -6,37 +6,37 @@
 <mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
     <delete id="deleteAllReply">
-        DELETE FROM comment
+        DELETE FROM qna_reply
     </delete>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM comment WHERE cid = #{cid} AND user_id = #{user_id}
+        DELETE FROM comment WHERE id = #{id} AND user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="QnaReplyDto">
-        INSERT INTO comment
-            (id, pcno, comment, user_id, reg_date, up_date)
+        INSERT INTO qna_reply
+            (id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id)
         VALUES
-            (#{id}, #{pcno}, #{comment}, #{user_id}, now(), now())
+            (#{id}, now(), now(), #{isDelete}, #{comment}, #{userId},#{qnaCommentId})
     </insert>
 
     <select id="selectAll" parameterType="int" resultType="QnaReplyDto">
-        SELECT cno, id, pcno, user_id, user_id, reg_date, up_date
-        FROM comment
-        WHERE id = #{bno}
-        ORDER BY reg_date ASC, cid ASC
+        SELECT id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id
+        FROM qna_reply
+        WHERE id = #{id}
+        ORDER BY created_at ASC, id ASC
     </select>
 
     <select id="select" parameterType="int" resultType="QnaReplyDto">
-        SELECT cid, id, pcno, user_id, user_id, reg_date, up_date
-        FROM comment
-        WHERE cid = #{cid}
+        SELECT id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id
+        FROM qna_reply
+        WHERE id = #{id}
     </select>
 
     <update id="update" parameterType="QnaReplyDto">
-        UPDATE comment
-        SET user_id = #{user_id}
-          , up_date = now()
-        WHERE cid = #{cid} and user_id = #{user_id}
+        UPDATE qna_reply
+        SET user_id = #{userId}
+          , modified_at = now()
+        WHERE id = #{id} and user_id = #{userId}
     </update>
 </mapper>

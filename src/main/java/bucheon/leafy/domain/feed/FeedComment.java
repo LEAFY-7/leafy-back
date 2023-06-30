@@ -24,7 +24,7 @@ public class FeedComment extends BaseDeleteEntity {
 
     private Boolean isDelete;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

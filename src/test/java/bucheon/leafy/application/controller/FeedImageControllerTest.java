@@ -68,7 +68,7 @@ public class FeedImageControllerTest {
 //    }
 //
 //    @Test
-//    void testSaveImage() throws Exception {
+//    void testSaveImage()  {
 //        User user1 = createUser("aaa1234@naver.com", "홍길동");
 //        userRepository.save(user1);
 //
@@ -77,7 +77,7 @@ public class FeedImageControllerTest {
 //
 //        //given
 //        FeedRequest request = FeedRequest.builder()
-//                .user_id(userId)
+//                .userId(userId)
 //                .title("새제목")
 //                .content("새내용")
 //                .is_hide(false)

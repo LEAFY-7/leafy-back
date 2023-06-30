@@ -2,26 +2,27 @@ package bucheon.leafy.domain.qna;
 
 import lombok.*;
 
-import java.time.LocalTime;
-import java.util.*;
 
+import java.util.*;
+@NoArgsConstructor
 @Data
 public class QnaDto {
-    private Integer id;
+    private Long id;
     private Date createdAt;
     private Date modifiedAt;
-    private Integer is_delete;
+    private Boolean isDelete;
     private String contents;
-    private String qna_status;
+    private String qnaStatus;
     private String title;
-    private Integer user_id;
+    private Long userId;
 
-    public QnaDto() {  }
-    public QnaDto(Integer id,String title, String contents, Integer user_id) {
-        this.id = id;
-        this.title = title;
+
+    public QnaDto( Boolean isDelete, String contents, String qnaStatus, String title, Long userId) {
+        this.isDelete = isDelete;
         this.contents = contents;
-        this.user_id = user_id;
+        this.qnaStatus = qnaStatus;
+        this.title = title;
+        this.userId = userId;
     }
 
 }

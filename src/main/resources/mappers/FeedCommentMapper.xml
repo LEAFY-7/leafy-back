@@ -5,11 +5,11 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedCommentMapper">
     <select id="findCommentList" resultType="FeedCommentResponse">
-        select fc.* from feed f, feed_comment fc where f.feed_id = fc.feed_id and fc.feed_id = #{feedId} and fc.is_delete = false
+        select fc.* from feed f, feed_comment fc where f.feed_id = fc.feed_id and fc.feed_id = #{feedId} and fc.isDelete = false
     </select>
 
     <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyProperty="comment_id">
-        insert into feed_comment(user_id,feed_id,comment,is_delete,created_at,modified_at) values (#{user_id}, #{feed_id}, #{comment}, false, now(), now())
+        insert into feed_comment(userId,feed_id,comment,isDelete,created_at,modified_at) values (#{userId}, #{feed_id}, #{comment}, false, now(), now())
     </insert>
 
     <update id="editComment" parameterType="FeedCommentRequest">
@@ -21,6 +21,6 @@
     </delete>
 
     <update id="softDeleteComment" parameterType="java.lang.Long">
-        update feed_comment set is_delete = true where feed_id = #{feed_id} and comment_id = #{comment_id}
+        update feed_comment set isDelete = true where feed_id = #{feed_id} and comment_id = #{comment_id}
     </update>
 </mapper>

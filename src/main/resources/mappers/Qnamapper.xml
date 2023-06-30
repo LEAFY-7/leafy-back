@@ -9,6 +9,7 @@
         SELECT count(*) FROM qna
     </select>
 
+
     <delete id="deleteForAdmin">
         DELETE FROM qna where id = #{id}
     </delete>
@@ -18,14 +19,14 @@
     </delete>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM qna WHERE id = #{id} and user_id = #{user_id}
+        DELETE FROM qna WHERE id = #{id} and user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="QnaDto">
         INSERT INTO qna
-        (id, created_at, modified_at, is_delete , contents, qna_status, title, user_id)
+        ( created_at ,is_delete , contents, qna_status, title, user_id)
         VALUES
-            (#{id}, now(), now(), #{is_delete}, #{contents}, #{qna_status}, #{title}, #{user_id})
+            (now(), #{isDelete}, #{contents}, #{qnaStatus}, #{title}, #{userId})
     </insert>
 
     <select id="selectAll" resultType="QnaDto">
@@ -39,7 +40,7 @@
         FROM qna
     </sql>
 
-    <select id="select" parameterType="int" resultType="QnaDto">
+    <select id="select" parameterType="long" resultType="QnaDto">
         <include refid="selectFrom"/>
         WHERE id = #{id}
     </select>
@@ -55,18 +56,18 @@
         SET   title = #{title}
           , contents = #{contents}
           , modified_at = now()
-          , user_id = #{user_id}
-        WHERE user_id = #{user_id}
+          , user_id = #{userId}
+        WHERE user_id = #{userId}
     </update>
 
 
-    <sql id="searchCondition">
+    <sql id="searchHandler">
         <choose>
             <when test='option=="T"'>
                 AND title LIKE concat('%', #{keyword}, '%')
             </when>
             <when test='option=="U"'>
-                AND user_id LIKE concat('%', #{keyword}, '%')
+                AND userId LIKE concat('%', #{keyword}, '%')
             </when>
             <otherwise>
                 AND (title   LIKE concat('%', #{keyword}, '%')
@@ -75,24 +76,24 @@
         </choose>
     </sql>
 
-    <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaDto">
+    <select id="searchSelectPage" parameterType="SearchHandler" resultType="QnaDto">
         SELECT *
         FROM qna
         WHERE true
-        <include refid="searchCondition"/>
+        <include refid="searchHandler"/>
         ORDER BY created_at DESC, id DESC
         LIMIT #{offset}, #{pateSize}
     </select>
 
-    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
+    <select id="searchResultCnt" parameterType="SearchHandler" resultType="int">
         SELECT count(*)
         FROM qna
         WHERE true
-        <include refid="searchCondition"/>
+        <include refid="searchHandler"/>
     </select>
 
     <update id="updateQnsReplyCnt" parameterType="map">
-        UPDATE qna_reply
+        UPDATE qna
         SET   qnareply_cnt = qnareply_cnt + #{cnt}
         WHERE id = #{id}
     </update>

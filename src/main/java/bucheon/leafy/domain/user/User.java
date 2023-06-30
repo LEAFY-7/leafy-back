@@ -18,7 +18,7 @@ import java.util.List;
 public class User extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name="userId")
     private Long id;
 
     private String password;
@@ -29,11 +29,11 @@ public class User extends BaseDeleteEntity {
 
     private String phone;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Feed> feeds = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> address = new ArrayList<>();
 
@@ -44,11 +44,11 @@ public class User extends BaseDeleteEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Qna> qna = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Notice> notices = new ArrayList<>();
 

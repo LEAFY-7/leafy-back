@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class FeedReplyRequest {
-    private Long user_id;
+    private Long userId;
     private Long feed_id;
     private Long comment_id;
     private String reply;
 
     @Builder
-    private FeedReplyRequest(Long user_id, Long feed_id, Long comment_id, String reply) {
-        this.user_id = user_id;
+    private FeedReplyRequest(Long userId, Long feed_id, Long comment_id, String reply) {
+        this.userId = userId;
         this.feed_id = feed_id;
         this.comment_id = comment_id;
         this.reply = reply;

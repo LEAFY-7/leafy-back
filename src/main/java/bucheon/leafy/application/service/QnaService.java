@@ -1,13 +1,14 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.mapper.NoticeMapper;
+
 import bucheon.leafy.application.mapper.QnaMapper;
+import bucheon.leafy.domain.qna.SearchHandler;
 import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.qna.SearchCondition;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 import java.util.Map;
@@ -18,49 +19,48 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QnaService {
 
-    private final NoticeMapper noticeMapper;
-
     private final QnaMapper qnaMapper;
+    private final Logger logger = LoggerFactory.getLogger(QnaService.class);
 
-    public int getCount() throws Exception {
+    public int getCount()  {
         return qnaMapper.count();
     }
 
-    public int remove(Integer id, Integer user_id) throws Exception {
+    public int remove(Long id, Long userId)  {
         int rowCnt = qnaMapper.count();
-        System.out.println("count - rowCnt = " + rowCnt);
-        rowCnt = qnaMapper.delete(id, user_id);
-        System.out.println("rowCnt = " + rowCnt);
+        logger.info("count - rowCnt = " + rowCnt);
+        rowCnt = qnaMapper.delete( id, userId);
+        logger.info("rowCnt = " + rowCnt);
 
-        return qnaMapper.delete(id, user_id);
+        return qnaMapper.delete( id, userId);
     }
 
-    public int write(QnaDto QnaDto) throws Exception {
-        return qnaMapper.insert(QnaDto);
+    public int write(QnaDto qnaDto)  {
+        return qnaMapper.insert(qnaDto);
     }
 
-    public List<QnaDto> getList() throws Exception {
+    public List<QnaDto> getList()  {
         return qnaMapper.selectAll();
     }
 
-    public QnaDto read(Integer id) throws Exception {
-        QnaDto qnaDto = qnaMapper.select(id);
-        return qnaDto;
+    public List<QnaDto> getRead(Long id) {
+        return qnaMapper.select(id);
     }
-
-    public List<QnaDto> getPage(Map map) throws Exception {
+    public List<QnaDto> getPage(Map<String, Integer> map) {
         return qnaMapper.selectPage(map);
     }
-
-    public int modify(QnaDto qnaDto) throws Exception {
+    public int modify(QnaDto qnaDto)  {
         return qnaMapper.update(qnaDto);
     }
 
-    public int getSearchResultCnt(SearchCondition sc) throws Exception {
-        return qnaMapper.searchResultCnt(sc);
+    public int getSearchResultCnt(SearchHandler searchHandler)   {
+        return qnaMapper.searchResultCnt(searchHandler);
     }
 
-    public List<QnaDto> getSearchSelectPage(SearchCondition sc) throws Exception {
-        return qnaMapper.searchSelectPage(sc);
+    public List<QnaDto> getSearchSelectPage(SearchHandler searchHandler)   {
+        return qnaMapper.searchSelectPage(searchHandler);
+    }
+    public List<QnaDto> getSearchResultPage(SearchHandler searchHandler)   {
+        return qnaMapper.searchSelectPage(searchHandler);
     }
 }

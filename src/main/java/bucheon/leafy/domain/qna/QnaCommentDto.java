@@ -9,18 +9,18 @@ public class QnaCommentDto {
     private Integer id;
     private Date created_at;
     private Date  modified_at;
-    private Integer is_delete;
+    private Integer isDelete;
     private String comment;
-    private Integer user_id;
+    private Integer userId;
     private Integer notice_comment_id;
 
 
     public QnaCommentDto() {}
 
-    public QnaCommentDto(Integer id, Integer user_id, String comment) {
+    public QnaCommentDto(Integer id, Integer userId, String comment) {
 
         this.id = id;
-        this.user_id = user_id;
+        this.userId = userId;
         this.comment = comment;
     }
 }

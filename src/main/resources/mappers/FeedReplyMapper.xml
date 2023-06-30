@@ -5,6 +5,6 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedReplyMapper">
     <select id="findReplyList" resultType="FeedReplyResponse">
-        select * from feed_reply where is_delete = false
+        select * from feed_reply where isDelete = false
     </select>
 </mapper>

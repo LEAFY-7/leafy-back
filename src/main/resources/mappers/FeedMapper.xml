@@ -4,19 +4,19 @@
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
     <select id="findFeedListFirst" resultType="FeedResponse">
-        select * from feed where is_hide = false and is_delete = false ORDER BY feed_id DESC LIMIT 10;
+        select * from feed where is_hide = false and isDelete = false ORDER BY feed_id DESC LIMIT 10;
     </select>
 
     <select id="findFeedListScroll" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where is_hide = false and is_delete = false and feed_id &lt;= #{id} ORDER BY feed_id DESC LIMIT 10;
+        select * from feed where is_hide = false and isDelete = false and feed_id &lt;= #{id} ORDER BY feed_id DESC LIMIT 10;
     </select>
 
     <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where feed_id = #{id} and is_hide = false and is_delete = false;
+        select * from feed where feed_id = #{id} and is_hide = false and isDelete = false;
     </select>
 
     <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyProperty="feed_id">
-        insert into feed (user_id,title,content,is_hide,is_delete,created_at,modified_at) values (#{user_id}, #{title}, #{content}, #{is_hide}, false, now(), now())
+        insert into feed (userId,title,content,is_hide,isDelete,created_at,modified_at) values (#{userId}, #{title}, #{content}, #{is_hide}, false, now(), now())
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
@@ -32,6 +32,6 @@
     </delete>
 
     <update id="softDeleteFeed" parameterType="java.lang.Long">
-        update feed set is_delete = true where feed_id = #{id}
+        update feed set isDelete = true where feed_id = #{id}
     </update>
 </mapper>

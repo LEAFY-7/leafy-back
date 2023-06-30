@@ -22,7 +22,7 @@ public class FeedReply extends BaseDeleteEntity {
 
     private String reply;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

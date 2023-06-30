@@ -10,24 +10,24 @@
         </delete>
 
         <delete id="delete" parameterType="map">
-            DELETE FROM qna WHERE id = #{id} and user_id = #{user_id}
+            DELETE FROM qna WHERE id = #{id} and user_id = #{userId}
         </delete>
 
         <insert id="insert" parameterType="QnaCommentDto">
             INSERT INTO qna
-                (title, contents, id, qan_status)
+                (title, comment, id, qan_status)
             VALUES
-                (#{title}, #{contents}, #{id}, #{qan_status})
+                (#{title}, #{comment}, #{id}, #{qanStatus})
         </insert>
 
         <select id="selectAll" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
+            SELECT id, created_at, modified_at, is_delete , comment, user_id, qna_id
             FROM qna
             ORDER BY created_at DESC, id DESC
         </select>
 
         <sql id="selectFrom">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
+            SELECT id, created_at, modified_at, is_delete , comment, user_id, qna_id
             FROM qna
         </sql>
 
@@ -45,19 +45,19 @@
         <update id="update" parameterType="QnaCommentDto">
             UPDATE qna
             SET   title = #{title}
-              , contents = #{contents}
+              , comment = #{comment}
               , modified_at = now()
-            WHERE user_id = #{user_id}
+            WHERE user_id = #{userId}
         </update>
 
 
-        <sql id="searchCondition">
+        <sql id="searchHandler">
             <choose>
                 <when test='option=="T"'>
                     AND title LIKE concat('%', #{keyword}, '%')
                 </when>
                 <when test='option=="U"'>
-                    AND user_id LIKE concat('%', #{keyword}, '%')
+                    AND userId LIKE concat('%', #{keyword}, '%')
                 </when>
                 <otherwise>
                     AND (title   LIKE concat('%', #{keyword}, '%')
@@ -66,11 +66,11 @@
             </choose>
         </sql>
 
-        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_id
+        <select id="searchSelectPage" parameterType="SearchHandler" resultType="QnaCommentDto">
+            SELECT id, created_at, modified_at, is_delete , comment, user_id, qna_id
             FROM qna
             WHERE true
-            <include refid="searchCondition"/>
+            <include refid="searchHandler"/>
             ORDER BY created_at DESC, id DESC
             LIMIT #{offset}, #{pateSize}
         </select>

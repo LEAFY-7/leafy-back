@@ -1,14 +1,13 @@
 package bucheon.leafy.domain.qna;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import static java.lang.Math.*;
 import static java.util.Objects.requireNonNullElse;
-
-public class SearchCondition {
+@Data
+@NoArgsConstructor
+public class SearchHandler {
     private Integer page = 1;
     private Integer pageSize = DEFAULT_PAGE_SIZE;
     private String  option = "";
@@ -17,13 +16,11 @@ public class SearchCondition {
     public static final int DEFAULT_PAGE_SIZE = 10;
     public static final int MAX_PAGE_SIZE = 50;
 
-    public SearchCondition(){}
-
-    public SearchCondition(Integer page, Integer pageSize) {
+    public SearchHandler(Integer page, Integer pageSize) {
         this(page, pageSize, "", "");
     }
 
-    public SearchCondition(Integer page, Integer pageSize, String option, String keyword) {
+    public SearchHandler(Integer page, Integer pageSize, String option, String keyword) {
         this.page = page;
         this.pageSize = pageSize;
         this.option = option;
@@ -42,17 +39,6 @@ public class SearchCondition {
                 .queryParam("keyword",  keyword)
                 .build().toString();
     }
-    public Integer getPage() {
-        return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = requireNonNullElse(pageSize, DEFAULT_PAGE_SIZE);
@@ -60,31 +46,9 @@ public class SearchCondition {
         this.pageSize = max(MIN_PAGE_SIZE, min(this.pageSize, MAX_PAGE_SIZE));
     }
 
-    public String getOption() {
-        return option;
-    }
-
-    public void setOption(String option) {
-        this.option = option;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) { this.keyword = keyword; }
 
     public Integer getOffset() {
         return (page-1)*pageSize;
-    }   // offset받기위해
-
-    @Override
-    public String toString() {
-        return "SearchCondition{" +
-                "page=" + page +
-                ", pageSize=" + pageSize +
-                ", option='" + option + '\'' +
-                ", keyword='" + keyword + '\'' +
-                '}';
     }
+
 }

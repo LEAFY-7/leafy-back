@@ -10,22 +10,30 @@
     </select>
 
     <delete id="deleteForAdmin">
-        DELETE FROM notice where id = #{id}
+        UPDATE notice
+           SET is_delete = #{isDelete}
+         WHERE id = #{id}
     </delete>
 
     <delete id="deleteAll">
         DELETE FROM notice
     </delete>
 
+<!--    <update id="deleteAll">-->
+<!--        UPDATE notice-->
+<!--           SET is_delete = #{isDelete}-->
+<!--         WHERE id = #{id}-->
+<!--    </update>-->
+
     <delete id="delete" parameterType="map">
-        DELETE FROM notice WHERE id = #{id} and user_id = #{user_id}
+        DELETE FROM notice WHERE id = #{id} and user_Id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="NoticeDto">
         INSERT INTO notice
-        (id, created_at, modified_at, is_delete , contents, qna_status, title, user_id)
+        ( created_at, modified_at, is_delete , contents, is_hide, title, user_id)
         VALUES
-            (#{id}, now(), now(), #{is_delete}, #{contents}, #{qna_status}, #{title}, #{user_id})
+            ( now(), now(), #{isDelete}, #{contents}, #{isHide}, #{title}, #{userId})
     </insert>
 
     <select id="selectAll" resultType="NoticeDto">
@@ -35,72 +43,30 @@
     </select>
 
     <sql id="selectFrom">
-        SELECT id, created_at, modified_at, is_delete , contents, qna_status, title, user_id
+        SELECT id, created_at, modified_at, is_delete , contents, is_hide, title, user_id
         FROM notice
     </sql>
 
-    <select id="select" parameterType="int" resultType="NoticeDto">
+    <select id="select" parameterType="long" resultType="NoticeDto">
         <include refid="selectFrom"/>
         WHERE id = #{id}
     </select>
+
+    <update id="update" parameterType="NoticeDto">
+        UPDATE notice
+           SET modified_at = now()
+             , is_delete =#{isDelete}
+             , contents = #{contents}
+             , is_hide = #{isHide}
+             , title = #{title}
+          , user_Id = #{userId}
+        WHERE user_Id = #{userId}
+    </update>
 
     <select id="selectPage" parameterType="map" resultType="NoticeDto">
         <include refid="selectFrom"/>
         ORDER BY created_at DESC, id DESC
         LIMIT #{offset}, #{pageSize}
     </select>
-
-    <update id="update" parameterType="NoticeDto">
-        UPDATE notice
-        SET   title = #{title}
-          , contents = #{contents}
-          , modified_at = now()
-          , user_id = #{user_id}
-        WHERE user_id = #{user_id}
-    </update>
-
-
-    <sql id="searchCondition">
-        <choose>
-            <when test='option=="T"'>
-                AND title LIKE concat('%', #{keyword}, '%')
-            </when>
-            <when test='option=="U"'>
-                AND user_id LIKE concat('%', #{keyword}, '%')
-            </when>
-            <otherwise>
-                AND (title   LIKE concat('%', #{keyword}, '%')
-                OR   contents LIKE concat('%', #{keyword}, '%'))
-            </otherwise>
-        </choose>
-    </sql>
-
-    <select id="searchSelectPage" parameterType="SearchCondition" resultType="NoticeDto">
-        SELECT *
-        FROM notice
-        WHERE true
-        <include refid="searchCondition"/>
-        ORDER BY created_at DESC, id DESC
-        LIMIT #{offset}, #{pateSize}
-    </select>
-
-    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
-        SELECT count(*)
-        FROM notice
-        WHERE true
-        <include refid="searchCondition"/>
-    </select>
-
-    <update id="updateQnsReplyCnt" parameterType="map">
-        UPDATE qna_reply
-        SET   qnareply_cnt = qnareply_cnt + #{cnt}
-        WHERE id = #{id}
-    </update>
-
-    <update id="updateCommentCnt" parameterType="map">
-        UPDATE notice
-        SET   comment_cnt = comment_cnt + #{cnt}
-        WHERE id = #{id}
-    </update>
 
 </mapper>
