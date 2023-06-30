@@ -33,7 +33,7 @@ public class FeedController {
     }
 
     @Operation(summary = "피드 상세")
-    @GetMapping("/feedId")
+    @GetMapping("/{feedId}")
     public ResponseEntity<FeedResponse> getFeedById(@PathVariable Long feedId) {
         return ResponseEntity.ok().body(service.getFeedById(feedId));
     }
@@ -45,13 +45,13 @@ public class FeedController {
     }
 
     @Operation(summary = "피드 수정")
-    @PutMapping("/feedId")
+    @PutMapping("/{feedId}")
     public ResponseEntity<Long> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequest request) {
         return ResponseEntity.ok().body(service.updateFeed(feedId, request));
     }
 
     @Operation(summary = "피드 삭제")
-    @DeleteMapping("/feedId")
+    @DeleteMapping("/{feedId}")
     public ResponseEntity<Boolean> deleteFeed(@PathVariable Long feedId) {
         return ResponseEntity.ok().body(service.deleteFeed(feedId));
     }
