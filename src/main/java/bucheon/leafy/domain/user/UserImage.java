@@ -23,14 +23,16 @@ public class UserImage {
     private String image;
 
     @Builder
-    private UserImage(String image) {
+    private UserImage(String image, User user) {
         this.image = image;
+        this.user = user;
     }
 
     // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
-    public static UserImage of(SignUpRequest signUpRequest) {
+    public static UserImage of(SignUpRequest signUpRequest, User user) {
         return UserImage.builder()
                 .image(signUpRequest.getUserImage())
+                .user(user)
                 .build();
     }
 }

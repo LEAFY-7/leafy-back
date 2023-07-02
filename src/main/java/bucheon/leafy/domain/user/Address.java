@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.user;
 
 import bucheon.leafy.domain.user.request.SignUpRequest;
-import bucheon.leafy.util.BaseDeleteEntity;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;

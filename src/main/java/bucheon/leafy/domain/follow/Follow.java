@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.follow;
 
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.util.BaseEntity;
+import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

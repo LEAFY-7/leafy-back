@@ -4,7 +4,7 @@ import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
-import bucheon.leafy.util.BaseDeleteEntity;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -71,7 +71,6 @@ public class User extends BaseDeleteEntity {
 
     public static User of(SignUpRequest signUpRequest) {
         Address address = Address.of(signUpRequest);
-        UserImage userImage = UserImage.of(signUpRequest);
 
         return User.builder()
                 .password(signUpRequest.getPassword())
@@ -79,10 +78,14 @@ public class User extends BaseDeleteEntity {
                 .nickName(signUpRequest.getNickName())
                 .phone(signUpRequest.getPhone())
                 .address(List.of(address))
-                .userImage(userImage)
                 .userRole(UserRole.MEMBER)
                 .build();
 
+    }
+
+    public void addUserImage(SignUpRequest signUpRequest){
+        UserImage userImage = UserImage.of(signUpRequest, this);
+        this.userImage = userImage;
     }
 
     public void changePassword(String encodePassword){
