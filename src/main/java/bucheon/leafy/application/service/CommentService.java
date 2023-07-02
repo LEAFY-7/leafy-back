@@ -1,6 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.CommentMapper;
+import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.domain.comment.CommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,9 @@ import java.util.List;
 
 @Service
 public class CommentService {
+
+    @Autowired
+    QnaMapper qnaMapper;
 
     @Autowired
     CommentMapper commentMapper;

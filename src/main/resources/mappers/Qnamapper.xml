@@ -76,6 +76,7 @@
         </choose>
     </sql>
 
+
     <select id="searchSelectPage" parameterType="SearchHandler" resultType="QnaDto">
         SELECT *
         FROM qna

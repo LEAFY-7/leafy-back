@@ -20,20 +20,20 @@
 
     <insert id="insert" parameterType="ReplyDto">
         INSERT INTO qna_reply
-            (id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id)
+            (id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
         VALUES
             (#{id}, now(), now(), #{isDelete}, #{comment}, #{userId},#{qnaCommentId})
     </insert>
 
     <select id="selectAll" parameterType="int" resultType="ReplyDto">
-        SELECT id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
         FROM qna_reply
         WHERE id = #{id}
         ORDER BY created_at ASC, id ASC
     </select>
 
     <select id="select" parameterType="int" resultType="ReplyDto">
-        SELECT id, created_at, modified_at, is_deleted, comment, user_id, qna_comment_id
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
         FROM qna_reply
         WHERE id = #{id}
     </select>

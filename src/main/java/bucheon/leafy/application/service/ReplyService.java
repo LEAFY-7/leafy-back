@@ -5,6 +5,7 @@ import bucheon.leafy.domain.reply.ReplyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -24,10 +25,9 @@ public class ReplyService {
     public int write(ReplyDto replytDto) { return replyMapper.insert(replytDto);
     }
 
-    public List<ReplytDto> getList(){
-        return replyMapper.selectAll();
+    public List<ReplyDto> getList(){return replyMapper.selectAll();
     }
-    public List<ReplytDto> read(Long id){ return replyMapper.select(id);
+    public ReplyDto  read(Long id){ return replyMapper.select(id);
     }
 
     public int modify(ReplyDto replytDto) {
