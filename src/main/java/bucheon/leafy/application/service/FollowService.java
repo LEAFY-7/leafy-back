@@ -8,7 +8,6 @@ import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.FollowNotFoundException;
 import bucheon.leafy.exception.UserNotFoundException;
-import bucheon.leafy.exception.enums.ExceptionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package bucheon.leafy.domain.feedLikeInfo;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.util.BaseEntity;
+import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

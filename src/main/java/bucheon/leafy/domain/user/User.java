@@ -4,7 +4,7 @@ import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
-import bucheon.leafy.util.BaseDeleteEntity;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.*;
 
 import javax.persistence.*;
