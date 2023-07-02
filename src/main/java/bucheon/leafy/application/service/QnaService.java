@@ -2,11 +2,9 @@ package bucheon.leafy.application.service;
 
 
 import bucheon.leafy.application.mapper.QnaMapper;
-import bucheon.leafy.domain.qna.SearchHandler;
 import bucheon.leafy.domain.qna.QnaDto;
+import bucheon.leafy.domain.qna.SearchHandler;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +18,6 @@ import java.util.Map;
 public class QnaService {
 
     private final QnaMapper qnaMapper;
-    private final Logger logger = LoggerFactory.getLogger(QnaService.class);
 
     public int getCount()  {
         return qnaMapper.count();
@@ -28,9 +25,7 @@ public class QnaService {
 
     public int remove(Long id, Long userId)  {
         int rowCnt = qnaMapper.count();
-        logger.info("count - rowCnt = " + rowCnt);
         rowCnt = qnaMapper.delete( id, userId);
-        logger.info("rowCnt = " + rowCnt);
 
         return qnaMapper.delete( id, userId);
     }

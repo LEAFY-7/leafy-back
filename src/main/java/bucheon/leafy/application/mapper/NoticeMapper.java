@@ -2,8 +2,6 @@ package bucheon.leafy.application.mapper;
 
 
 import bucheon.leafy.domain.notice.NoticeDto;
-import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.qna.SearchHandler;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 import java.util.Map;

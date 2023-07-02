@@ -47,7 +47,7 @@ public class PageHandler {
                 .queryParam("page",     page)
                 .queryParam("pageSize", searchHandler.getPageSize())
                 .queryParam("option",   searchHandler.getOption())
-                .queryParam("keyword",  searchHandler.getKeyword())
+//                .queryParam("keyword",  searchHandler.getKeyword())
                 .build().toString();
     }
 

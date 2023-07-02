@@ -32,8 +32,8 @@ public class QnaController {
 
     private QnaService qnaService;
     @Operation(summary = "Qna게시판 수정하기")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PostMapping("/modify/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER')")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> modify(
             @AuthenticationPrincipal AuthUser user,
             @RequestBody QnaDto qnaDto,
@@ -51,8 +51,7 @@ public class QnaController {
     }
 
     @Operation(summary = "Qna게시판 글 하나 클릭해서 읽기")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @GetMapping("/read/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> read(
             @AuthenticationPrincipal AuthUser user,
             @PathVariable("id") Long id
@@ -68,9 +67,9 @@ public class QnaController {
         }
     }
 
+
     @Operation(summary = "Qna게시판 글 삭제하기")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PostMapping("/remove/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> remove(
             @AuthenticationPrincipal AuthUser user,
             SearchHandler searchHandler,
@@ -86,7 +85,7 @@ public class QnaController {
     }
 
     @Operation(summary = "Qna게시판 전체 리스트 보여주기")
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<List<QnaDto>> list(
             SearchHandler searchHandler
     ) {
@@ -98,12 +97,12 @@ public class QnaController {
 
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(totalCnt))
-                .header("X-Page-Handler", pageHandler.toString())
+                .header("X-Page-Handler", pageHandler.toString())//body
                 .body(qnaList);
     }
 
-    @Operation(summary = "Notice게시판 쓰기")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @Operation(summary = "Qna게시판 쓰기")
+    @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping("/write")
     public ResponseEntity<List<QnaDto>> write(QnaDto qnaDto,
                                               @RequestParam(required = false) Long userId,
@@ -121,17 +120,6 @@ public class QnaController {
         return ResponseEntity.ok().body(result);
     }
 
-
-    @Operation(summary = "Qna게시판 로그인 체크")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PostMapping("/logincheck")
-    public ResponseEntity<String> logincheck(@AuthenticationPrincipal AuthUser user,@PathVariable("id") Long userId) {
-        if (user != null) {
-            return ResponseEntity.ok("User is logged in");
-        } else {
-            return ResponseEntity.ok("User is not logged in");
-        }
-    }
 }
 
 

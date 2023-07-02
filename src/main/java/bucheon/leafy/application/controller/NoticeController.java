@@ -3,7 +3,6 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.NoticeService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.notice.NoticeDto;
-import bucheon.leafy.domain.qna.PageHandler;
 import bucheon.leafy.domain.qna.SearchHandler;
 import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.enums.ReadFailedException;

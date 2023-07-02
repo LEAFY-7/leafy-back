@@ -57,7 +57,7 @@
           , contents = #{contents}
           , modified_at = now()
           , user_id = #{userId}
-        WHERE user_id = #{userId}
+        WHERE id = #{id}
     </update>
 
 
@@ -82,7 +82,7 @@
         WHERE true
         <include refid="searchHandler"/>
         ORDER BY created_at DESC, id DESC
-        LIMIT #{offset}, #{pateSize}
+        LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="searchResultCnt" parameterType="SearchHandler" resultType="int">

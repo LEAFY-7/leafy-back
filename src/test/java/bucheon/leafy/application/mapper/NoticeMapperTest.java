@@ -53,13 +53,13 @@ class NoticeMapperTest {
     @Test
     void deleteTest()  {
         noticeMapper.deleteAll();
-        assertTrue(noticeMapper.count()==0);
+        assertEquals(0,noticeMapper.count());
 
         NoticeDto noticeDto = new NoticeDto(false,"contents",false, "no content", 11111L);
-        assertTrue(noticeMapper.insert(noticeDto)==1);
+        assertEquals(1, noticeMapper.insert(noticeDto));
         Long id = noticeMapper.selectAll().get(0).getId();
-        assertTrue(noticeMapper.delete(id, noticeDto.getUserId())==1);
-        assertTrue(noticeMapper.count()==0);
+        assertEquals(1,noticeMapper.delete(id, noticeDto.getUserId()));
+        assertEquals(0,noticeMapper.count());
 
     }
 
@@ -83,30 +83,30 @@ class NoticeMapperTest {
     @Test
     void selectAllTest()  {
         noticeMapper.deleteAll();
-        assertTrue(noticeMapper.count()==0);
+        assertEquals(0,noticeMapper.count());
 
         List<NoticeDto> list = noticeMapper.selectAll();
-        assertTrue(list.size() == 0);
+        assertEquals(0,list.size() );
 
         NoticeDto noticeDto = new NoticeDto(false,"contents",false, "no content", 11111L);
-        assertTrue(noticeMapper.insert(noticeDto)==1);
+        assertEquals(1,noticeMapper.insert(noticeDto));
 
         list = noticeMapper.selectAll();
-        assertTrue(list.size() == 1);
+        assertEquals(1,list.size() );
 
-        assertTrue(noticeMapper.insert(noticeDto)==1);
+        assertEquals(1,noticeMapper.insert(noticeDto));
         list = noticeMapper.selectAll();
-        assertTrue(list.size() == 2);
+        assertEquals(2,list.size() );
     }
 
 
     @Test
     void selectTest () {
         noticeMapper.deleteAll();
-        assertTrue (noticeMapper.count () == 0);
+        assertEquals(0,noticeMapper.count());
 
         NoticeDto noticeDto = new NoticeDto(false,"contents",false, "no content", 11111L);
-        assertTrue (noticeMapper.insert (noticeDto) == 1);
+        assertEquals (1,noticeMapper.insert (noticeDto));
 
         Long id = noticeMapper.selectAll().get(0).getId();
         List<NoticeDto> noticeDto2 = noticeMapper.select(id);
@@ -132,38 +132,38 @@ class NoticeMapperTest {
         map.put("pageSize", 3);
 
         List<NoticeDto> list = noticeMapper.selectPage(map);
-        assertTrue(list.get(0).getTitle().equals("10"));
-        assertTrue(list.get(1).getTitle().equals("9"));
-        assertTrue(list.get(2).getTitle().equals("8"));
+        assertEquals("10", list.get(0).getTitle());
+        assertEquals("9",list.get(1).getTitle());
+        assertEquals("8",list.get(2).getTitle());
 
         map = new HashMap<>();
         map.put("offset", 0);
         map.put("pageSize", 1);
 
         list = noticeMapper.selectPage(map);
-        assertTrue(list.get(0).getTitle().equals("10"));
+        assertEquals("10",list.get(0).getTitle());
 
         map = new HashMap<>();
         map.put("offset", 7);
         map.put("pageSize", 3);
 
         list = noticeMapper.selectPage(map);
-        assertTrue(list.get(0).getTitle().equals("3"));
-        assertTrue(list.get(1).getTitle().equals("2"));
-        assertTrue(list.get(2).getTitle().equals("1"));
+        assertEquals("3",list.get(0).getTitle());
+        assertEquals("2",list.get(1).getTitle());
+        assertEquals("1",list.get(2).getTitle());
     }
 
     @Test
     void updateTest()  {
         noticeMapper.deleteAll();
         NoticeDto noticeDto = new NoticeDto(false,"contents",false, "no content", 11111L);
-        assertTrue(noticeMapper.insert(noticeDto) == 1);
+        assertEquals(1,noticeMapper.insert(noticeDto));
 
         Long id = noticeMapper.selectAll().get(0).getId();
         noticeDto.setId(id);
         noticeDto.setTitle("yes title");
         noticeDto.setUserId(11111L);
-        assertTrue(noticeMapper.update(noticeDto)==1);
+        assertEquals(1,noticeMapper.update(noticeDto));
 
     }
 
