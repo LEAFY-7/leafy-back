@@ -1,4 +1,4 @@
-package bucheon.leafy.util;
+package bucheon.leafy.util.entity;
 
 import lombok.Getter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
