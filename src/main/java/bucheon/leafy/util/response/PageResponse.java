@@ -12,19 +12,45 @@ import java.util.List;
 public class PageResponse <T> {
 
     private PageRequest pageRequest;
+
     private List<T> body;
 
+    private Long total;
+
+    private Integer totalPage;
+
+    private boolean isFirst;
+
+    private boolean isLast;
+
     @Builder
-    private PageResponse(PageRequest pageRequest, List<T> body) {
+    public PageResponse(PageRequest pageRequest, List<T> body, Long total,
+                        Integer totalPage, boolean isFirst, boolean isLast) {
+
         this.pageRequest = pageRequest;
         this.body = body;
+        this.total = total;
+        this.totalPage = totalPage;
+        this.isFirst = isFirst;
+        this.isLast = isLast;
     }
 
-    public static <T> PageResponse of(PageRequest pageRequest, List<T> body){
+    public static <T> PageResponse of(PageRequest pageRequest, List<T> body, Long total){
+
+        Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
+        boolean isFirst = pageRequest.getPage() == 1;
+        boolean isLast = pageRequest.getPage() == totalPage;
+
         return PageResponse.<T>builder()
                 .pageRequest(pageRequest)
                 .body(body)
+                .total(total)
+                .totalPage(totalPage.intValue())
+                .isFirst(isFirst)
+                .isLast(isLast)
                 .build();
     }
+
+
 
 }

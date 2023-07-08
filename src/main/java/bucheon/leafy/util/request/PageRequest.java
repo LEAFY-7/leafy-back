@@ -8,30 +8,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PageRequest {
 
-    private int page;
+    private Integer page;
 
-    public int limit = 20;
+    public Integer limit;
 
-    private int offset;
+    private Long offset;
 
     private String sortColumn;
 
     private SortStatus sortStatus;
 
-    private boolean isFirst;
+    public PageRequest(Integer page, Integer limit, Long offset, String sortColumn, SortStatus sortStatus) {
 
-    private boolean isLast;
-
-    public PageRequest(int page, int limit, int offset, String sortColumn,
-                       SortStatus sortStatus, boolean isFirst, boolean isLast) {
-
-//        this.offset = page * limit;
-        this.page = page;
-        this.limit = limit;
-        this.offset = offset;
+        this.page = page == null ? 1 : page;
+        this.limit = limit == null ? 20 : limit;
+        this.offset = offset == null ? 0 : Long.valueOf(this.limit * this.page - 1);
         this.sortColumn = sortColumn;
         this.sortStatus = sortStatus;
-        this.isFirst = isFirst;
-        this.isLast = isLast;
     }
+
 }
