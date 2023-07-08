@@ -5,15 +5,18 @@ import lombok.Data;
 
 @Data
 public class FeedImageRequest {
-
-    private Long image_id;
-    private Long feed_id;
-    private String image;
+    private Long imageId;
+    private Long feedId;
+    private String imageName;
+    private String imagePath;
+    private Boolean isThumb;
 
     @Builder
-    private FeedImageRequest(Long image_id, Long feed_id, String image) {
-        this.image_id = image_id;
-        this.feed_id = feed_id;
-        this.image = image;
+    private FeedImageRequest(Long imageId, Long feedId, String imageName, String imagePath, Boolean isThumb) {
+        this.imageId = imageId;
+        this.feedId = feedId;
+        this.imageName = imageName;
+        this.imagePath = imagePath;
+        this.isThumb = isThumb;
     }
 }
