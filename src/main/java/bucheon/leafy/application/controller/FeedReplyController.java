@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -32,8 +31,8 @@ public class FeedReplyController {
 
     @Operation(summary = "피드 대댓글 등록")
     @PostMapping
-    public ResponseEntity<Long> saveReply(@PathVariable Long commentId, @RequestBody FeedReplyRequest request) {
-        return ResponseEntity.ok().body(service.saveReply(commentId, request));
+    public ResponseEntity<Long> saveReply(@PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedReplyRequest request) {
+        return ResponseEntity.ok().body(service.saveReply(feedId, commentId, request));
     }
 
     @Operation(summary = "피드 대댓글 수정")
