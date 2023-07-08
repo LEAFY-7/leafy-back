@@ -37,14 +37,15 @@ class UserControllerTest {
         SignUpRequest request = SignUpRequest.builder()
                 .password("1234")
                 .email("abcd1234@gmail.com")
-                .nickName("김찬우")
+                .name("김찬우")
+                .nickName("chanU kim")
+                .simpleIntroduction("안녕!~!")
                 .phone("01012345678")
                 .zipcode("12578")
                 .street("부천")
                 .lot("상동")
                 .detail("호수공원")
                 .reference("1동 1호")
-                .userImage("a.png")
                 .build();
 
         //when //then

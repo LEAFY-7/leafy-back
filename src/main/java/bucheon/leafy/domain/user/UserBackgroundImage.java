@@ -10,9 +10,10 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserImage {
+public class UserBackgroundImage {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -22,16 +23,18 @@ public class UserImage {
     private String image;
 
     @Builder
-    private UserImage(String image, User user) {
+    private UserBackgroundImage(String image, User user) {
         this.image = image;
         this.user = user;
     }
 
     // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
-    public static UserImage of(String userImage, User user) {
-        return UserImage.builder()
-                .image(userImage)
+    public static UserBackgroundImage of(String image, User user) {
+        return UserBackgroundImage.builder()
+                .image(image)
                 .user(user)
                 .build();
     }
+
+
 }

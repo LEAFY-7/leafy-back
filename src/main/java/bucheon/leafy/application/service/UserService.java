@@ -65,7 +65,6 @@ public class UserService {
                 });
 
         User user = User.of(signUpRequest);
-        user.addUserImage(signUpRequest);
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
