@@ -182,8 +182,6 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         return Feed.builder()
                 .title("타이틀")
                 .content("내용")
-                .isHide(false)
-                .isDelete(false)
                 .feedLikeCount(feedLikeCount)
                 .build();
 
