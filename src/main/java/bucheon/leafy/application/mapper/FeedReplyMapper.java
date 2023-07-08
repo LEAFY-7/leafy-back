@@ -2,18 +2,22 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.feed.dto.request.FeedReplyRequest;
 import bucheon.leafy.domain.feed.dto.response.FeedReplyResponse;
-
+import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
+import java.util.Optional;
 
+@Mapper
 public interface FeedReplyMapper {
 
-    List<FeedReplyResponse> findReplyList();
+    List<FeedReplyResponse> findReplyList(Long commentId);
+
+    Optional<FeedReplyResponse> findReplyById(Long replyId);
 
     Long saveReply(FeedReplyRequest request);
 
     int editReply(FeedReplyRequest request);
+    
+    void deleteAllReplies();
 
-    void hardDeleteReply();
-
-    int softDeleteReply(Long id);
+    void deleteReply(Long replyId);
 }
