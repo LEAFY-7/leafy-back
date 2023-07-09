@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "식물 검색")
 @RestController
-@RequestMapping("/v1/search")
+@RequestMapping("/api/v1/search")
 @RequiredArgsConstructor
 public class SearchController {
 

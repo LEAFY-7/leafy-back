@@ -89,4 +89,11 @@ public class UserController {
         return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(summary = "마이페이지")
+    @PostMapping("/my-page")
+    public ResponseEntity signOut(@AuthenticationPrincipal AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        return ResponseEntity.badRequest().body(null);
+    }
+
 }
