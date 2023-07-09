@@ -1,6 +1,6 @@
 package bucheon.leafy.domain.qna;
 
-import bucheon.leafy.util.entity.BaseDeleteEntity;
+import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

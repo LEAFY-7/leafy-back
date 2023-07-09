@@ -1,9 +1,11 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.SearchService;
+import bucheon.leafy.domain.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +23,8 @@ public class SearchController {
 
     @Operation(summary = "식물 검색")
     @GetMapping
-    public ResponseEntity getSearch(@RequestParam String searchName) {
-        return searchService.getSearch(searchName);
+    public ResponseEntity<Result> getSearch(@RequestParam String searchName) {
+        return new ResponseEntity<>(searchService.getSearch(searchName), HttpStatus.OK);
 
     }
 
