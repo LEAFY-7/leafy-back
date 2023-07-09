@@ -42,3 +42,14 @@ leafy:
   api:
     serviceKey: F445D25F38CE455C976577FB9869F826
   
+cloud:
+  aws:
+    s3:
+      bucket: bucket-leafy-upload
+    credentials:
+      access-key: AKIAYP7MIYZU3BSGZNWK
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
