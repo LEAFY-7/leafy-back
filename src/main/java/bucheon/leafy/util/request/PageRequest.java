@@ -22,7 +22,7 @@ public class PageRequest {
 
         this.page = page == null ? 1 : page;
         this.limit = limit == null ? 20 : limit;
-        this.offset = offset == null ? 0 : Long.valueOf(this.limit * this.page - 1);
+        this.offset = offset == null ? 0 : Long.valueOf(this.limit * (this.page - 1));
         this.sortColumn = sortColumn;
         this.sortStatus = sortStatus;
     }

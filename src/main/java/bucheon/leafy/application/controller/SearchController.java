@@ -1,14 +1,13 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.SearchService;
+import bucheon.leafy.util.request.PageRequest;
+import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "식물 검색")
@@ -21,8 +20,8 @@ public class SearchController {
 
     @Operation(summary = "식물 검색")
     @GetMapping
-    public ResponseEntity getSearch(@RequestParam String searchName) {
-        return searchService.getSearch(searchName);
+    public ResponseEntity<PageResponse> getSearch(@RequestParam String searchName, PageRequest pageRequest) {
+        return searchService.getSearch(searchName, pageRequest);
 
     }
 
