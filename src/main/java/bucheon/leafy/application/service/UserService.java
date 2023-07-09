@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -80,4 +81,31 @@ public class UserService {
 
         return ResponseEntity.status(200).body("아이디가 사용 가능합니다.");
     }
+
+    public ResponseEntity<String> createUserImage(Long userId, MultipartFile file) {
+        User user = getUserById(userId);
+        user.addUserImage(null);
+        return null;
+    }
+
+    public ResponseEntity<String> createUserBackgroundImage(Long userId, MultipartFile file) {
+        User user = getUserById(userId);
+        user.addUserBackgroundImage(null);
+        return null;
+    }
+
+    public ResponseEntity<String> editUserImage(Long userId, MultipartFile file) {
+        User user = getUserById(userId);
+        return null;
+    }
+
+    public ResponseEntity<String> editUserBackgroundImage(Long userId, MultipartFile file) {
+        User user = getUserById(userId);
+        return null;
+    }
+
+    public User getUserById(Long userId){
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
+
 }

@@ -23,7 +23,6 @@ public class SearchController {
     @GetMapping
     public ResponseEntity getSearch(@RequestParam String searchName) {
         return searchService.getSearch(searchName);
-
     }
 
 }

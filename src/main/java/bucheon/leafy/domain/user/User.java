@@ -94,9 +94,14 @@ public class User extends BaseDeleteEntity {
 
     }
 
-    public void addUserBackgroundImage(String userBackgroundImage){
+    public void addUserImage(String userBackgroundImage){
         UserImage userImage = UserImage.of(userBackgroundImage, this);
         this.userImage = userImage;
+    }
+
+    public void addUserBackgroundImage(String userBackgroundImage){
+        UserBackgroundImage backgroundImage = UserBackgroundImage.of(userBackgroundImage, this);
+        this.userBackgroundImage = backgroundImage;
     }
 
     public void changePassword(String encodePassword){
