@@ -38,6 +38,7 @@ public class PageResponse <T> {
     public static <T> PageResponse of(PageRequest pageRequest, List<T> body, Long total){
 
         Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
+        totalPage = total % Long.valueOf(pageRequest.limit) == 0 ? totalPage : totalPage + 1;
         boolean isFirst = pageRequest.getPage() == 1;
         boolean isLast = pageRequest.getPage() == totalPage;
 

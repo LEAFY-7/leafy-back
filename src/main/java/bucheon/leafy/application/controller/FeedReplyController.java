@@ -7,11 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/feeds/{feedId}/comments/{commentId}/replies")
+@RequestMapping("/api/v1/feeds/{feedId}/comments/{commentId}/replies")
 @RequiredArgsConstructor
 public class FeedReplyController {
 
