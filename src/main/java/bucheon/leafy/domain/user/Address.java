@@ -25,13 +25,16 @@ public class Address extends BaseDeleteEntity {
 
     private String reference;
 
+    private Boolean isHide;
+
     @Builder
-    private Address(String zipcode, String street, String lot, String detail, String reference) {
+    private Address(String zipcode, String street, String lot, String detail, String reference, Boolean isHide) {
         this.zipcode = zipcode;
         this.street = street;
         this.lot = lot;
         this.detail = detail;
         this.reference = reference;
+        this.isHide = isHide;
     }
 
     public static Address of(SignUpRequest signUpRequest) {
@@ -41,6 +44,7 @@ public class Address extends BaseDeleteEntity {
                 .lot(signUpRequest.getLot())
                 .detail(signUpRequest.getDetail())
                 .reference(signUpRequest.getReference())
+                .isHide(signUpRequest.getAddressIsHide())
                 .build();
     }
 
