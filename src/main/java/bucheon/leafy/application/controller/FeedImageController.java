@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/feeds/{feedId}/images")
+@RequestMapping("/api/v1/feeds/{feedId}/images")
 @RequiredArgsConstructor
 public class FeedImageController {
 
