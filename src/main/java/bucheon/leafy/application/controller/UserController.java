@@ -1,6 +1,7 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
+import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.jwt.TokenResponse;
@@ -10,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +23,7 @@ import javax.validation.Valid;
 
 @Tag(name = "회원정보")
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -42,6 +45,38 @@ public class UserController {
     @PostMapping("/sign-up")
     public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
         return userService.signUp(signUpRequest);
+    }
+
+    @Operation(summary = "이미지 등록")
+    @PostMapping("/image")
+    public ResponseEntity<String> createImage(@AuthenticationPrincipal AuthUser authUser,
+                                              MultipartFile file) {
+        Long userId = authUser.getUserId();
+        return userService.createUserImage(userId, file);
+    }
+
+    @Operation(summary = "이미지 등록")
+    @PostMapping("/background-image")
+    public ResponseEntity<String> createBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+                                                        MultipartFile file) {
+        Long userId = authUser.getUserId();
+        return userService.createUserBackgroundImage(userId, file);
+    }
+
+    @Operation(summary = "이미지 등록")
+    @PutMapping("/image")
+    public ResponseEntity<String> updateImage(@AuthenticationPrincipal AuthUser authUser,
+                                              MultipartFile file) {
+        Long userId = authUser.getUserId();
+        return userService.editUserImage(userId, file);
+    }
+
+    @Operation(summary = "이미지 등록")
+    @PutMapping("/background-image")
+    public ResponseEntity<String> updateBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+                                                        MultipartFile file) {
+        Long userId = authUser.getUserId();
+        return userService.editUserBackgroundImage(userId, file);
     }
 
     @Operation(summary = "로그아웃")

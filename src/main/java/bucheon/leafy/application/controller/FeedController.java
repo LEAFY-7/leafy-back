@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "피드")
 @RestController
-@RequestMapping("/v1/feeds")
+@RequestMapping("/api/v1/feeds")
 @RequiredArgsConstructor
 public class FeedController {
 

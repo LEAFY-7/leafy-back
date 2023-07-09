@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "피드 좋아요")
 @RestController
-@RequestMapping("/v1/feeds/{id}/like")
+@RequestMapping("/api/v1/feeds/{id}/like")
 @RequiredArgsConstructor
 public class FeedLikeController {
 

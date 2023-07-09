@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "식물 검색")
 @RestController
-@RequestMapping("/api/v1/search")
+@RequestMapping("/v1/search")
 @RequiredArgsConstructor
 public class SearchController {
 
@@ -23,7 +23,6 @@ public class SearchController {
     @GetMapping
     public ResponseEntity getSearch(@RequestParam String searchName) {
         return searchService.getSearch(searchName);
-
     }
 
 }
