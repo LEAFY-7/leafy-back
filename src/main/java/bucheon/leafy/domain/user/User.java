@@ -5,9 +5,11 @@ import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
+import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +32,18 @@ public class User extends BaseDeleteEntity {
 
     private String phone;
 
+    private Gender gender;
+
+    private LocalDate birthDay;
+
     private String simpleIntroduction;
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Feed> feeds = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> address = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Address address;
 
     // 유저는 정보를 뽑아올 때 거의 대부분 이미지를 뽑아오고 추가적으로 연관관계가 설정이 되어있지 않기 때문에 FetchType.EAGER 로 수정 고려
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -61,8 +66,8 @@ public class User extends BaseDeleteEntity {
     @Builder
     private User(String password, String email, String nickName, String phone,
                  String name, String simpleIntroduction, List<Feed> feeds,
-                 List<Address> address, UserImage userImage, UserRole userRole,
-                 List<Qna> qna, List<Notice> notices) {
+                 Gender gender, LocalDate birthDay, Address address, UserImage userImage,
+                 UserRole userRole, List<Qna> qna, List<Notice> notices) {
 
         this.password = password;
         this.email = email;
@@ -74,6 +79,8 @@ public class User extends BaseDeleteEntity {
         this.address = address;
         this.userImage = userImage;
         this.userRole = userRole;
+        this.gender = gender;
+        this.birthDay = birthDay;
         this.qna = qna;
         this.notices = notices;
     }
@@ -88,7 +95,7 @@ public class User extends BaseDeleteEntity {
                 .nickName(signUpRequest.getNickName())
                 .phone(signUpRequest.getPhone())
                 .simpleIntroduction(signUpRequest.getSimpleIntroduction())
-                .address(List.of(address))
+                .address(address)
                 .userRole(UserRole.MEMBER)
                 .build();
 
