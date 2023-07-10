@@ -4,20 +4,13 @@ import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.repository.AddressRepository;
 import bucheon.leafy.application.repository.UserImageRepository;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.application.service.FeedCommentService;
-import bucheon.leafy.application.service.FeedService;
-import bucheon.leafy.domain.feed.dto.request.FeedRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedResponse;
-import bucheon.leafy.domain.user.Address;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.user.UserImage;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;

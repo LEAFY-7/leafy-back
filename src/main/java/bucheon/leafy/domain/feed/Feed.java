@@ -1,10 +1,7 @@
 package bucheon.leafy.domain.feed;
 
 import bucheon.leafy.util.entity.BaseDeleteEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -47,6 +44,7 @@ public class Feed extends BaseDeleteEntity {
     private Feed(String title, String content, FeedLikeCount feedLikeCount,
                  List<FeedComment> feedComments, List<FeedTag> feedTags,
                  FeedType feedType, List<FeedImage> feedImages) {
+
         this.title = title;
         this.content = content;
         this.feedLikeCount = feedLikeCount;
@@ -54,6 +52,7 @@ public class Feed extends BaseDeleteEntity {
         this.feedTags = feedTags;
         this.feedType = feedType;
         this.feedImages = feedImages;
+
     }
 
 }

@@ -1,14 +1,12 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.FeedCommentMapper;
-import bucheon.leafy.domain.feed.dto.request.FeedCommentRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedCommentResponse;
+import bucheon.leafy.domain.feed.request.FeedCommentRequest;
+import bucheon.leafy.domain.feed.response.FeedCommentResponse;
 import bucheon.leafy.exception.FeedCommentDataAccessException;
 import bucheon.leafy.exception.FeedCommentNotFoundException;
-import bucheon.leafy.exception.FeedDataAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

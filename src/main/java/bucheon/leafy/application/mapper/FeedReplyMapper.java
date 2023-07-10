@@ -1,7 +1,7 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.feed.dto.request.FeedReplyRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedReplyResponse;
+import bucheon.leafy.domain.feed.request.FeedReplyRequest;
+import bucheon.leafy.domain.feed.response.FeedReplyResponse;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public interface FeedReplyMapper {
     Long saveReply(FeedReplyRequest request);
 
     int editReply(FeedReplyRequest request);
-
+    
     void deleteAllReplies();
 
     void deleteReply(Long replyId);

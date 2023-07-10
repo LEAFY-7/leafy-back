@@ -1,8 +1,8 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.FeedImageMapper;
-import bucheon.leafy.domain.feed.dto.request.FeedImageRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedImageResponse;
+import bucheon.leafy.domain.feed.request.FeedImageRequest;
+import bucheon.leafy.domain.feed.response.FeedImageResponse;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;

@@ -1,8 +1,8 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedReplyService;
-import bucheon.leafy.domain.feed.dto.request.FeedReplyRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedReplyResponse;
+import bucheon.leafy.domain.feed.request.FeedReplyRequest;
+import bucheon.leafy.domain.feed.response.FeedReplyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedImageService;
-import bucheon.leafy.domain.feed.dto.request.FeedImageRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedImageResponse;
+import bucheon.leafy.domain.feed.request.FeedImageRequest;
+import bucheon.leafy.domain.feed.response.FeedImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

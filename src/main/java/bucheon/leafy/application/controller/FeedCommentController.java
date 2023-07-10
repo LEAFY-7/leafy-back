@@ -1,8 +1,8 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedCommentService;
-import bucheon.leafy.domain.feed.dto.request.FeedCommentRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedCommentResponse;
+import bucheon.leafy.domain.feed.request.FeedCommentRequest;
+import bucheon.leafy.domain.feed.response.FeedCommentResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
