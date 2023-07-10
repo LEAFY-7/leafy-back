@@ -1,0 +1,4 @@
+[submodule "submodule-config"]
+	path = submodule-config
+	url = https://github.com/LEAFY-7/submodule-config.git
+	branch = main
