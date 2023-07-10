@@ -4,6 +4,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.exception.enums.ExceptionKey;
@@ -108,4 +109,8 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
+    public UserResponse getUserResponseByUserId(Long userId) {
+        User user = getUserById(userId);
+        return UserResponse.of(user);
+    }
 }
