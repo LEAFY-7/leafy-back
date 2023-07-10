@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.feed.dto.response;
+package bucheon.leafy.domain.feed.response;
 
 import lombok.Builder;
 import lombok.Data;

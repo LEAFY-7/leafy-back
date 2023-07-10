@@ -90,7 +90,7 @@ class UserRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         return User.builder()
-                .address(List.of(address))
+                .address(address)
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")

@@ -1,8 +1,8 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.FeedReplyMapper;
-import bucheon.leafy.domain.feed.dto.request.FeedReplyRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedReplyResponse;
+import bucheon.leafy.domain.feed.request.FeedReplyRequest;
+import bucheon.leafy.domain.feed.response.FeedReplyResponse;
 import bucheon.leafy.exception.FeedCommentDataAccessException;
 import bucheon.leafy.exception.FeedCommentNotFoundException;
 import lombok.RequiredArgsConstructor;

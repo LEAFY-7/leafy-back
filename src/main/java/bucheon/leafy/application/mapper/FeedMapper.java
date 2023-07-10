@@ -1,7 +1,7 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.feed.dto.request.FeedRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedResponse;
+import bucheon.leafy.domain.feed.request.FeedRequest;
+import bucheon.leafy.domain.feed.response.FeedResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 

@@ -88,6 +88,21 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
+    public Long getFollowerCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return followRepository.countByFollower(user);
+    }
+
+    public Long getFollowingCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return followRepository.countByFollowing(user);
+    }
+
+
     // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
 
     private List<Long> getFollowersId(List<Follow> followers) {

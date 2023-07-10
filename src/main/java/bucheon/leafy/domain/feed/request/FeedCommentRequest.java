@@ -1,8 +1,7 @@
-package bucheon.leafy.domain.feed.dto.request;
+package bucheon.leafy.domain.feed.request;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class FeedCommentRequest {
