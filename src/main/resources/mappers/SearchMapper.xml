@@ -10,7 +10,7 @@
           and sale_date = (select max(sale_date) from search)
         order by good_name
         limit #{pageRequest.limit}
-        offset #{pageRequest.offset}
+            offset #{pageRequest.offset}
     </select>
 
     <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyApi.LeafyApiDto">

@@ -61,11 +61,13 @@ dependencies {
 
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
 
 task copyMainResources(type: Copy) {
 	copy {
@@ -88,3 +90,4 @@ task copyTestResources(type: Copy) {
 		}
 	}
 }
+

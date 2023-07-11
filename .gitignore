@@ -37,12 +37,6 @@ out/
 .vscode/
 
 ## ignore
-<<<<<<< HEAD
-application.yml
-log4jdbc.log4j2.properties
-
-=======
 /src/main/resources/application.yml
 /src/main/resources/log4jdbc.log4j2.properties
 /src/test/resources/application.yml
->>>>>>> 51c0fe832ddb73ef735f8e23f04d745c5756c23d

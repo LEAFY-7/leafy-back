@@ -16,10 +16,8 @@ public interface FeedMapper {
 
     List<FeedResponse> findFeedListScroll(Long feedId);
 
-    // 사용자가 특정 feed_id로 조회했을 시 해당 feed가 없을수도 있기때문에 optional 사용
     FeedResponse findFeedById(Long feedId);
 
-    // insert 후 auto-incremented 필드값이 반환됨
     Long saveFeed(FeedRequest request);
 
     int editFeed(FeedRequest request);
@@ -27,5 +25,6 @@ public interface FeedMapper {
     void deleteAllFeeds();
 
     void hardDeleteFeed(Long feedId);
+
     int softDeleteFeed(Long feedId);
 }

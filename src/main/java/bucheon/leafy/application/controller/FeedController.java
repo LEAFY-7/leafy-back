@@ -1,14 +1,9 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedService;
-<<<<<<< HEAD
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.feed.dto.request.FeedRequest;
-import bucheon.leafy.domain.feed.dto.response.FeedResponse;
-=======
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
->>>>>>> d09b628b834277ae4f8b6d50286d36f4bfa02928
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @Tag(name = "피드")
 @RestController

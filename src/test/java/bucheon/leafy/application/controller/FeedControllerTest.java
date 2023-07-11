@@ -8,7 +8,7 @@ import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.config.AuthUserDetailService;
 import bucheon.leafy.domain.feed.FeedType;
-import bucheon.leafy.domain.feed.dto.request.FeedRequest;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
@@ -25,10 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -71,7 +68,7 @@ public class FeedControllerTest {
                 .build();
 
         User user = User.builder()
-                .address(List.of(address))
+                .address(address)
                 .userImage(image)
                 .email("email@email.com")
                 .phone("01012341234")
@@ -101,8 +98,8 @@ public class FeedControllerTest {
         FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC).build();
 
         ResultActions result = mockMvc.perform(post("/v1/feeds")
-                .content(objectMapper.writeValueAsString(feedRequest))
-                .contentType(APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(feedRequest))
+                        .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 

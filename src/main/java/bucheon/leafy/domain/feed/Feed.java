@@ -21,11 +21,6 @@ public class Feed extends BaseDeleteEntity {
 
     private String content;
 
-<<<<<<< HEAD
-    private Boolean isDelete;
-
-=======
->>>>>>> d09b628b834277ae4f8b6d50286d36f4bfa02928
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
     private FeedLikeCount feedLikeCount;
 
@@ -46,21 +41,12 @@ public class Feed extends BaseDeleteEntity {
 
 
     @Builder
-<<<<<<< HEAD
-    private Feed(String title, String content, Boolean isDelete,
-                 FeedLikeCount feedLikeCount, List<FeedComment> feedComments,
-                 List<FeedTag> feedTags, FeedType feedType, List<FeedImage> feedImages) {
-        this.title = title;
-        this.content = content;
-        this.isDelete = isDelete;
-=======
     private Feed(String title, String content, FeedLikeCount feedLikeCount,
                  List<FeedComment> feedComments, List<FeedTag> feedTags,
                  FeedType feedType, List<FeedImage> feedImages) {
 
         this.title = title;
         this.content = content;
->>>>>>> d09b628b834277ae4f8b6d50286d36f4bfa02928
         this.feedLikeCount = feedLikeCount;
         this.feedComments = feedComments;
         this.feedTags = feedTags;
