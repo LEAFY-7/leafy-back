@@ -43,3 +43,24 @@ leafy:
   api:
     serviceKey: F445D25F38CE455C976577FB9869F826
 
+mail:
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: whwnagnl910@gmail.com
+    password: ffvwoctwgeicjymx
+    auth: true
+    starttls:
+      enable: true
+  subject:
+    members:
+      registration: Thank you for joining our cafe!
+
+bucheon.leafy.application.service:
+  dependencyManagement:
+    imports:
+      - mavenBom: com.icegreen:greenmail:1.6.1
+
+  dependencies:
+    - implementation: com.icegreen:greenmail
+      scope: test

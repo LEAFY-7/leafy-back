@@ -11,10 +11,6 @@
     <select id="count" parameterType="int" resultType="int">
         SELECT count(*)
         FROM qna_reply
-<<<<<<< HEAD
-=======
-        WHERE qna_id = #{qnaId}
->>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     </select>
 
     <delete id="delete" parameterType="map">
@@ -28,13 +24,10 @@
             (#{id}, now(), now(), #{isDelete}, #{comment}, #{userId},#{qnaCommentId})
     </insert>
 
-<<<<<<< HEAD
     <select id="selectByQnaId" resultType="Long">
         SELECT * FROM qna_comment WHERE qna_id = #{id}
     </select>
 
-=======
->>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     <select id="selectAll" parameterType="int" resultType="ReplyDto">
         SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
         FROM qna_reply
@@ -45,11 +38,7 @@
     <select id="select" parameterType="int" resultType="ReplyDto">
         SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
         FROM qna_reply
-<<<<<<< HEAD
         WHERE qna_comment_id = #{qnaCommentId}
-=======
-        WHERE id = #{id}
->>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     </select>
 
     <update id="update" parameterType="ReplyDto">

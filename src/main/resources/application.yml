@@ -9,7 +9,7 @@ spring:
         mode: never
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -41,4 +41,17 @@ jwt:
 leafy:
   api:
     serviceKey: F445D25F38CE455C976577FB9869F826
-  
+
+mail:
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: whwnagnl910@gmail.com
+    password: ffvwoctwgeicjymx
+    auth: true
+    starttls:
+      enable: true
+  subject:
+    members:
+      registration: Thank you for joining our cafe!
+
