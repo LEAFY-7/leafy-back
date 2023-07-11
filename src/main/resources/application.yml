@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/leafy
+    username: castello
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql:
+      init:
+        mode: never
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 100
+        use_sql_comments: true
+    open-in-view: false
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mappers/*.xml
+  type-aliases-package: bucheon.leafy.*
+
+logging:
+  level:
+    jdbc.sqlonly: off
+    jdbc.sqltiming: info
+    jdbc.resultsettable: info
+    jdbc.audit: off
+    jdbc.resultset: off
+    jdbc.connection: off
+
+jwt:
+  header: Authorization
+  secret: aW5jaGVvbi1hbmQtYnVjaGVvbi1sZWFmeS1wcm9qZWN0LWphdmEtc3ByaW5nLWJhY2tlbmQtcmVhY3QtYW5kLXR5cGVzcGlyLWZyb250ZW5kLWp3dC1zZWNyZXQta2V5
+  token-validity-in-seconds: 86400
+
+leafy:
+  api:
+    serviceKey: F445D25F38CE455C976577FB9869F826
+  

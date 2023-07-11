@@ -11,6 +11,7 @@ import java.util.Map;
 public interface NoticeMapper {
 
     int count();
+<<<<<<< HEAD
 
     NoticeDto select(Long id);
     int increaseViewCnt(Long id);
@@ -23,4 +24,14 @@ public interface NoticeMapper {
 
     List<NoticeDto> selectAll();
     List<NoticeDto> selectPage(Map map);
+=======
+    int deleteAll();
+    List<NoticeDto> select(Long id);
+    int delete(Long id, Long userId);
+    int insert(NoticeDto noticeDto) ;
+    int update(NoticeDto noticeDto);
+    List<NoticeDto> selectPage(Map<String ,Integer>map);
+    List<NoticeDto> selectAll();
+
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
 }

@@ -9,6 +9,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class NoticeDto {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     private Long id;
     private Date createdAt;
     private Date modifiedAt;
@@ -18,8 +22,12 @@ public class NoticeDto {
     private String title;
     private Long userId;
 
+<<<<<<< HEAD
     public NoticeDto(Long id, boolean isDelete, String contents, boolean isHide, String title, Long userId) {
         this.id = id;
+=======
+    public NoticeDto( boolean isDelete, String contents, boolean isHide, String title, Long userId) {
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
         this.isDelete = isDelete;
         this.contents = contents;
         this.isHide = isHide;

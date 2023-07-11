@@ -9,6 +9,7 @@
         SELECT count(*) FROM notice
     </select>
 
+<<<<<<< HEAD
     <delete id="delete" parameterType="map">
         UPDATE notice
            SET is_delete = 1
@@ -27,10 +28,31 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
+=======
+    <delete id="deleteForAdmin">
+        UPDATE notice
+           SET is_delete = #{isDelete}
+         WHERE id = #{id}
+    </delete>
+
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     <delete id="deleteAll">
         DELETE FROM notice
     </delete>
 
+<<<<<<< HEAD
+=======
+<!--    <update id="deleteAll">-->
+<!--        UPDATE notice-->
+<!--           SET is_delete = #{isDelete}-->
+<!--         WHERE id = #{id}-->
+<!--    </update>-->
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM notice WHERE id = #{id} and user_Id = #{userId}
+    </delete>
+
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     <insert id="insert" parameterType="NoticeDto">
         INSERT INTO notice
         ( created_at, modified_at, is_delete , contents, is_hide, title, user_id)
@@ -65,5 +87,13 @@
         WHERE user_Id = #{userId}
     </update>
 
+<<<<<<< HEAD
+=======
+    <select id="selectPage" parameterType="map" resultType="NoticeDto">
+        <include refid="selectFrom"/>
+        ORDER BY created_at DESC, id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
 
 </mapper>

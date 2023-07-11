@@ -12,6 +12,7 @@ public class QnaDto {
     private Date modifiedAt;
     private Boolean isDelete;
     private String contents;
+<<<<<<< HEAD
     private Boolean qnaStatus;
     private String title;
     private Long userId;
@@ -19,6 +20,17 @@ public class QnaDto {
 
     public QnaDto( String contents, String title, Long userId  ) {
         this.contents = contents;
+=======
+    private String qnaStatus;
+    private String title;
+    private Long userId;
+
+
+    public QnaDto( Boolean isDelete, String contents, String qnaStatus, String title, Long userId) {
+        this.isDelete = isDelete;
+        this.contents = contents;
+        this.qnaStatus = qnaStatus;
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
         this.title = title;
         this.userId = userId;
     }

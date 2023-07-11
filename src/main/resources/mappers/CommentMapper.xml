@@ -4,10 +4,21 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.CommentMapper">
 
+<<<<<<< HEAD
+=======
+    <delete id="deleteAll" parameterType="int">
+        DELETE
+          FROM qna_comment
+    </delete>
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
 
     <select id="count" parameterType="int" resultType="int">
         SELECT count(*)
           FROM qna_comment
+<<<<<<< HEAD
+=======
+         WHERE qna_id = #{qnaId}
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
     </select>
 
     <delete id="delete" parameterType="map">
@@ -19,6 +30,7 @@
 
     <insert id="insert" parameterType="CommentDto">
         INSERT INTO qna_comment
+<<<<<<< HEAD
             ( created_at, is_delete, comment, user_id, qna_id)
         VALUES
             (now(), 0, #{comment}, #{userId}, #{qnaId})
@@ -51,6 +63,22 @@
 
     <select id="select" parameterType="long" resultType="CommentDto">
         SELECT *
+=======
+            ( modified_at, is_delete, comment, user_id, qna_id)
+        VALUES
+            (now(), #{isDlete}, #{comment}, #{userId}, #{qnaId})
+    </insert>
+
+    <select id="selectAll" parameterType="int" resultType="CommentDto">
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
+        FROM qna_comment
+        WHERE qna_id = #{qnaId}
+        ORDER BY created_at ASC, cno ASC
+    </select>
+
+    <select id="select" parameterType="int" resultType="CommentDto">
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
         FROM qna_comment
         WHERE id = #{id}
     </select>
@@ -58,7 +86,11 @@
     <update id="update" parameterType="CommentDto">
         UPDATE qna_comment
         SET comment = #{comment}
+<<<<<<< HEAD
           , modified_at = now()
+=======
+          , modified_at =#{modifiedAt}
+>>>>>>> 9218b65be2274ff7ec268c04b6bc3eb932729e57
         WHERE id = #{id} and user_id = #{userId}
     </update>
 </mapper>
