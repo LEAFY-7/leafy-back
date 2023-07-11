@@ -19,17 +19,11 @@ public class SignUpRequest {
         @NotBlank(message = "비밀번호를 입력해주세요")
         private String password;
 
-        @NotBlank(message = "이름을 입력해주세요")
-        private String name;
-
         @NotBlank(message = "넥네임을 입력해주세요")
         private String nickName;
 
         @NotBlank(message = "전화번호를 입력해주세요")
         private String phone;
-
-        @NotBlank(message = "간단 소개를 입력해주세요")
-        private String simpleIntroduction;
 
         // TODO : 주소
         private String zipcode;
@@ -42,26 +36,25 @@ public class SignUpRequest {
 
         private String reference;
 
-        private Boolean addressIsHide;
+        // TODO : 이미지
+        private String userImage;
 
         @Builder
-        private SignUpRequest(String password, String email, String nickName,  String name,
-                              String simpleIntroduction, String phone, String zipcode,
-                              String street, String lot, String detail, String reference,
-                              Boolean addressIsHide) {
+        private SignUpRequest(String password, String email, String nickName,
+                             String phone, String zipcode, String street, String lot,
+                             String detail, String reference, String userImage) {
 
                 this.password = password;
                 this.email = email;
                 this.nickName = nickName;
-                this.name = name;
-                this.simpleIntroduction = simpleIntroduction;
                 this.phone = phone;
                 this.zipcode = zipcode;
                 this.street = street;
                 this.lot = lot;
                 this.detail = detail;
                 this.reference = reference;
-                this.addressIsHide = addressIsHide;
+                this.userImage = userImage;
+
         }
 
 }

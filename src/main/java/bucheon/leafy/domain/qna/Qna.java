@@ -1,6 +1,6 @@
 package bucheon.leafy.domain.qna;
 
-import bucheon.leafy.util.entity.BaseDeleteEntity;
+import bucheon.leafy.util.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class Qna extends BaseDeleteEntity {
     @Enumerated(EnumType.STRING)
     private QnaStatus qnaStatus;
 
-    private Qna(String title, String contents, QnaStatus qnaStatus) {
+    private Qna(String title, String contents, QnaStatus qnaStatus ) {
         this.title = title;
         this.contents = contents;
         this.qnaStatus = qnaStatus;

@@ -25,7 +25,7 @@ class UserTest {
                 .build();
 
         User user = User.builder()
-                .address(address)
+                .address(List.of(address))
                 .userImage(image)
                 .email("email@email.com")
                 .phone("01012341234")

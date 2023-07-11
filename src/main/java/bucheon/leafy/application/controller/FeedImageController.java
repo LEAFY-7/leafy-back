@@ -1,42 +1,69 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedImageService;
-import bucheon.leafy.domain.feed.request.FeedImageRequest;
-import bucheon.leafy.domain.feed.response.FeedImageResponse;
+import bucheon.leafy.domain.feed.dto.request.FeedImageRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Tag(name = "피드 이미지")
 @RestController
-@RequestMapping("/api/v1/feeds/{feedId}/images")
+@RequestMapping("/v1/feeds/{feedId}")
 @RequiredArgsConstructor
 public class FeedImageController {
 
     private final FeedImageService service;
 
-    @GetMapping
-    public ResponseEntity<List<FeedImageResponse>> getImages(@PathVariable Long feedId) {
+//    @GetMapping
+//    public ResponseEntity getImages() {
+//        return ResponseEntity.ok().body();
+//    }
 
-        return ResponseEntity.ok().body(service.getImages(feedId));
+    @PostMapping("/images")
+    public ResponseEntity saveImage(@PathVariable Long feedId, @RequestPart List<MultipartFile> imageList) throws IOException {
+        String imagePath = "C:/upload";
+
+        List<FeedImageRequest> requestList = new ArrayList<>();
+
+        for (MultipartFile image : imageList) {
+            UUID uuid = UUID.randomUUID();
+            String imageName = uuid.toString();
+
+
+            File uploadImage = new File(imagePath, imageName);
+
+            image.transferTo(uploadImage);
+
+            FeedImageRequest request = FeedImageRequest.builder()
+                    .image_id(null)
+                    .image(imageName)
+                    .feed_id(feedId)
+                    .build();
+
+            requestList.add(request);
+        }
+
+        service.saveImage(requestList);
+
+        return ResponseEntity.ok().body("이미지 저장 완료");
+
     }
 
-    @PostMapping
-    public ResponseEntity<List<FeedImageRequest>> uploadImage(@PathVariable Long feedId, @RequestPart List<MultipartFile> imageFileList,
-                                              @RequestParam List<Boolean> isThumbList) throws IOException {
+//    @PutMapping
+//    public ResponseEntity updateImage() {
+//        return ResponseEntity.ok().body();
+//    }
 
-        return ResponseEntity.ok().body(service.uploadImage(feedId, imageFileList, isThumbList));
-    }
-
-
-    @DeleteMapping("/{imageId}")
-    public ResponseEntity deleteImage(@PathVariable Long feedId, @PathVariable Long imageId, @RequestParam String imagePath, @RequestParam String imageName) {
-
-        service.deleteImage(imageId, imagePath, imageName);
-
-        return ResponseEntity.ok().body("이미지 삭제 완료");
-    }
+//    @DeleteMapping
+//    public ResponseEntity deleteImage() {
+//        return ResponseEntity.ok().body();
+//    }
 }

@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.user.request.SignUpRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,22 +17,20 @@ public class UserImage {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private User user;
 
     private String image;
 
     @Builder
-    private UserImage(String image, User user) {
+    private UserImage(String image) {
         this.image = image;
-        this.user = user;
     }
 
     // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
-    public static UserImage of(String userImage, User user) {
+    public static UserImage of(SignUpRequest signUpRequest) {
         return UserImage.builder()
-                .image(userImage)
-                .user(user)
+                .image(signUpRequest.getUserImage())
                 .build();
     }
 }

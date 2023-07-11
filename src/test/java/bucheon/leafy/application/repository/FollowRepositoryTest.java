@@ -130,58 +130,6 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         assertThat(follow.getFollowing()).isEqualTo(user2);
     }
 
-    @Test
-    @DisplayName("회원이 팔로우한 회원의 수를 조회한다.")
-    void testCountByFollower(){
-        //given
-        User user1 = createUser("ekxk1234@naver.com", "정철희");
-        User user2 = createUser("abcd@gmail.com", "홍길동");
-        User user3 = createUser("qwer@gmail.com", "강호동");
-        User user4 = createUser("zxcv@naver.com", "유재석");
-        User user5 = createUser("tyui@gmail.com", "강호동");
-
-        userRepository.saveAll( List.of(user1, user2, user3, user4, user5) );
-
-        Follow follow1 = Follow.of(user1, user2);
-        Follow follow2 = Follow.of(user1, user3);
-        Follow follow3 = Follow.of(user1, user4);
-        Follow follow4 = Follow.of(user1, user5);
-        List<Follow> followList = List.of(follow1, follow2, follow3, follow4);
-
-        followRepository.saveAll(followList);
-
-        //when
-        Long count = followRepository.countByFollower(user1);
-
-        //then
-        assertThat(count).isEqualTo(4L);
-    }
-
-    @Test
-    @DisplayName("회원을 팔로잉한 회원의 수를 조회한다.")
-    void testCountByFollowing(){
-        //given
-        User user1 = createUser("ekxk1234@naver.com", "정철희");
-        User user2 = createUser("abcd@gmail.com", "홍길동");
-        User user3 = createUser("qwer@gmail.com", "강호동");
-        User user4 = createUser("zxcv@naver.com", "유재석");
-
-        userRepository.saveAll( List.of(user1, user2, user3, user4) );
-
-        Follow follow1 = Follow.of(user2, user1);
-        Follow follow2 = Follow.of(user3, user1);
-        Follow follow3 = Follow.of(user4, user1);
-        List<Follow> followList = List.of(follow1, follow2, follow3);
-
-        followRepository.saveAll(followList);
-
-        //when
-        Long count = followRepository.countByFollowing(user1);
-
-        //then
-        assertThat(count).isEqualTo(3L);
-    }
-
 
     private User createUser(String email, String nickName) {
         Address address = Address.builder()
@@ -197,7 +145,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         return User.builder()
-                .address(address)
+                .address(List.of(address))
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")

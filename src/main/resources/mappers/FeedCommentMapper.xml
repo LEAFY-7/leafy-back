@@ -5,27 +5,22 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedCommentMapper">
     <select id="findCommentList" resultType="FeedCommentResponse">
-        select * from feed_comment where feed_id = #{feedId}
+        select fc.* from feed f, feed_comment fc where f.feed_id = fc.feed_id and fc.feed_id = #{feedId} and fc.isDelete = false
     </select>
 
-    <select id="findCommentById" resultType="FeedCommentResponse" parameterType="java.lang.Long">
-        select * from feed_comment where comment_id = #{commentId}
-    </select>
-
-    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyProperty="commentId">
-        insert into feed_comment(user_id,feed_id,comment,created_at,modified_at) values (#{userId}, #{feedId}, #{comment}, now(), now())
+    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyProperty="comment_id">
+        insert into feed_comment(userId,feed_id,comment,isDelete,created_at,modified_at) values (#{userId}, #{feed_id}, #{comment}, false, now(), now())
     </insert>
 
     <update id="editComment" parameterType="FeedCommentRequest">
-        update feed_comment set comment = #{comment}, modified_at = now() where comment_id = #{commentId}
+        update feed_comment set comment = #{comment}, modified_at = now() where feed_id = #{feed_id} and comment_id = #{comment_id}
     </update>
 
-    <delete id="deleteAllComments">
-        delete from feed_comment
+    <delete id="hardDeleteComment"  parameterType="java.lang.Long">
+        delete from feed_comment where feed_id = #{feed_id} and comment_id = #{comment_id}
     </delete>
 
-    <delete id="deleteComment"  parameterType="java.lang.Long">
-        delete from feed_comment where comment_id = #{commentId}
-    </delete>
-
+    <update id="softDeleteComment" parameterType="java.lang.Long">
+        update feed_comment set isDelete = true where feed_id = #{feed_id} and comment_id = #{comment_id}
+    </update>
 </mapper>

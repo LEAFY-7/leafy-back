@@ -18,7 +18,6 @@ public class SearchResponse {
     private int minAmt;
     private int avgAmt;
 
-
     @Builder
     private SearchResponse(Long searchId, String saleDate, String flowerGubn, String pumName,
                            String goodName, String lv, int maxAmt, int minAmt, int avgAmt){

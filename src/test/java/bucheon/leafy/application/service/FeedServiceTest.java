@@ -4,13 +4,20 @@ import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.repository.AddressRepository;
 import bucheon.leafy.application.repository.UserImageRepository;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.feed.request.FeedRequest;
+import bucheon.leafy.application.service.FeedCommentService;
+import bucheon.leafy.application.service.FeedService;
+import bucheon.leafy.domain.feed.dto.request.FeedRequest;
+import bucheon.leafy.domain.feed.dto.response.FeedResponse;
+import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserImage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,7 +70,7 @@ public class FeedServiceTest {
 
         //given
         FeedRequest request = FeedRequest.builder()
-                .user_id(userId)
+                .userId(userId)
                 .title("새제목")
                 .content("새내용")
                 .is_hide(false)
@@ -84,7 +91,7 @@ public class FeedServiceTest {
 //        Long userId = user.get().getId();
 //
 //        FeedRequest request1 = FeedRequest.builder()
-//                .user_id(userId)
+//                .userId(userId)
 //                .title("새제목")
 //                .content("새내용")
 //                .is_hide(false)

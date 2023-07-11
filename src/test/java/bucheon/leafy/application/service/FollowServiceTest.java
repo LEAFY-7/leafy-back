@@ -173,7 +173,7 @@ class FollowServiceTest extends IntegrationTestSupport {
                 .build();
 
         return User.builder()
-                .address(address)
+                .address(List.of(address))
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")

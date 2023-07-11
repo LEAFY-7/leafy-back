@@ -1,85 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
-
-
-        <delete id="deleteAll">
-            DELETE FROM qna
-        </delete>
-
-        <delete id="deleteQna" parameterType="map">
-            DELETE FROM qna WHERE id = #{id} and id = #{id}
-        </delete>
-
-        <insert id="insert" parameterType="QnaDto">
-            INSERT INTO qna
-                (title, contents, id)
-            VALUES
-                (#{title}, #{contents}, #{id})
-        </insert>
-
-        <select id="selectAll" resultType="QnaDto">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
-            FROM qna
-            ORDER BY created_at DESC, id DESC
-        </select>
-
-        <sql id="selectFrom">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
-            FROM qna
-        </sql>
-
-        <select id="select" parameterType="int" resultType="QnaDto">
-            <include refid="selectFrom"/>
-            WHERE id = #{id}
-        </select>
-
-        <select id="selectPage" parameterType="map" resultType="QnaDto">
-            <include refid="selectFrom"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pageSize}
-        </select>
-
-        <update id="update" parameterType="QnaDto">
-            UPDATE qna
-            SET   title = #{title}
-              , contents = #{contents}
-              , modified_at = now()
-            WHERE user_id = #{user_id}
-        </update>
+<mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
 
-        <sql id="searchCondition">
-            <choose>
-                <when test='option=="T"'>
-                    AND title LIKE concat('%', #{keyword}, '%')
-                </when>
-                <when test='option=="U"'>
-                    AND user_id LIKE concat('%', #{keyword}, '%')
-                </when>
-                <otherwise>
-                    AND (title   LIKE concat('%', #{keyword}, '%')
-                    OR   contents LIKE concat('%', #{keyword}, '%'))
-                </otherwise>
-            </choose>
-        </sql>
+    <select id="count" resultType="int">
+        SELECT count(*) FROM qna
+    </select>
 
-        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaDto">
-            SELECT id, title, contents, user_id, view_cnt, comment_cnt, created_at
-            FROM qna
-            WHERE truef
-            <include refid="searchCondition"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pateSize}
-        </select>
+    <delete id="deleteForAdmin">
+        DELETE FROM qna where id = #{id}
+    </delete>
 
-        <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
-            SELECT count(*)
-            FROM qna
-            WHERE true
-            <include refid="searchCondition"/>
-        </select>
-    </mapper>
+    <delete id="deleteAll">
+        DELETE FROM qna
+    </delete>
+
+    <delete id="delete" parameterType="map">
+        UPDATE qna
+        SET is_delete = 1
+        WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+    <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
+        VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
+    </insert>
+
+    <select id="selectAll" resultType="QnaDto">
+        SELECT *
+        FROM qna
+        ORDER BY created_at DESC, id DESC
+    </select>
+
+    <sql id="selectFrom">
+        SELECT id, created_at, modified_at, is_delete , contents, qna_status, title, user_id
+        FROM qna
+    </sql>
+
+    <select id="select" parameterType="long" resultType="QnaDto">
+        <include refid="selectFrom"/>
+        WHERE id = #{id}
+    </select>
+
+    <update id="increaseViewCnt" parameterType="int">
+        UPDATE qna
+        SET   view_cnt = view_cnt + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="update" parameterType="QnaDto">
+        UPDATE qna
+        SET   title = #{title}
+          , contents = #{contents}
+          , modified_at = now()
+          , user_id = #{userId}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateQnaStatus" parameterType="QnaDto">
+        UPDATE qna
+        SET   qna_status = 1
+        WHERE  id = #{id}
+    </update>
+
+    <sql id="searchHandler">
+        <choose>
+            <when test='option=="T"'>
+                AND title LIKE concat('%', #{keyword}, '%')
+            </when>
+            <when test='option=="U"'>
+                AND userId LIKE concat('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                AND (title   LIKE concat('%', #{keyword}, '%')
+                OR   contents LIKE concat('%', #{keyword}, '%'))
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="selectByQnaId" resultType="CommentDto">
+        SELECT * FROM qna_reply WHERE qna_comment_id = #{id}
+    </select>
+
+    <select id="searchSelectPage" parameterType="SearchHandler" resultType="QnaDto">
+        SELECT *
+        FROM qna
+        WHERE true
+        <include refid="searchHandler"/>
+        ORDER BY created_at DESC, id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="searchResultCnt" parameterType="SearchHandler" resultType="int">
+        SELECT count(*)
+        FROM qna
+        WHERE true
+        <include refid="searchHandler"/>
+    </select>
+
+
+</mapper>

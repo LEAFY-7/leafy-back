@@ -46,11 +46,11 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/users/sign**").permitAll()
+                .antMatchers("/v1/users/sign**").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                .antMatchers("/api/v1/search/**").permitAll()
-                .antMatchers("/api/v1/feeds/**").permitAll()
-                .antMatchers("/api/v1/feeds/{id}/like/**").authenticated()
+                .antMatchers("/v1/search/**").permitAll()
+                .antMatchers("/v1/feeds/**").permitAll()
+                .antMatchers("/v1/feeds/{id}/like/**").authenticated()
                 .anyRequest().authenticated()
 
                 .and()
