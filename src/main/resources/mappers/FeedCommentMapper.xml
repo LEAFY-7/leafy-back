@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bucheon.leafy.application.mapper.FeedCommentMapper">
+    <select id="findCommentList" resultType="FeedCommentResponse">
+        select * from feed_comment where feed_id = #{feedId}
+    </select>
+
+    <select id="findCommentById" resultType="FeedCommentResponse" parameterType="java.lang.Long">
+        select * from feed_comment where comment_id = #{commentId}
+    </select>
+
+    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyProperty="commentId">
+        insert into feed_comment(user_id,feed_id,comment,created_at,modified_at) values (#{userId}, #{feedId}, #{comment}, now(), now())
+    </insert>
+
+    <update id="editComment" parameterType="FeedCommentRequest">
+        update feed_comment set comment = #{comment}, modified_at = now() where comment_id = #{commentId}
+    </update>
+
+    <delete id="deleteAllComments">
+        delete from feed_comment
+    </delete>
+
+    <delete id="deleteComment"  parameterType="java.lang.Long">
+        delete from feed_comment where comment_id = #{commentId}
+    </delete>
+
+</mapper>

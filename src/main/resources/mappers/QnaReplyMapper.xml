@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
+
+    <delete id="deleteAllReply">
+        DELETE FROM comment
+    </delete>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM comment WHERE cid = #{cid} AND user_id = #{user_id}
+    </delete>
+
+    <insert id="insert" parameterType="QnaReplyDto">
+        INSERT INTO comment
+            (id, pcno, comment, user_id, reg_date, up_date)
+        VALUES
+            (#{id}, #{pcno}, #{comment}, #{user_id}, now(), now())
+    </insert>
+
+    <select id="selectAll" parameterType="int" resultType="QnaReplyDto">
+        SELECT cno, id, pcno, user_id, user_id, reg_date, up_date
+        FROM comment
+        WHERE id = #{bno}
+        ORDER BY reg_date ASC, cid ASC
+    </select>
+
+    <select id="select" parameterType="int" resultType="QnaReplyDto">
+        SELECT cid, id, pcno, user_id, user_id, reg_date, up_date
+        FROM comment
+        WHERE cid = #{cid}
+    </select>
+
+    <update id="update" parameterType="QnaReplyDto">
+        UPDATE comment
+        SET user_id = #{user_id}
+          , up_date = now()
+        WHERE cid = #{cid} and user_id = #{user_id}
+    </update>
+</mapper>

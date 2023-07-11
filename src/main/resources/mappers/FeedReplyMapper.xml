@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bucheon.leafy.application.mapper.FeedReplyMapper">
+    <select id="findReplyList" resultType="FeedReplyResponse">
+        select * from feed_reply where comment_id = #{commentId}
+    </select>
+
+    <select id="findReplyById" resultType="FeedReplyResponse" parameterType="java.lang.Long">
+        select * from feed_reply where reply_id = #{replyId}
+    </select>
+
+    <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyProperty="replyId">
+        insert into feed_reply(user_id,feed_id,comment_id,reply,created_at,modified_at) values (#{userId}, #{feedId}, #{commentId}, #{reply}, now(), now())
+    </insert>
+
+    <update id="editReply" parameterType="FeedReplyRequest">
+        update feed_reply set reply = #{reply}, modified_at = now() where reply_id = #{replyId}
+    </update>
+
+    <delete id="deleteAllReplies">
+        delete from feed_reply
+    </delete>
+
+    <delete id="deleteReply"  parameterType="java.lang.Long">
+        delete from feed_reply where reply_id = #{replyId}
+    </delete>
+</mapper>
