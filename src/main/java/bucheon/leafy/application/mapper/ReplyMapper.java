@@ -11,16 +11,12 @@ public interface ReplyMapper {
 
     int deleteAll();
     Long selectByCommentId(Long id);
-
     List<ReplyDto> select(Long id) ;
-
     int delete(Long id, Long userId ) ;
-
     int insert(ReplyDto replyDto) ;
-
     int update(ReplyDto replyDto) ;
-
     List<ReplyDto> selectAll() ;
+    int getCount();
 
 
 }

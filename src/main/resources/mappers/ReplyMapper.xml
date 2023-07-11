@@ -8,7 +8,7 @@
         DELETE FROM qna_reply
     </delete>
 
-    <select id="count" parameterType="int" resultType="int">
+    <select id="getCount" parameterType="int" resultType="int">
         SELECT count(*)
         FROM qna_reply
     </select>

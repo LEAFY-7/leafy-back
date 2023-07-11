@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 
 import bucheon.leafy.application.service.CommentService;
+import bucheon.leafy.application.service.ReplyService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.CommentDto;
 import bucheon.leafy.domain.qna.PageHandler;
@@ -28,8 +29,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QnaController {
     private final QnaService qnaService;
-
     private final CommentService commentService;
+    private final ReplyService replyService;
 
 
     @Operation(summary = "Qna 게시판 수정하기")
@@ -63,10 +64,15 @@ public class QnaController {
 
         QnaDto qnaDto = qnaService.getRead(id);
         Long qnaId = commentService.getCommentsByQnaId(id);
+        int replyCount = replyService.getCount();
+        List<CommentDto> comment = commentService.getRead(id);
+
         List<CommentDto> commentList    = commentService.getRead(qnaId);
         if (qnaDto != null) {
 
             Map<String, Object> result = new HashMap<>();
+            result.put("replyCount",replyCount);
+            result.put("comment",comment);
             result.put("commentList",commentList);
             result.put("qnaDto", qnaDto);
 

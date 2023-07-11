@@ -76,22 +76,6 @@ public class CommentController {
     }
 
 
-    @Operation(summary = "Qna 게시판 댓글 읽기")
-    @GetMapping("/read/{id}/comment/{commentId}")
-    public ResponseEntity<Object> readComment(
-            @PathVariable("id") Long id
-    ) {
-
-        Long commentId = replyService.getRepliesByCommentId(id);
-        List<CommentDto> commentDtoList =  commentService.getRead(commentId);
-
-        if(commentId == 0){
-            throw  new ReadFailedException();
-        }
-        return ResponseEntity.ok().body(commentDtoList);
-
-    }
-
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> remove( @AuthenticationPrincipal AuthUser user,
