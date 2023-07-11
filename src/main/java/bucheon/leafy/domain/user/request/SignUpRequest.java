@@ -1,12 +1,14 @@
 package bucheon.leafy.domain.user.request;
 
 
+import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +33,13 @@ public class SignUpRequest {
         @NotBlank(message = "간단 소개를 입력해주세요")
         private String simpleIntroduction;
 
+        @NotBlank(message = "생일을 입력해주세요")
+        private LocalDate birthDay;
+
+        @NotBlank(message = "성별을 입력해주세요")
+        private Gender gender;
+
+
         // TODO : 주소
         private String zipcode;
 
@@ -48,7 +57,7 @@ public class SignUpRequest {
         private SignUpRequest(String password, String email, String nickName,  String name,
                               String simpleIntroduction, String phone, String zipcode,
                               String street, String lot, String detail, String reference,
-                              Boolean addressIsHide) {
+                              Boolean addressIsHide, LocalDate birthDay, Gender gender) {
 
                 this.password = password;
                 this.email = email;
@@ -62,6 +71,8 @@ public class SignUpRequest {
                 this.detail = detail;
                 this.reference = reference;
                 this.addressIsHide = addressIsHide;
+                this.birthDay = birthDay;
+                this.gender = gender;
         }
 
 }
