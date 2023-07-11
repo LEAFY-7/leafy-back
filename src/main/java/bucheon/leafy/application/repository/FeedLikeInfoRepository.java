@@ -17,3 +17,4 @@ public interface FeedLikeInfoRepository extends JpaRepository<FeedLikeInfo, Long
     @EntityGraph( attributePaths = { "feed", "feed.feedLikeCount", "feed.feedImages" } )
     List<FeedLikeInfo> findAllWithFeedByUserId(Long userId, Pageable pageable);
 }
+

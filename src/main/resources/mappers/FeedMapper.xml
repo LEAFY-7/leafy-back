@@ -8,19 +8,19 @@
     </select>
 
     <select id="findFeedListScroll" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where is_hide = false and is_delete = false and feed_id &lt;= #{feedId} ORDER BY feed_id DESC LIMIT 10;
+        select * from feed where is_delete = false and feed_id &lt;= #{feedId} ORDER BY feed_id DESC LIMIT 10;
     </select>
 
-    <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where feed_id = #{feedId} and is_hide = false and is_delete = false;
+    <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >
+        select * from feed where feed_id = #{feedId} and is_delete = false;
     </select>
 
-    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyProperty="feedId">
-        insert into feed (user_id,title,content,is_hide,is_delete,created_at,modified_at) values (#{userId}, #{title}, #{content}, #{isHide}, false, now(), now())
+    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="feedId">
+        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{title}, #{content}, false, #{feedType}, now(), now())
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
-        update feed set title = #{title}, content = #{content}, is_hide = #{isHide}, modified_at = now() where feed_id = #{feedId}
+        update feed set title = #{title}, content = #{content}, modified_at = now() where feed_id = #{feedId}
     </update>
 
     <delete id="deleteAllFeeds">

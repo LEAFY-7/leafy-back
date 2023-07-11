@@ -44,7 +44,7 @@ public class FeedImageService {
             response.setImageUrl(imageUrl);
         }
 
-       return responseList;
+        return responseList;
     }
 
     public List<FeedImageRequest> uploadImage(Long feedId, List<MultipartFile> imageFileList, List<Boolean> isThumbList) {

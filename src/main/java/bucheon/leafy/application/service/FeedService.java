@@ -5,6 +5,7 @@ import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,15 +33,19 @@ public class FeedService {
     }
 
     public FeedResponse getFeedById(Long feedId) {
-        return mapper.findFeedById(feedId).orElseThrow(FeedNotFoundException::new);
+        return Optional.of(mapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new);
     }
 
-    public Long saveFeed(FeedRequest request) {
-        return mapper.saveFeed(request);
+    public Long saveFeed(Long userId, FeedRequest request) {
+        request.setUserId(userId);
+        mapper.saveFeed(request);
+
+        return request.getFeedId();
     }
 
-    public Long updateFeed(Long feedId, FeedRequest request) {
-        request.setFeed_id(feedId);
+    public Long updateFeed(Long userId, Long feedId, FeedRequest request) {
+        request.setUserId(userId);
+        request.setFeedId(feedId);
         if( mapper.editFeed(request) == 1 ) {
             return feedId;
         } else {
