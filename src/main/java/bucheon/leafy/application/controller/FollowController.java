@@ -6,6 +6,7 @@ import bucheon.leafy.domain.follow.response.FollowersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,22 @@ public class FollowController {
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<List<FollowersResponse>> getFollowers(@AuthenticationPrincipal AuthUser authUser,
-                                                                @PageableDefault(page = 0, size = 20) Pageable pageable) {
+    public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal AuthUser authUser,
+                                                                @PageableDefault(page = 1, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
-        List<FollowersResponse> result = followService.getFollowers(userId, pageable);
+        Page<FollowersResponse> result = followService.getFollowers(userId, pageable);
         return ResponseEntity.ok().body(result);
     }
 
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<List<FollowersResponse>> getFollowings(@AuthenticationPrincipal AuthUser authUser,
-                                                                 @PageableDefault(page = 0, size = 20) Pageable pageable) {
+    public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal AuthUser authUser,
+                                                                 @PageableDefault(page = 1, size = 20) Pageable pageable) {
+
+        System.out.println("pageable = " + pageable);
         Long userId = authUser.getUserId();
-        List<FollowersResponse> result = followService.getFollowings(userId, pageable);
+        Page<FollowersResponse> result = followService.getFollowings(userId, pageable);
         return ResponseEntity.ok().body(result);
     }
 
@@ -51,7 +54,6 @@ public class FollowController {
 
         Long userId = authUser.getUserId();
         followService.follow(userId, targetUserId);
-
         return ResponseEntity.ok().body("팔로우 성공");
     }
 

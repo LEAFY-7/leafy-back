@@ -67,7 +67,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-
 task copyMainResources(type: Copy) {
 	copy {
 		from './submodule-config'
@@ -89,4 +88,3 @@ task copyTestResources(type: Copy) {
 		}
 	}
 }
-

@@ -7,8 +7,11 @@ import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.FollowNotFoundException;
+import bucheon.leafy.exception.SelfTargetException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,39 +29,45 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     // 나를 팔로우 한 사람들
-    public List<FollowersResponse> getFollowers(Long userId, Pageable pageable) {
+    public Page<FollowersResponse> getFollowers(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Follow> followers = followRepository.findAllByFollowing(user, pageable);
+        Page<Follow> followers = followRepository.findAllByFollowing(user, pageable);
 
-        List<Long> ids = getFollowersId(followers);
+        List<Long> ids = getFollowersId( followers.getContent() );
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
-        return followUsers.stream()
+        List<FollowersResponse> followersResponses = followUsers.stream()
                 .map(FollowersResponse::of)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(followersResponses, pageable, followers.getTotalElements());
     }
 
     // 내가 팔로우 한 사람들
-    public List<FollowersResponse> getFollowings(Long userId, Pageable pageable) {
+    public Page<FollowersResponse> getFollowings(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Follow> followings = followRepository.findAllByFollower(user, pageable);
+        Page<Follow> followings = followRepository.findAllByFollower(user, pageable);
 
-        List<Long> ids = getFollowingsId(followings);
+        List<Long> ids = getFollowingsId(followings.getContent());
 
         List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
 
-        return followUsers.stream()
+        List<FollowersResponse> followersResponses = followUsers.stream()
                 .map(FollowersResponse::of)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(followersResponses, pageable, followings.getTotalElements());
     }
 
 
     public void follow(Long userId, Long targetUserId) {
+        if (userId == targetUserId) throw new SelfTargetException();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -76,6 +85,8 @@ public class FollowService {
     }
 
     public void unfollow(Long userId, Long targetUserId) {
+        if (userId == targetUserId) throw new SelfTargetException();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 

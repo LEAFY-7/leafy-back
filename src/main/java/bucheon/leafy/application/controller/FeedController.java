@@ -1,9 +1,7 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedService;
-
 import bucheon.leafy.config.AuthUser;
-
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import io.swagger.v3.oas.annotations.Operation;

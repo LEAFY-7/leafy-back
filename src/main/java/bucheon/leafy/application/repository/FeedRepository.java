@@ -20,4 +20,3 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
 
 }
-
