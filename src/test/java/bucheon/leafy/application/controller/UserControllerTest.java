@@ -49,7 +49,7 @@ class UserControllerTest {
                 .build();
 
         //when //then
-        mockMvc.perform(post("/v1/users/sign-up")
+        mockMvc.perform(post("/api/v1/users/sign-up")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(APPLICATION_JSON)
                 ).andDo(print())

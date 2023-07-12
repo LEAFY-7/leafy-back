@@ -12,7 +12,8 @@ public class UserResponse {
 
     private String email;
 
-    private Gender gender;
+    private String gender;
+
     private LocalDate birthDay;
 
     private String name;
@@ -40,7 +41,7 @@ public class UserResponse {
                         String street, String lot, String detail, String reference) {
 
         this.email = email;
-        this.gender = gender;
+        this.gender = gender.getValue();
         this.birthDay = birthDay;
         this.name = name;
         this.nickName = nickName;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -33,10 +34,10 @@ public class SignUpRequest {
         @NotBlank(message = "간단 소개를 입력해주세요")
         private String simpleIntroduction;
 
-        @NotBlank(message = "생일을 입력해주세요")
+        @NotNull(message = "생일을 입력해주세요")
         private LocalDate birthDay;
 
-        @NotBlank(message = "성별을 입력해주세요")
+        @NotNull(message = "성별을 입력해주세요")
         private Gender gender;
 
 

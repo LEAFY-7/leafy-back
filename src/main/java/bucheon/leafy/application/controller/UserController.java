@@ -79,14 +79,4 @@ public class UserController {
         return userService.editUserBackgroundImage(userId, file);
     }
 
-    @Operation(summary = "로그아웃")
-    @PostMapping("/sign-out")
-    public ResponseEntity signOut(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        if (authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
-            return ResponseEntity.ok("로그아웃 성공");
-        }
-        return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
-    }
-
 }
