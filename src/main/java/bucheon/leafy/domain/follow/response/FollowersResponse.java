@@ -26,7 +26,7 @@ public class FollowersResponse {
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
-                .image(user.getUserImage().getImage())
+                .image(user.getUserImage() == null ? null : user.getUserImage().getImage())
                 .build();
     }
 
