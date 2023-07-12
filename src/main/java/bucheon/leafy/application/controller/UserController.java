@@ -8,16 +8,11 @@ import bucheon.leafy.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 
@@ -47,7 +42,7 @@ public class UserController {
         return userService.signUp(signUpRequest);
     }
 
-    @Operation(summary = "이미지 등록")
+    @Operation(summary = "회원 이미지 등록")
     @PostMapping("/image")
     public ResponseEntity<String> createImage(@AuthenticationPrincipal AuthUser authUser,
                                               MultipartFile file) {
@@ -55,7 +50,7 @@ public class UserController {
         return userService.createUserImage(userId, file);
     }
 
-    @Operation(summary = "이미지 등록")
+    @Operation(summary = "배경 이미지 등록")
     @PostMapping("/background-image")
     public ResponseEntity<String> createBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
                                                         MultipartFile file) {
@@ -63,7 +58,7 @@ public class UserController {
         return userService.createUserBackgroundImage(userId, file);
     }
 
-    @Operation(summary = "이미지 등록")
+    @Operation(summary = "회원 이미지 수정")
     @PutMapping("/image")
     public ResponseEntity<String> updateImage(@AuthenticationPrincipal AuthUser authUser,
                                               MultipartFile file) {
@@ -71,7 +66,7 @@ public class UserController {
         return userService.editUserImage(userId, file);
     }
 
-    @Operation(summary = "이미지 등록")
+    @Operation(summary = "배경 이미지 수정")
     @PutMapping("/background-image")
     public ResponseEntity<String> updateBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
                                                         MultipartFile file) {
