@@ -83,7 +83,7 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
         feedLikeInfoRepository.saveAll(feedLikeInfos);
 
         //when
-        List<FeedLikeInfo> feedLikeInfoResult = feedLikeInfoRepository.findAllWithFeedByUserId(saveUser.getId(), pageable);
+        List<FeedLikeInfo> feedLikeInfoResult = feedLikeInfoRepository.findAllWithFeedByUserId(saveUser.getId(), pageable).getContent();
 
         List<Feed> feedResults = feedLikeInfoResult.stream()
                 .map(FeedLikeInfo::getFeed)
