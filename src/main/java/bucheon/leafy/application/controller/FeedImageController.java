@@ -26,7 +26,7 @@ public class FeedImageController {
 
     @PostMapping
     public ResponseEntity<List<FeedImageRequest>> uploadImage(@PathVariable Long feedId, @RequestPart List<MultipartFile> imageFileList,
-                                              @RequestParam List<Boolean> isThumbList) throws IOException {
+                                                              @RequestParam List<Boolean> isThumbList) throws IOException {
 
         return ResponseEntity.ok().body(service.uploadImage(feedId, imageFileList, isThumbList));
     }

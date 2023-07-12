@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,15 +32,19 @@ public class FeedService {
     }
 
     public FeedResponse getFeedById(Long feedId) {
-        return mapper.findFeedById(feedId).orElseThrow(FeedNotFoundException::new);
+        return Optional.of(mapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new);
     }
 
-    public Long saveFeed(FeedRequest request) {
-        return mapper.saveFeed(request);
+    public Long saveFeed(Long userId, FeedRequest request) {
+        request.setUserId(userId);
+        mapper.saveFeed(request);
+
+        return request.getFeedId();
     }
 
-    public Long updateFeed(Long feedId, FeedRequest request) {
-        request.setFeed_id(feedId);
+    public Long updateFeed(Long userId, Long feedId, FeedRequest request) {
+        request.setUserId(userId);
+        request.setFeedId(feedId);
         if( mapper.editFeed(request) == 1 ) {
             return feedId;
         } else {

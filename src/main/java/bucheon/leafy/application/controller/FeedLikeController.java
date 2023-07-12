@@ -20,7 +20,7 @@ public class FeedLikeController {
     @PostMapping
     @Operation(summary = "좋아요 등록")
     public ResponseEntity<String> like(@AuthenticationPrincipal AuthUser user,
-                                      @PathVariable("id") Long feedId) {
+                                       @PathVariable("id") Long feedId) {
 
         Long userId = user.getUserId();
         feedLikeService.saveLike(userId, feedId);
@@ -31,7 +31,7 @@ public class FeedLikeController {
     @DeleteMapping
     @Operation(summary = "좋아요 삭제")
     public ResponseEntity<String> deleteLike(@AuthenticationPrincipal AuthUser user,
-                                      @PathVariable("id") Long feedId) {
+                                             @PathVariable("id") Long feedId) {
 
         Long userId = user.getUserId();
         feedLikeService.deleteLike(userId, feedId);
