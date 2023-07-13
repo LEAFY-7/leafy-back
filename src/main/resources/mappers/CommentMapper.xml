@@ -38,10 +38,12 @@
         WHERE id = #{id}
     </select>
 
+<!--    <select id="selectByQnaId" resultType="CommentDto">-->
+<!--        SELECT * FROM qna_reply WHERE qna_comment.id = #{id}-->
+<!--    </select>-->
     <select id="selectByQnaId" resultType="CommentDto">
-        SELECT * FROM qna_reply WHERE qna_comment.id = #{id}
+        SELECT * FROM qna_comment WHERE id = #{id}
     </select>
-
 
     <select id="selectAll" resultType="CommentDto">
         SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id

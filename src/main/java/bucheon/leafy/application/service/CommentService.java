@@ -28,18 +28,23 @@ public class CommentService {
     JavaMailSender mailSender; // Add this line
 
     private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
-    ExecutorService emailExecutor = Executors.newFixedThreadPool(10);
+
+    ExecutorService emailExecutor = Executors.newFixedThreadPool(10); // or however many threads you want
     public Long getCommentsByQnaId(Long id) {
         return commentMapper.selectByQnaId(id);
     }
+
     public int getCount() {
         return commentMapper.count();
     }
     public int remove(Long id, Long userId) { return commentMapper.delete(id, userId); }
+
     public int write(CommentDto commentDto) { return commentMapper.insert(commentDto); }
+
     public List<CommentDto> getList(){
         return commentMapper.selectAll();
     }
+
     public List<CommentDto> getRead(Long id){
         return commentMapper.select(id);
     }
@@ -49,6 +54,7 @@ public class CommentService {
     public String getContent(Long qnaCommentId) {
         return commentMapper.getContent(qnaCommentId);
     }
+
     public String getEmail(Long id) { return commentMapper.getEmail(id); }
     public void sendEmailNotification(CommentDto commentDto) {
         emailExecutor.submit(() -> {

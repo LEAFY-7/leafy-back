@@ -73,17 +73,4 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(ModifyFailedException.class)
-    public ResponseEntity<ExceptionResponse> ModifyFailedException(FeedNotFoundException e) {
-        int statusCode = e.getStatusCode();
-
-        ExceptionResponse response = ExceptionResponse.builder()
-                .code(String.valueOf(statusCode))
-                .message(e.getMessage())
-                .validation(e.getValidation())
-                .build();
-
-        return ResponseEntity.status(statusCode).body(response);
-    }
-
 }

@@ -17,6 +17,10 @@ public class FeedImage {
     @Column(name = "image_id")
     private Long id;
 
-    private String image;
+    private String imageName;
+
+    private String imagePath;
+
+    private Boolean isThumb;
 
 }

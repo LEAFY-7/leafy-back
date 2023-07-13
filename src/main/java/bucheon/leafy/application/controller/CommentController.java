@@ -3,12 +3,10 @@ package bucheon.leafy.application.controller;
 
 
 import bucheon.leafy.application.service.CommentService;
-import bucheon.leafy.application.service.EmailService;
 import bucheon.leafy.application.service.QnaService;
 import bucheon.leafy.application.service.ReplyService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.CommentDto;
-import bucheon.leafy.domain.qna.QnaReply;
 import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.enums.ReadFailedException;
 import bucheon.leafy.exception.enums.RemoveFailedException;
@@ -36,8 +34,6 @@ public class CommentController {
     private final CommentService commentService;
     private final QnaService qnaService;
     private final ReplyService replyService;
-
-
 
     @Operation(summary = "댓글 수정하기")
     @PatchMapping("/modifiy/{id}")   // /ch4/comments/26  PATCH
@@ -75,6 +71,22 @@ public class CommentController {
 
     }
 
+
+    @Operation(summary = "Qna 게시판 댓글 읽기")
+    @GetMapping("/read/{id}/comment/{commentId}")
+    public ResponseEntity<Object> readComment(
+            @PathVariable("id") Long id
+    ) {
+
+        Long commentId = replyService.getRepliesByCommentId(id);
+        List<CommentDto> commentDtoList =  commentService.getRead(commentId);
+
+        if(commentId == 0){
+            throw  new ReadFailedException();
+        }
+        return ResponseEntity.ok().body(commentDtoList);
+
+    }
 
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{id}")

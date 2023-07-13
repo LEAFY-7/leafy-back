@@ -6,9 +6,11 @@
     <select id="findSearchByPumName" resultType="bucheon.leafy.domain.search.response.SearchResponse">
         select *
         from search
-        where (pum_name = #{searchName) or good_name =#{searchName})
+        where (pum_name = #{searchName} or good_name =#{searchName})
           and sale_date = (select max(sale_date) from search)
         order by good_name
+        limit #{pageRequest.limit}
+        offset #{pageRequest.offset}
     </select>
 
     <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyApi.LeafyApiDto">
@@ -21,5 +23,13 @@
         from search
         where date(DATE_SUB(NOW(), INTERVAL 7 DAY)) > date(created_at)
     </delete>
+
+    <select id="count" resultType="long">
+        select count(1) as total
+        from search
+        where (pum_name = #{searchName} or good_name =#{searchName})
+          and sale_date = (select max(sale_date) from search)
+        order by good_name
+    </select>
 
 </mapper>

@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.feed;
 
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.util.BaseDeleteEntity;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,15 +24,13 @@ public class FeedComment extends BaseDeleteEntity {
 
     private Boolean isDelete;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JoinColumn(name = "reply_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedReply> feedReply;
-
-
 
     @Builder
     private FeedComment(String comment, Boolean isDelete) {

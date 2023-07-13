@@ -16,7 +16,7 @@ public interface FeedReplyMapper {
     Long saveReply(FeedReplyRequest request);
 
     int editReply(FeedReplyRequest request);
-
+    
     void deleteAllReplies();
 
     void deleteReply(Long replyId);
