@@ -22,6 +22,8 @@ public class Qna extends BaseDeleteEntity {
 
     private String contents;
 
+    private Long viewCount;
+
     @JoinColumn(name = "qna_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QnaComment> qnaComments = new ArrayList<>();
@@ -29,10 +31,11 @@ public class Qna extends BaseDeleteEntity {
     @Enumerated(EnumType.STRING)
     private QnaStatus qnaStatus;
 
-    private Qna(String title, String contents, QnaStatus qnaStatus) {
+    private Qna(String title, String contents, QnaStatus qnaStatus, Long viewCount) {
         this.title = title;
         this.contents = contents;
         this.qnaStatus = qnaStatus;
+        this.viewCount = viewCount;
     }
 
 }
