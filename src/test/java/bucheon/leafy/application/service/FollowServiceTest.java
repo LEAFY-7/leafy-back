@@ -109,7 +109,7 @@ class FollowServiceTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<FollowersResponse> followers = followService.getFollowings(user1.getId(), pageable);
+        List<FollowersResponse> followers = followService.getFollowings(user1.getId(), pageable).getContent();
 
         //then
         assertThat(followers).hasSize(pageable.getPageSize())
@@ -145,7 +145,7 @@ class FollowServiceTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<FollowersResponse> followers = followService.getFollowers(user1.getId(), pageable);
+        List<FollowersResponse> followers = followService.getFollowers(user1.getId(), pageable).getContent();
 
         //then
         assertThat(followers).hasSize(pageable.getPageSize())

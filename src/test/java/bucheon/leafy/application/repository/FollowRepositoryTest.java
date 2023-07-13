@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,11 +66,10 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<Follow> followers = followRepository.findAllByFollower(user1, pageable);
+        Page<Follow> follows = followRepository.findAllByFollower(user1, pageable);
+        List<Follow> followers = follows.getContent();
 
         //then
-        assertThat( followers.size() ).isLessThan( followList.size() );
-
         assertThat(followers).hasSize(pageable.getPageSize())
                 .extracting("following")
                 .contains(user5, user4, user3);
@@ -81,7 +81,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
     void testFindAllByFollowing(){
         //given
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        PageRequest pageable = PageRequest.of(0, 4, sort);
+        PageRequest pageable = PageRequest.of(1, 2, sort);
 
         User user1 = createUser("ekxk1234@naver.com", "정철희");
         User user2 = createUser("abcd@gmail.com", "홍길동");
@@ -100,14 +100,13 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<Follow> followers = followRepository.findAllByFollowing(user1, pageable);
+        Page<Follow> follows = followRepository.findAllByFollowing(user1, pageable);
+        List<Follow> followers = follows.getContent();
 
         //then
-        assertThat( followers.size() ).isEqualTo( followList.size() );
-
         assertThat(followers).hasSize(pageable.getPageSize())
                 .extracting("follower")
-                .contains(user5, user4, user3, user2);
+                .contains(user3, user2);
 
     }
 

@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.feed.response;
 
+
 import bucheon.leafy.domain.feed.FeedType;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class FeedResponse {
+
     private Long feedId;
     private Long userId;
     private String title;

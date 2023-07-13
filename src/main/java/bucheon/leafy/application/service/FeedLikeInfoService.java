@@ -20,7 +20,7 @@ public class FeedLikeInfoService {
     private final FeedLikeInfoRepository feedLikeInfoRepository;
 
     public List<FeedWithLikeCountResponse> getFeedByUserId(Long userId, Pageable pageable) {
-        List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAllWithFeedByUserId(userId, pageable);
+        List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAllWithFeedByUserId(userId, pageable).getContent();
 
         List<Feed> feeds = feedLikeInfos.stream()
                 .map(FeedLikeInfo::getFeed)

@@ -95,6 +95,8 @@ public class User extends BaseDeleteEntity {
                 .nickName(signUpRequest.getNickName())
                 .phone(signUpRequest.getPhone())
                 .simpleIntroduction(signUpRequest.getSimpleIntroduction())
+                .gender(signUpRequest.getGender())
+                .birthDay(signUpRequest.getBirthDay())
                 .address(address)
                 .userRole(UserRole.MEMBER)
                 .build();
