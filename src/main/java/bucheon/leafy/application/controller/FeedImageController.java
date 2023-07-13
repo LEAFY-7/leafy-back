@@ -1,41 +1,39 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.application.service.FeedImageService;
-import bucheon.leafy.domain.feed.request.FeedImageRequest;
-import bucheon.leafy.domain.feed.response.FeedImageResponse;
+import bucheon.leafy.application.service.FeedService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
+@Tag(name = "피드 이미지 업로드")
 @RestController
 @RequestMapping("/api/v1/feeds/{feedId}/images")
 @RequiredArgsConstructor
 public class FeedImageController {
 
-    private final FeedImageService service;
+    private final FeedService service;
 
     @GetMapping
-    public ResponseEntity<List<FeedImageResponse>> getImages(@PathVariable Long feedId) {
+    public ResponseEntity<List<String>> getImages(@PathVariable Long feedId) {
 
-        return ResponseEntity.ok().body(service.getImages(feedId));
+        return ResponseEntity.ok().body(service.getFeedImages(feedId));
     }
 
     @PostMapping
-    public ResponseEntity<List<FeedImageRequest>> uploadImage(@PathVariable Long feedId, @RequestPart List<MultipartFile> imageFileList,
-                                                              @RequestParam List<Boolean> isThumbList) throws IOException {
+    public ResponseEntity<List<String>> uploadImage(@PathVariable Long feedId, @RequestPart List<MultipartFile> imageList) {
 
-        return ResponseEntity.ok().body(service.uploadImage(feedId, imageFileList, isThumbList));
+        return ResponseEntity.ok().body(service.saveFeedImage(feedId, imageList));
     }
 
 
-    @DeleteMapping("/{imageId}")
-    public ResponseEntity deleteImage(@PathVariable Long feedId, @PathVariable Long imageId, @RequestParam String imagePath, @RequestParam String imageName) {
+    @DeleteMapping
+    public ResponseEntity deleteImage(@PathVariable Long feedId, @RequestParam String imageName) {
 
-        service.deleteImage(imageId, imagePath, imageName);
+        service.deleteFeedImage(feedId, imageName);
 
         return ResponseEntity.ok().body("이미지 삭제 완료");
     }
