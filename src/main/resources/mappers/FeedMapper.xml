@@ -4,15 +4,15 @@
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
     <select id="findFeedListFirst" resultType="FeedResponse">
-        select * from feed where is_hide = false and is_delete = false ORDER BY feed_id DESC LIMIT 10;
+        select * from feed where is_delete = false ORDER BY feed_id DESC LIMIT #{size}
     </select>
 
-    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where is_delete = false and feed_id &lt;= #{feedId} ORDER BY feed_id DESC LIMIT 10;
+    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="ScrollRequest">
+        select * from feed where is_delete = false and feed_id &lt; #{key} ORDER BY feed_id DESC LIMIT #{size}
     </select>
 
     <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >
-        select * from feed where feed_id = #{feedId} and is_delete = false;
+        select * from feed where feed_id = #{feedId} and is_delete = false
     </select>
 
     <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="feedId">

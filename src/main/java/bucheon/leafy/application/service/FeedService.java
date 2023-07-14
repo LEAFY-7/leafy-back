@@ -12,6 +12,8 @@ import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.path.S3Path;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,12 +35,16 @@ public class FeedService {
 
     private String imagePath = S3Path.FEED_PATH;
 
-    public List<FeedResponse> getFeeds() {
-        return feedMapper.findFeedListFirst();
-    }
-
-    public List<FeedResponse> getFeeds(Long feedId) {
-        return feedMapper.findFeedListScroll(feedId);
+    public List<FeedResponse> getFeeds(ScrollRequest scrollRequest) {
+        if (scrollRequest.hasKey()) {
+            return feedMapper.findFeedListScroll(scrollRequest);
+        } else {
+            if (scrollRequest.getKey() == null) {
+                return feedMapper.findFeedListFirst();
+            } else {
+                return null;
+            }
+        }
     }
 
     public FeedResponse getFeedById(Long feedId) {

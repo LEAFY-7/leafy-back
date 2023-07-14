@@ -4,6 +4,8 @@ import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +28,8 @@ public class FeedController {
 
     @Operation(summary = "피드 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedResponse>> getFeeds(@RequestParam(required = false) Long lastFeedId) {
-        List<FeedResponse> responseList;
-
-        if( lastFeedId == null) {
-            responseList = service.getFeeds();
-        } else {
-            responseList = service.getFeeds(lastFeedId);
-        }
-        return ResponseEntity.ok().body(responseList);
+    public ResponseEntity<List<FeedResponse>> getFeeds(@RequestParam(required = false) ScrollRequest scrollRequest) {
+        return ResponseEntity.ok().body(service.getFeeds(scrollRequest));
     }
 
     @Operation(summary = "피드 상세")
