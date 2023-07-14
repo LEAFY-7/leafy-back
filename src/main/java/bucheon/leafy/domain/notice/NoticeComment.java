@@ -16,8 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NoticeComment extends BaseDeleteEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn(name = "user_id")
@@ -36,5 +35,6 @@ public class NoticeComment extends BaseDeleteEntity {
         this.comment = comment;
         this.noticeReplies = noticeReplies;
     }
+
 }
 

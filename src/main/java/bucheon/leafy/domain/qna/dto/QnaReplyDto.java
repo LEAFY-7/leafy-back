@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.qnareply;
+package bucheon.leafy.domain.qna.dto;
 import lombok.*;
 
 import java.util.Date;

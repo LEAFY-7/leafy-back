@@ -1,6 +1,6 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.qnareply.QnaReplyDto;
+import bucheon.leafy.domain.qna.dto.QnaReplyDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.rmi.server.ExportException;
