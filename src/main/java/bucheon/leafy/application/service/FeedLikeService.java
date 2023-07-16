@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @Transactional
@@ -48,14 +47,14 @@ public class FeedLikeService {
     }
 
     public void increaseLikeCount(Feed feed) {
-        AtomicLong likeCount = feed.getFeedLikeCount().getLikeCount();
+        Long likeCount = feed.getFeedLikeCount().getLikeCount();
         FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
         feedLikeCount.like();
         feedLikeRepository.save(feedLikeCount);
     }
 
     public void decreaseLikeCount(Feed feed) {
-        AtomicLong likeCount = feed.getFeedLikeCount().getLikeCount();
+        Long likeCount = feed.getFeedLikeCount().getLikeCount();
         FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
         feedLikeCount.likeCancel();
         feedLikeRepository.save(feedLikeCount);

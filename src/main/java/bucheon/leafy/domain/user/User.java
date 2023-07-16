@@ -15,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Entity
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseDeleteEntity {
 
@@ -99,6 +98,7 @@ public class User extends BaseDeleteEntity {
                 .birthDay(signUpRequest.getBirthDay())
                 .address(address)
                 .userRole(UserRole.MEMBER)
+                .feeds(new ArrayList<>())
                 .build();
 
     }
