@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.user.response;
 
+import bucheon.leafy.domain.user.Gender;
 import bucheon.leafy.domain.user.User;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class UserResponse {
 
     private String email;
 
-    private String gender;
+    private Gender gender;
 
     private LocalDate birthDay;
 
@@ -41,7 +41,7 @@ public class UserResponse {
                         String street, String lot, String detail, String reference) {
 
         this.email = email;
-        this.gender = gender.getValue();
+        this.gender = gender;
         this.birthDay = birthDay;
         this.name = name;
         this.nickName = nickName;
