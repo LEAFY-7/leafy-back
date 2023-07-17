@@ -1,6 +1,6 @@
 package bucheon.leafy.application.response;
 
-import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
@@ -28,8 +28,8 @@ public class MyPageResponse {
 
     @Builder
     private MyPageResponse(UserResponse userResponse, Long followerCount, Long followingCount,
-                          List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
-                          List<FollowersResponse> followings, List<FeedWithLikeCountResponse> likedFeeds) {
+                           List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
+                           List<FollowersResponse> followings, List<FeedWithLikeCountResponse> likedFeeds) {
 
         this.userResponse = userResponse;
         this.followerCount = followerCount;
