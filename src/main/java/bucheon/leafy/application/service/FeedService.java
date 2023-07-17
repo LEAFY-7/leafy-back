@@ -128,4 +128,8 @@ public class FeedService {
         throw new FeedDataAccessException();
         }
     }
+
+    public List<String> getPopularTags() {
+        return feedRepository.getPopular10TagsInTop100Feeds();
+    }
 }

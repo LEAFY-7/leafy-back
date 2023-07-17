@@ -23,8 +23,14 @@ public class FeedTag {
     private String tag;
 
     @Builder
-    public FeedTag(String tag) {
+    private FeedTag(String tag) {
         this.tag = tag;
+    }
+
+    public static FeedTag of(String tag){
+        return FeedTag.builder()
+                .tag(tag)
+                .build();
     }
 
 }

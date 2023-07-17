@@ -13,7 +13,7 @@
         offset #{pageRequest.offset}
     </select>
 
-    <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyApi.LeafyApiDto">
+    <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyapi.LeafyApiDto">
         insert into search(avg_amt, flower_gubn, good_name, lv, max_amt, min_amt, pum_name, sale_date, created_at, modified_at)
         values (#{avgAmt}, #{flowerGubn}, #{goodName}, #{lv}, #{maxAmt}, #{minAmt}, #{pumName}, #{saleDate}, sysdate(), sysdate())
     </insert>
