@@ -5,7 +5,7 @@ import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.FeedTag;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
-import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
@@ -17,7 +17,6 @@ import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -38,6 +37,9 @@ class FeedRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     FeedRepository feedRepository;
+
+    @Autowired
+    FeedLikeRepository feedLikeRepository;
 
     @Test
     @DisplayName("회원의 1년 동안의 월별 활동 내역을 카운트하여 가져온다.")
@@ -82,7 +84,6 @@ class FeedRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    @Commit
     @Transactional
     @DisplayName("일주일 동안 가장 인기 있는 게시물 100개 중에 가장 많이 존재하는 태그 10개를 조회한다.")
     void testGetPopular10TagsInTop100Feeds(){
@@ -135,13 +136,15 @@ class FeedRepositoryTest extends IntegrationTestSupport {
     }
 
     private Feed createFeed(String title) {
-        FeedLikeCount likeCount = FeedLikeCount.of( 0L );
-
-        return Feed.builder()
+        Feed feed = Feed.builder()
                 .title(title)
                 .content("내용")
-                .feedLikeCount(likeCount)
                 .build();
+
+        FeedLikeCount feedLikeCount = FeedLikeCount.of(0L, feed);
+        feedLikeRepository.save(feedLikeCount);
+        feed.initFeedLikeCount(feedLikeCount);
+        return feed;
     }
 
     private User createUser(String email, String nickName, List<Feed> feeds) {

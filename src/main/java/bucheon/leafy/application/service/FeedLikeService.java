@@ -32,7 +32,7 @@ public class FeedLikeService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        increaseLikeCount(feed);
+        feedLikeRepository.likeIncrease(feed);
         saveLikeInfo(user, feed);
     }
 
@@ -42,22 +42,8 @@ public class FeedLikeService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        decreaseLikeCount(feed);
+        feedLikeRepository.likeDecrease(feed);
         deleteLikeInfo(user, feed);
-    }
-
-    public void increaseLikeCount(Feed feed) {
-        Long likeCount = feed.getFeedLikeCount().getLikeCount();
-        FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
-        feedLikeCount.like();
-        feedLikeRepository.save(feedLikeCount);
-    }
-
-    public void decreaseLikeCount(Feed feed) {
-        Long likeCount = feed.getFeedLikeCount().getLikeCount();
-        FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount);
-        feedLikeCount.likeCancel();
-        feedLikeRepository.save(feedLikeCount);
     }
 
     public void saveLikeInfo(User user, Feed feed) {
