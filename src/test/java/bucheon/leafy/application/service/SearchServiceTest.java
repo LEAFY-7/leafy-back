@@ -1,7 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
-import bucheon.leafy.domain.leafyApi.LeafyApiDto;
+import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

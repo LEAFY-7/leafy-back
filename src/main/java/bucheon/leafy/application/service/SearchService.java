@@ -1,7 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.SearchMapper;
-import bucheon.leafy.domain.leafyApi.LeafyApiDto;
+import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import bucheon.leafy.domain.search.response.SearchResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
