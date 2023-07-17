@@ -5,6 +5,7 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,8 @@ public class FeedController {
 
     @Operation(summary = "피드 등록")
     @PostMapping
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal AuthUser user, @RequestBody FeedRequest request) {
+    public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                         @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.saveFeed(userId, request));
     }
@@ -54,7 +55,8 @@ public class FeedController {
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Long> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
+    public ResponseEntity<Long> updateFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                           @PathVariable Long feedId, @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
         FeedResponse response = service.getFeedById(feedId);
         if( userId.equals(response.getUserId()) ) {
@@ -67,7 +69,8 @@ public class FeedController {
     @Operation(summary = "피드 삭제")
     @DeleteMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Boolean> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
+    public ResponseEntity<Boolean> deleteFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                              @PathVariable Long feedId) {
         Long userId = user.getUserId();
         FeedResponse response = service.getFeedById(feedId);
         if( userId.equals(response.getUserId()) ) {
