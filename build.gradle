@@ -62,7 +62,8 @@ dependencies {
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-
+	// easy random
+	testImplementation 'org.jeasy:easy-random-core:5.0.0'
 }
 
 tasks.named('test') {

@@ -113,4 +113,8 @@ public class FeedService {
 
         feedImageMapper.deleteImage(feedId, imageName);
     }
+
+    public List<String> getPopularTags() {
+        return feedRepository.getPopular10TagsInTop100Feeds();
+    }
 }

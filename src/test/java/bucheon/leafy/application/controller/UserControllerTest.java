@@ -3,6 +3,7 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.openid.connect.sdk.claims.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,6 +44,8 @@ class UserControllerTest {
                 .nickName("chanU kim")
                 .simpleIntroduction("안녕!~!")
                 .phone("01012345678")
+                .birthDay(LocalDate.now())
+                .gender(Gender.MALE)
                 .zipcode("12578")
                 .street("부천")
                 .lot("상동")

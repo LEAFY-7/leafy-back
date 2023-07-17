@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -103,7 +102,7 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
 
     private Feed createFeed(String title) {
 
-        FeedLikeCount likeCount = FeedLikeCount.of( new AtomicLong(0) );
+        FeedLikeCount likeCount = FeedLikeCount.of( 0L );
 
         return Feed.builder()
                 .title(title)
