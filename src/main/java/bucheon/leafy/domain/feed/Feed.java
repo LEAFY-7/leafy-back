@@ -55,4 +55,8 @@ public class Feed extends BaseDeleteEntity {
 
     }
 
+    public void initFeedLikeCount(FeedLikeCount feedLikeCount){
+        this.feedLikeCount = feedLikeCount;
+    }
+
 }

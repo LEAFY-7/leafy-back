@@ -39,7 +39,7 @@ public class FeedWithLikeCountResponse {
                 .feedId(feed.getId())
                 .title(feed.getTitle())
                 .content(feed.getContent())
-                .likeCount(feed.getFeedLikeCount().getLikeCount().get())
+                .likeCount(feed.getFeedLikeCount().getLikeCount())
                 .image(feedImage)
                 .build();
     }

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,8 +60,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedLikeService.increaseLikeCount(feed);
 
         //then
-        assertThat(feed.getFeedLikeCount().getLikeCount().get())
-                .isEqualTo(1);
+        assertThat(feed.getFeedLikeCount().getLikeCount()).isEqualTo(1);
     }
 
     @Test
@@ -79,8 +77,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedLikeService.decreaseLikeCount(feed);
 
         //then
-        assertThat(feed.getFeedLikeCount().getLikeCount().get())
-                .isEqualTo(0);
+        assertThat(feed.getFeedLikeCount().getLikeCount()).isEqualTo(0);
     }
 
     @Test
@@ -139,7 +136,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.saveLike(user.getId(), feed.getId());
 
-        long feedLikeCount = feed.getFeedLikeCount().getLikeCount().get();
+        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then
@@ -167,7 +164,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.deleteLike(user.getId(), feed.getId());
 
-        long feedLikeCount = feed.getFeedLikeCount().getLikeCount().get();
+        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then
@@ -177,7 +174,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
 
     private Feed createFeed(Long likeCount) {
 
-        FeedLikeCount feedLikeCount = FeedLikeCount.of( new AtomicLong(likeCount) );
+        FeedLikeCount feedLikeCount = FeedLikeCount.of( likeCount );
 
         return Feed.builder()
                 .title("타이틀")
