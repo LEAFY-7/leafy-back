@@ -12,16 +12,16 @@ import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.path.S3Path;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,12 +38,10 @@ public class FeedService {
     public List<FeedResponse> getFeeds(ScrollRequest scrollRequest) {
         if (scrollRequest.hasKey()) {
             return feedMapper.findFeedListScroll(scrollRequest);
+        } else if (scrollRequest.getKey() == null) {
+            return feedMapper.findFeedListFirst(scrollRequest);
         } else {
-            if (scrollRequest.getKey() == null) {
-                return feedMapper.findFeedListFirst();
-            } else {
-                return null;
-            }
+            return null;
         }
     }
 
@@ -52,23 +50,30 @@ public class FeedService {
     }
 
     public Long saveFeed(Long userId, FeedRequest request) {
-        request.setUserId(userId);
-        feedMapper.saveFeed(request);
+        feedMapper.saveFeed(userId, request);
 
         return request.getFeedId();
     }
 
-    public Long updateFeed(Long userId, Long feedId, FeedRequest request) {
-        request.setUserId(userId);
-        request.setFeedId(feedId);
-        if( feedMapper.editFeed(request) == 1 ) {
-            return feedId;
+    public Map<String, Object> updateFeed(Long feedId, Long userId, FeedRequest request) {
+        if( feedMapper.editFeed(feedId, userId, request) == 1 ) {
+            FeedResponse response = feedMapper.findFeedById(feedId);
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("data", response);
+            responseMap.put("message", "피드 수정 완료");
+            return responseMap;
         } else {
             throw new FeedDataAccessException();
         }
     }
 
-    public boolean deleteFeed(Long feedId) { return feedMapper.softDeleteFeed(feedId) == 1; }
+    public String deleteFeed(Long feedId, Long userId) {
+        if( feedMapper.deleteFeed(feedId, userId) == 1 ) {
+            return "피드 삭제 완료";
+        } else {
+            throw new FeedDataAccessException();
+        }
+    }
 
     public List<FeedMonthlyResponse> getCountGroupByMonthly(Long userId) {
         List<FeedMonthlyInformation> feedMonthlyInformation = feedRepository.groupByMonthlyCountByUserId(userId);
@@ -114,9 +119,13 @@ public class FeedService {
         return imageUrlList;
     }
 
-    public void deleteFeedImage(Long feedId, String imageName) {
+    public String deleteFeedImage(Long feedId, String imageName) {
         imageComponent.deleteImage(imagePath, imageName);
 
-        feedImageMapper.deleteImage(feedId, imageName);
+        if(feedImageMapper.deleteImage(feedId, imageName) == 1) {
+            return "이미지 삭제 완료";
+        }  else {
+        throw new FeedDataAccessException();
+        }
     }
 }

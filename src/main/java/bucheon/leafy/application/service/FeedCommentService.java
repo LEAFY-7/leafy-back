@@ -5,7 +5,10 @@ import bucheon.leafy.domain.feed.request.FeedCommentRequest;
 import bucheon.leafy.domain.feed.response.FeedCommentResponse;
 import bucheon.leafy.exception.FeedCommentDataAccessException;
 import bucheon.leafy.exception.FeedCommentNotFoundException;
+import bucheon.leafy.exception.FeedDataAccessException;
+import bucheon.leafy.util.request.ScrollRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +19,11 @@ public class FeedCommentService {
 
     private final FeedCommentMapper mapper;
 
-    public List<FeedCommentResponse> getComments(Long feedId) {
+    public List<FeedCommentResponse> getComments(ScrollRequest scrollRequest) {
         return mapper.findCommentList(feedId);
     }
 
-    public FeedCommentResponse findCommentById(Long commentId) {
+    public FeedCommentResponse getCommentById(Long commentId) {
         return mapper.findCommentById(commentId).orElseThrow(FeedCommentNotFoundException::new);
     }
 
@@ -29,17 +32,20 @@ public class FeedCommentService {
         return mapper.saveComment(request);
     }
 
-    public Long updateComment(Long feedId, Long commentId, FeedCommentRequest request) {
-        request.setFeedId(feedId);
+    public String updateComment(Long commentId, FeedCommentRequest request) {
         request.setCommentId(commentId);
         if( mapper.editComment(request) == 1 ) {
-            return commentId;
+            return "댓글 수정 완료";
         } else {
             throw new FeedCommentDataAccessException();
         }
     }
 
-    public void deleteComment(Long commentId) {
-        mapper.deleteComment(commentId);
+    public String deleteComment(Long commentId) {
+        if( mapper.deleteComment(feedId); == 1 ) {
+            return "피드 삭제 완료";
+        } else {
+            throw new FeedDataAccessException();
+        }
     }
 }

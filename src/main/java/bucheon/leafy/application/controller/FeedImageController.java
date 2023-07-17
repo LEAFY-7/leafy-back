@@ -31,10 +31,8 @@ public class FeedImageController {
 
 
     @DeleteMapping
-    public ResponseEntity deleteImage(@PathVariable Long feedId, @RequestParam String imageName) {
+    public ResponseEntity<String> deleteImage(@PathVariable Long feedId, @RequestParam String imageName) {
 
-        service.deleteFeedImage(feedId, imageName);
-
-        return ResponseEntity.ok().body("이미지 삭제 완료");
+        return ResponseEntity.ok().body(service.deleteFeedImage(feedId, imageName));
     }
 }

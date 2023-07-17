@@ -16,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Tag(name = "피드")
@@ -49,26 +51,28 @@ public class FeedController {
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Long> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
+    public ResponseEntity<Map<String, Object>> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
-        FeedResponse response = service.getFeedById(feedId);
-        if( userId.equals(response.getUserId()) ) {
-            return ResponseEntity.ok().body(service.updateFeed(userId, feedId, request));
-        } else {
-            throw new AccessDeniedException("수정 권한이 없습니다.");
-        }
+//        FeedResponse response = service.getFeedById(feedId);
+//        if( userId.equals(response.getUserId()) ) {
+//            return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
+//        } else {
+//            throw new AccessDeniedException("수정 권한이 없습니다.");
+//        }
+        return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
     }
 
     @Operation(summary = "피드 삭제")
     @DeleteMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Boolean> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
+    public ResponseEntity<String> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
         Long userId = user.getUserId();
-        FeedResponse response = service.getFeedById(feedId);
-        if( userId.equals(response.getUserId()) ) {
-            return ResponseEntity.ok().body(service.deleteFeed(feedId));
-        } else {
-            throw new AccessDeniedException("삭제 권한이 없습니다.");
-        }
+//        FeedResponse response = service.getFeedById(feedId);
+//        if( userId.equals(response.getUserId()) ) {
+//            return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
+//        } else {
+//            throw new AccessDeniedException("삭제 권한이 없습니다.");
+//        }
+        return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
     }
 }

@@ -3,7 +3,7 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
-    <select id="findFeedListFirst" resultType="FeedResponse">
+    <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
         select * from feed where is_delete = false ORDER BY feed_id DESC LIMIT #{size}
     </select>
 
@@ -20,18 +20,14 @@
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
-        update feed set title = #{title}, content = #{content}, modified_at = now() where feed_id = #{feedId}
+        update feed set title = #{title}, content = #{content}, feed_type = #{feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
     </update>
 
     <delete id="deleteAllFeeds">
         delete from feed
     </delete>
 
-    <delete id="hardDeleteFeed"  parameterType="java.lang.Long">
-        delete from feed where feed_id = #{feedId}
-    </delete>
-
-    <update id="softDeleteFeed" parameterType="java.lang.Long">
-        update feed set is_delete = true where feed_id = #{feedId}
+    <update id="deleteFeed" parameterType="java.lang.Long">
+        update feed set is_delete = true where feed_id = #{feedId} and user_id = #{userId}
     </update>
 </mapper>
