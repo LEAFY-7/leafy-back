@@ -1,6 +1,6 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.domain.leafyApi.LeafyApiDto;
+import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;

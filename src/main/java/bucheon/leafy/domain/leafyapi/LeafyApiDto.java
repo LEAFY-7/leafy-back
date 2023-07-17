@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.leafyApi;
+package bucheon.leafy.domain.leafyapi;
 
 import lombok.*;
 
