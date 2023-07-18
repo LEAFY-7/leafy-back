@@ -2,6 +2,7 @@ package bucheon.leafy.application.repository;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
+import bucheon.leafy.domain.feed.response.PopularTagInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +19,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             nativeQuery = true)
     List<FeedMonthlyInformation> groupByMonthlyCountByUserId(@Param("userId") Long userId);
 
-    @Query(value = "SELECT ft.tag " +
+    @Query(value = "SELECT ft.tag as tag, count(ft.tag) as count " +
             "FROM ( " +
             "SELECT f.*, flc.like_count " +
             "FROM feed f " +
@@ -32,7 +33,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "ORDER BY count(*) DESC " +
             "LIMIT 10;",
             nativeQuery = true)
-    List<String> getPopular10TagsInTop100Feeds();
+    List<PopularTagInformation> getPopular10TagsInTop100Feeds();
 
 
 }
