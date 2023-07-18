@@ -1,8 +1,8 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.ImageComponent;
-import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.mapper.FeedImageMapper;
+import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
@@ -12,20 +12,15 @@ import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.path.S3Path;
-import bucheon.leafy.util.entity.BaseDeleteEntity;
 import bucheon.leafy.util.request.ScrollRequest;
-import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class FeedService {
     private final FeedMapper feedMapper;

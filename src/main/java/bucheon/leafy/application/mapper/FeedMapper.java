@@ -9,7 +9,6 @@ import org.mybatis.spring.annotation.MapperScan;
 
 import java.util.List;
 
-@MapperScan
 @Mapper
 public interface FeedMapper {
 

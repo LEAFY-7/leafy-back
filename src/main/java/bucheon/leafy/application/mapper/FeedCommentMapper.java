@@ -2,7 +2,9 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.feed.request.FeedCommentRequest;
 import bucheon.leafy.domain.feed.response.FeedCommentResponse;
+import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +12,17 @@ import java.util.Optional;
 @Mapper
 public interface FeedCommentMapper {
 
-    List<FeedCommentResponse> findCommentList(Long feedId);
+    List<FeedCommentResponse> findCommentListFirst(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
 
-    Optional<FeedCommentResponse> findCommentById(Long commentId);
+    List<FeedCommentResponse> findCommentListScroll(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
 
-    Long saveComment(FeedCommentRequest request);
+    FeedCommentResponse findCommentById(Long commentId);
 
-    int editComment(FeedCommentRequest request);
+    Long saveComment(@Param("userId") Long userId, @Param("feedId") Long feedId, FeedCommentRequest request);
+
+    int editComment(@Param("commentId") Long commentId, @Param("userId") Long userId, @Param("feedId") Long feedId, FeedCommentRequest request);
 
     void deleteAllComments();
 
-    void deleteComment(Long commentId);
+    int deleteComment(@Param("commentId") Long commentId, @Param("userId") Long userId, @Param("feedId") Long feedId);
 }
