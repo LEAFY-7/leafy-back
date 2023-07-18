@@ -38,4 +38,11 @@ public class FeedLikeCount {
         this.feed = feed;
     }
 
+    public void like() {
+        this.likeCount += 1;
+    }
+
+    public void likeCancel() {
+        this.likeCount -= 1;
+    }
 }
