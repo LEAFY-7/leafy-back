@@ -22,22 +22,16 @@ public class FeedLikeCount {
     private Long likeCount;
 
     @Builder
-    private FeedLikeCount(Long likeCount) {
+    private FeedLikeCount(Long likeCount, Feed feed) {
         this.likeCount = likeCount;
+        this.feed = feed;
     }
 
-    public static FeedLikeCount of(Long likeCount) {
+    public static FeedLikeCount of(Long likeCount, Feed feed) {
         return FeedLikeCount.builder()
                 .likeCount(likeCount)
+                .feed(feed)
                 .build();
-    }
-
-    public void like() {
-        this.likeCount = this.likeCount + 1;
-    }
-
-    public void likeCancel() {
-        this.likeCount = this.likeCount - 1;
     }
 
     public void initFeed(Feed feed) {

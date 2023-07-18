@@ -33,7 +33,6 @@ class UserServiceTest extends IntegrationTestSupport {
 
         userRepository.save(user1);
 
-
         return List.of(
 
                 DynamicTest.dynamicTest("아이디가 중복이 아니면 성공한다.", () -> {

@@ -4,6 +4,7 @@ import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class FollowController {
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                                 @PageableDefault(page = 1, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
         Page<FollowersResponse> result = followService.getFollowers(userId, pageable);
@@ -37,7 +38,7 @@ public class FollowController {
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                                  @PageableDefault(page = 1, size = 20) Pageable pageable) {
 
         System.out.println("pageable = " + pageable);
@@ -49,7 +50,7 @@ public class FollowController {
     @Operation(summary = "팔로우")
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<String> follow(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                          @PathVariable("id") Long targetUserId) {
 
         Long userId = authUser.getUserId();
@@ -60,7 +61,7 @@ public class FollowController {
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<String> unfollow(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                            @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
         followService.unfollow(userId, targetUserId);

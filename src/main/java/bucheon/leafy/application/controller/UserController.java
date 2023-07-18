@@ -6,6 +6,7 @@ import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class UserController {
 
     @Operation(summary = "회원 이미지 등록")
     @PostMapping("/image")
-    public ResponseEntity<String> createImage(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                               MultipartFile file) {
         Long userId = authUser.getUserId();
         return userService.createUserImage(userId, file);
@@ -52,7 +53,7 @@ public class UserController {
 
     @Operation(summary = "배경 이미지 등록")
     @PostMapping("/background-image")
-    public ResponseEntity<String> createBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> createBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                         MultipartFile file) {
         Long userId = authUser.getUserId();
         return userService.createUserBackgroundImage(userId, file);
@@ -60,7 +61,7 @@ public class UserController {
 
     @Operation(summary = "회원 이미지 수정")
     @PutMapping("/image")
-    public ResponseEntity<String> updateImage(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> updateImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                               MultipartFile file) {
         Long userId = authUser.getUserId();
         return userService.editUserImage(userId, file);
@@ -68,7 +69,7 @@ public class UserController {
 
     @Operation(summary = "배경 이미지 수정")
     @PutMapping("/background-image")
-    public ResponseEntity<String> updateBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<String> updateBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                         MultipartFile file) {
         Long userId = authUser.getUserId();
         return userService.editUserBackgroundImage(userId, file);

@@ -7,7 +7,7 @@ import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
-import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;

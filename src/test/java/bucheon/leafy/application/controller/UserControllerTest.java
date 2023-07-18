@@ -1,9 +1,9 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
+import bucheon.leafy.domain.user.Gender;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

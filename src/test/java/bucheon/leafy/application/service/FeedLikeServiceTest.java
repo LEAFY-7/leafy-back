@@ -14,8 +14,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class FeedLikeServiceTest extends IntegrationTestSupport {
 
+    @Autowired
+    EntityManager em;
     @Autowired
     FeedLikeService feedLikeService;
 
@@ -57,10 +62,15 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedRepository.save(feed);
 
         //when
-        feedLikeService.increaseLikeCount(feed);
+        feedLikeRepository.likeIncrease(feed);
+
+        em.flush();
+        em.clear();
+
+        Feed result = feedRepository.findById(feed.getId()).get();
 
         //then
-        assertThat(feed.getFeedLikeCount().getLikeCount()).isEqualTo(1);
+        assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(1);
     }
 
     @Test
@@ -74,10 +84,14 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedRepository.save(feed);
 
         //when
-        feedLikeService.decreaseLikeCount(feed);
+        feedLikeRepository.likeDecrease(feed);
+
+        em.flush();
+        em.clear();
+        Feed result = feedRepository.findById(feed.getId()).get();
 
         //then
-        assertThat(feed.getFeedLikeCount().getLikeCount()).isEqualTo(0);
+        assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(0);
     }
 
     @Test
@@ -96,9 +110,9 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(result).hasSize(1)
-                .extracting("user", "feed")
+                .extracting("user.id", "feed.id")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(user, feed)
+                        Tuple.tuple(user.getId(), feed.getId())
                 );
     }
 
@@ -136,15 +150,19 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.saveLike(user.getId(), feed.getId());
 
-        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
+        em.flush();
+        em.clear();
+
+        Feed result = feedRepository.findById(feed.getId()).get();
+        long feedLikeCount = result.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then
         assertThat(feedLikeCount).isEqualTo(4L);
         assertThat(feedLikeInfos).hasSize(1)
-                .extracting("user", "feed")
+                .extracting("user.id", "feed.id")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple(user, feed)
+                        Tuple.tuple(user.getId(), feed.getId())
                 );
     }
 
@@ -164,7 +182,11 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.deleteLike(user.getId(), feed.getId());
 
-        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
+        em.flush();
+        em.clear();
+
+        Feed result = feedRepository.findById(feed.getId()).get();
+        long feedLikeCount = result.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then
@@ -173,15 +195,15 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
     }
 
     private Feed createFeed(Long likeCount) {
-
-        FeedLikeCount feedLikeCount = FeedLikeCount.of( likeCount );
-
-        return Feed.builder()
+        Feed feed = Feed.builder()
                 .title("타이틀")
                 .content("내용")
-                .feedLikeCount(feedLikeCount)
                 .build();
 
+        FeedLikeCount feedLikeCount = FeedLikeCount.of(likeCount, feed);
+        feedLikeRepository.save(feedLikeCount);
+        feed.initFeedLikeCount(feedLikeCount);
+        return feed;
     }
 
     private User createUser(String email, String nickName) {
