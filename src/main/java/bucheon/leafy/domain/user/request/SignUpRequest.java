@@ -1,7 +1,6 @@
 package bucheon.leafy.domain.user.request;
 
-
-import com.nimbusds.openid.connect.sdk.claims.Gender;
+import bucheon.leafy.domain.user.Gender;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

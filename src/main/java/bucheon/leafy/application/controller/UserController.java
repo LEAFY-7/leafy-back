@@ -1,13 +1,17 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.service.UserImageService;
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +27,15 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final UserImageService userImageService;
+
+    @Operation(summary = "Get Me")
+    @GetMapping
+    public ResponseEntity<GetMeResponse> authorize(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        GetMeResponse getMe = userService.getMe(userId);
+        return ResponseEntity.ok().body(getMe);
+    }
 
     @Operation(summary = "로그인")
     @PostMapping("/sign-in")
@@ -32,46 +45,52 @@ public class UserController {
 
     @Operation(summary = "아이디 중복체크")
     @GetMapping("/check")
-    public ResponseEntity<String> check(@RequestParam String email) {
-        return userService.duplicationIdCheck(email);
+    @ResponseStatus(HttpStatus.OK)
+    public void check(@RequestParam String email) {
+        userService.duplicationIdCheck(email);
     }
 
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
-    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        return userService.signUp(signUpRequest);
+    public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
+        Long userId = userService.signUp(signUpRequest);
+        return ResponseEntity.status(200).body(userId);
     }
 
     @Operation(summary = "회원 이미지 등록")
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/image")
-    public ResponseEntity<String> createImage(@AuthenticationPrincipal AuthUser authUser,
+    public void createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                               MultipartFile file) {
         Long userId = authUser.getUserId();
-        return userService.createUserImage(userId, file);
+        userImageService.createUserImage(userId, "안녕");
     }
 
     @Operation(summary = "배경 이미지 등록")
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/background-image")
-    public ResponseEntity<String> createBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+    public void createBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                         MultipartFile file) {
         Long userId = authUser.getUserId();
-        return userService.createUserBackgroundImage(userId, file);
+        userImageService.createUserBackgroundImage(userId, file);
     }
 
     @Operation(summary = "회원 이미지 수정")
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/image")
-    public ResponseEntity<String> updateImage(@AuthenticationPrincipal AuthUser authUser,
+    public void updateImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                               MultipartFile file) {
         Long userId = authUser.getUserId();
-        return userService.editUserImage(userId, file);
+        userImageService.editUserImage(userId, file);
     }
 
     @Operation(summary = "배경 이미지 수정")
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/background-image")
-    public ResponseEntity<String> updateBackgroundImage(@AuthenticationPrincipal AuthUser authUser,
+    public void updateBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                         MultipartFile file) {
         Long userId = authUser.getUserId();
-        return userService.editUserBackgroundImage(userId, file);
+        userImageService.editUserBackgroundImage(userId, file);
     }
 
 }

@@ -32,6 +32,9 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
     @Autowired
     FeedRepository feedRepository;
 
+    @Autowired
+    FeedLikeRepository feedLikeRepository;
+
     @Test
     @DisplayName("사용자의 정보와 게시글의 정보로 회원을 찾는다.")
     void testFindFeedLikeInfoByUserAndFeed(){
@@ -101,15 +104,15 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
     }
 
     private Feed createFeed(String title) {
-
-        FeedLikeCount likeCount = FeedLikeCount.of( 0L );
-
-        return Feed.builder()
+        Feed feed = Feed.builder()
                 .title(title)
                 .content("내용")
-                .feedLikeCount(likeCount)
                 .build();
 
+        FeedLikeCount feedLikeCount = FeedLikeCount.of(0L, feed);
+        feedLikeRepository.save(feedLikeCount);
+        feed.initFeedLikeCount(feedLikeCount);
+        return feed;
     }
 
     private User createUser(String email, String nickName) {

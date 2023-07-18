@@ -6,6 +6,7 @@ import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
 
 @Tag(name = "피드")
 @RestController
@@ -39,8 +39,8 @@ public class FeedController {
 
     @Operation(summary = "피드 등록")
     @PostMapping
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal AuthUser user, @RequestBody FeedRequest request) {
+    public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                         @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.saveFeed(userId, request));
     }

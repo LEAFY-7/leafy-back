@@ -5,7 +5,6 @@ import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +30,7 @@ public class User extends BaseDeleteEntity {
 
     private String phone;
 
+    @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
     private LocalDate birthDay;
