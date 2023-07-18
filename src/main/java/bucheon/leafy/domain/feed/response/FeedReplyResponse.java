@@ -9,22 +9,22 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class FeedReplyResponse {
-    private Long reply_id;
-    private Long user_id;
-    private Long feed_id;
-    private Long comment_id;
+    private Long replyId;
+    private Long userId;
+    private Long feedId;
+    private Long commentId;
     private String reply;
-    private Boolean is_delete;
-    private Date modified_at;
+    private Date createdAt;
+    private Date modifiedAt;
 
     @Builder
-    private FeedReplyResponse(Long reply_id, Long user_id, Long feed_id, Long comment_id, String reply, Boolean is_delete, Date modified_at) {
-        this.reply_id = reply_id;
-        this.user_id = user_id;
-        this.feed_id = feed_id;
-        this.comment_id = comment_id;
+    public FeedReplyResponse(Long replyId, Long userId, Long feedId, Long commentId, String reply, Date createdAt, Date modifiedAt) {
+        this.replyId = replyId;
+        this.userId = userId;
+        this.feedId = feedId;
+        this.commentId = commentId;
         this.reply = reply;
-        this.is_delete = is_delete;
-        this.modified_at = modified_at;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 }

@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +51,6 @@ public class FeedCommentController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<String> deleteComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId) {
         Long userId = user.getUserId();
-
         return ResponseEntity.ok().body(service.deleteComment(commentId, userId, feedId));
     }
 }

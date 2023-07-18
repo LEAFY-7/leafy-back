@@ -7,7 +7,7 @@
     </select>
 
     <select id="findCommentListScroll" resultType="FeedCommentResponse" parameterType="ScrollRequest">
-        select * from feed_comment where is_delete = false and and feed_id = #{feedId} and comment_id &lt; #{key} ORDER BY comment_id DESC LIMIT #{size}
+        select * from feed_comment where is_delete = false and feed_id = #{feedId} and comment_id &lt; #{key} ORDER BY comment_id DESC LIMIT #{size}
     </select>
 
     <select id="findCommentById" resultType="FeedCommentResponse" parameterType="java.lang.Long">

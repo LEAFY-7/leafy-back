@@ -7,7 +7,6 @@ import bucheon.leafy.exception.FeedCommentDataAccessException;
 import bucheon.leafy.exception.FeedCommentNotFoundException;
 import bucheon.leafy.util.request.ScrollRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class FeedCommentService {
     }
 
     public Map<String, Object> updateComment(Long commentId, Long userId, Long feedId, FeedCommentRequest request) {
-        if( feedCommentMapper.editComment(commentId, feedId, userId, request) == 1 ) {
+        if( feedCommentMapper.editComment(commentId, userId, feedId, request) == 1 ) {
             FeedCommentResponse response = feedCommentMapper.findCommentById(commentId);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("data", response);
