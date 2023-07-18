@@ -10,12 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @Tag(name = "피드")
 @RestController
@@ -54,7 +52,6 @@ public class FeedController {
 
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<Long> updateFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                            @PathVariable Long feedId, @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
@@ -68,7 +65,6 @@ public class FeedController {
 
     @Operation(summary = "피드 삭제")
     @DeleteMapping("/{feedId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<Boolean> deleteFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                               @PathVariable Long feedId) {
         Long userId = user.getUserId();

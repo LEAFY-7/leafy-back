@@ -10,12 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "팔로우")
 @RestController
@@ -27,7 +25,6 @@ public class FollowController {
 
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                                 @PageableDefault(page = 1, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
@@ -37,11 +34,8 @@ public class FollowController {
 
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                                  @PageableDefault(page = 1, size = 20) Pageable pageable) {
-
-        System.out.println("pageable = " + pageable);
         Long userId = authUser.getUserId();
         Page<FollowersResponse> result = followService.getFollowings(userId, pageable);
         return ResponseEntity.ok().body(result);
@@ -49,23 +43,20 @@ public class FollowController {
 
     @Operation(summary = "팔로우")
     @PostMapping("/{id}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<String> follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                          @PathVariable("id") Long targetUserId) {
-
         Long userId = authUser.getUserId();
         followService.follow(userId, targetUserId);
-        return ResponseEntity.ok().body("팔로우 성공");
     }
 
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<String> unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                            @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
         followService.unfollow(userId, targetUserId);
-        return ResponseEntity.ok().body("언팔로우 성공");
     }
 
 }
