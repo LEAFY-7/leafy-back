@@ -9,6 +9,7 @@ import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedResponse;
+import bucheon.leafy.domain.feed.response.PopularTagInformation;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.path.S3Path;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static bucheon.leafy.domain.feed.response.PopularTagInformation.*;
 
 @Service
 @Transactional
@@ -114,7 +117,10 @@ public class FeedService {
         feedImageMapper.deleteImage(feedId, imageName);
     }
 
-    public List<String> getPopularTags() {
-        return feedRepository.getPopular10TagsInTop100Feeds();
+    public List<PopularTagResponse> getPopularTags() {
+        List<PopularTagInformation> popularTags = feedRepository.getPopular10TagsInTop100Feeds();
+        return popularTags.stream()
+                .map(PopularTagResponse::of)
+                .collect(Collectors.toList());
     }
 }
