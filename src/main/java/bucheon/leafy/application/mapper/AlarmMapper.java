@@ -3,10 +3,12 @@ package bucheon.leafy.application.mapper;
 import bucheon.leafy.domain.alarm.request.AlarmCheckRequest;
 import bucheon.leafy.domain.alarm.request.AlarmRequest;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
+import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface AlarmMapper {
@@ -17,5 +19,11 @@ public interface AlarmMapper {
 
     int deleteAlarm();
 
+    int deleteOneAlarm(Long id);
+
     List<AlarmResponse> findByUserId(Long userId);
+
+    int findCountByUserId(Long userId);
+
+    Optional<HashMap<String, Object>> findById(long id);
 }
