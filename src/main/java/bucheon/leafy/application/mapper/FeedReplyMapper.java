@@ -23,5 +23,5 @@ public interface FeedReplyMapper {
 
     void deleteAllReplies();
 
-    int deleteReply(@Param("replyId") Long replyId, @Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId);
+    int deleteReply(Long replyId, Long userId, Long feedId, Long commentId);
 }

@@ -15,12 +15,12 @@
         select * from feed where feed_id = #{feedId} and is_delete = false
     </select>
 
-    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="feedId">
-        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{title}, #{content}, false, #{feedType}, now(), now())
+    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="request.feedId">
+        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{request.title}, #{request.content}, false, #{request.feedType}, now(), now())
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
-        update feed set title = #{title}, content = #{content}, feed_type = #{feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
+        update feed set title = #{request.title}, content = #{request.content}, feed_type = #{request.feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
     </update>
 
     <delete id="deleteAllFeeds">

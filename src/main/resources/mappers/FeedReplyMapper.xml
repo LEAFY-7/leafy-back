@@ -3,11 +3,11 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedReplyMapper">
     <select id="findReplyListFirst" resultType="FeedReplyResponse" parameterType="ScrollRequest">
-        select * from feed_reply where is_delete = false and feed_id = #{feedId} and comment_id = #{commentId} ORDER BY reply_id DESC LIMIT #{size}
+        select * from feed_reply where is_delete = false and feed_id = #{feedId} and comment_id = #{commentId} ORDER BY reply_id DESC LIMIT #{scrollRequest.size}
     </select>
 
-    <select id="findReplyListFirst" resultType="FeedReplyResponse" parameterType="ScrollRequest">
-        select * from feed_reply where is_delete = false and feed_id = #{feedId} and and comment_id = #{commentId} reply_id &lt; #{key} ORDER BY reply_id DESC LIMIT #{size}
+    <select id="findReplyListScroll" resultType="FeedReplyResponse" parameterType="ScrollRequest">
+        select * from feed_reply where is_delete = false and feed_id = #{feedId} and and comment_id = #{commentId} reply_id &lt; #{scrollRequest.key} ORDER BY reply_id DESC LIMIT #{scrollRequest.size}
     </select>
 
     <select id="findReplyById" resultType="FeedReplyResponse" parameterType="java.lang.Long">
@@ -15,11 +15,11 @@
     </select>
 
     <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyColumn="reply_id" keyProperty="replyId">
-        insert into feed_reply (user_id,feed_id,comment_id,reply,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{commentId}, #{reply}, false, now(), now())
+        insert into feed_reply (user_id,feed_id,comment_id,reply,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{commentId}, #{request.reply}, false, now(), now())
     </insert>
 
     <update id="editReply" parameterType="FeedReplyRequest">
-        update feed_reply set reply = #{reply}, modified_at = now() where reply_id = #{replyId} and user_id = #{userId} and feed_id = #{feedId} and comment_id = #{commentId}
+        update feed_reply set reply = #{request.reply}, modified_at = now() where reply_id = #{replyId} and user_id = #{userId} and feed_id = #{feedId} and comment_id = #{commentId}
     </update>
 
     <delete id="deleteAllReplies">

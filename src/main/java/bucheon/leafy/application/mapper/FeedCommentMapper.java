@@ -24,5 +24,5 @@ public interface FeedCommentMapper {
 
     void deleteAllComments();
 
-    int deleteComment(@Param("commentId") Long commentId, @Param("userId") Long userId, @Param("feedId") Long feedId);
+    int deleteComment(Long commentId, Long userId, Long feedId);
 }
