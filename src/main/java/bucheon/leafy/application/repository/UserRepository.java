@@ -9,6 +9,11 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Override
+    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
+    Optional<User> findById(Long userId);
+
+    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findByEmail(String email);
 
     @EntityGraph(attributePaths = "userImage")
