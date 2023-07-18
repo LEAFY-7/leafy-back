@@ -4,6 +4,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.UserNotFoundException;
@@ -59,7 +60,7 @@ public class UserService {
 
     }
 
-    public ResponseEntity signUp(SignUpRequest signUpRequest) {
+    public Long signUp(SignUpRequest signUpRequest) {
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -70,39 +71,17 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
-        userRepository.save(user);
-        return ResponseEntity.status(200).body("회원가입 완료");
+        User saveUser = userRepository.save(user);
+        return saveUser.getId();
     }
 
-    public ResponseEntity duplicationIdCheck(String email) {
+    public ResponseEntity<String> duplicationIdCheck(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(u -> {
                     throw new ExistException(ExceptionKey.EMAIL);
                 });
 
         return ResponseEntity.status(200).body("아이디가 사용 가능합니다.");
-    }
-
-    public ResponseEntity<String> createUserImage(Long userId, MultipartFile file) {
-        User user = getUserById(userId);
-        user.addUserImage(null);
-        return null;
-    }
-
-    public ResponseEntity<String> createUserBackgroundImage(Long userId, MultipartFile file) {
-        User user = getUserById(userId);
-        user.addUserBackgroundImage(null);
-        return null;
-    }
-
-    public ResponseEntity<String> editUserImage(Long userId, MultipartFile file) {
-        User user = getUserById(userId);
-        return null;
-    }
-
-    public ResponseEntity<String> editUserBackgroundImage(Long userId, MultipartFile file) {
-        User user = getUserById(userId);
-        return null;
     }
 
     public User getUserById(Long userId){
@@ -113,4 +92,10 @@ public class UserService {
         User user = getUserById(userId);
         return UserResponse.of(user);
     }
+
+    public GetMeResponse getMe(Long userId) {
+        User user = getUserById(userId);
+        return GetMeResponse.of(user);
+    }
+
 }
