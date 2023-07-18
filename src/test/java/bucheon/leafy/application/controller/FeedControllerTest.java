@@ -97,7 +97,7 @@ public class FeedControllerTest {
 
         FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC).build();
 
-        ResultActions result = mockMvc.perform(post("/v1/feeds")
+        ResultActions result = mockMvc.perform(post("/api/v1/feeds")
                         .content(objectMapper.writeValueAsString(feedRequest))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
@@ -105,7 +105,7 @@ public class FeedControllerTest {
 
         Long feedId = Long.valueOf(result.andReturn().getResponse().getContentAsString());
 
-        mockMvc.perform(get("/v1/feeds/{feedId}", feedId))
+        mockMvc.perform(get("/api/v1/feeds/{feedId}", feedId))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
