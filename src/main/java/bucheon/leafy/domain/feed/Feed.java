@@ -46,13 +46,14 @@ public class Feed extends BaseDeleteEntity {
 
     @Builder
     private Feed(String title, String content, FeedLikeCount feedLikeCount,
-                 List<FeedComment> feedComments, List<FeedTag> feedTags,
+                 List<FeedComment> feedComments, List<FeedReply> feedReplies, List<FeedTag> feedTags,
                  FeedType feedType, List<FeedImage> feedImages) {
 
         this.title = title;
         this.content = content;
         this.feedLikeCount = feedLikeCount;
         this.feedComments = feedComments;
+        this.feedReplies = feedReplies;
         this.feedTags = feedTags;
         this.feedType = feedType;
         this.feedImages = feedImages;

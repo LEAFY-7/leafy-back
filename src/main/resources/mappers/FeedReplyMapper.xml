@@ -14,7 +14,7 @@
         select * from feed_reply where reply_id = #{replyId} and is_delete = false
     </select>
 
-    <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyColumn="reply_id" keyProperty="replyId">
+    <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyColumn="reply_id" keyProperty="request.replyId">
         insert into feed_reply (user_id,feed_id,comment_id,reply,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{commentId}, #{request.reply}, false, now(), now())
     </insert>
 

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,13 +27,14 @@ public class FeedComment extends BaseDeleteEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(name = "reply_id")
+    @JoinColumn(name = "comment_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedReply> feedReply;
+    private List<FeedReply> feedReplies = new ArrayList<>();
 
     @Builder
-    private FeedComment(String comment) {
+    private FeedComment(String comment, List<FeedReply> feedReplies) {
         this.comment = comment;
+        this.feedReplies = feedReplies;
     }
 
 }

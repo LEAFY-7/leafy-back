@@ -39,8 +39,8 @@ public class FeedCommentService {
         return request.getCommentId();
     }
 
-    public Map<String, Object> updateComment(Long commentId, Long userId, Long feedId, FeedCommentRequest request) {
-        if( feedCommentMapper.editComment(commentId, userId, feedId, request) == 1 ) {
+    public Map<String, Object> updateComment(Long userId, Long feedId, Long commentId, FeedCommentRequest request) {
+        if( feedCommentMapper.editComment(userId, feedId, commentId, request) == 1 ) {
             FeedCommentResponse response = feedCommentMapper.findCommentById(commentId);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("data", response);
@@ -51,8 +51,8 @@ public class FeedCommentService {
         }
     }
 
-    public String deleteComment(Long commentId, Long userId, Long feedId) {
-        if( feedCommentMapper.deleteComment(commentId, userId, feedId) == 1 ) {
+    public String deleteComment(Long userId, Long feedId, Long commentId) {
+        if( feedCommentMapper.deleteComment(userId, feedId, commentId) == 1 ) {
             return "댓글 삭제 완료";
         } else {
             throw new FeedCommentDataAccessException();

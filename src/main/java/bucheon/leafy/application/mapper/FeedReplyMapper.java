@@ -19,9 +19,9 @@ public interface FeedReplyMapper {
 
     Long saveReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedReplyRequest request);
 
-    int editReply(@Param("replyId") Long replyId, @Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedReplyRequest request);
+    int editReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, @Param("replyId") Long replyId, FeedReplyRequest request);
 
     void deleteAllReplies();
 
-    int deleteReply(Long replyId, Long userId, Long feedId, Long commentId);
+    int deleteReply(Long userId, Long feedId, Long replyId, Long commentId);
 }
