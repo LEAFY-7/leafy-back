@@ -22,8 +22,6 @@ public class FeedComment extends BaseDeleteEntity {
 
     private String comment;
 
-    private Boolean isDelete;
-
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -33,9 +31,8 @@ public class FeedComment extends BaseDeleteEntity {
     private List<FeedReply> feedReply;
 
     @Builder
-    private FeedComment(String comment, Boolean isDelete) {
+    private FeedComment(String comment) {
         this.comment = comment;
-        this.isDelete = isDelete;
     }
 
 }

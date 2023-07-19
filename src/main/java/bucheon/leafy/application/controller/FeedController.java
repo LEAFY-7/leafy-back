@@ -4,16 +4,18 @@ import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
+import bucheon.leafy.util.request.ScrollRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "피드")
 @RestController
@@ -25,15 +27,8 @@ public class FeedController {
 
     @Operation(summary = "피드 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedResponse>> getFeeds(@RequestParam(required = false) Long lastFeedId) {
-        List<FeedResponse> responseList;
-
-        if( lastFeedId == null) {
-            responseList = service.getFeeds();
-        } else {
-            responseList = service.getFeeds(lastFeedId);
-        }
-        return ResponseEntity.ok().body(responseList);
+    public ResponseEntity<List<FeedResponse>> getFeeds(@RequestParam(required = false) ScrollRequest scrollRequest) {
+        return ResponseEntity.ok().body(service.getFeeds(scrollRequest));
     }
 
     @Operation(summary = "피드 상세")
@@ -52,27 +47,29 @@ public class FeedController {
 
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
-    public ResponseEntity<Long> updateFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                           @PathVariable Long feedId, @RequestBody FeedRequest request) {
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    public ResponseEntity<Map<String, Object>> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
         Long userId = user.getUserId();
-        FeedResponse response = service.getFeedById(feedId);
-        if( userId.equals(response.getUserId()) ) {
-            return ResponseEntity.ok().body(service.updateFeed(userId, feedId, request));
-        } else {
-            throw new AccessDeniedException("수정 권한이 없습니다.");
-        }
+//        FeedResponse response = service.getFeedById(feedId);
+//        if( userId.equals(response.getUserId()) ) {
+//            return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
+//        } else {
+//            throw new AccessDeniedException("수정 권한이 없습니다.");
+//        }
+        return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
     }
 
     @Operation(summary = "피드 삭제")
     @DeleteMapping("/{feedId}")
-    public ResponseEntity<Boolean> deleteFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                              @PathVariable Long feedId) {
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    public ResponseEntity<String> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
         Long userId = user.getUserId();
-        FeedResponse response = service.getFeedById(feedId);
-        if( userId.equals(response.getUserId()) ) {
-            return ResponseEntity.ok().body(service.deleteFeed(feedId));
-        } else {
-            throw new AccessDeniedException("삭제 권한이 없습니다.");
-        }
+//        FeedResponse response = service.getFeedById(feedId);
+//        if( userId.equals(response.getUserId()) ) {
+//            return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
+//        } else {
+//            throw new AccessDeniedException("삭제 권한이 없습니다.");
+//        }
+        return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
     }
 }

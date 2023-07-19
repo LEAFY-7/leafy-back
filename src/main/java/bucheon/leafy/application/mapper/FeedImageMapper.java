@@ -14,5 +14,5 @@ public interface FeedImageMapper {
 
     void deleteAllImages();
 
-    void deleteImage(Long feedId, String imageName);
+    int deleteImage(Long feedId, String imageName);
 }

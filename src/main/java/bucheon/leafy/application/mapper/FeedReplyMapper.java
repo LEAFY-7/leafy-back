@@ -2,22 +2,26 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.feed.request.FeedReplyRequest;
 import bucheon.leafy.domain.feed.response.FeedReplyResponse;
+import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public interface FeedReplyMapper {
 
-    List<FeedReplyResponse> findReplyList(Long commentId);
+    List<FeedReplyResponse> findReplyListFirst(@Param("feedId") Long feedId, @Param("commentId") Long commentId, ScrollRequest scrollRequest);
 
-    Optional<FeedReplyResponse> findReplyById(Long replyId);
+    List<FeedReplyResponse> findReplyListScroll(@Param("feedId") Long feedId, @Param("commentId") Long commentId, ScrollRequest scrollRequest);
 
-    Long saveReply(FeedReplyRequest request);
+    FeedReplyResponse findReplyById(Long replyId);
 
-    int editReply(FeedReplyRequest request);
+    Long saveReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedReplyRequest request);
+
+    int editReply(@Param("replyId") Long replyId, @Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedReplyRequest request);
 
     void deleteAllReplies();
 
-    void deleteReply(Long replyId);
+    int deleteReply(Long replyId, Long userId, Long feedId, Long commentId);
 }

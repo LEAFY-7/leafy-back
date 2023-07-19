@@ -30,6 +30,10 @@ public class Feed extends BaseDeleteEntity {
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FeedReply> feedReplies = new ArrayList<>();
+
+    @JoinColumn(name = "feed_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<FeedTag> feedTags = new ArrayList<>();
 
     @JoinColumn(name = "feed_id")
