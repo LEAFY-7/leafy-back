@@ -3,6 +3,8 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.AlarmService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +26,8 @@ public class AlarmController {
     // TODO 스크롤 적용해서 코드 수정하기
     @Operation(summary = "유저의 알림 리스트 조회")
     @GetMapping
-    public ResponseEntity<List<AlarmResponse>> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
-        return ResponseEntity.ok().body(alarmService.getAlarm(user));
+    public ResponseEntity<ScrollResponse> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, ScrollRequest scrollRequest) {
+        return ResponseEntity.ok().body(alarmService.getAlarm(user, scrollRequest));
     }
 
     @Operation(summary = "유저의 새 알림 갯수 조회")

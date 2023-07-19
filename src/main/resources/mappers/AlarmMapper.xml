@@ -30,11 +30,12 @@
         where id = #{id}
     </delete>
 
-    <select id="findByUserId" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
+    <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
         select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where user_id = #{userId}
-        order by created_at desc limit 5;
+          and id &lt;= #{scrollRequest.key}
+        order by created_at desc limit #{scrollRequest.size}
     </select>
 
     <select id="findCountByUserId" resultType="int">
@@ -47,6 +48,13 @@
         select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where id = #{id}
+    </select>
+
+    <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
+        select id, user_id, type, checked, table_id, msg, created_at
+        from alarm
+        where user_id = #{userId}
+        order by created_at desc limit #{scrollRequest.size}
     </select>
 
 </mapper>

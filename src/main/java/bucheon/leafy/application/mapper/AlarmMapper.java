@@ -5,6 +5,7 @@ import bucheon.leafy.domain.alarm.request.AlarmRequest;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,11 @@ public interface AlarmMapper {
 
     int deleteOneAlarm(Long id);
 
-    List<AlarmResponse> findByUserId(Long userId);
+    List<AlarmResponse> findByUserId(@Param("userId") Long userId, @Param("scrollRequest") ScrollRequest scrollRequest);
 
     int findCountByUserId(Long userId);
 
     Optional<HashMap<String, Object>> findById(long id);
+
+    List<AlarmResponse> findFirstByUserId(@Param("userId") Long userId, @Param("scrollRequest") ScrollRequest scrollRequest);
 }

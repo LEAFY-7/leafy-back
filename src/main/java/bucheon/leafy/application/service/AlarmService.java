@@ -8,6 +8,8 @@ import bucheon.leafy.domain.alarm.request.AlarmRequest;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
 import bucheon.leafy.exception.AlarmDataAccessException;
 import bucheon.leafy.exception.AlarmNotExistException;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -62,8 +64,19 @@ public class AlarmService {
         return "댓글 삭제 성공";
     }
 
-    public List<AlarmResponse> getAlarm(AuthUser user) {
-        return alarmMapper.findByUserId(user.getUserId());
+    public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
+        List<AlarmResponse> list;
+        if(scrollRequest.getKey() == null){
+            list =  alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+        } else {
+            list = alarmMapper.findByUserId(user.getUserId(), scrollRequest);
+        }
+
+        ScrollResponse scrollResponse = new ScrollResponse();
+        scrollResponse.setScrollRequest(scrollRequest);
+        scrollResponse.setBody(list);
+
+        return scrollResponse;
     }
 
     public int getNewAlarmCount(AuthUser user) {
