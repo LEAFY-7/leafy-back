@@ -43,7 +43,7 @@ public class FeedCommentController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<Map<String, Object>> updateComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedCommentRequest request) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.updateComment(commentId, userId, feedId, request));
+        return ResponseEntity.ok().body(service.updateComment(userId, feedId, commentId, request));
     }
 
     @Operation(summary = "피드 댓글 삭제")
@@ -51,6 +51,6 @@ public class FeedCommentController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<String> deleteComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.deleteComment(commentId, userId, feedId));
+        return ResponseEntity.ok().body(service.deleteComment(userId, feedId, commentId));
     }
 }

@@ -14,7 +14,7 @@
         select * from feed_comment where comment_id = #{commentId} and is_delete = false
     </select>
 
-    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyColumn="comment_id" keyProperty="commentId">
+    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyColumn="comment_id" keyProperty="request.commentId">
         insert into feed_comment (user_id,feed_id,comment,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{request.comment}, false, now(), now())
     </insert>
 

@@ -40,8 +40,8 @@ public class FeedReplyService {
         return request.getReplyId();
     }
 
-    public Map<String, Object> updateReply(Long replyId, Long userId, Long feedId, Long commentId, FeedReplyRequest request) {
-        if( feedReplyMapper.editReply(replyId, userId, feedId, commentId, request) == 1 ) {
+    public Map<String, Object> updateReply(Long userId, Long feedId, Long commentId, Long replyId, FeedReplyRequest request) {
+        if( feedReplyMapper.editReply(userId, feedId, commentId, replyId, request) == 1 ) {
             FeedReplyResponse response = feedReplyMapper.findReplyById(commentId);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("data", response);
@@ -52,8 +52,8 @@ public class FeedReplyService {
         }
     }
 
-    public String deleteReply(Long replyId, Long userId, Long feedId, Long commentId) {
-        if( feedReplyMapper.deleteReply(replyId, userId, feedId, commentId) == 1 ) {
+    public String deleteReply(Long userId, Long feedId, Long commentId, Long replyId) {
+        if( feedReplyMapper.deleteReply(userId, feedId, commentId, replyId) == 1 ) {
             return "대댓글 삭제 완료";
         } else {
             throw new FeedCommentDataAccessException();

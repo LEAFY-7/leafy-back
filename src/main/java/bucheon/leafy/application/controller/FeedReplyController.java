@@ -41,9 +41,9 @@ public class FeedReplyController {
     @Operation(summary = "피드 대댓글 수정")
     @PutMapping("/{replyId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Map<String, Object>> updateReply(@AuthenticationPrincipal AuthUser user, @PathVariable Long replyId, @PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedReplyRequest request) {
+    public ResponseEntity<Map<String, Object>> updateReply(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @PathVariable Long replyId, @RequestBody FeedReplyRequest request) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.updateReply(replyId, userId, feedId, commentId, request));
+        return ResponseEntity.ok().body(service.updateReply(userId, feedId, commentId, replyId, request));
     }
 
     @Operation(summary = "피드 대댓글 삭제")
@@ -51,7 +51,7 @@ public class FeedReplyController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity deleteReply(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @PathVariable Long replyId) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.deleteReply(replyId, userId, feedId, commentId));
+        return ResponseEntity.ok().body(service.deleteReply(userId, feedId, commentId, replyId));
     }
 
 }
