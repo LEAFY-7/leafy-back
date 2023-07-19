@@ -24,11 +24,37 @@
           and date(DATE_SUB(NOW(), INTERVAL 7 DAY)) > date(created_at)
     </delete>
 
-    <select id="findByUserId" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
+    <delete id="deleteOneAlarm">
+        delete
+        from alarm
+        where id = #{id}
+    </delete>
+
+    <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
         select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where user_id = #{userId}
-        order by created_at desc
+          and id &lt;= #{scrollRequest.key}
+        order by created_at desc limit #{scrollRequest.size}
+    </select>
+
+    <select id="findCountByUserId" resultType="int">
+        select ifnull(count(case when checked ='false' then 1 end), 0) as count
+        from alarm
+        where user_id = #{userId}
+    </select>
+
+    <select id="findById" resultType="Hashmap">
+        select id, user_id, type, checked, table_id, msg, created_at
+        from alarm
+        where id = #{id}
+    </select>
+
+    <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
+        select id, user_id, type, checked, table_id, msg, created_at
+        from alarm
+        where user_id = #{userId}
+        order by created_at desc limit #{scrollRequest.size}
     </select>
 
 </mapper>
