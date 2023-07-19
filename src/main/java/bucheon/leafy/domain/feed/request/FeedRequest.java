@@ -15,9 +15,7 @@ public class FeedRequest {
     private FeedType feedType;
 
     @Builder
-    private FeedRequest(Long feedId, Long userId, String title, String content, FeedType feedType) {
-        this.feedId = feedId;
-        this.userId = userId;
+    private FeedRequest(String title, String content, FeedType feedType) {
         this.title = title;
         this.content = content;
         this.feedType = feedType;

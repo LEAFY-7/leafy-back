@@ -5,43 +5,58 @@ import bucheon.leafy.domain.feed.request.FeedReplyRequest;
 import bucheon.leafy.domain.feed.response.FeedReplyResponse;
 import bucheon.leafy.exception.FeedCommentDataAccessException;
 import bucheon.leafy.exception.FeedCommentNotFoundException;
+import bucheon.leafy.util.request.ScrollRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FeedReplyService {
 
-    private final FeedReplyMapper mapper;
+    private final FeedReplyMapper feedReplyMapper;
 
-    public List<FeedReplyResponse> getReplies(Long commentId) {
-        return mapper.findReplyList(commentId);
+    public List<FeedReplyResponse> getReplies(Long feedId, Long commentId, ScrollRequest scrollRequest) {
+        if (scrollRequest.hasKey()) {
+            return feedReplyMapper.findReplyListScroll(feedId, commentId, scrollRequest);
+        } else if (scrollRequest.getKey() == null) {
+            return feedReplyMapper.findReplyListFirst(feedId, commentId, scrollRequest);
+        } else {
+            return null;
+        }
     }
 
     public FeedReplyResponse findReplyById(Long replyId) {
-        return mapper.findReplyById(replyId).orElseThrow(FeedCommentNotFoundException::new);
+        return Optional.of(feedReplyMapper.findReplyById(replyId)).orElseThrow(FeedCommentNotFoundException::new);
     }
 
-    public Long saveReply(Long feedId, Long commentId, FeedReplyRequest request) {
-        request.setFeedId(feedId);
-        request.setCommentId(commentId);
-        return mapper.saveReply(request);
+    public Long saveReply(Long userId, Long feedId, Long commentId, FeedReplyRequest request) {
+        feedReplyMapper.saveReply(userId, feedId, commentId, request);
+
+        return request.getReplyId();
     }
 
-    public Long updateReply(Long feedId, Long commentId, Long replyId, FeedReplyRequest request) {
-        request.setFeedId(feedId);
-        request.setCommentId(commentId);
-        request.setReplyId(replyId);
-        if( mapper.editReply(request) == 1 ) {
-            return replyId;
+    public Map<String, Object> updateReply(Long replyId, Long userId, Long feedId, Long commentId, FeedReplyRequest request) {
+        if( feedReplyMapper.editReply(replyId, userId, feedId, commentId, request) == 1 ) {
+            FeedReplyResponse response = feedReplyMapper.findReplyById(commentId);
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("data", response);
+            responseMap.put("message", "대댓글 수정 완료");
+            return responseMap;
         } else {
             throw new FeedCommentDataAccessException();
         }
     }
 
-    public void deleteReply(Long replyId) {
-        mapper.deleteReply(replyId);
+    public String deleteReply(Long replyId, Long userId, Long feedId, Long commentId) {
+        if( feedReplyMapper.deleteReply(replyId, userId, feedId, commentId) == 1 ) {
+            return "대댓글 삭제 완료";
+        } else {
+            throw new FeedCommentDataAccessException();
+        }
     }
 }

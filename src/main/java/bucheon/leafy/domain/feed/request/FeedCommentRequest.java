@@ -11,10 +11,7 @@ public class FeedCommentRequest {
     private String comment;
 
     @Builder
-    private FeedCommentRequest(Long commentId, Long userId, Long feedId, String comment) {
-        this.commentId = commentId;
-        this.userId = userId;
-        this.feedId = feedId;
+    private FeedCommentRequest(String comment) {
         this.comment = comment;
     }
 }

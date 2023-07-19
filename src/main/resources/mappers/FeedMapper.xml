@@ -3,35 +3,31 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
-    <select id="findFeedListFirst" resultType="FeedResponse">
-        select * from feed where is_hide = false and is_delete = false ORDER BY feed_id DESC LIMIT 10;
+    <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
+        select * from feed where is_delete = false ORDER BY feed_id DESC LIMIT #{size}
     </select>
 
-    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="java.lang.Long">
-        select * from feed where is_delete = false and feed_id &lt;= #{feedId} ORDER BY feed_id DESC LIMIT 10;
+    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="ScrollRequest">
+        select * from feed where is_delete = false and feed_id &lt; #{key} ORDER BY feed_id DESC LIMIT #{size}
     </select>
 
     <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >
-        select * from feed where feed_id = #{feedId} and is_delete = false;
+        select * from feed where feed_id = #{feedId} and is_delete = false
     </select>
 
-    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="feedId">
-        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{title}, #{content}, false, #{feedType}, now(), now())
+    <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="request.feedId">
+        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{request.title}, #{request.content}, false, #{request.feedType}, now(), now())
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
-        update feed set title = #{title}, content = #{content}, modified_at = now() where feed_id = #{feedId}
+        update feed set title = #{request.title}, content = #{request.content}, feed_type = #{request.feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
     </update>
 
     <delete id="deleteAllFeeds">
         delete from feed
     </delete>
 
-    <delete id="hardDeleteFeed"  parameterType="java.lang.Long">
-        delete from feed where feed_id = #{feedId}
-    </delete>
-
-    <update id="softDeleteFeed" parameterType="java.lang.Long">
-        update feed set is_delete = true where feed_id = #{feedId}
+    <update id="deleteFeed" parameterType="java.lang.Long">
+        update feed set is_delete = true where feed_id = #{feedId} and user_id = #{userId}
     </update>
 </mapper>

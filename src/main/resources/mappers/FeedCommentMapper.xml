@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedCommentMapper">
-    <select id="findCommentList" resultType="FeedCommentResponse">
-        select * from feed_comment where feed_id = #{feedId}
+    <select id="findCommentListFirst" resultType="FeedCommentResponse" parameterType="ScrollRequest">
+        select * from feed_comment where is_delete = false and feed_id = #{feedId} ORDER BY comment_id DESC LIMIT #{scrollRequest.size}
+    </select>
+
+    <select id="findCommentListScroll" resultType="FeedCommentResponse" parameterType="ScrollRequest">
+        select * from feed_comment where is_delete = false and feed_id = #{feedId} and comment_id &lt; #{scrollRequest.key} ORDER BY comment_id DESC LIMIT #{scrollRequest.size}
     </select>
 
     <select id="findCommentById" resultType="FeedCommentResponse" parameterType="java.lang.Long">
-        select * from feed_comment where comment_id = #{commentId}
+        select * from feed_comment where comment_id = #{commentId} and is_delete = false
     </select>
 
-    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyProperty="commentId">
-        insert into feed_comment(user_id,feed_id,comment,created_at,modified_at) values (#{userId}, #{feedId}, #{comment}, now(), now())
+    <insert id="saveComment" parameterType="FeedCommentRequest" useGeneratedKeys="true" keyColumn="comment_id" keyProperty="commentId">
+        insert into feed_comment (user_id,feed_id,comment,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{request.comment}, false, now(), now())
     </insert>
 
     <update id="editComment" parameterType="FeedCommentRequest">
-        update feed_comment set comment = #{comment}, modified_at = now() where comment_id = #{commentId}
+        update feed_comment set comment = #{request.comment}, modified_at = now() where comment_id = #{commentId} and user_id = #{userId} and feed_id = #{feedId}
     </update>
 
     <delete id="deleteAllComments">
@@ -25,7 +27,6 @@
     </delete>
 
     <delete id="deleteComment"  parameterType="java.lang.Long">
-        delete from feed_comment where comment_id = #{commentId}
+        update feed_comment set is_delete = true where comment_id = #{commentId} and user_id = #{userId} and feed_id = #{feedId}
     </delete>
-
 </mapper>
