@@ -27,7 +27,7 @@ public class FeedController {
 
     @Operation(summary = "피드 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedResponse>> getFeeds(@RequestParam(required = false) ScrollRequest scrollRequest) {
+    public ResponseEntity<List<FeedResponse>> getFeeds(ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getFeeds(scrollRequest));
     }
 
