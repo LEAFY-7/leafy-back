@@ -21,7 +21,7 @@ public class SearchController {
     @Operation(summary = "식물 검색")
     @GetMapping
     public ResponseEntity<PageResponse> getSearch(@RequestParam String searchName, PageRequest pageRequest) {
-        return searchService.getSearch(searchName, pageRequest);
+        return ResponseEntity.ok().body(searchService.getSearch(searchName, pageRequest));
 
     }
 

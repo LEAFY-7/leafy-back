@@ -1,15 +1,15 @@
 package bucheon.leafy.domain.feed.request;
 
 import bucheon.leafy.domain.feed.FeedType;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 public class FeedRequest {
+
+    @JsonIgnore
     private Long feedId;
-    private Long userId;
     private String title;
     private String content;
     private FeedType feedType;

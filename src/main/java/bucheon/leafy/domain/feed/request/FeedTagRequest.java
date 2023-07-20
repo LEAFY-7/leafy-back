@@ -2,10 +2,12 @@ package bucheon.leafy.domain.feed.request;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class FeedTagRequest {
     private Long feed_id;
     private List<String> tag;

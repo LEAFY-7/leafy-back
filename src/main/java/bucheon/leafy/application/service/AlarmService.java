@@ -6,12 +6,18 @@ import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.alarm.request.AlarmCheckRequest;
 import bucheon.leafy.domain.alarm.request.AlarmRequest;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
+import bucheon.leafy.exception.AlarmDataAccessException;
+import bucheon.leafy.exception.AlarmNotExistException;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +50,36 @@ public class AlarmService {
     @Transactional
     public void deleteAlarm(){alarmMapper.deleteAlarm();}
 
+    @Transactional
+    public String deleteAlarm(AuthUser user, long id){
+        Optional<HashMap<String, Object>> data = alarmMapper.findById(id);
+        data.orElseThrow(AlarmNotExistException::new);
 
-    public List<AlarmResponse> getAlarm(AuthUser user) {
-        return alarmMapper.findByUserId(user.getUserId());
+        if(Long.parseLong(data.get().get("user_id").toString()) != user.getUserId()){
+            throw new AlarmNotExistException();
+        }
+        if(alarmMapper.deleteOneAlarm(id) != 1){
+            throw new AlarmDataAccessException();
+        }
+        return "댓글 삭제 성공";
+    }
+
+    public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
+        List<AlarmResponse> list;
+        if(scrollRequest.getKey() == null){
+            list =  alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+        } else {
+            list = alarmMapper.findByUserId(user.getUserId(), scrollRequest);
+        }
+
+        ScrollResponse scrollResponse = new ScrollResponse();
+        scrollResponse.setScrollRequest(scrollRequest);
+        scrollResponse.setBody(list);
+
+        return scrollResponse;
+    }
+
+    public int getNewAlarmCount(AuthUser user) {
+        return alarmMapper.findCountByUserId(user.getUserId());
     }
 }

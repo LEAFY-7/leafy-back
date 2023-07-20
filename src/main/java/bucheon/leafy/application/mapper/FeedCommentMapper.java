@@ -20,9 +20,9 @@ public interface FeedCommentMapper {
 
     Long saveComment(@Param("userId") Long userId, @Param("feedId") Long feedId, FeedCommentRequest request);
 
-    int editComment(@Param("commentId") Long commentId, @Param("userId") Long userId, @Param("feedId") Long feedId, FeedCommentRequest request);
+    int editComment(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedCommentRequest request);
 
     void deleteAllComments();
 
-    int deleteComment(Long commentId, Long userId, Long feedId);
+    int deleteComment(Long userId, Long feedId, Long commentId);
 }

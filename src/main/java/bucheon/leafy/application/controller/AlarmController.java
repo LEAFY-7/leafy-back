@@ -3,15 +3,15 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.AlarmService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
+import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,14 +24,25 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     // TODO 스크롤 적용해서 코드 수정하기
-    @Operation(summary = "유저의 알림 조회")
+    @Operation(summary = "유저의 알림 리스트 조회")
     @GetMapping
-    public ResponseEntity<List<AlarmResponse>> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
-        return ResponseEntity.ok().body(alarmService.getAlarm(user));
+    public ResponseEntity<ScrollResponse> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, ScrollRequest scrollRequest) {
+        return ResponseEntity.ok().body(alarmService.getAlarm(user, scrollRequest));
     }
 
-    // TODO 신규 알림 갯수
-    // TODO 유저가 알림 삭제 처리 가능 로직 작성
+    @Operation(summary = "유저의 새 알림 갯수 조회")
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getNewAlarmCount(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
+        return ResponseEntity.ok().body(alarmService.getNewAlarmCount(user));
+    }
+
+    @Operation(summary = "유저의 알림 삭제 (단건)")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                              @PathVariable @Parameter(description = "삭제할 알림 id") long id){
+        return ResponseEntity.ok().body(alarmService.deleteAlarm(user, id));
+    }
+
 
 
 }
