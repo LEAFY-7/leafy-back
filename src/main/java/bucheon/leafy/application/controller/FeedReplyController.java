@@ -26,7 +26,7 @@ public class FeedReplyController {
 
     @Operation(summary = "피드 대댓글 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedReplyResponse>> getReplies(@PathVariable Long feedId, @PathVariable Long commentId, @RequestParam(required = false) ScrollRequest scrollRequest) {
+    public ResponseEntity<List<FeedReplyResponse>> getReplies(@PathVariable Long feedId, @PathVariable Long commentId, ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getReplies(feedId, commentId, scrollRequest));
     }
 
