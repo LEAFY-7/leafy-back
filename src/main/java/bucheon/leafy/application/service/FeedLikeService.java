@@ -12,11 +12,12 @@ import bucheon.leafy.exception.UserLikeNotFoundException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional
+@Transactional(isolation = Isolation.REPEATABLE_READ)
 @RequiredArgsConstructor
 public class FeedLikeService {
 
@@ -25,6 +26,8 @@ public class FeedLikeService {
     private final FeedLikeInfoRepository feedLikeInfoRepository;
 
 
+    // 레코드에 직접적으로 락을 걸기 때문에 성능이 떨어질 수 있음
+    // 추후에 saveLikeInfo 메서드를 다른 트랜잭션(컨트롤러 레이어)으로 변경을 하거나 낙관적 락으로 변경을 고려
     public void saveLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
