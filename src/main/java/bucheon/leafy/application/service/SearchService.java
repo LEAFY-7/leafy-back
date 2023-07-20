@@ -18,13 +18,13 @@ public class SearchService {
 
     private final SearchMapper searchMapper;
 
-    public ResponseEntity<PageResponse> getSearch(String searchName, PageRequest pageRequest) {
+    public PageResponse getSearch(String searchName, PageRequest pageRequest) {
         pageRequest = new PageRequest(pageRequest.getPage(), pageRequest.getLimit(), pageRequest.getOffset(), pageRequest.getSortColumn(), pageRequest.getSortStatus());
         List<SearchResponse> list = searchMapper.findSearchByPumName(searchName, pageRequest);
         long total = searchMapper.count(searchName);
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
-        return ResponseEntity.status(200).body(pageResponse);
+        return pageResponse;
     }
 
     @Transactional

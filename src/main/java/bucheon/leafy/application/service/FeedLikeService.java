@@ -2,7 +2,6 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.repository.FeedLikeInfoRepository;
 import bucheon.leafy.application.repository.FeedLikeRepository;
-import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
@@ -22,29 +21,45 @@ import org.springframework.transaction.annotation.Transactional;
 public class FeedLikeService {
 
     private final UserRepository userRepository;
-    private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedLikeInfoRepository feedLikeInfoRepository;
+
 
     public void saveLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        Feed feed = feedRepository.findById(feedId)
-                .orElseThrow(FeedNotFoundException::new);
 
-        feedLikeRepository.likeIncrease(feed);
+        Feed feed = increaseLikeCount(feedId);
         saveLikeInfo(user, feed);
     }
+
+
+    public Feed increaseLikeCount(Long feedId) {
+        FeedLikeCount feedLikeCount = feedLikeRepository.findByFeedId(feedId)
+                .orElseThrow(FeedNotFoundException::new);
+
+        feedLikeCount.like();
+        return feedLikeCount.getFeed();
+    }
+
 
     public void deleteLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        Feed feed = feedRepository.findById(feedId)
-                .orElseThrow(FeedNotFoundException::new);
 
-        feedLikeRepository.likeDecrease(feed);
+        Feed feed = decreaseLikeCount(feedId);
         deleteLikeInfo(user, feed);
     }
+
+
+    public Feed decreaseLikeCount(Long feedId) {
+        FeedLikeCount feedLikeCount = feedLikeRepository.findByFeedId(feedId)
+                .orElseThrow(FeedNotFoundException::new);
+
+        feedLikeCount.likeCancel();
+        return feedLikeCount.getFeed();
+    }
+
 
     public void saveLikeInfo(User user, Feed feed) {
         FeedLikeInfo userLike = FeedLikeInfo.of(user, feed);
