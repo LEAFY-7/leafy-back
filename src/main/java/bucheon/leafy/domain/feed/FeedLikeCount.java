@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
+@Table(indexes = @Index(columnList = "feed_id"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedLikeCount {
 
