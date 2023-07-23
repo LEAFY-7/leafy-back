@@ -45,6 +45,10 @@ public class JwtFilter extends GenericFilterBean {
 
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                 httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
+
+                log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
+                log.info("refreshToken = {}", refreshToken);
+                log.info("header = {}", httpServletResponse);
             }
         } else {
             log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
