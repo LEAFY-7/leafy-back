@@ -35,31 +35,22 @@ public class JwtFilter extends GenericFilterBean {
         log.info("bool = {}", StringUtils.hasText(jwt));
 
         if (StringUtils.hasText(jwt)) {
-            try {
                 if (tokenProvider.validateToken(jwt)) {
                     Authentication authentication = tokenProvider.getAuthentication(jwt);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
                 }
-            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
-
-                log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
-                log.info("refreshToken = {}", refreshToken);
-                log.info("header = {}", httpServletResponse);
-            } finally {
-                log.info("doFilter : finally 실행");
-            }
         } else {
-            log.info("엘스");
-            log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String refreshToken = tokenProvider.createRefreshToken(authentication);
+            log.info("refreshToken = {} ", refreshToken);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+            httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
         }
 
+        log.info("servletRequest = {}", servletRequest);
+        log.info("servletResponse = {}", servletResponse);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
