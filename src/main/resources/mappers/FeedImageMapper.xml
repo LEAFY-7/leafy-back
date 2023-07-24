@@ -2,15 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bucheon.leafy.application.mapper.FeedImageMapper">
 
-    <select id="findImageList" resultType="java.lang.String">
-        select image_name from feed_image where feed_id = #{feedId}
+    <select id="findImageList" resultType="FeedImageResponse" parameterType="java.lang.Long">
+        select image_id, image_name from feed_image where feed_id = #{feedId}
     </select>
 
-    <insert id="saveImage" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="image_id">
+    <select id="findImage" resultType="java.lang.String" parameterType="java.lang.Long">
+        select image_name from feed_image where image_id = #{imageId}
+    </select>
+
+    <insert id="saveImage" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="image_id" keyProperty="request.imageId">
         INSERT INTO feed_image (feed_id, image_name)
         VALUES
-        <foreach collection="list" item="request" separator=",">
-            (#{request.feedId}, #{request.imageName})
+        <foreach collection="request" item="request" separator=",">
+            (#{feedId}, #{request.imageName})
         </foreach>
     </insert>
 
@@ -19,7 +23,7 @@
     </delete>
 
     <delete id="deleteImage">
-        delete from feed_image where feed_id = #{feedId} and image_name = #{imageName}
+        delete from feed_image where feed_id = #{feedId} and image_id = #{imageId}
     </delete>
 
 </mapper>

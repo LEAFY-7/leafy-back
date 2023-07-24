@@ -8,9 +8,9 @@ import java.util.List;
 
 @Mapper
 public interface FeedTagMapper {
-    List<FeedTagResponse> findTagList();
+    List<FeedTagResponse> findTagList(Long feedId);
 
-    Long saveTag(FeedTagRequest request);
+    void saveTag(List<FeedTagRequest> request);
 
-    void deleteTag();
+    int deleteTag(Long feedId, Long tagId);
 }

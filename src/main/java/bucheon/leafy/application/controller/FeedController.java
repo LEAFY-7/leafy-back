@@ -5,6 +5,7 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +28,7 @@ public class FeedController {
 
     @Operation(summary = "피드 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedResponse>> getFeeds(ScrollRequest scrollRequest) {
+    public ResponseEntity<ScrollResponse> getFeeds(ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getFeeds(scrollRequest));
     }
 
@@ -40,9 +41,9 @@ public class FeedController {
     @Operation(summary = "피드 등록")
     @PostMapping
     public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                         @RequestBody FeedRequest request) {
+                                         @RequestBody FeedRequest request, @RequestParam List<String> tagList) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.saveFeed(userId, request));
+        return ResponseEntity.ok().body(service.saveFeed(userId, request, tagList));
     }
 
     @Operation(summary = "피드 수정")

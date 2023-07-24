@@ -1,19 +1,18 @@
-package bucheon.leafy.domain.feed.request;
+package bucheon.leafy.domain.feed.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class FeedImageRequest {
-    @JsonIgnore
+public class FeedImageResponse {
     private Long imageId;
     private String imageName;
+    private String imageUrl;
 
     @Builder
-    private FeedImageRequest(Long imageId, String imageName) {
+    public FeedImageResponse(Long imageId, String imageName) {
         this.imageId = imageId;
         this.imageName = imageName;
     }

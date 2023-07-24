@@ -5,4 +5,19 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedTagMapper">
 
+    <select id="findTagList" resultType="FeedTagResponse" parameterType="java.lang.Long">
+        select * from feed_tag where feed_id = #{feedId}
+    </select>
+
+    <insert id="saveTag" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="tag_id" keyProperty="request.tagId">
+        INSERT INTO feed_tag (feed_id, tag)
+        VALUES
+        <foreach collection="list" item="request" separator=",">
+            (#{request.feedId}, #{request.tag})
+        </foreach>
+    </insert>
+
+    <delete id="deleteTag" parameterType="java.lang.Long">
+        delete from feed_tag where feed_id = #{feedId} and tag_id = #{tagId}
+    </delete>
 </mapper>

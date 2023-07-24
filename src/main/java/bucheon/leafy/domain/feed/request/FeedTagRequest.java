@@ -9,12 +9,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class FeedTagRequest {
-    private Long feed_id;
-    private List<String> tag;
+
+    private Long feedId;
+    private Long tagId;
+    private String tag;
 
     @Builder
-    private FeedTagRequest(Long feed_id, List<String> tag) {
-        this.feed_id = feed_id;
+    private FeedTagRequest(Long feedId, Long tagId, String tag) {
+        this.feedId = feedId;
+        this.tagId = tagId;
         this.tag = tag;
     }
 }
