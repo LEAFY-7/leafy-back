@@ -13,6 +13,7 @@ import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -43,6 +45,8 @@ public class UserService {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        log.info("signIn : SecurityContextHolder.getContext() = {}", SecurityContextHolder.getContext());
 
         String authority = authentication.getAuthorities().stream()
                 .map(g -> g.getAuthority()).findFirst()
