@@ -31,6 +31,8 @@ public class JwtFilter extends GenericFilterBean {
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
+        log.info("jwt = {}", jwt);
+
         if (StringUtils.hasText(jwt)) {
             try {
                 if (tokenProvider.validateToken(jwt)) {
@@ -49,6 +51,8 @@ public class JwtFilter extends GenericFilterBean {
                 log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
                 log.info("refreshToken = {}", refreshToken);
                 log.info("header = {}", httpServletResponse);
+            } finally {
+                log.info("doFilter : finally 실행");
             }
         } else {
             log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
