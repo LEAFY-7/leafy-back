@@ -40,15 +40,12 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public ResponseEntity signIn(SignInRequest signInRequest) {
-        log.info("signIn : signInRequest = {}", signInRequest);
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        log.info("signIn : SecurityContextHolder.getContext() = {}", SecurityContextHolder.getContext());
 
         String authority = authentication.getAuthorities().stream()
                 .map(g -> g.getAuthority()).findFirst()
