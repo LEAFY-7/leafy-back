@@ -107,7 +107,7 @@ public class TokenProvider implements InitializingBean {
         return false;
     }
 
-    public String generateRefreshToken(Authentication authentication) {
+    public String createRefreshToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
