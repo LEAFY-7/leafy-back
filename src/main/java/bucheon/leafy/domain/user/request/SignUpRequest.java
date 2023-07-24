@@ -41,22 +41,22 @@ public class SignUpRequest {
 
 
         // TODO : 주소
-        private String zipcode;
+        private String zoneCode;
 
-        private String street;
+        private String address;
 
-        private String lot;
+        private String jibunAddress;
 
-        private String detail;
+        private String roadAddress;
 
-        private String reference;
+        private String detailAddress;
 
         private Boolean addressIsHide;
 
         @Builder
         private SignUpRequest(String password, String email, String nickName,  String name,
-                              String simpleIntroduction, String phone, String zipcode,
-                              String street, String lot, String detail, String reference,
+                              String simpleIntroduction, String phone, String zoneCode,
+                              String address, String jibunAddress, String roadAddress, String detailAddress,
                               Boolean addressIsHide, LocalDate birthDay, Gender gender) {
 
                 this.password = password;
@@ -65,11 +65,11 @@ public class SignUpRequest {
                 this.name = name;
                 this.simpleIntroduction = simpleIntroduction;
                 this.phone = phone;
-                this.zipcode = zipcode;
-                this.street = street;
-                this.lot = lot;
-                this.detail = detail;
-                this.reference = reference;
+                this.zoneCode = zoneCode;
+                this.address = address;
+                this.jibunAddress = jibunAddress;
+                this.roadAddress = roadAddress;
+                this.detailAddress = detailAddress;
                 this.addressIsHide = addressIsHide;
                 this.birthDay = birthDay;
                 this.gender = gender;
