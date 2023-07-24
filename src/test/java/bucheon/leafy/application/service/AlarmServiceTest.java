@@ -4,18 +4,14 @@ import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.alarm.AlarmType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
 @Transactional
 class AlarmServiceTest extends IntegrationTestSupport {
 
-//    @Autowired
-//    AlarmService alarmService;
 
     @Test
     @DisplayName("알림을 저장한다")
