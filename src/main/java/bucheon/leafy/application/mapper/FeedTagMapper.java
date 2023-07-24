@@ -3,6 +3,7 @@ package bucheon.leafy.application.mapper;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
 import bucheon.leafy.domain.feed.response.FeedTagResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface FeedTagMapper {
     List<FeedTagResponse> findTagList(Long feedId);
 
-    void saveTag(List<FeedTagRequest> request);
+    void saveTag(@Param("feedId") Long feedId, @Param("request") List<FeedTagRequest> request);
 
-    int deleteTag(Long feedId, Long tagId);
+    int deleteTagNotIn(@Param("feedId") Long feedId, @Param("request") List<FeedTagRequest> request);
 }

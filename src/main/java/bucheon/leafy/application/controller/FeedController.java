@@ -3,9 +3,12 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
+import bucheon.leafy.domain.feed.request.FeedTagRequest;
+import bucheon.leafy.domain.feed.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
+import com.amazonaws.Request;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +37,7 @@ public class FeedController {
 
     @Operation(summary = "피드 상세")
     @GetMapping("/{feedId}")
-    public ResponseEntity<FeedResponse> getFeedById(@PathVariable Long feedId) {
+    public ResponseEntity<Map<String, Object>> getFeedById(@PathVariable Long feedId) {
         return ResponseEntity.ok().body(service.getFeedById(feedId));
     }
 
@@ -49,14 +52,9 @@ public class FeedController {
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Map<String, Object>> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
+    public ResponseEntity<String> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedUpdateRequest request) {
         Long userId = user.getUserId();
-//        FeedResponse response = service.getFeedById(feedId);
-//        if( userId.equals(response.getUserId()) ) {
-//            return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
-//        } else {
-//            throw new AccessDeniedException("수정 권한이 없습니다.");
-//        }
+
         return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
     }
 
@@ -65,12 +63,7 @@ public class FeedController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<String> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
         Long userId = user.getUserId();
-//        FeedResponse response = service.getFeedById(feedId);
-//        if( userId.equals(response.getUserId()) ) {
-//            return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
-//        } else {
-//            throw new AccessDeniedException("삭제 권한이 없습니다.");
-//        }
+
         return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
     }
 }

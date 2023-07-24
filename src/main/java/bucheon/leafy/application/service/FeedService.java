@@ -11,6 +11,7 @@ import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
+import bucheon.leafy.domain.feed.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
 import bucheon.leafy.exception.FeedDataAccessException;
@@ -53,8 +54,13 @@ public class FeedService {
         }
     }
 
-    public FeedResponse getFeedById(Long feedId) {
-        return Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new);
+    public Map<String, Object> getFeedById(Long feedId) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        responseMap.put("feed", Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new));
+        responseMap.put("tag", findTagList(feedId));
+
+        return responseMap;
     }
 
     public List<FeedTagResponse> findTagList(Long feedId) {
@@ -64,7 +70,12 @@ public class FeedService {
     public Long saveFeed(Long userId, FeedRequest request, List<String> tagList) {
         feedMapper.saveFeed(userId, request);
         Long feedId = request.getFeedId();
-        saveFeedTag(feedId, tagList);
+        List<FeedTagRequest> tagRequestList = new ArrayList<>();
+        for(String tag : tagList) {
+            FeedTagRequest tagRequest = FeedTagRequest.builder().tag(tag).build();
+            tagRequestList.add(tagRequest);
+        }
+        saveFeedTag(feedId, tagRequestList);
         initFeedLike(feedId);
 
         return feedId;
@@ -79,27 +90,32 @@ public class FeedService {
         feedLikeRepository.save(likeCount);
     }
 
-    public void saveFeedTag(Long feedId, List<String> tagList) {
-        List<FeedTagRequest> requestList = new ArrayList<>();
-
-        for(String tag : tagList) {
-            FeedTagRequest tagRequest = FeedTagRequest.builder().feedId(feedId).tag(tag).build();
-            requestList.add(tagRequest);
-        }
-
-        feedTagMapper.saveTag(requestList);
+    public void saveFeedTag(Long feedId, List<FeedTagRequest> saveFeedList) {
+        feedTagMapper.saveTag(feedId, saveFeedList);
     }
 
-    public Map<String, Object> updateFeed(Long feedId, Long userId, FeedRequest request) {
-        if( feedMapper.editFeed(feedId, userId, request) == 1 ) {
-            FeedResponse response = feedMapper.findFeedById(feedId);
-            Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("data", response);
-            responseMap.put("message", "피드 수정 완료");
-            return responseMap;
+    public String updateFeed(Long feedId, Long userId, FeedUpdateRequest request) {
+        if( feedMapper.editFeed(feedId, userId, request.getFeedRequest()) == 1 ) {
+            List<FeedTagRequest> deleteTagList = new ArrayList<>();
+            List<FeedTagRequest> saveFeedList = new ArrayList<>();
+            for( FeedTagRequest tagRequest : request.getTagRequestList() ) {
+                Long tagId = tagRequest.getTagId();
+                if (tagId != null && tagId > 0) {
+                    deleteTagList.add(tagRequest);
+                } else {
+                    saveFeedList.add(tagRequest);
+                }
+            }
+            deleteFeedTag(feedId, deleteTagList);
+            saveFeedTag(feedId, saveFeedList);
+            return "피드 수정 완료";
         } else {
             throw new FeedDataAccessException();
         }
+    }
+
+    public void deleteFeedTag(Long feedId, List<FeedTagRequest> deleteTagList) {
+        feedTagMapper.deleteTagNotIn(feedId, deleteTagList);
     }
 
     public String deleteFeed(Long feedId, Long userId) {

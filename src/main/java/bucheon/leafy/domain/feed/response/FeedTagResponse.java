@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FeedTagResponse {
     private Long tagId;
-    private Long feedId;
     private String tag;
 
     @Builder
-    private FeedTagResponse(Long tagId, Long feedId, String tag) {
+    private FeedTagResponse(Long tagId, String tag) {
         this.tagId = tagId;
-        this.feedId = feedId;
         this.tag = tag;
     }
 }
