@@ -43,7 +43,7 @@ public class JwtFilter extends GenericFilterBean {
                 }
             } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String refreshToken = tokenProvider.generateRefreshToken(authentication);
+                String refreshToken = tokenProvider.createRefreshToken(authentication);
 
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                 httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);

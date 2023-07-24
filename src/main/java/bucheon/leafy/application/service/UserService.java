@@ -40,6 +40,8 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public ResponseEntity signIn(SignInRequest signInRequest) {
+        log.info("signIn : signInRequest = {}", signInRequest);
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
 
@@ -55,6 +57,7 @@ public class UserService {
         String role = authority.replace("ROLE_", "");
 
         String jwt = tokenProvider.createToken(authentication);
+//        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
