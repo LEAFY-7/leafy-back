@@ -24,21 +24,23 @@ public class UserResponse {
 
     private String simpleIntroduction;
 
-    private String addressZipcode;
+    private String zoneCode;
 
-    private String addressStreet;
+    private String address;
 
-    private String addressLot;
+    private String jibunAddress;
 
-    private String addressDetail;
+    private String roadAddress;
 
-    private String addressReference;
+    private String detailAddress;
+
 
     @Builder
     public UserResponse(String email, Gender gender, LocalDate birthDay,
                         String name, String nickName, String phone,
-                        String simpleIntroduction, String zipcode,
-                        String street, String lot, String detail, String reference) {
+                        String simpleIntroduction, String zoneCode,
+                        String address, String jibunAddress,
+                        String roadAddress, String detailAddress) {
 
         this.email = email;
         this.gender = gender;
@@ -47,11 +49,11 @@ public class UserResponse {
         this.nickName = nickName;
         this.phone = phone;
         this.simpleIntroduction = simpleIntroduction;
-        this.addressZipcode = zipcode;
-        this.addressStreet = street;
-        this.addressLot = lot;
-        this.addressDetail = detail;
-        this.addressReference = reference;
+        this.zoneCode = zoneCode;
+        this.address = address;
+        this.jibunAddress = jibunAddress;
+        this.roadAddress = roadAddress;
+        this.detailAddress = detailAddress;
     }
 
     public static UserResponse of(User user) {
@@ -63,11 +65,11 @@ public class UserResponse {
                 .birthDay(user.getBirthDay())
                 .gender(user.getGender())
                 .simpleIntroduction(user.getSimpleIntroduction())
-                .zipcode(user.getAddress().getZipcode())
-                .street(user.getAddress().getStreet())
-                .lot(user.getAddress().getLot())
-                .detail(user.getAddress().getDetail())
-                .reference(user.getAddress().getReference())
+                .zoneCode(user.getAddress().getDetailAddress())
+                .address(user.getAddress().getAddress())
+                .jibunAddress(user.getAddress().getJibunAddress())
+                .roadAddress(user.getAddress().getRoadAddress())
+                .detailAddress(user.getAddress().getDetailAddress())
                 .build();
     }
 

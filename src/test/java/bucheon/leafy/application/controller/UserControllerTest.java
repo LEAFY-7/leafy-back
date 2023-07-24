@@ -46,11 +46,11 @@ class UserControllerTest {
                 .phone("01012345678")
                 .birthDay(LocalDate.now())
                 .gender(Gender.MALE)
-                .zipcode("12578")
-                .street("부천")
-                .lot("상동")
-                .detail("호수공원")
-                .reference("1동 1호")
+                .zoneCode("12578")
+                .address("부천")
+                .jibunAddress("상동")
+                .roadAddress("호수공원")
+                .detailAddress("1동 1호")
                 .build();
 
         //when //then

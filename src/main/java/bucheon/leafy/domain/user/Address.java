@@ -21,35 +21,36 @@ public class Address extends BaseDeleteEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String zipcode;
+    private String zoneCode;
 
-    private String street;
+    private String address;
 
-    private String lot;
+    private String jibunAddress;
 
-    private String detail;
+    private String roadAddress;
 
-    private String reference;
+    private String detailAddress;
 
     private Boolean isHide;
 
     @Builder
-    private Address(String zipcode, String street, String lot, String detail, String reference, Boolean isHide) {
-        this.zipcode = zipcode;
-        this.street = street;
-        this.lot = lot;
-        this.detail = detail;
-        this.reference = reference;
+    private Address(String zoneCode, String address, String jibunAddress,
+                    String roadAddress, String detailAddress, Boolean isHide) {
+        this.zoneCode = zoneCode;
+        this.address = address;
+        this.jibunAddress = jibunAddress;
+        this.roadAddress = roadAddress;
+        this.detailAddress = detailAddress;
         this.isHide = isHide;
     }
 
     public static Address of(SignUpRequest signUpRequest) {
         return Address.builder()
-                .zipcode(signUpRequest.getZipcode())
-                .street(signUpRequest.getStreet())
-                .lot(signUpRequest.getLot())
-                .detail(signUpRequest.getDetail())
-                .reference(signUpRequest.getReference())
+                .zoneCode(signUpRequest.getZoneCode())
+                .address(signUpRequest.getAddress())
+                .jibunAddress(signUpRequest.getJibunAddress())
+                .roadAddress(signUpRequest.getRoadAddress())
+                .detailAddress(signUpRequest.getDetailAddress())
                 .isHide(signUpRequest.getAddressIsHide())
                 .build();
     }
