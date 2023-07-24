@@ -38,7 +38,6 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public ResponseEntity signIn(SignInRequest signInRequest) {
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
 
@@ -57,7 +56,6 @@ public class UserService {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         return new ResponseEntity<>(new TokenResponse(jwt, role), httpHeaders, HttpStatus.OK);
-
     }
 
     public Long signUp(SignUpRequest signUpRequest) {

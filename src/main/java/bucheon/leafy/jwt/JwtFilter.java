@@ -1,5 +1,7 @@
 package bucheon.leafy.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -24,14 +27,29 @@ public class JwtFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (StringUtils.hasText(jwt)) {
+            try {
+                if (tokenProvider.validateToken(jwt)) {
+                    Authentication authentication = tokenProvider.getAuthentication(jwt);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+                }
+            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                String refreshToken = tokenProvider.generateRefreshToken(authentication);
+
+                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+                httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
+
+                log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
+                log.info("refreshToken = {}", refreshToken);
+                log.info("header = {}", httpServletResponse);
+            }
         } else {
             log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
