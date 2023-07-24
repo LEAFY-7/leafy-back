@@ -32,6 +32,7 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI();
 
         log.info("jwt = {}", jwt);
+        log.info("bool = {}", StringUtils.hasText(jwt));
 
         if (StringUtils.hasText(jwt)) {
             try {
@@ -55,6 +56,7 @@ public class JwtFilter extends GenericFilterBean {
                 log.info("doFilter : finally 실행");
             }
         } else {
+            log.info("엘스");
             log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
 
