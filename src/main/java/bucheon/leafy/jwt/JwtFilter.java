@@ -32,23 +32,15 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI();
 
         if (StringUtils.hasText(jwt)) {
-            try {
-                if (tokenProvider.validateToken(jwt)) {
-                    Authentication authentication = tokenProvider.getAuthentication(jwt);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
-                }
-            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
+            if (tokenProvider.validateToken(jwt)) {
+                Authentication authentication = tokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 String refreshToken = tokenProvider.createRefreshToken(authentication);
 
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                 httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
-
-                log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
-                log.info("refreshToken = {}", refreshToken);
-                log.info("header = {}", httpServletResponse);
             }
         } else {
             log.info("엘스");
