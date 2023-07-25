@@ -1,7 +1,5 @@
 package bucheon.leafy.jwt;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
@@ -27,24 +24,16 @@ public class JwtFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        if (StringUtils.hasText(jwt)) {
-            if (tokenProvider.validateToken(jwt)) {
-                Authentication authentication = tokenProvider.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-                HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-                httpServletResponse.addHeader("Authorization", "Bearer " + refreshToken);
-            }
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Authentication authentication = tokenProvider.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
-            log.info("엘스");
-            log.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
