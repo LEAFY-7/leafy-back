@@ -97,6 +97,8 @@ public class TokenProvider implements InitializingBean {
             log.info("validateToken = {}", token);
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
+            log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
