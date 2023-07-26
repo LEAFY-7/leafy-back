@@ -6,11 +6,13 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
+import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,7 +42,9 @@ public class UserController {
     @Operation(summary = "로그인")
     @PostMapping("/sign-in")
     public ResponseEntity<TokenResponse> authorize(@Valid @RequestBody SignInRequest signInRequest) {
-        return userService.signIn(signInRequest);
+        TokenResponse tokenResponse = userService.signIn(signInRequest);
+        insertTokenInHeader(tokenResponse);
+        return ResponseEntity.status(200).body(tokenResponse);
     }
 
     @Operation(summary = "아이디 중복체크")
@@ -52,9 +56,14 @@ public class UserController {
 
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
-    public ResponseEntity<Long> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
+    public ResponseEntity<TokenResponse> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
         Long userId = userService.signUp(signUpRequest);
-        return ResponseEntity.status(200).body(userId);
+        SignInRequest signInRequest = SignInRequest.of(signUpRequest);
+        
+        TokenResponse tokenResponse = userService.signIn(signInRequest);
+        tokenResponse.addUserId(userId);
+        insertTokenInHeader(tokenResponse);
+        return ResponseEntity.status(200).body(tokenResponse);
     }
 
     @Operation(summary = "회원 이미지 등록")
@@ -91,6 +100,11 @@ public class UserController {
                                                         MultipartFile file) {
         Long userId = authUser.getUserId();
         userImageService.editUserBackgroundImage(userId, file);
+    }
+
+    private void insertTokenInHeader(TokenResponse tokenResponse) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenResponse.getToken());
     }
 
 }
