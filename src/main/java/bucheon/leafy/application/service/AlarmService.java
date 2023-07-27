@@ -59,7 +59,7 @@ public class AlarmService {
 
     public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
-            List<AlarmResponse> alarms =  alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+            List<AlarmResponse> alarms =  alarmMapper.findByUserId(user.getUserId(), scrollRequest);
             ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
             return new ScrollResponse(nextScrollRequest, alarms);
         } else {

@@ -34,7 +34,7 @@
         select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where user_id = #{userId}
-          and id &lt;= #{scrollRequest.key}
+          and id &lt; #{scrollRequest.key}
         order by created_at desc limit #{scrollRequest.size}
     </select>
 
