@@ -7,15 +7,13 @@ import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.PasswordNotMatchedException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.exception.enums.ExceptionKey;
-import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,7 +22,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -39,7 +36,7 @@ public class UserService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public ResponseEntity signIn(SignInRequest signInRequest) {
+    public TokenResponse signIn(SignInRequest signInRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
@@ -54,15 +51,16 @@ public class UserService {
         String role = authority.replace("ROLE_", "");
 
         String jwt = tokenProvider.createToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
+//        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + refreshToken);
-
-        return new ResponseEntity<>(new TokenResponse(jwt, role), httpHeaders, HttpStatus.OK);
+        return new TokenResponse(jwt, role);
     }
 
     public Long signUp(SignUpRequest signUpRequest) {
+        String password = signUpRequest.getPassword();
+        String confirmPassword = signUpRequest.getConfirmPassword();
+
+        comparePasswords(password, confirmPassword);
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -71,10 +69,17 @@ public class UserService {
 
         User user = User.of(signUpRequest);
 
-        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+        String encodedPassword = passwordEncoder.encode(password);
         user.changePassword(encodedPassword);
         User saveUser = userRepository.save(user);
+
         return saveUser.getId();
+    }
+
+    private void comparePasswords(String password, String confirmPassword) {
+       if ( !password.equals(confirmPassword) ){
+           throw new PasswordNotMatchedException();
+       }
     }
 
     public ResponseEntity<String> duplicationIdCheck(String email) {

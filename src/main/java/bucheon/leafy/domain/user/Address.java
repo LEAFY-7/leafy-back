@@ -21,15 +21,11 @@ public class Address extends BaseDeleteEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String zoneCode;
-
-    private String address;
-
-    private String jibunAddress;
-
-    private String roadAddress;
-
-    private String detailAddress;
+    private String zoneCode; // 우편번호
+    private String address; // 주소
+    private String jibunAddress; // 지번주소
+    private String roadAddress; // 도로명주소
+    private String detailAddress; // 상세주소
 
     private Boolean isHide;
 

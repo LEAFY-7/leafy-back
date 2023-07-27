@@ -10,6 +10,6 @@ public class UserLikeNotFoundException extends GlobalException {
 
     @Override
     public int getStatusCode() {
-        return 500;
+        return 404;
     }
 }
