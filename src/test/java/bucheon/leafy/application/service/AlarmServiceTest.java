@@ -2,15 +2,21 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.alarm.AlarmType;
+import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
 @Transactional
 class AlarmServiceTest extends IntegrationTestSupport {
+
+    @Autowired
+    AlarmService alarmService;
 
 
     @Test
@@ -31,4 +37,5 @@ class AlarmServiceTest extends IntegrationTestSupport {
         verify(alarmService, times(1)).raedAlarm(1, AlarmType.NOTICE, 1);
 
     }
+
 }

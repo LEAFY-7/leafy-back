@@ -23,7 +23,6 @@ public class AlarmController {
 
     private final AlarmService alarmService;
 
-    // TODO 스크롤 적용해서 코드 수정하기
     @Operation(summary = "유저의 알림 리스트 조회")
     @GetMapping
     public ResponseEntity<ScrollResponse> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, ScrollRequest scrollRequest) {
