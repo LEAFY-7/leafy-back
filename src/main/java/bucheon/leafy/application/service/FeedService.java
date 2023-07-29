@@ -6,10 +6,11 @@ import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.FeedResponse;
-import bucheon.leafy.domain.feed.response.PopularTagInformation;
+import bucheon.leafy.domain.feed.response.PopularTagResponse;
+import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.path.S3Path;
@@ -20,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static bucheon.leafy.domain.feed.response.PopularTagInformation.*;
 
 @Service
 @RequiredArgsConstructor
@@ -74,9 +73,9 @@ public class FeedService {
     }
 
     public List<FeedMonthlyResponse> getCountGroupByMonthly(Long userId) {
-        List<FeedMonthlyInformation> feedMonthlyInformation = feedRepository.groupByMonthlyCountByUserId(userId);
+        List<FeedMonthlyInformation> feedMonthlyResponse = feedRepository.groupByMonthlyCountByUserId(userId);
 
-        return feedMonthlyInformation.stream()
+        return feedMonthlyResponse.stream()
                 .map(FeedMonthlyResponse::of)
                 .collect(Collectors.toList());
     }
@@ -100,7 +99,7 @@ public class FeedService {
         List<String> imageUrlList = new ArrayList<>();
         List<FeedImageRequest> requestList = new ArrayList<>();
 
-        List<String> imageNameList = imageComponent.uploadImage(imagePath, imageList);
+        List<String> imageNameList = imageComponent.uploadImages(imagePath, imageList);
 
         for(String imageName : imageNameList) {
             FeedImageRequest request = FeedImageRequest.builder().feedId(feedId).imageName(imageName).build();
