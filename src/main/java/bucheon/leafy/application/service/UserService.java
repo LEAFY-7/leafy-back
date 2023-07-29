@@ -57,10 +57,8 @@ public class UserService {
     }
 
     public Long signUp(SignUpRequest signUpRequest) {
-        String password = signUpRequest.getPassword();
-        String confirmPassword = signUpRequest.getConfirmPassword();
 
-        comparePasswords(password, confirmPassword);
+        signUpRequest.comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -69,18 +67,13 @@ public class UserService {
 
         User user = User.of(signUpRequest);
 
-        String encodedPassword = passwordEncoder.encode(password);
+        String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
         User saveUser = userRepository.save(user);
 
         return saveUser.getId();
     }
 
-    private void comparePasswords(String password, String confirmPassword) {
-       if ( !password.equals(confirmPassword) ){
-           throw new PasswordNotMatchedException();
-       }
-    }
 
     public ResponseEntity<String> duplicationIdCheck(String email) {
         userRepository.findByEmail(email)
@@ -88,7 +81,14 @@ public class UserService {
                     throw new ExistException(ExceptionKey.EMAIL);
                 });
 
-        return ResponseEntity.status(200).body("아이디가 사용 가능합니다.");
+        return ResponseEntity.status(201).body("아이디가 사용 가능합니다.");
+    }
+
+    public void duplicationNickNameCheck(String nickName) {
+        userRepository.findByNickName(nickName)
+                .ifPresent(u -> {
+                    throw new ExistException(ExceptionKey.NICKNAME);
+                });
     }
 
     public User getUserById(Long userId){
