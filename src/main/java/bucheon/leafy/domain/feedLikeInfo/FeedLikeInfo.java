@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class FeedLikeInfo extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "feed_like_info_id")
     private Long id;
 
     @JoinColumn(name = "user_id")

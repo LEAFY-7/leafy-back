@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class FeedLikeCount {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "feed_like_count_id")
     private Long id;
 
     @OneToOne

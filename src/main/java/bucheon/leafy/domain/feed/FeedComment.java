@@ -18,7 +18,7 @@ public class FeedComment extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "feed_comment_id")
     private Long id;
 
     private String comment;
