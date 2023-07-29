@@ -1,6 +1,7 @@
 package bucheon.leafy.domain.user.request;
 
 import bucheon.leafy.domain.user.Gender;
+import bucheon.leafy.exception.PasswordNotMatchedException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -19,9 +21,11 @@ public class SignUpRequest {
         private String email;
 
         @NotBlank(message = "비밀번호를 입력해주세요")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,15}$")
         private String password;
 
         @NotBlank(message = "체크 비밀번호를 입력해주세요")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,15}$")
         private String confirmPassword;
 
         @NotBlank(message = "이름을 입력해주세요")
@@ -31,6 +35,7 @@ public class SignUpRequest {
         private String nickName;
 
         @NotBlank(message = "전화번호를 입력해주세요")
+        @Pattern(regexp = "([0|1|6|7|8|9]{3})([0-9]{3,4})?([0-9]{4})")
         private String phone;
 
         @NotBlank(message = "간단 소개를 입력해주세요")
@@ -76,6 +81,12 @@ public class SignUpRequest {
                 this.addressIsHide = addressIsHide;
                 this.birthDay = birthDay;
                 this.gender = gender;
+        }
+
+        public void comparePasswords(String password, String confirmPassword) {
+                if ( !password.equals(confirmPassword) ){
+                        throw new PasswordNotMatchedException();
+                }
         }
 
 }

@@ -5,6 +5,8 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,10 @@ public class FollowController {
 
     private final FollowService followService;
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "나를 팔로우한 회원을 찾지 못함")
+    })
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
@@ -32,6 +38,10 @@ public class FollowController {
         return ResponseEntity.ok().body(result);
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "내가 팔로우한 회원을 찾지 못함")
+    })
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
     public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
@@ -41,15 +51,26 @@ public class FollowController {
         return ResponseEntity.ok().body(result);
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "팔로우 성공"),
+            @ApiResponse(responseCode = "404", description = "팔로우 할 회원을 찾지 못함"),
+            @ApiResponse(responseCode = "409", description = "이미 팔로우함"),
+            @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
+    })
     @Operation(summary = "팔로우")
     @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     public void follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                          @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
         followService.follow(userId, targetUserId);
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "언팔로우 성공"),
+            @ApiResponse(responseCode = "404", description = "언팔로우 할 회원을 찾지 못함, 이미 언팔로우함"),
+            @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
+    })
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

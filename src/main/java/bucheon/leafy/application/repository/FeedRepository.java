@@ -1,13 +1,14 @@
 package bucheon.leafy.application.repository;
 
 import bucheon.leafy.domain.feed.Feed;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
-import bucheon.leafy.domain.feed.response.PopularTagInformation;
+import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+
+import static bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 

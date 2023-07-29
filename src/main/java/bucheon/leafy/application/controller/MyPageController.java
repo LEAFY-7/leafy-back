@@ -6,12 +6,14 @@ import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +41,10 @@ public class MyPageController {
 
     private final FeedLikeInfoService feedLikeInfoService;
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "500", description = "서버 코드 문제")
+    })
     @Operation(summary = "마이페이지")
     @GetMapping
     public ResponseEntity<MyPageResponse> signOut(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
