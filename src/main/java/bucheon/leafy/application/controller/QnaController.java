@@ -26,27 +26,27 @@ public class QnaController {
     @Operation(summary = "Qna 게시물 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("/modify/{id}")
-    public ResponseEntity<Object> modify( @RequestBody QnaDto qnaDto, @PathVariable("id") Long id ) {
+    public ResponseEntity<Object> modify(@AuthenticationPrincipal AuthUser user, @RequestBody QnaDto qnaDto, @PathVariable("id") Long id ) {
         return ResponseEntity.ok().body(qnaService.modify(qnaDto, id));
     }
 
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping("/write")
-    public ResponseEntity<Long> write( @RequestBody QnaDto qnaDto) {
+    public ResponseEntity<Long> write( @AuthenticationPrincipal AuthUser user,@RequestBody QnaDto qnaDto) {
         return ResponseEntity.ok().body(qnaService.write(qnaDto));
     }
 
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @GetMapping("/{id}")
-    public ResponseEntity<Object> read( @PathVariable Long id ) {
+    public ResponseEntity<Object> read(@AuthenticationPrincipal AuthUser user, @PathVariable Long id ) {
         return ResponseEntity.ok().body(qnaService.getRead(id));
     }
 
     //Mypage이니까 자신만 삭제가능
     @Operation(summary = "Qna 게시판 글 삭제하기")
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<Object> remove( @PathVariable("id") Long id ) {
+    public ResponseEntity<Object> remove(@AuthenticationPrincipal AuthUser user, @PathVariable("id") Long id ) {
             return ResponseEntity.ok().body(qnaService.remove(id));
 
     }

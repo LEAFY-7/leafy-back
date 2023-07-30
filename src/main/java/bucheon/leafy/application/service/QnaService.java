@@ -23,8 +23,10 @@ public class QnaService {
 
     private final UserRepository userRepository;
     private final QnaMapper qnaMapper;
+    private final AlarmService alarmService;
 
     public boolean remove(Long id) {
+
         boolean deleteStatus = qnaMapper.delete(id);
 
         if (!deleteStatus) {
