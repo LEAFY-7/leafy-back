@@ -110,17 +110,18 @@ public class UserService {
         return GetMeResponse.of(user);
     }
 
-    public String updateTemporaryPassword(String email) {
+    public void updateTemporaryPassword(String email) {
         userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
         String password = randomPassword(10);
         String encodedPassword = passwordEncoder.encode(password);
+
         if(userMapper.updatePassword(email, encodedPassword) != 1){
             throw new UserPasswordDataAccessException();
         }
+
         // TODO 추후 임시비밀번호 메일 발송 로직 구현
-        return "임시 비밀번호 발급 완료";
     }
 
     private String randomPassword(int length){

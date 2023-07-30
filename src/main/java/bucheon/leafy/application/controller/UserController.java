@@ -111,16 +111,16 @@ public class UserController {
         userService.editPassword(userId, passwordRequest);
     }
 
+    @Operation(summary = "임시 비밀번호 발급")
+    @PutMapping("/temporary-password")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateTemporaryPassword(@RequestParam String email){
+        userService.updateTemporaryPassword(email);
+    }
+
     private void insertTokenInHeader(TokenResponse tokenResponse) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenResponse.getToken());
-    }
-
-    @Operation(summary = "임시 비밀번호 발급")
-    @PutMapping("/temporary-password")
-    public ResponseEntity<String> updateTemporaryPassword(@RequestParam String email){
-        userService.updateTemporaryPassword(email);
-        return ResponseEntity.ok().body();
     }
 
 }
