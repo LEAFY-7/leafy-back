@@ -2,6 +2,7 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
@@ -57,8 +58,7 @@ public class UserService {
     }
 
     public Long signUp(SignUpRequest signUpRequest) {
-
-        signUpRequest.comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
+        comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -103,6 +103,20 @@ public class UserService {
     public GetMeResponse getMe(Long userId) {
         User user = getUserById(userId);
         return GetMeResponse.of(user);
+    }
+
+    public void editPassword(Long userId, PasswordRequest passwordRequest) {
+        comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
+
+        User user = getUserById(userId);
+        String encodedPassword = passwordEncoder.encode(passwordRequest.getPassword());
+        user.changePassword(encodedPassword);
+    }
+
+    private void comparePasswords(String password, String confirmPassword) {
+        if ( !password.equals(confirmPassword) ){
+            throw new PasswordNotMatchedException();
+        }
     }
 
 }
