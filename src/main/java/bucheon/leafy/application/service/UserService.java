@@ -1,5 +1,6 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.PasswordRequest;
@@ -10,6 +11,7 @@ import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.PasswordNotMatchedException;
 import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.UserPasswordDataAccessException;
 import bucheon.leafy.exception.enums.ExceptionKey;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
@@ -24,6 +26,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
+
 @Slf4j
 @Service
 @Transactional
@@ -36,6 +40,7 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserMapper userMapper;
 
     public TokenResponse signIn(SignInRequest signInRequest) {
 
@@ -105,6 +110,50 @@ public class UserService {
         return GetMeResponse.of(user);
     }
 
+    public String updateTemporaryPassword(String email) {
+        userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        String password = randomPassword(10);
+        String encodedPassword = passwordEncoder.encode(password);
+        if(userMapper.updatePassword(email, encodedPassword) != 1){
+            throw new UserPasswordDataAccessException();
+        }
+        // TODO 추후 임시비밀번호 메일 발송 로직 구현
+        return "임시 비밀번호 발급 완료";
+    }
+
+    private String randomPassword(int length){
+        String upperAlphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerAlphabets = upperAlphabets.toLowerCase();
+        String numbers = "0123456789";
+        String specialCharacters = "!@#$%^&*()";
+
+        String allCharacters = upperAlphabets + lowerAlphabets + numbers + specialCharacters;
+
+        Random random = new Random();
+        StringBuilder randomString = new StringBuilder();
+
+        randomString.append(upperAlphabets.charAt(random.nextInt(upperAlphabets.length())));
+        randomString.append(lowerAlphabets.charAt(random.nextInt(lowerAlphabets.length())));
+        randomString.append(numbers.charAt(random.nextInt(numbers.length())));
+        randomString.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+
+        for (int i = 4; i < length; i++) {
+            randomString.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+
+        char[] charArray = randomString.toString().toCharArray();
+        for (int i = charArray.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+            char temp = charArray[index];
+            charArray[index] = charArray[i];
+            charArray[i] = temp;
+        }
+
+        return new String(charArray);
+    }
+
     public void editPassword(Long userId, PasswordRequest passwordRequest) {
         comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
 
@@ -118,5 +167,4 @@ public class UserService {
             throw new PasswordNotMatchedException();
         }
     }
-
 }
