@@ -22,8 +22,6 @@ public class Notice extends BaseDeleteEntity {
 
     private String contents;
 
-    private Long viewCount;
-
     private Boolean isHide;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -31,13 +29,12 @@ public class Notice extends BaseDeleteEntity {
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
     @Builder
-    private Notice(String title, String contents, Long viewCount,
+    private Notice(String title, String contents,
                    List<NoticeComment> noticeComments,
                    Boolean isHide) {
 
         this.title = title;
         this.contents = contents;
-        this.viewCount = viewCount;
         this.noticeComments = noticeComments;
         this.isHide = isHide;
     }

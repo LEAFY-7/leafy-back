@@ -72,5 +72,54 @@ public class ControllerAdvisor {
 
         return ResponseEntity.status(statusCode).body(response);
     }
+    @ExceptionHandler(RemoveFailedException.class)
+    public ResponseEntity<ExceptionResponse> RemoveNotFoundException(RemoveFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+    @ExceptionHandler(RemoveFailedException.class)
+    public ResponseEntity<ExceptionResponse> ReadFoundException(RemoveFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+    @ExceptionHandler(ModifyFailedException.class)
+    public ResponseEntity<ExceptionResponse> ModiflyFoundException(ModifyFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(WriteFailedException.class)
+    public ResponseEntity<ExceptionResponse> WriteFoundException(WriteFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
 
 }

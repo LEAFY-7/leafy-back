@@ -13,27 +13,27 @@
         DELETE FROM comment WHERE cid = #{cid} AND user_id = #{user_id}
     </delete>
 
-    <insert id="insert" parameterType="QnaReplyDto">
+    <insert id="insert" parameterType="ReplyDto">
         INSERT INTO comment
             (id, pcno, comment, user_id, reg_date, up_date)
         VALUES
             (#{id}, #{pcno}, #{comment}, #{user_id}, now(), now())
     </insert>
 
-    <select id="selectAll" parameterType="int" resultType="QnaReplyDto">
+    <select id="selectAll" parameterType="int" resultType="ReplyDto">
         SELECT cno, id, pcno, user_id, user_id, reg_date, up_date
         FROM comment
         WHERE id = #{bno}
         ORDER BY reg_date ASC, cid ASC
     </select>
 
-    <select id="select" parameterType="int" resultType="QnaReplyDto">
+    <select id="select" parameterType="int" resultType="ReplyDto">
         SELECT cid, id, pcno, user_id, user_id, reg_date, up_date
         FROM comment
         WHERE cid = #{cid}
     </select>
 
-    <update id="update" parameterType="QnaReplyDto">
+    <update id="update" parameterType="ReplyDto">
         UPDATE comment
         SET user_id = #{user_id}
           , up_date = now()
