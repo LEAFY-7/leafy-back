@@ -21,10 +21,13 @@ public class FeedBlock extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "feed_id")
     private Feed feed;
+
 
     @Builder
     private FeedBlock(User user, Feed feed) {

@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.userreport;
 
-import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -21,15 +20,18 @@ public class UserReport extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
+    // 신고 대상
     @ManyToOne
-    private Feed feed;
+    @JoinColumn(name = "report_user_id")
+    private User reportUser;
 
     @Builder
-    private UserReport(User user, Feed feed) {
+    private UserReport(User user,User reportUser) {
         this.user = user;
-        this.feed = feed;
+        this.reportUser = reportUser;
     }
 
 }

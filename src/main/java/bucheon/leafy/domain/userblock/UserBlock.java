@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.userblock;
 
-import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -21,15 +20,18 @@ public class UserBlock extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
+    // 차단 대상
     @ManyToOne
-    private Feed feed;
+    @JoinColumn(name = "block_user_id")
+    private User blockUser;
 
     @Builder
-    private UserBlock(User user, Feed feed) {
+    private UserBlock(User user, User blockUser) {
         this.user = user;
-        this.feed = feed;
+        this.blockUser = blockUser;
     }
 
 }
