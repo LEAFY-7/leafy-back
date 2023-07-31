@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class FeedTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tag_id")
+    @Column(name = "feed_tag_id")
     private Long id;
 
     @Column(unique = true)

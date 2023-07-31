@@ -4,9 +4,10 @@ import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.FeedTag;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
-import bucheon.leafy.domain.feed.response.PopularTagInformation;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
+import bucheon.leafy.domain.feed.response.PopularTagResponse;
+import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
@@ -26,7 +27,6 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static bucheon.leafy.domain.feed.response.PopularTagInformation.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.jeasy.random.FieldPredicates.named;
 import static org.jeasy.random.FieldPredicates.ofType;
@@ -162,11 +162,11 @@ class FeedRepositoryTest extends IntegrationTestSupport {
 
     private User createUser(String email, String nickName, List<Feed> feeds) {
         Address address = Address.builder()
-                .zipcode("01011")
-                .street("bucheon")
-                .lot("100")
-                .reference("ref")
-                .detail("hello world")
+                .zoneCode("01011")
+                .address("bucheon")
+                .jibunAddress("100")
+                .roadAddress("ref")
+                .detailAddress("hello world")
                 .build();
 
         UserImage image = UserImage.builder()

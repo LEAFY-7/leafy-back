@@ -6,7 +6,6 @@ import bucheon.leafy.domain.search.response.SearchResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

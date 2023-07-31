@@ -56,11 +56,11 @@ public class FeedControllerTest {
     @BeforeEach
     void setUp() {
         Address address = Address.builder()
-                .zipcode("01011")
-                .street("bucheon")
-                .lot("100")
-                .reference("ref")
-                .detail("hello world")
+                .zoneCode("01011")
+                .address("bucheon")
+                .jibunAddress("100")
+                .roadAddress("ref")
+                .detailAddress("hello world")
                 .build();
 
         UserImage image = UserImage.builder()

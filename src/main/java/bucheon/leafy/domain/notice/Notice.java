@@ -16,6 +16,7 @@ import java.util.List;
 public class Notice extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notice_id")
     private Long id;
 
     private String title;

@@ -13,10 +13,10 @@ import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
 import bucheon.leafy.domain.feed.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
+import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
-import bucheon.leafy.path.S3Path;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static bucheon.leafy.domain.feed.response.PopularTagInformation.*;
 import static bucheon.leafy.path.S3Path.FEED_PATH;
 
 @Service
@@ -44,7 +43,7 @@ public class FeedService {
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if (scrollRequest.hasKey()) {
             List<FeedResponse> responseList = feedMapper.findFeedListScroll(scrollRequest);
-            ScrollResponse scrollResponse = new ScrollResponse(scrollRequest, responseList);
+            ScrollResponse scrollResponse = ScrollResponse.of(scrollRequest, responseList);
             return scrollResponse;
         } else if (scrollRequest.getKey() == null) {
              feedMapper.findFeedListFirst(scrollRequest);
@@ -127,9 +126,9 @@ public class FeedService {
     }
 
     public List<FeedMonthlyResponse> getCountGroupByMonthly(Long userId) {
-        List<FeedMonthlyInformation> feedMonthlyInformation = feedRepository.groupByMonthlyCountByUserId(userId);
+        List<FeedMonthlyInformation> feedMonthlyResponse = feedRepository.groupByMonthlyCountByUserId(userId);
 
-        return feedMonthlyInformation.stream()
+        return feedMonthlyResponse.stream()
                 .map(FeedMonthlyResponse::of)
                 .collect(Collectors.toList());
     }
@@ -151,7 +150,7 @@ public class FeedService {
     public void saveImage(Long feedId, List<MultipartFile> imageList) {
         List<FeedImageRequest> requestList = new ArrayList<>();
 
-        List<String> imageNameList = imageComponent.uploadImage(FEED_PATH, imageList);
+        List<String> imageNameList = imageComponent.uploadImages(imagePath, imageList);
 
         for(String imageName : imageNameList) {
             FeedImageRequest request = FeedImageRequest.builder().imageName(imageName).build();

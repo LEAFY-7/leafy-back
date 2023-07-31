@@ -27,7 +27,23 @@ public class ImageComponent {
 
     private final AmazonS3Client amazonS3Client;
 
-    public List<String> uploadImage(String imagePath, List<MultipartFile> imageList) {
+    public String uploadImage(String imagePath, MultipartFile image) {
+        String imageName = createUUID();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(image.getSize());
+        metadata.setContentType(image.getContentType());
+
+        try(InputStream inputStream = image.getInputStream()) {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, imagePath + imageName, inputStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch(IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
+        }
+
+        return imageName;
+    }
+    public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) {
 
         List<String> imageNameList = new ArrayList<>();
 
@@ -53,7 +69,6 @@ public class ImageComponent {
     }
 
     public void deleteImage(String imagePath, String imageName) {
-
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
     }
 
@@ -62,10 +77,7 @@ public class ImageComponent {
     }
 
     public String getImageUrl(String imagePath, String imageName) {
-
-        String imageUrl = amazonS3Client.getUrl(bucket, imagePath + imageName).toString();
-
-        return imageUrl;
+        return amazonS3Client.getUrl(bucket, imagePath + imageName).toString();
     }
 
 }
