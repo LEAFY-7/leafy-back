@@ -34,4 +34,11 @@ public class UserBlock extends BaseEntity {
         this.blockUser = blockUser;
     }
 
+    public static UserBlock of(User user, User blockUser) {
+        return UserBlock.builder()
+                .user(user)
+                .blockUser(blockUser)
+                .build();
+    }
+
 }
