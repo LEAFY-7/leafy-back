@@ -1,6 +1,5 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.SignInRequest;
@@ -37,7 +36,8 @@ public class UserService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final UserMapper userMapper;
+
+
 
     public TokenResponse signIn(SignInRequest signInRequest) {
 
@@ -109,17 +109,34 @@ public class UserService {
     }
 
 
-    public String updateTemporaryPassword(String email) {
-        userRepository.findByEmail(email)
+    public void updateTemporaryPassword(String email, String phone) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
+        verifyUser(user, phone);
+
         String password = randomPassword(10);
+        System.out.println(password);
+
+        // mybatis
+//        String encodedPassword = passwordEncoder.encode(password);
+//        if(userMapper.updatePassword(email, encodedPassword) != 1){
+//            throw new UserPasswordDataAccessException();
+//        }
+
+        // jpa
         String encodedPassword = passwordEncoder.encode(password);
-        if(userMapper.updatePassword(email, encodedPassword) != 1){
-            throw new UserPasswordDataAccessException();
-        }
+        user.changePassword(encodedPassword);
+        userRepository.save(user);
+
+
         // TODO 추후 임시비밀번호 메일 발송 로직 구현
-        return "임시 비밀번호 발급 완료";
+    }
+
+    public void verifyUser(User user, String phone) {
+        if (!user.getPhone().equals(phone)){
+            throw new UserNotVerifiedException();
+        }
     }
 
     private String randomPassword(int length){

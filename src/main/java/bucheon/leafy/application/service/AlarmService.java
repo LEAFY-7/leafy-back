@@ -27,14 +27,14 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void crateAlarm(long userId, AlarmType type, long tableId, String msg){
+    public void createAlarm(long userId, AlarmType type, long tableId, String msg){
         AlarmRequest request = new AlarmRequest(userId, type, tableId, msg);
         alarmMapper.saveAlarm(request);
     }
 
     @Async
     @Transactional
-    public void raedAlarm(long userId, AlarmType type, long tableId){
+    public void readAlarm(long userId, AlarmType type, long tableId){
         AlarmCheckRequest request = new AlarmCheckRequest(userId, type, tableId);
         alarmMapper.updateCheckAlarm(request);
     }
@@ -44,7 +44,7 @@ public class AlarmService {
     public void deleteAlarm(){alarmMapper.deleteAlarm();}
 
     @Transactional
-    public String deleteAlarm(AuthUser user, long id){
+    public void deleteAlarm(AuthUser user, long id){
         Optional<HashMap<String, Object>> data = alarmMapper.findById(id);
         data.orElseThrow(AlarmNotExistException::new);
 
@@ -54,7 +54,6 @@ public class AlarmService {
         if(alarmMapper.deleteOneAlarm(id) != 1){
             throw new AlarmDataAccessException();
         }
-        return "알림 삭제 성공";
     }
 
     public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
@@ -75,7 +74,7 @@ public class AlarmService {
         } else {
             long nextKey = alarms.stream()
                     .reduce((first, second) -> second)
-                    .map(AlarmResponse::getId)
+                    .map(AlarmResponse::getAlarmId)
                     .get();
             return scrollRequest.next(nextKey);
         }
@@ -83,6 +82,6 @@ public class AlarmService {
 
 
     public int getNewAlarmCount(AuthUser user) {
-        return alarmMapper.findCountByUserId(user.getUserId());
+        return alarmMapper.countByUserId(user.getUserId());
     }
 }
