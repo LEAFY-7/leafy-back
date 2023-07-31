@@ -34,4 +34,10 @@ public class FeedReport extends BaseEntity {
         this.feed = feed;
     }
 
+    public static FeedReport of(User user, Feed feed) {
+        return FeedReport.builder()
+                .user(user)
+                .feed(feed)
+                .build();
+    }
 }

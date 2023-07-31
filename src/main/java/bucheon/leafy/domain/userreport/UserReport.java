@@ -1,6 +1,7 @@
 package bucheon.leafy.domain.userreport;
 
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.userblock.UserBlock;
 import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,4 +35,10 @@ public class UserReport extends BaseEntity {
         this.reportUser = reportUser;
     }
 
+    public static UserReport of(User user, User blockUser) {
+        return UserReport.builder()
+                .user(user)
+                .reportUser(blockUser)
+                .build();
+    }
 }
