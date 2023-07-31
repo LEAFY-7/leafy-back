@@ -1,7 +1,7 @@
 package bucheon.leafy.domain.qna;
 
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.util.BaseDeleteEntity;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class QnaReply extends BaseDeleteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 

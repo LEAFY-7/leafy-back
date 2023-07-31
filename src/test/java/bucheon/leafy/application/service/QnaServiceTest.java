@@ -8,14 +8,8 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 //import org.springframework.boot.test.context.SpringBootTest;
 //
-<<<<<<< HEAD
 //
 //import java.util.List;
-=======
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 //import java.util.Objects;
 //
 //import static org.junit.jupiter.api.Assertions.*;
@@ -30,10 +24,6 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 //    @Autowired
 //    private QnaMapper qnaMapper;
 //
-<<<<<<< HEAD
-=======
-//    // 현재 시간
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 //    @Test
 //    void count() {
 //        qnaMapper.deleteAll();
@@ -79,23 +69,6 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 ////
 ////        assertTrue(qnaDtoList.getIsDelete());
 ////    }
-=======
-//    @Test
-//    void deleteTest() {
-//        qnaMapper.deleteAll();
-//        assertEquals(0, qnaService.getCount());
-//
-//        QnaDto qnaDto = new QnaDto("dfsgf", "contents", 11111L);
-//        assertEquals(1, qnaService.write(qnaDto));
-//        Long id = qnaService.getList().get(0).getId();
-//        assertEquals(1, qnaService.remove(id, qnaDto.getUserId()));
-//
-//        QnaDto qnaDtoList = qnaService.getRead(id);
-//
-//        assert true == qnaDtoList.get(0).getIsDelete();
-//
-//    }
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 //
 //    @Test
 //    void insertTest() {
@@ -132,7 +105,6 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 //        assertEquals(2, list.size());
 //    }
 //
-<<<<<<< HEAD
 ////    @Test
 ////    void selectTest() {
 ////        qnaMapper.deleteAll();
@@ -147,29 +119,12 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 ////        assertNotNull(qnaDtoResult);
 ////        assertTrue(compareRelevantFields(qnaDto, qnaDtoResult));
 ////    }
-=======
-//    @Test
-//    void selectTest() {
-//        qnaMapper.deleteAll();
-//        assertEquals(0, qnaService.getCount());
-//
-//        QnaDto qnaDto = new QnaDto("dfsgf", "contents", 11111L);
-//        assertEquals(1, qnaService.write(qnaDto));
-//
-//        Long id = qnaService.getList().get(0).getId();
-//        QnaDto qnaDtoList = qnaService.getRead(id);
-//
-//        assertFalse(qnaDtoList.isEmpty());
-//        assertTrue(compareRelevantFields(qnaDto, qnaDtoList.get(0)));
-//    }
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 //
 //    @Test
 //    void selectPageTest() {
 //        qnaMapper.deleteAll();
 //
 //        for (int i = 1; i <= 10; i++) {
-<<<<<<< HEAD
 //            QnaDto qnaDto = new QnaDto("dfsgf", "" + i, 11111L);
 //            qnaService.write(qnaDto);
 //        }
@@ -190,35 +145,6 @@ package bucheon.leafy.application.service;//package bucheon.leafy.application.se
 ////        qnaDto.setUserId(11111L);
 ////        assertEquals(1, qnaMapper.update(qnaDto));
 ////    }
-=======
-//            QnaDto qnaDto = new QnaDto("dfsgf", ""+i, 11111L);
-//            qnaService.write(qnaDto);
-//        }
-//
-//        SearchHandler searchHandler = new SearchHandler(1,5);
-//
-//        List<QnaDto> list = qnaService.getSearchResultPage(searchHandler);
-//        assertEquals("10", list.get(0).getTitle());
-//        assertEquals("9", list.get(1).getTitle());
-//        assertEquals("8", list.get(2).getTitle());
-//
-//    }
-//
-//
-//
-//    @Test
-//    void updateTest() {
-//        qnaMapper.deleteAll();
-//        QnaDto qnaDto = new QnaDto("dfsgf", "contents", 11111L);
-//        assertEquals(1, qnaMapper.insert(qnaDto));
-//
-//        Long id = qnaMapper.selectAll().get(0).getId();
-//        qnaDto.setId(id);
-//        qnaDto.setTitle("yes title");
-//        qnaDto.setUserId(11111L);
-//        assertEquals(1, qnaMapper.update(qnaDto));
-//    }
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 //
 //    private boolean compareRelevantFields(QnaDto expected, QnaDto actual) {
 //        return Objects.equals(expected.getContents(), actual.getContents()) &&

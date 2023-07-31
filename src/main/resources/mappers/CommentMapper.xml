@@ -3,24 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.CommentMapper">
-<<<<<<< HEAD
     <!--Test-->
     <delete id="deleteAll">
         DELETE FROM qna_comment
     </delete>
-=======
-
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 
     <select id="count" parameterType="int" resultType="int">
         SELECT count(*)
           FROM qna_comment
     </select>
-<<<<<<< HEAD
     <!---->
-=======
-
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <delete id="delete" parameterType="map">
         DELETE
           FROM qna_comment
@@ -35,37 +27,9 @@
             (now(), 0, #{comment}, #{userId}, #{qnaId})
     </insert>
 
-<<<<<<< HEAD
     <select id="selectAll" resultType="CommentDto">
         SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
         FROM qna_comment
-=======
-    <select id="getEmail" parameterType="long" resultType="String">
-        SELECT user.email
-        FROM user
-                 JOIN qna ON user.user_id = qna.user_id
-        WHERE qna.id = #{id}
-
-    </select>
-
-    <select id="getContent" parameterType="long" resultType="String">
-        SELECT comment
-        FROM qna_comment
-        WHERE id = #{id}
-    </select>
-
-<!--    <select id="selectByQnaId" resultType="CommentDto">-->
-<!--        SELECT * FROM qna_reply WHERE qna_comment.id = #{id}-->
-<!--    </select>-->
-    <select id="selectByQnaId" resultType="CommentDto">
-        SELECT * FROM qna_comment WHERE id = #{id}
-    </select>
-
-    <select id="selectAll" resultType="CommentDto">
-        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
-        FROM qna_comment
-        ORDER BY created_at ASC, id ASC
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     </select>
 
     <select id="select" parameterType="long" resultType="CommentDto">
@@ -80,12 +44,9 @@
           , modified_at = now()
         WHERE id = #{id} and user_id = #{userId}
     </update>
-<<<<<<< HEAD
 
     <select id="selectId" parameterType="long" resultType="CommentDto">
         SELECT id
         FROM qna_comment
     </select>
-=======
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 </mapper>

@@ -11,7 +11,6 @@
         WHERE id = #{id}
     </delete>
 
-<<<<<<< HEAD
     <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
         VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
@@ -58,106 +57,10 @@
         WHERE id = #{id}
     </update>
 
-=======
-    <select id="count" resultType="int">
-        SELECT count(*) FROM qna
-    </select>
-
-    <delete id="deleteForAdmin">
-        DELETE FROM qna where id = #{id}
-    </delete>
-
-    <delete id="deleteAll">
-        DELETE FROM qna
-    </delete>
-
-    <delete id="delete" parameterType="map">
-        UPDATE qna
-        SET is_delete = 1
-        WHERE id = #{id} AND user_id = #{userId}
-    </delete>
-
-    <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
-        VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
-    </insert>
-
-    <select id="selectAll" resultType="QnaDto">
-        SELECT *
-        FROM qna
-        ORDER BY created_at DESC, id DESC
-    </select>
-
-    <sql id="selectFrom">
-        SELECT id, created_at, modified_at, is_delete , contents, qna_status, title, user_id
-        FROM qna
-    </sql>
-
-    <select id="select" parameterType="long" resultType="QnaDto">
-        <include refid="selectFrom"/>
-        WHERE id = #{id}
-    </select>
-
-    <update id="increaseViewCnt" parameterType="int">
-        UPDATE qna
-        SET   view_cnt = view_cnt + 1
-        WHERE id = #{id}
-    </update>
-
-    <update id="update" parameterType="QnaDto">
-        UPDATE qna
-        SET   title = #{title}
-          , contents = #{contents}
-          , modified_at = now()
-          , user_id = #{userId}
-        WHERE id = #{id}
-    </update>
-
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <update id="updateQnaStatus" parameterType="QnaDto">
         UPDATE qna
         SET   qna_status = 1
         WHERE  id = #{id}
     </update>
-<<<<<<< HEAD
 
-=======
-
-    <sql id="searchHandler">
-        <choose>
-            <when test='option=="T"'>
-                AND title LIKE concat('%', #{keyword}, '%')
-            </when>
-            <when test='option=="U"'>
-                AND userId LIKE concat('%', #{keyword}, '%')
-            </when>
-            <otherwise>
-                AND (title   LIKE concat('%', #{keyword}, '%')
-                OR   contents LIKE concat('%', #{keyword}, '%'))
-            </otherwise>
-        </choose>
-    </sql>
-
-    <select id="selectByQnaId" resultType="CommentDto">
-        SELECT * FROM qna_reply WHERE qna_comment_id = #{id}
-    </select>
-
-    <select id="searchSelectPage" parameterType="SearchHandler" resultType="QnaDto">
-        SELECT *
-        FROM qna
-        WHERE true
-        <include refid="searchHandler"/>
-        ORDER BY created_at DESC, id DESC
-        LIMIT #{offset}, #{pageSize}
-    </select>
-
-    <select id="searchResultCnt" parameterType="SearchHandler" resultType="int">
-        SELECT count(*)
-        FROM qna
-        WHERE true
-        <include refid="searchHandler"/>
-    </select>
-
-
->>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 </mapper>

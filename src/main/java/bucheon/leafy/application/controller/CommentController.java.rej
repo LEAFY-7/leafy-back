@@ -1,0 +1,48 @@
+diff a/src/main/java/bucheon/leafy/application/controller/CommentController.java b/src/main/java/bucheon/leafy/application/controller/CommentController.java	(rejected hunks)
+@@ -9,20 +9,46 @@
+ import bucheon.leafy.exception.ModifyFailedException;;
+ import bucheon.leafy.exception.RemoveFailedException;
+ import bucheon.leafy.exception.WriteFailedException;
++=======
++
++import bucheon.leafy.application.service.CommentService;
++import bucheon.leafy.application.service.QnaService;
++import bucheon.leafy.application.service.ReplyService;
++import bucheon.leafy.config.AuthUser;
++import bucheon.leafy.domain.comment.CommentDto;
++import bucheon.leafy.exception.ModifyFailedException;
++import bucheon.leafy.exception.enums.ReadFailedException;
++import bucheon.leafy.exception.enums.RemoveFailedException;
++import bucheon.leafy.exception.enums.WriteFailedException;
++>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
+ import io.swagger.v3.oas.annotations.Operation;
+ import lombok.RequiredArgsConstructor;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
++<<<<<<< HEAD
++=======
++
++>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
+ import org.springframework.security.core.annotation.AuthenticationPrincipal;
+ import org.springframework.web.bind.annotation.*;
+ 
+ 
++<<<<<<< HEAD
++=======
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++
++>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
+ @RequiredArgsConstructor
+ @RestController
+ @RequestMapping("/v1/comment")
+ public class CommentController {
+ 
+     private final CommentService commentService;
++<<<<<<< HEAD
+ 
+     private final QnaService qnaService;
+ 
