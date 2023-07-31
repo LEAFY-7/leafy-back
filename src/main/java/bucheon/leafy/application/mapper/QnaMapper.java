@@ -9,11 +9,11 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface QnaMapper {
     QnaDto findById(Long id);
-    boolean deleteById(Long id) ;
+    boolean deleteById(Long id);
     Long save(QnaDto qnaDto);
     int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
     int qnaStatusModify(Long id);
-    PageResponse<QnaDto> selectAll(Long userId, PageRequest pageRequest);
+    PageResponse<QnaDto> selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
     PageResponse<QnaDto> adminSelectAll( PageRequest pageRequest);
     int viewCnt(Long id);
 }

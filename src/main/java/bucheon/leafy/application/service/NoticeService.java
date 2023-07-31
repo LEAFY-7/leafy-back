@@ -45,12 +45,12 @@ public class NoticeService {
     @Transactional
     public NoticeDto getRead(Long id) {
 
-        if (noticeMapper.select(id) == null) {
+        if (noticeMapper.findById(id) == null) {
             throw new ReadFailedException();
         }
         noticeMapper.viewCnt(id);
 
-        return noticeMapper.select(id);
+        return noticeMapper.findById(id);
     }
     public NoticeDto modify(NoticeDto noticeDto)  {
 
@@ -58,7 +58,7 @@ public class NoticeService {
             throw new ModifyFailedException();
         }
         Long id = noticeDto.getId();
-        return noticeMapper.select(id);
+        return noticeMapper.findById(id);
     }
 
     public User getUserById(Long userId){

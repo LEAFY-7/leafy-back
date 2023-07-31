@@ -27,7 +27,7 @@ public class QnaService {
 
     public boolean remove(Long id) {
 
-        boolean deleteStatus = qnaMapper.delete(id);
+        boolean deleteStatus = qnaMapper.deleteById(id);
 
         if (!deleteStatus) {
             throw new RemoveFailedException();
@@ -36,7 +36,7 @@ public class QnaService {
         return true;
     }
     public Long write(QnaDto qnaDto) {
-        return qnaMapper.insert(qnaDto);
+        return qnaMapper.save(qnaDto);
     }
 
     public PageResponse<QnaDto> getList(Long userId, PageRequest pageRequest) {
@@ -49,7 +49,7 @@ public class QnaService {
     }
     @Transactional
     public QnaDto getRead(Long id) {
-        QnaDto qnaDto = qnaMapper.select(id);
+        QnaDto qnaDto = qnaMapper.findById(id);
 
         if (qnaDto == null) {
             throw new ReadFailedException();
@@ -57,10 +57,10 @@ public class QnaService {
 
         qnaMapper.viewCnt(id);
 
-        return qnaMapper.select(id);
+        return qnaMapper.findById(id);
     }
     public int modify(QnaDto qnaDto,Long id) {
-        return qnaMapper.update(qnaDto, id);
+        return qnaMapper.editById(qnaDto, id);
     }
     public int qnaStatusModify(Long id) {
         return qnaMapper.qnaStatusModify(id);
