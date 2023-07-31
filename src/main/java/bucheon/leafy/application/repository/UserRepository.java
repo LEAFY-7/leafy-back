@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findByNickName(String nickName);
+
+    List<Long> findAllUserIdsByFeedIdIn(List<Long> feedIds);
+
 }
