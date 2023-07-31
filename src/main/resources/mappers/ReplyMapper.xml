@@ -8,6 +8,7 @@
         DELETE FROM qna_reply
     </delete>
 
+<<<<<<< HEAD
     <select id="getCount" parameterType="long" resultType="int">
         SELECT count(*)
         FROM qna_reply
@@ -15,16 +16,36 @@
     </select>
 
     <delete id="delete" parameterType="map">notice_reply
+=======
+    <select id="count" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM qna_reply
+    </select>
+
+    <delete id="delete" parameterType="map">
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
         DELETE FROM qna_reply WHERE id = #{id} AND user_id = #{userId}
     </delete>
 
     <insert id="insert" parameterType="ReplyDto">
         INSERT INTO qna_reply
+<<<<<<< HEAD
             ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
         VALUES
             ( now(), now(), false, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
+=======
+            (id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
+        VALUES
+            (#{id}, now(), now(), #{isDelete}, #{comment}, #{userId},#{qnaCommentId})
+    </insert>
+
+    <select id="selectByQnaId" resultType="Long">
+        SELECT * FROM qna_comment WHERE qna_id = #{id}
+    </select>
+
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <select id="selectAll" parameterType="int" resultType="ReplyDto">
         SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
         FROM qna_reply
@@ -32,6 +53,15 @@
         ORDER BY created_at ASC, id ASC
     </select>
 
+<<<<<<< HEAD
+=======
+    <select id="select" parameterType="int" resultType="ReplyDto">
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
+        FROM qna_reply
+        WHERE qna_comment_id = #{qnaCommentId}
+    </select>
+
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <update id="update" parameterType="ReplyDto">
         UPDATE qna_reply
         SET user_id = #{userId}

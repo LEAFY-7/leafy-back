@@ -2,6 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<<<<<<< HEAD
 <mapper namespace="bucheon.leafy.application.mapper.NoticeMapper">
 
     <delete id="delete" parameterType="map">
@@ -9,10 +10,38 @@
         SET is_delete = 1
     </delete>
 
+=======
+
+<mapper namespace="bucheon.leafy.application.mapper.NoticeMapper">
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM notice
+    </select>
+
+    <delete id="delete" parameterType="map">
+        UPDATE notice
+           SET is_delete = 1
+         WHERE id = #{id} And user_id =#{userId}
+    </delete>
+
+    <delete id="adminDelete" parameterType="map">
+        UPDATE notice
+        SET is_delete = 1
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectPage" parameterType="map" resultType="NoticeDto">
+        SELECT * FROM notice
+        ORDER BY created_at DESC, id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <delete id="deleteAll">
         DELETE FROM notice
     </delete>
 
+<<<<<<< HEAD
     <insert id="insert" parameterType="NoticeDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO notice (created_at, is_delete, contents, is_hide, title, user_id)
         VALUES (now(), 0, #{contents}, #{isHide}, #{title}, #{userId})
@@ -24,12 +53,22 @@
         WHERE id = #{id}
     </update>
 
+=======
+    <insert id="insert" parameterType="NoticeDto">
+        INSERT INTO notice
+        ( created_at, modified_at, is_delete , contents, is_hide, title, user_id)
+        VALUES
+            ( now(), now(), #{isDelete}, #{contents}, #{isHide}, #{title}, #{userId})
+    </insert>
+
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
     <select id="selectAll" resultType="NoticeDto">
         SELECT *
         FROM notice
         ORDER BY created_at DESC, id DESC
     </select>
 
+<<<<<<< HEAD
     <select id="select" parameterType="long" resultType="NoticeDto">
         SELECT *
         FROM notice
@@ -75,5 +114,28 @@
         ORDER BY created_at DESC, id DESC
         LIMIT #{offset}, #{pageSize}
     </select>
+=======
+    <sql id="selectFrom">
+        SELECT id, created_at, modified_at, is_delete , contents, is_hide, title, user_id
+        FROM notice
+    </sql>
+
+    <select id="select" parameterType="long" resultType="NoticeDto">
+        <include refid="selectFrom"/>
+        WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="NoticeDto">
+        UPDATE notice
+           SET modified_at = now()
+             , is_delete =#{isDelete}
+             , contents = #{contents}
+             , is_hide = #{isHide}
+             , title = #{title}
+          , user_Id = #{userId}
+        WHERE user_Id = #{userId}
+    </update>
+
+>>>>>>> 48dd2d34b88ed1d765648b11af5e585fb255cbde
 
 </mapper>
