@@ -1,12 +1,17 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
-import bucheon.leafy.exception.*;
+import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.PasswordNotMatchedException;
+import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.UserPasswordDataAccessException;
 import bucheon.leafy.exception.enums.ExceptionKey;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
@@ -35,9 +40,7 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-
-
+    private final UserMapper userMapper;
 
     public TokenResponse signIn(SignInRequest signInRequest) {
 
@@ -60,8 +63,7 @@ public class UserService {
     }
 
     public Long signUp(SignUpRequest signUpRequest) {
-
-        signUpRequest.comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
+        comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -108,35 +110,18 @@ public class UserService {
         return GetMeResponse.of(user);
     }
 
-
-    public void updateTemporaryPassword(String email, String phone) {
-        User user = userRepository.findByEmail(email)
+    public void updateTemporaryPassword(String email) {
+        userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        verifyUser(user, phone);
-
         String password = randomPassword(10);
-        System.out.println(password);
-
-        // mybatis
-//        String encodedPassword = passwordEncoder.encode(password);
-//        if(userMapper.updatePassword(email, encodedPassword) != 1){
-//            throw new UserPasswordDataAccessException();
-//        }
-
-        // jpa
         String encodedPassword = passwordEncoder.encode(password);
-        user.changePassword(encodedPassword);
-        userRepository.save(user);
 
+        if(userMapper.updatePassword(email, encodedPassword) != 1){
+            throw new UserPasswordDataAccessException();
+        }
 
         // TODO 추후 임시비밀번호 메일 발송 로직 구현
-    }
-
-    public void verifyUser(User user, String phone) {
-        if (!user.getPhone().equals(phone)){
-            throw new UserNotVerifiedException();
-        }
     }
 
     private String randomPassword(int length){
@@ -168,5 +153,19 @@ public class UserService {
         }
 
         return new String(charArray);
+    }
+
+    public void editPassword(Long userId, PasswordRequest passwordRequest) {
+        comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
+
+        User user = getUserById(userId);
+        String encodedPassword = passwordEncoder.encode(passwordRequest.getPassword());
+        user.changePassword(encodedPassword);
+    }
+
+    private void comparePasswords(String password, String confirmPassword) {
+        if ( !password.equals(confirmPassword) ){
+            throw new PasswordNotMatchedException();
+        }
     }
 }

@@ -1,47 +1,41 @@
 package bucheon.leafy.domain.alarm;
 
-import bucheon.leafy.domain.user.User;
+import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Alarm {
+public class Alarm extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarm_id")
-    @NotNull
     private Long id;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
-    private User user;
+    private AlarmType alarmType;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private AlarmType type;
+    private Boolean checked;
 
-    @NotNull
-    private boolean checked = false;
+    private Long tableId;
 
-    @NotNull
-    private Long table_id;
+    private String message;
 
-    @NotNull
-    private String msg;
+    @Builder
+    private Alarm(AlarmType alarmType, Boolean checked, Long tableId, String message) {
+        this.alarmType = alarmType;
+        this.checked = checked;
+        this.tableId = tableId;
+        this.message = message;
+    }
 
-    @CreatedDate
-    @NotNull
-    private LocalDateTime createdAt;
+//    public static Alarm of() {
+//        return Alarm.builder().build();
+//    }
 
 }
-

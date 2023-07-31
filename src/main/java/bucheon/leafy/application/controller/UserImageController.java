@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-@Tag(name = "회원정보")
+@Tag(name = "회원 이미지")
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor

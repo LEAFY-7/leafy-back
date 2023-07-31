@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
@@ -20,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 
 @Tag(name = "회원정보")
@@ -95,20 +97,30 @@ public class UserController {
         return ResponseEntity.ok().body(getMe);
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
+            @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
+    })
+    @Operation(summary = "비밀번호 변경")
+    @PutMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePassword(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                               @RequestBody @Valid PasswordRequest passwordRequest) {
+
+        Long userId = authUser.getUserId();
+        userService.editPassword(userId, passwordRequest);
+    }
+
+    @Operation(summary = "임시 비밀번호 발급")
+    @PutMapping("/temporary-password")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateTemporaryPassword(@RequestParam String email){
+        userService.updateTemporaryPassword(email);
+    }
+
     private void insertTokenInHeader(TokenResponse tokenResponse) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenResponse.getToken());
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "임시 비밀번호 발급 성공"),
-            @ApiResponse(responseCode = "400", description = "email, phone 비교 검증 불통과"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 email")
-    })
-    @Operation(summary = "임시 비밀번호 발급")
-    @PutMapping("/temporary-password")
-    public void updateTemporaryPassword(@RequestParam String email, String phone){
-        userService.updateTemporaryPassword(email, phone);
     }
 
 }

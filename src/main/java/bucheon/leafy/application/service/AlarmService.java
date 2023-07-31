@@ -60,11 +60,11 @@ public class AlarmService {
         if(scrollRequest.hasKey()){
             List<AlarmResponse> alarms =  alarmMapper.findByUserId(user.getUserId(), scrollRequest);
             ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
-            return new ScrollResponse(nextScrollRequest, alarms);
+            return ScrollResponse.of(nextScrollRequest, alarms);
         } else {
             List<AlarmResponse> alarms = alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
             ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
-            return new ScrollResponse(nextScrollRequest, alarms);
+            return ScrollResponse.of(nextScrollRequest, alarms);
         }
     }
 

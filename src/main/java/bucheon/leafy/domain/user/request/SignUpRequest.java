@@ -21,11 +21,11 @@ public class SignUpRequest {
         private String email;
 
         @NotBlank(message = "비밀번호를 입력해주세요")
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,15}$")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
         private String password;
 
         @NotBlank(message = "체크 비밀번호를 입력해주세요")
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,15}$")
+        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
         private String confirmPassword;
 
         @NotBlank(message = "이름을 입력해주세요")
@@ -83,10 +83,5 @@ public class SignUpRequest {
                 this.gender = gender;
         }
 
-        public void comparePasswords(String password, String confirmPassword) {
-                if ( !password.equals(confirmPassword) ){
-                        throw new PasswordNotMatchedException();
-                }
-        }
 
 }
