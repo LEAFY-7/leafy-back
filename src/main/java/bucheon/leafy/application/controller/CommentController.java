@@ -75,16 +75,6 @@ public class CommentController {
 
         return ResponseEntity.status(200).body("댓글이 삭제 되었습니다.");
     }
-//    @Operation(summary = "댓글 읽기")
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<CommentDto> Read(@AuthenticationPrincipal AuthUser user,
-//                                       @PathVariable("id") Long id) {
-//
-//        Long userId = user.getUserId();
-//        CommentDto commentDto = commentService.getRead(id, userId);
-//
-//        if(commentDto) {
-//            throw new RemoveFailedException();
-//        }
+
 
 }

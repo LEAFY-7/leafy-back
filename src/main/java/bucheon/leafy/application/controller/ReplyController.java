@@ -30,7 +30,7 @@ public class ReplyController {
     private final CommentService commentService;
 
     @Operation(summary = "대댓글 수정")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}")  //수정
     public ResponseEntity<String> modify( @AuthenticationPrincipal AuthUser user,
                                             @RequestBody ReplyDto replyDto) {
         Long userId = user.getUserId();
@@ -58,20 +58,6 @@ public class ReplyController {
 
     }
 
-//    @Operation(summary = "Qna 게시판 대댓글 리스트 불러오기")
-//    @GetMapping("/read/{qnaId}")
-//    public ResponseEntity<Object> read(
-//            @AuthenticationPrincipal AuthUser user,
-//            @PathVariable("id") Long qnaId
-//    ) {
-//
-//        List<ReplyDto> replyDtoList =  replyService.getList(qnaId);
-//
-//        if(replyDtoList.isEmpty()){
-//            throw  new ReadFailedException();
-//        }
-//        return ResponseEntity.ok().body(replyDtoList);
-//    }
 
     @Operation(summary = "대댓글 삭제")
     @DeleteMapping("/{id}")

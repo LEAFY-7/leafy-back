@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface NoticeMapper {
-    NoticeDto select(Long id);
+    NoticeDto findById(Long id);
     int viewCnt(Long id);
     int delete(Long id);
     Long insert(NoticeDto noticeDto) ;

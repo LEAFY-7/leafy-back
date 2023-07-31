@@ -33,7 +33,7 @@
         SELECT q.*, qc.id AS qna_comment_id
         FROM qna q
                  LEFT JOIN qna_comment qc ON q.id = qc.qna_id
-        WHERE q.id = #{id}
+        WHERE q.id = #{id} AND q.user_id = #{userId}
     </select>
 
     <select id="selectPage" parameterType="map" resultType="QnaDto">
@@ -48,7 +48,7 @@
         WHERE id = #{id}
     </update>
 
-    <update id="update" parameterType="QnaDto">
+    <update id="update">
         UPDATE qna
         SET   title = #{title}
           , contents = #{contents}
