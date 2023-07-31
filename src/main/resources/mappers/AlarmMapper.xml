@@ -4,16 +4,17 @@
 <mapper namespace="bucheon.leafy.application.mapper.AlarmMapper">
 
     <insert id="saveAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmRequest">
-        insert into alarm(user_id, type, table_id, msg, checked, created_at)
-        values (#{userId}, #{type}, #{tableId}, #{msg}, false, now())
+        insert into alarm(user_id, alarm_type, table_id, message, checked, created_at, modified_at, is_delete)
+        values (#{userId}, #{alarmType}, #{tableId}, #{message}, false, now(), now(), false)
     </insert>
 
     <update id="updateCheckAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmCheckRequest">
         update alarm
-        set checked = true
+        set checked = true,
+            modified_at = now()
         where checked = false
           and user_id = #{userId}
-          and type = #{type}
+          and alarm_type = #{alarmType}
           and table_id = #{tableId}
     </update>
 
@@ -31,7 +32,7 @@
     </delete>
 
     <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, type, checked, table_id, msg, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
         from alarm
         where user_id = #{userId}
           and alarm_id &lt; #{scrollRequest.key}
@@ -45,13 +46,13 @@
     </select>
 
     <select id="findById" resultType="Hashmap">
-        select alarm_id, user_id, type, checked, table_id, msg, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
         from alarm
         where alarm_id = #{id}
     </select>
 
     <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, type, checked, table_id, msg, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
         from alarm
         where user_id = #{userId}
         order by created_at desc limit #{scrollRequest.size}

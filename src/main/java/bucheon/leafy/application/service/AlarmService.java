@@ -27,15 +27,15 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void createAlarm(long userId, AlarmType type, long tableId, String msg){
-        AlarmRequest request = new AlarmRequest(userId, type, tableId, msg);
+    public void createAlarm(long userId, AlarmType alarmType, long tableId, String message){
+        AlarmRequest request = new AlarmRequest(userId, alarmType, tableId, message);
         alarmMapper.saveAlarm(request);
     }
 
     @Async
     @Transactional
-    public void readAlarm(long userId, AlarmType type, long tableId){
-        AlarmCheckRequest request = new AlarmCheckRequest(userId, type, tableId);
+    public void readAlarm(long userId, AlarmType alarmType, long tableId){
+        AlarmCheckRequest request = new AlarmCheckRequest(userId, alarmType, tableId);
         alarmMapper.updateCheckAlarm(request);
     }
 

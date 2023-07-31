@@ -111,11 +111,15 @@ public class UserController {
         userService.editPassword(userId, passwordRequest);
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "임시 비밀번호 발급 성공"),
+            @ApiResponse(responseCode = "400", description = "email, phone 비교 검증 불통과"),
+            @ApiResponse(responseCode = "404", description = "유효하지 않은 email")
+    })
     @Operation(summary = "임시 비밀번호 발급")
     @PutMapping("/temporary-password")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateTemporaryPassword(@RequestParam String email){
-        userService.updateTemporaryPassword(email);
+    public void updateTemporaryPassword(@RequestParam String email, String phone) {
+        userService.updateTemporaryPassword(email, phone);
     }
 
     private void insertTokenInHeader(TokenResponse tokenResponse) {

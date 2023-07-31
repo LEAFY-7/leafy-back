@@ -8,10 +8,7 @@ import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
-import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.PasswordNotMatchedException;
-import bucheon.leafy.exception.UserNotFoundException;
-import bucheon.leafy.exception.UserPasswordDataAccessException;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.enums.ExceptionKey;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
@@ -41,6 +38,7 @@ public class UserService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserMapper userMapper;
+
 
     public TokenResponse signIn(SignInRequest signInRequest) {
 
@@ -110,18 +108,33 @@ public class UserService {
         return GetMeResponse.of(user);
     }
 
-    public void updateTemporaryPassword(String email) {
-        userRepository.findByEmail(email)
+    public void updateTemporaryPassword(String email, String phone) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        String password = randomPassword(10);
-        String encodedPassword = passwordEncoder.encode(password);
+        verifyUser(user, phone);
 
-        if(userMapper.updatePassword(email, encodedPassword) != 1){
-            throw new UserPasswordDataAccessException();
-        }
+        String password = randomPassword(10);
+
+        // mybatis
+//        String encodedPassword = passwordEncoder.encode(password);
+//        if(userMapper.updatePassword(email, encodedPassword) != 1){
+//            throw new UserPasswordDataAccessException();
+//        }
+
+        // jpa
+        String encodedPassword = passwordEncoder.encode(password);
+        user.changePassword(encodedPassword);
+        userRepository.save(user);
+
 
         // TODO 추후 임시비밀번호 메일 발송 로직 구현
+    }
+
+    public void verifyUser(User user, String phone) {
+        if (!user.getPhone().equals(phone)) {
+            throw new UserNotVerifiedException();
+        }
     }
 
     private String randomPassword(int length){
