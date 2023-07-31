@@ -18,6 +18,7 @@ public class Alarm extends BaseDeleteEntity {
     @Column(name = "alarm_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
 
     private Boolean checked;

@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 public class AlarmRequest {
 
     private Long userId;
-    private AlarmType type;
+    private AlarmType alarmType;
     private Long tableId;
-    private String msg;
+    private String message;
 
     @Builder
-    public AlarmRequest(Long userId, AlarmType type, Long tableId, String msg) {
+    public AlarmRequest(Long userId, AlarmType alarmType, Long tableId, String message) {
         this.userId = userId;
-        this.type = type;
+        this.alarmType = alarmType;
         this.tableId = tableId;
-        this.msg = msg;
+        this.message = message;
     }
 }
