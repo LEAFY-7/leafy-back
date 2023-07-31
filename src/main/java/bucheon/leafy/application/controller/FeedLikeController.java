@@ -22,7 +22,7 @@ public class FeedLikeController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "좋아요 등록 성공"),
-            @ApiResponse(responseCode = "404", description = "게시글이 삭제됨")
+            @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @PostMapping
     @Operation(summary = "좋아요 등록")
@@ -35,7 +35,7 @@ public class FeedLikeController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "좋아요 삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "게시글이 삭제됨")
+            @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @DeleteMapping
     @Operation(summary = "좋아요 삭제")
