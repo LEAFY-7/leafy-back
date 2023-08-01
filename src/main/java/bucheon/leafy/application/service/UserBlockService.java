@@ -33,7 +33,13 @@ public class UserBlockService {
                 .map(UserBlock::getBlockUser)
                 .collect(Collectors.toList());
 
-        return blockUsers.stream()
+        List<Long> userIds = blockUsers.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+
+        List<User> users = userRepository.findAllById(userIds);
+
+        return users.stream()
                 .map(UserResponse::of)
                 .collect(Collectors.toList());
     }
