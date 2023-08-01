@@ -39,7 +39,7 @@ public class FeedBlockService {
                 .map(Feed::getId)
                 .collect(Collectors.toList());
 
-        List<Long> userIds = userRepository.findAllUserIdsByFeedIdIn(feedIds);
+//        List<User> users = userRepository.findAllUserByFeedIn(feedIds);
 
         return null;
     }
