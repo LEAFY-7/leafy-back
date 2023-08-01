@@ -1,6 +1,7 @@
 package bucheon.leafy.application.repository;
 
 import bucheon.leafy.domain.feed.Feed;
+import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,5 +37,11 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             nativeQuery = true)
     List<PopularTagInformation> getPopular10TagsInTop100Feeds();
 
+    @Query(value = "SELECT new bucheon.leafy.domain.feed.response.FeedResponse( " +
+            "f.id, u.id, f.title, f.content, f.feedType, f.createdAt, f.modifiedAt " +
+            ") FROM User u " +
+            "INNER JOIN u.feeds f " +
+            "WHERE f IN :feeds")
+    List<FeedResponse> findAllFeedWithUserIdByFeedIn(@Param("feeds") List<Feed> feeds);
 
 }
