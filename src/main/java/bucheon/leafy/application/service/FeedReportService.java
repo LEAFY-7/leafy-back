@@ -34,11 +34,7 @@ public class FeedReportService {
                 .map(FeedReport::getFeed)
                 .collect(Collectors.toList());
 
-        List<FeedResponse> feedResponses = feeds.stream()
-                .map(FeedResponse::of)
-                .collect(Collectors.toList());
-
-        return null;
+        return feedRepository.findAllFeedWithUserIdByFeedIn(feeds);
     }
 
     public void reportFeed(Long userId, Long feedId) {

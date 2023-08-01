@@ -35,13 +35,7 @@ public class FeedBlockService {
                 .map(FeedBlock::getFeed)
                 .collect(Collectors.toList());
 
-        List<Long> feedIds = feeds.stream()
-                .map(Feed::getId)
-                .collect(Collectors.toList());
-
-//        List<User> users = userRepository.findAllUserByFeedIn(feedIds);
-
-        return null;
+        return feedRepository.findAllFeedWithUserIdByFeedIn(feeds);
     }
 
     public void blockFeed(Long userId, Long feedId) {
