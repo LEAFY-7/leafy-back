@@ -13,7 +13,7 @@ public interface FeedBlockRepository extends JpaRepository<FeedBlock, Long> {
 
     @EntityGraph(attributePaths = "feed")
     List<FeedBlock> findByUserId(Long userId, Pageable pageable);
-    void deleteByUserAndFeed(User user, Feed feed);
 
+    void deleteByUserAndFeed(User user, Feed feed);
 
 }
