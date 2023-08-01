@@ -1,12 +1,10 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.repository.FeedBlockRepository;
 import bucheon.leafy.application.repository.FeedReportRepository;
 import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.response.FeedResponse;
-import bucheon.leafy.domain.feedblock.FeedBlock;
 import bucheon.leafy.domain.feedreport.FeedReport;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.FeedNotFoundException;
