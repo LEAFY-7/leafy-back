@@ -23,7 +23,7 @@ public class FeedResponse {
     private LocalDateTime modifiedAt;
 
     @Builder
-    private FeedResponse(Long feedId, Long userId, String title, String content,
+    public FeedResponse(Long feedId, Long userId, String title, String content,
                          FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.feedId = feedId;
         this.userId = userId;
