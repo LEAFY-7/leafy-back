@@ -33,7 +33,13 @@ public class UserReportService {
                 .map(UserReport::getReportUser)
                 .collect(Collectors.toList());
 
-        return reportUsers.stream()
+        List<Long> userIds = reportUsers.stream()
+                .map(User::getId)
+                .collect(Collectors.toList());
+
+        List<User> users = userRepository.findAllById(userIds);
+
+        return users.stream()
                 .map(UserResponse::of)
                 .collect(Collectors.toList());
     }
