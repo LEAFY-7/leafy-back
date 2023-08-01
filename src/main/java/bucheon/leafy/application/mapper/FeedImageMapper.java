@@ -12,11 +12,11 @@ public interface FeedImageMapper {
 
     List<FeedImageResponse> findImageList(Long feedId);
 
-    String findImage(Long imageId);
+    String findImage(Long feedImageId);
 
     void saveImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
 
     void deleteAllImages();
 
-    int deleteImage(Long feedId, Long imageId);
+    int deleteImage(Long feedId, Long feedImageId);
 }

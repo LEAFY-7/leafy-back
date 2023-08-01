@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 public class FeedTagRequest {
 
-    private Long tagId;
+    @JsonIgnore
+    private Long feedTagId;
     private String tag;
 
     @Builder
-    private FeedTagRequest(Long tagId, String tag) {
-        this.tagId = tagId;
+    private FeedTagRequest(String tag) {
         this.tag = tag;
     }
 }

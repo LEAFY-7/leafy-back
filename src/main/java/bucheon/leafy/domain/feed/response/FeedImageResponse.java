@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FeedImageResponse {
-    private Long imageId;
+    private Long feedImageId;
     private String imageName;
     private String imageUrl;
 
     @Builder
-    public FeedImageResponse(Long imageId, String imageName) {
-        this.imageId = imageId;
+    public FeedImageResponse(Long feedImageId, String imageName) {
+        this.feedImageId = feedImageId;
         this.imageName = imageName;
     }
 }

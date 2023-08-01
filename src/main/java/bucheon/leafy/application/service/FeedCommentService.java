@@ -36,16 +36,13 @@ public class FeedCommentService {
     public Long saveComment(Long userId, Long feedId, FeedCommentRequest request) {
         feedCommentMapper.saveComment(userId, feedId, request);
 
-        return request.getCommentId();
+        return request.getFeedCommentId();
     }
 
-    public Map<String, Object> updateComment(Long userId, Long feedId, Long commentId, FeedCommentRequest request) {
+    public FeedCommentResponse updateComment(Long userId, Long feedId, Long commentId, FeedCommentRequest request) {
         if( feedCommentMapper.editComment(userId, feedId, commentId, request) == 1 ) {
             FeedCommentResponse response = feedCommentMapper.findCommentById(commentId);
-            Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("data", response);
-            responseMap.put("message", "댓글 수정 완료");
-            return responseMap;
+            return response;
         } else {
             throw new FeedCommentDataAccessException();
         }

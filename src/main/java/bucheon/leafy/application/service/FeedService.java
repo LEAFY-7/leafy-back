@@ -11,7 +11,7 @@ import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
-import bucheon.leafy.domain.feed.request.FeedUpdateRequest;
+import bucheon.leafy.application.component.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
@@ -98,7 +98,7 @@ public class FeedService {
             List<FeedTagRequest> deleteTagList = new ArrayList<>();
             List<FeedTagRequest> saveFeedList = new ArrayList<>();
             for( FeedTagRequest tagRequest : request.getTagRequestList() ) {
-                Long tagId = tagRequest.getTagId();
+                Long tagId = tagRequest.getFeedTagId();
                 if (tagId != null && tagId > 0) {
                     deleteTagList.add(tagRequest);
                 } else {

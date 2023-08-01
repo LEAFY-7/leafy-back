@@ -1,6 +1,6 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.application.response.MyPageResponse;
+import bucheon.leafy.application.component.response.MyPageResponse;
 import bucheon.leafy.application.service.FeedLikeInfoService;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.application.service.FollowService;

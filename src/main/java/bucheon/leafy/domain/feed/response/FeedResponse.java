@@ -16,16 +16,28 @@ public class FeedResponse {
     private Long userId;
     private String title;
     private String content;
+    private String species;
+    private String nickname;
+    private Double temperature;
+    private Integer humidity;
+    private Double waterAmount;
+    private String wateringPeriod;
     private FeedType feedType;
     private Date createdAt;
     private Date modifiedAt;
 
     @Builder
-    private FeedResponse(Long feedId, Long userId, String title, String content, FeedType feedType, Date createdAt, Date modifiedAt) {
+    public FeedResponse(Long feedId, Long userId, String title, String content, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, FeedType feedType, Date createdAt, Date modifiedAt) {
         this.feedId = feedId;
         this.userId = userId;
         this.title = title;
         this.content = content;
+        this.species = species;
+        this.nickname = nickname;
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.waterAmount = waterAmount;
+        this.wateringPeriod = wateringPeriod;
         this.feedType = feedType;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;

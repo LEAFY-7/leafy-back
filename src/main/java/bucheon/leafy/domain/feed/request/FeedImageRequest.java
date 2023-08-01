@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FeedImageRequest {
     @JsonIgnore
-    private Long imageId;
+    private Long feedImageId;
     private String imageName;
 
     @Builder
-    private FeedImageRequest(Long imageId, String imageName) {
-        this.imageId = imageId;
+    private FeedImageRequest(Long feedImageId, String imageName) {
+        this.feedImageId = feedImageId;
         this.imageName = imageName;
     }
 }

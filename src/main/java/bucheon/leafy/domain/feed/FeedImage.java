@@ -14,7 +14,7 @@ public class FeedImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "feed_image_id")
     private Long id;
 
     private String imageName;

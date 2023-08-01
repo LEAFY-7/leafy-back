@@ -16,7 +16,6 @@ public class FeedTag {
     @Column(name = "feed_tag_id")
     private Long id;
 
-    @Column(unique = true)
     private String tag;
 
     @Builder
