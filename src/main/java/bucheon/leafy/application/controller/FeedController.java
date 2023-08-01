@@ -1,5 +1,6 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.component.response.FeedFindResponse;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
@@ -34,7 +35,7 @@ public class FeedController {
 
     @Operation(summary = "피드 상세")
     @GetMapping("/{feedId}")
-    public ResponseEntity<Map<String, Object>> getFeedById(@PathVariable Long feedId) {
+    public ResponseEntity<FeedFindResponse> getFeedById(@PathVariable Long feedId) {
         return ResponseEntity.ok().body(service.getFeedById(feedId));
     }
 

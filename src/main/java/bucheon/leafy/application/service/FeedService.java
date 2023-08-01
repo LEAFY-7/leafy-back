@@ -1,11 +1,13 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.ImageComponent;
+import bucheon.leafy.application.component.response.FeedFindResponse;
 import bucheon.leafy.application.mapper.FeedImageMapper;
 import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.mapper.FeedTagMapper;
 import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.FeedRepository;
+import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
@@ -15,8 +17,10 @@ import bucheon.leafy.application.component.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
+import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
+import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,7 @@ import static bucheon.leafy.path.S3Path.FEED_PATH;
 public class FeedService {
     private final FeedMapper feedMapper;
     private final FeedRepository feedRepository;
+    private final UserRepository userRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final ImageComponent imageComponent;
     private final FeedImageMapper feedImageMapper;
@@ -43,6 +48,11 @@ public class FeedService {
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if (scrollRequest.hasKey()) {
             List<FeedResponse> responseList = feedMapper.findFeedListScroll(scrollRequest);
+            responseList.forEach(feedResponse -> {
+                Long userId = feedResponse.getUserId();
+                Optional<User> user = Optional.of(userRepository.findById(userId)).orElseThrow(UserNotFoundException::new);
+                feedResponse.setUserName(user.map(User::getName).orElseThrow(UserNotFoundException::new));
+            });
             ScrollResponse scrollResponse = ScrollResponse.of(scrollRequest, responseList);
             return scrollResponse;
         } else if (scrollRequest.getKey() == null) {
@@ -53,13 +63,15 @@ public class FeedService {
         }
     }
 
-    public Map<String, Object> getFeedById(Long feedId) {
-        Map<String, Object> responseMap = new HashMap<>();
+    public FeedFindResponse getFeedById(Long feedId) {
+        FeedFindResponse response =  FeedFindResponse.builder()
+                .feedResponse(Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new))
+                .tagResponseList(findTagList(feedId)).build();
 
-        responseMap.put("feed", Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new));
-        responseMap.put("tag", findTagList(feedId));
-
-        return responseMap;
+        Long userId = response.getFeedResponse().getUserId();
+        Optional<User> user = Optional.of(userRepository.findById(userId)).orElseThrow(UserNotFoundException::new);
+        response.getFeedResponse().setUserName(user.map(User::getName).orElseThrow(UserNotFoundException::new));
+        return response;
     }
 
     public List<FeedTagResponse> findTagList(Long feedId) {

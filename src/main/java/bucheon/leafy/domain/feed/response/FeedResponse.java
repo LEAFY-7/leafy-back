@@ -1,12 +1,13 @@
 package bucheon.leafy.domain.feed.response;
 
 
+import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public class FeedResponse {
 
     private Long feedId;
     private Long userId;
+    private String userName;
     private String title;
     private String content;
     private String species;
@@ -23,13 +25,14 @@ public class FeedResponse {
     private Double waterAmount;
     private String wateringPeriod;
     private FeedType feedType;
-    private Date createdAt;
-    private Date modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @Builder
-    public FeedResponse(Long feedId, Long userId, String title, String content, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, FeedType feedType, Date createdAt, Date modifiedAt) {
+    public FeedResponse(Long feedId, Long userId, String userName, String title, String content, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.feedId = feedId;
         this.userId = userId;
+        this.userName = userName;
         this.title = title;
         this.content = content;
         this.species = species;
@@ -42,4 +45,16 @@ public class FeedResponse {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
+    public static FeedResponse of(Feed feed) {
+        return FeedResponse.builder()
+                .feedId(feed.getId())
+                .title(feed.getTitle())
+                .content(feed.getContent())
+                .feedType(feed.getFeedType())
+                .createdAt(feed.getCreatedAt())
+                .modifiedAt(feed.getModifiedAt())
+                .build();
+    }
+
 }

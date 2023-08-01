@@ -28,11 +28,17 @@ public class FeedBlock extends BaseEntity {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-
     @Builder
     private FeedBlock(User user, Feed feed) {
         this.user = user;
         this.feed = feed;
+    }
+
+    public static FeedBlock of(User user, Feed feed) {
+        return FeedBlock.builder()
+                .user(user)
+                .feed(feed)
+                .build();
     }
 
 }

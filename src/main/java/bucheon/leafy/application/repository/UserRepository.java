@@ -13,6 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findById(Long userId);
 
+    @Override
+    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"} )
+    List<User> findAllById(Iterable<Long> userIds);
+
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findByEmail(String email);
 
@@ -21,4 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findByNickName(String nickName);
+
 }
