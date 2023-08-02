@@ -10,6 +10,6 @@ public class FollowNotFoundException extends GlobalException {
 
     @Override
     public int getStatusCode() {
-        return 404;
+        return 500;
     }
 }

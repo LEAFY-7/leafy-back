@@ -14,7 +14,6 @@ public class UserBackgroundImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_background_image_id")
     private Long id;
 
     @OneToOne
@@ -38,7 +37,4 @@ public class UserBackgroundImage {
     }
 
 
-    public void update(String image) {
-        this.image = image;
-    }
 }

@@ -1,0 +1,11 @@
+diff a/src/main/java/bucheon/leafy/application/component/ImageComponent.java b/src/main/java/bucheon/leafy/application/component/ImageComponent.java	(rejected hunks)
+@@ -69,8 +69,7 @@
+     }
+ 
+     public void deleteImage(String imagePath, String imageName) {
+-
+-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
++        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
+     }
+ 
+     private String createUUID() {

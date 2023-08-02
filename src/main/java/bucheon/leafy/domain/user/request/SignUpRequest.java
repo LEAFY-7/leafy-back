@@ -1,7 +1,6 @@
 package bucheon.leafy.domain.user.request;
 
 import bucheon.leafy.domain.user.Gender;
-import bucheon.leafy.exception.PasswordNotMatchedException;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -21,12 +19,7 @@ public class SignUpRequest {
         private String email;
 
         @NotBlank(message = "비밀번호를 입력해주세요")
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
         private String password;
-
-        @NotBlank(message = "체크 비밀번호를 입력해주세요")
-        @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
-        private String confirmPassword;
 
         @NotBlank(message = "이름을 입력해주세요")
         private String name;
@@ -35,7 +28,6 @@ public class SignUpRequest {
         private String nickName;
 
         @NotBlank(message = "전화번호를 입력해주세요")
-        @Pattern(regexp = "([0|1|6|7|8|9]{3})([0-9]{3,4})?([0-9]{4})")
         private String phone;
 
         @NotBlank(message = "간단 소개를 입력해주세요")
@@ -49,22 +41,22 @@ public class SignUpRequest {
 
 
         // TODO : 주소
-        private String zoneCode;
+        private String zipcode;
 
-        private String address;
+        private String street;
 
-        private String jibunAddress;
+        private String lot;
 
-        private String roadAddress;
+        private String detail;
 
-        private String detailAddress;
+        private String reference;
 
         private Boolean addressIsHide;
 
         @Builder
         private SignUpRequest(String password, String email, String nickName,  String name,
-                              String simpleIntroduction, String phone, String zoneCode,
-                              String address, String jibunAddress, String roadAddress, String detailAddress,
+                              String simpleIntroduction, String phone, String zipcode,
+                              String street, String lot, String detail, String reference,
                               Boolean addressIsHide, LocalDate birthDay, Gender gender) {
 
                 this.password = password;
@@ -73,15 +65,14 @@ public class SignUpRequest {
                 this.name = name;
                 this.simpleIntroduction = simpleIntroduction;
                 this.phone = phone;
-                this.zoneCode = zoneCode;
-                this.address = address;
-                this.jibunAddress = jibunAddress;
-                this.roadAddress = roadAddress;
-                this.detailAddress = detailAddress;
+                this.zipcode = zipcode;
+                this.street = street;
+                this.lot = lot;
+                this.detail = detail;
+                this.reference = reference;
                 this.addressIsHide = addressIsHide;
                 this.birthDay = birthDay;
                 this.gender = gender;
         }
-
 
 }

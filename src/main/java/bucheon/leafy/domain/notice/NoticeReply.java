@@ -17,7 +17,6 @@ public class NoticeReply extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_reply_id")
     private Long id;
 
     @JoinColumn(name = "user_id")

@@ -37,7 +37,7 @@ public class FeedReplyService {
     public Long saveReply(Long userId, Long feedId, Long commentId, FeedReplyRequest request) {
         feedReplyMapper.saveReply(userId, feedId, commentId, request);
 
-        return request.getFeedReplyId();
+        return request.getReplyId();
     }
 
     public Map<String, Object> updateReply(Long userId, Long feedId, Long commentId, Long replyId, FeedReplyRequest request) {

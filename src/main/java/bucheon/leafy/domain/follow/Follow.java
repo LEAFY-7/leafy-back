@@ -16,7 +16,6 @@ public class Follow extends BaseEntity {
 
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "follow_id")
     private Long id;
 
     // 나, 본인

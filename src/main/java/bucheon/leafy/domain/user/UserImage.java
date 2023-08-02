@@ -13,7 +13,6 @@ import javax.persistence.*;
 public class UserImage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_image_id")
     private Long id;
 
     @OneToOne
@@ -29,15 +28,10 @@ public class UserImage {
     }
 
     // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
-    public static UserImage of(String image, User user) {
+    public static UserImage of(String userImage, User user) {
         return UserImage.builder()
-                .image(image)
+                .image(userImage)
                 .user(user)
                 .build();
     }
-
-    public void update(String image){
-        this.image = image;
-    }
-
 }

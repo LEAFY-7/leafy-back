@@ -15,39 +15,41 @@ import javax.persistence.*;
 public class Address extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String zoneCode; // 우편번호
-    private String address; // 주소
-    private String jibunAddress; // 지번주소
-    private String roadAddress; // 도로명주소
-    private String detailAddress; // 상세주소
+    private String zipcode;
+
+    private String street;
+
+    private String lot;
+
+    private String detail;
+
+    private String reference;
 
     private Boolean isHide;
 
     @Builder
-    private Address(String zoneCode, String address, String jibunAddress,
-                    String roadAddress, String detailAddress, Boolean isHide) {
-        this.zoneCode = zoneCode;
-        this.address = address;
-        this.jibunAddress = jibunAddress;
-        this.roadAddress = roadAddress;
-        this.detailAddress = detailAddress;
+    private Address(String zipcode, String street, String lot, String detail, String reference, Boolean isHide) {
+        this.zipcode = zipcode;
+        this.street = street;
+        this.lot = lot;
+        this.detail = detail;
+        this.reference = reference;
         this.isHide = isHide;
     }
 
     public static Address of(SignUpRequest signUpRequest) {
         return Address.builder()
-                .zoneCode(signUpRequest.getZoneCode())
-                .address(signUpRequest.getAddress())
-                .jibunAddress(signUpRequest.getJibunAddress())
-                .roadAddress(signUpRequest.getRoadAddress())
-                .detailAddress(signUpRequest.getDetailAddress())
+                .zipcode(signUpRequest.getZipcode())
+                .street(signUpRequest.getStreet())
+                .lot(signUpRequest.getLot())
+                .detail(signUpRequest.getDetail())
+                .reference(signUpRequest.getReference())
                 .isHide(signUpRequest.getAddressIsHide())
                 .build();
     }

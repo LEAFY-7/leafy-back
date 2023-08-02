@@ -26,7 +26,7 @@ public class FeedCommentController {
 
     @Operation(summary = "피드 댓글 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedCommentResponse>> getComments(@PathVariable Long feedId, ScrollRequest scrollRequest) {
+    public ResponseEntity<List<FeedCommentResponse>> getComments(@PathVariable Long feedId, @RequestParam(required = false) ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getComments(feedId, scrollRequest));
     }
 
@@ -41,7 +41,7 @@ public class FeedCommentController {
     @Operation(summary = "피드 댓글 수정")
     @PutMapping("/{commentId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<FeedCommentResponse> updateComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedCommentRequest request) {
+    public ResponseEntity<Map<String, Object>> updateComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedCommentRequest request) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.updateComment(userId, feedId, commentId, request));
     }

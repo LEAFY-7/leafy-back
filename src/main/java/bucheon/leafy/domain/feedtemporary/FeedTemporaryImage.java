@@ -13,7 +13,7 @@ public class FeedTemporaryImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feed_temporary_image_id")
+    @Column(name = "image_id")
     private Long id;
 
     private String imageName;
