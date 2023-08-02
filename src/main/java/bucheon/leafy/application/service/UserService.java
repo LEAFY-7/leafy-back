@@ -1,5 +1,6 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
@@ -38,6 +39,8 @@ public class UserService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserMapper userMapper;
+
+    private final AlarmMapper alarmMapper;
 
 
     public TokenResponse signIn(SignInRequest signInRequest) {
@@ -105,7 +108,8 @@ public class UserService {
 
     public GetMeResponse getMe(Long userId) {
         User user = getUserById(userId);
-        return GetMeResponse.of(user);
+        int alarmCount = alarmMapper.countByUserId(userId);
+        return GetMeResponse.of(user, alarmCount);
     }
 
     public void updateTemporaryPassword(String email, String phone) {
