@@ -3,23 +3,23 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedReplyMapper">
     <select id="findReplyListFirst" resultType="FeedReplyResponse" parameterType="ScrollRequest">
-        select * from feed_reply where is_delete = false and feed_id = #{feedId} and comment_id = #{commentId} ORDER BY reply_id DESC LIMIT #{scrollRequest.size}
+        select * from feed_reply where is_delete = false and feed_id = #{feedId} and feed_comment_id = #{feedCommentId} ORDER BY feed_reply_id DESC LIMIT #{scrollRequest.size}
     </select>
 
     <select id="findReplyListScroll" resultType="FeedReplyResponse" parameterType="ScrollRequest">
-        select * from feed_reply where is_delete = false and feed_id = #{feedId} and and comment_id = #{commentId} reply_id &lt; #{scrollRequest.key} ORDER BY reply_id DESC LIMIT #{scrollRequest.size}
+        select * from feed_reply where is_delete = false and feed_id = #{feedId} and and feed_comment_id = #{feedCommentId} feed_reply_id &lt; #{scrollRequest.key} ORDER BY feed_reply_id DESC LIMIT #{scrollRequest.size}
     </select>
 
     <select id="findReplyById" resultType="FeedReplyResponse" parameterType="java.lang.Long">
-        select * from feed_reply where reply_id = #{replyId} and is_delete = false
+        select * from feed_reply where feed_reply_id = #{feedReplyId} and is_delete = false
     </select>
 
-    <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyColumn="reply_id" keyProperty="request.replyId">
-        insert into feed_reply (user_id,feed_id,comment_id,reply,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{commentId}, #{request.reply}, false, now(), now())
+    <insert id="saveReply" parameterType="FeedReplyRequest" useGeneratedKeys="true" keyColumn="feed_reply_id" keyProperty="request.feedReplyId">
+        insert into feed_reply (user_id,feed_id,feed_comment_id,reply,is_delete,created_at,modified_at) values (#{userId}, #{feedId}, #{feedCommentId}, #{request.reply}, false, now(), now())
     </insert>
 
     <update id="editReply" parameterType="FeedReplyRequest">
-        update feed_reply set reply = #{request.reply}, modified_at = now() where reply_id = #{replyId} and user_id = #{userId} and feed_id = #{feedId} and comment_id = #{commentId}
+        update feed_reply set reply = #{request.reply}, modified_at = now() where feed_reply_id = #{feedReplyId} and user_id = #{userId} and feed_id = #{feedId} and feed_comment_id = #{feedCommentId}
     </update>
 
     <delete id="deleteAllReplies">
@@ -27,6 +27,6 @@
     </delete>
 
     <delete id="deleteReply"  parameterType="java.lang.Long">
-        update feed_reply set is_delete = true where reply_id = #{replyId} and user_id = #{userId} and feed_id = #{feedId} and comment_id = #{commentId}
+        update feed_reply set is_delete = true where feed_reply_id = #{feedReplyId} and user_id = #{userId} and feed_id = #{feedId} and feed_comment_id = #{feedCommentId}
     </delete>
 </mapper>

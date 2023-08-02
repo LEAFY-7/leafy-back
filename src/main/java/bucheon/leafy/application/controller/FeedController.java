@@ -1,10 +1,12 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.component.response.FeedFindResponse;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedRequest;
-import bucheon.leafy.domain.feed.response.FeedResponse;
+import bucheon.leafy.application.component.request.FeedUpdateRequest;
 import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,35 +29,30 @@ public class FeedController {
 
     @Operation(summary = "피드 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedResponse>> getFeeds(ScrollRequest scrollRequest) {
+    public ResponseEntity<ScrollResponse> getFeeds(ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getFeeds(scrollRequest));
     }
 
     @Operation(summary = "피드 상세")
     @GetMapping("/{feedId}")
-    public ResponseEntity<FeedResponse> getFeedById(@PathVariable Long feedId) {
+    public ResponseEntity<FeedFindResponse> getFeedById(@PathVariable Long feedId) {
         return ResponseEntity.ok().body(service.getFeedById(feedId));
     }
 
     @Operation(summary = "피드 등록")
     @PostMapping
     public ResponseEntity<Long> saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                         @RequestBody FeedRequest request) {
+                                         @RequestBody FeedRequest request, @RequestParam List<String> tagList) {
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(service.saveFeed(userId, request));
+        return ResponseEntity.ok().body(service.saveFeed(userId, request, tagList));
     }
 
     @Operation(summary = "피드 수정")
     @PutMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Map<String, Object>> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedRequest request) {
+    public ResponseEntity<String> updateFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedUpdateRequest request) {
         Long userId = user.getUserId();
-//        FeedResponse response = service.getFeedById(feedId);
-//        if( userId.equals(response.getUserId()) ) {
-//            return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
-//        } else {
-//            throw new AccessDeniedException("수정 권한이 없습니다.");
-//        }
+
         return ResponseEntity.ok().body(service.updateFeed(feedId, userId, request));
     }
 
@@ -64,12 +61,7 @@ public class FeedController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public ResponseEntity<String> deleteFeed(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId) {
         Long userId = user.getUserId();
-//        FeedResponse response = service.getFeedById(feedId);
-//        if( userId.equals(response.getUserId()) ) {
-//            return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
-//        } else {
-//            throw new AccessDeniedException("삭제 권한이 없습니다.");
-//        }
+
         return ResponseEntity.ok().body(service.deleteFeed(feedId, userId));
     }
 }

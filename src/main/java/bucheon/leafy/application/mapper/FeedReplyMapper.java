@@ -11,17 +11,17 @@ import java.util.List;
 @Mapper
 public interface FeedReplyMapper {
 
-    List<FeedReplyResponse> findReplyListFirst(@Param("feedId") Long feedId, @Param("commentId") Long commentId, ScrollRequest scrollRequest);
+    List<FeedReplyResponse> findReplyListFirst(@Param("feedId") Long feedId, @Param("feedCommentId") Long feedCommentId, ScrollRequest scrollRequest);
 
-    List<FeedReplyResponse> findReplyListScroll(@Param("feedId") Long feedId, @Param("commentId") Long commentId, ScrollRequest scrollRequest);
+    List<FeedReplyResponse> findReplyListScroll(@Param("feedId") Long feedId, @Param("feedCommentId") Long feedCommentId, ScrollRequest scrollRequest);
 
-    FeedReplyResponse findReplyById(Long replyId);
+    FeedReplyResponse findReplyById(Long feedReplyId);
 
-    Long saveReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedReplyRequest request);
+    Long saveReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("feedCommentId") Long feedCommentId, FeedReplyRequest request);
 
-    int editReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, @Param("replyId") Long replyId, FeedReplyRequest request);
+    int editReply(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("feedCommentId") Long feedCommentId, @Param("feedReplyId") Long feedReplyId, FeedReplyRequest request);
 
     void deleteAllReplies();
 
-    int deleteReply(Long userId, Long feedId, Long replyId, Long commentId);
+    int deleteReply(Long userId, Long feedId, Long feedCommentId, Long feedReplyId);
 }

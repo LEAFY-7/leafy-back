@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class FeedReplyRequest {
 
     @JsonIgnore
-    private Long replyId;
+    private Long feedReplyId;
     private String reply;
 
     @Builder

@@ -38,7 +38,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     List<PopularTagInformation> getPopular10TagsInTop100Feeds();
 
     @Query(value = "SELECT new bucheon.leafy.domain.feed.response.FeedResponse( " +
-            "f.id, u.id, f.title, f.content, f.feedType, f.createdAt, f.modifiedAt " +
+            "f.id, u.id, u.name, f.title, f.content, f.species, f.nickname, f.temperature, f.humidity, f.waterAmount, f.wateringPeriod, f.feedType, f.createdAt, f.modifiedAt " +
             ") FROM User u " +
             "INNER JOIN u.feeds f " +
             "WHERE f IN :feeds")

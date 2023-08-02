@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class FeedCommentRequest {
 
     @JsonIgnore
-    private Long commentId;
+    private Long feedCommentId;
     private String comment;
 
     @Builder
