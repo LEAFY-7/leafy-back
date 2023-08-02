@@ -46,11 +46,11 @@ class FeedRepositoryTest extends IntegrationTestSupport {
         //then
         Assertions.assertThat(feedResponses)
                 .hasSize(3)
-                .extracting("userId", "title")
+                .extracting("userName", "title")
                 .containsExactlyInAnyOrder(
-                        new Tuple(user1.getId(), feed1.getTitle()),
-                        new Tuple(user2.getId(), feed3.getTitle()),
-                        new Tuple(user2.getId(), feed4.getTitle())
+                        new Tuple(user1.getName(), feed1.getTitle()),
+                        new Tuple(user2.getName(), feed3.getTitle()),
+                        new Tuple(user2.getName(), feed4.getTitle())
                 );
     }
 
