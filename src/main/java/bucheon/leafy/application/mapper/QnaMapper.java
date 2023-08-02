@@ -1,5 +1,6 @@
 package bucheon.leafy.application.mapper;
 
+import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
@@ -12,8 +13,9 @@ public interface QnaMapper {
     boolean deleteById(Long id);
     Long save(QnaDto qnaDto);
     int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
+    QnaDto findQnaById(Long qnaId);
     int qnaStatusModify(Long id);
-    PageResponse<QnaDto> selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
-    PageResponse<QnaDto> adminSelectAll( PageRequest pageRequest);
+    QnaDto selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
+    QnaDto adminSelectAll( PageRequest pageRequest);
     int viewCnt(Long id);
 }

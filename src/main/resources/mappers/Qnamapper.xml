@@ -36,6 +36,10 @@
         WHERE q.id = #{id} AND q.user_id = #{userId}
     </select>
 
+    <select id="findQnaById" parameterType="Long" resultType="QnaDto" >
+        select * from qna where qna_Id = #{qna_id} and is_delete = false
+    </select>
+
     <select id="selectPage" parameterType="map" resultType="QnaDto">
         SELECT *
         ORDER BY reg_date DESC, bno DESC

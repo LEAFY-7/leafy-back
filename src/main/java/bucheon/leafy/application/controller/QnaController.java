@@ -4,6 +4,7 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.application.service.QnaService;
 import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.domain.user.response.GetMeResponse;
+import bucheon.leafy.exception.enums.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,39 +25,52 @@ public class QnaController {
     @Operation(summary = "Qna 게시물 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("{id}")
-    public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true)AuthUser user, @RequestBody QnaDto qnaDto, @PathVariable("id") Long id ) {
+    public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @RequestBody QnaDto qnaDto, @PathVariable("id") Long id) {
         return ResponseEntity.ok().body(qnaService.modify(qnaDto, id));
     }
 
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping("")
-    public ResponseEntity<Long> write( @AuthenticationPrincipal  @Parameter(hidden = true)AuthUser user,@RequestBody QnaDto qnaDto) {
+    public ResponseEntity<Long> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @RequestBody QnaDto qnaDto) {
         return ResponseEntity.ok().body(qnaService.write(qnaDto));
     }
 
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @GetMapping("/{id}")
-    public ResponseEntity<Object> read(@AuthenticationPrincipal  @Parameter(hidden = true)AuthUser user, @PathVariable Long id ) {
+    public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable Long id) {
         return ResponseEntity.ok().body(qnaService.getRead(id));
     }
 
     //Mypage이니까 자신만 삭제가능
     @Operation(summary = "Qna 게시판 글 삭제하기")
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> remove(@AuthenticationPrincipal  @Parameter(hidden = true)AuthUser user, @PathVariable("id") Long id ) {
-            return ResponseEntity.ok().body(qnaService.remove(id));
+    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(qnaService.remove(id));
     }
 
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<PageResponse<QnaDto>> list(@AuthenticationPrincipal  @Parameter(hidden = true)AuthUser user, PageRequest pageRequest) {
-        Long userId = user.getUserId();
-        if (user.getAuthorities().contains("ROLE_ADMIN")){
+    public ResponseEntity<QnaDto> list(
+            @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+            @PathVariable Long userId, PageRequest pageRequest) {
+
+            userId = user.getUserId();
+            QnaDto qnadto = qnaService.getQnaById(userId);
+
+
+        if (userId.equals(qnadto.getUserId())) {
+
+            return ResponseEntity.ok().body(qnaService.getList(pageRequest));
+
+        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
+
             return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
+
         }
-        return ResponseEntity.ok().body(qnaService.getList(userId, pageRequest));
+
+        throw new ReadFailedException();
     }
 
     @Operation(summary = "Get Me")

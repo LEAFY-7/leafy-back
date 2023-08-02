@@ -5,15 +5,17 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
+import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.exception.RemoveFailedException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.util.request.PageRequest;
-import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 @Service
@@ -38,13 +40,11 @@ public class QnaService {
     public Long write(QnaDto qnaDto) {
         return qnaMapper.save(qnaDto);
     }
-
-    public PageResponse<QnaDto> getList(Long userId, PageRequest pageRequest) {
-        PageResponse<QnaDto> qnaDto = qnaMapper.selectAll(userId, pageRequest);
-        return qnaDto;
+    public QnaDto admingetList(PageRequest pageRequest){
+        return qnaMapper.adminSelectAll(pageRequest);
     }
 
-    public PageResponse<QnaDto> admingetList(PageRequest pageRequest){
+    public QnaDto getList(PageRequest pageRequest){
         return qnaMapper.adminSelectAll(pageRequest);
     }
     @Transactional
@@ -64,6 +64,11 @@ public class QnaService {
     }
     public int qnaStatusModify(Long id) {
         return qnaMapper.qnaStatusModify(id);
+    }
+
+
+    public QnaDto getQnaById(Long qnaId) {
+        return Optional.of(qnaMapper.findQnaById(qnaId)).orElseThrow(FeedNotFoundException::new);
     }
 
     public User getUserById(Long userId){
