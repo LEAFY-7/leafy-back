@@ -1,5 +1,6 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.application.service.UserBlockService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.response.UserResponse;
@@ -25,6 +26,7 @@ import java.util.List;
 public class UserBlockController {
 
     private final UserBlockService userBlockService;
+    private final FollowService followService;
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "차단한 회원 목록 조회"),
@@ -51,6 +53,7 @@ public class UserBlockController {
                            @PathVariable Long blockUserId) {
         Long userId = authUser.getUserId();
         userBlockService.blockUser(userId, blockUserId);
+        followService.unfollow(userId, blockUserId);
     }
 
     @ApiResponses({
