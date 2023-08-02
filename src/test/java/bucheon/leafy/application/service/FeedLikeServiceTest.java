@@ -27,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FeedLikeServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    EntityManager em;
-    @Autowired
     FeedLikeService feedLikeService;
 
     @Autowired
@@ -62,12 +60,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedRepository.save(feed);
 
         //when
-        feedLikeRepository.likeIncrease(feed);
-
-        em.flush();
-        em.clear();
-
-        Feed result = feedRepository.findById(feed.getId()).get();
+        Feed result = feedLikeService.increaseLikeCount(feed.getId());
 
         //then
         assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(1);
@@ -84,11 +77,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedRepository.save(feed);
 
         //when
-        feedLikeRepository.likeDecrease(feed);
-
-        em.flush();
-        em.clear();
-        Feed result = feedRepository.findById(feed.getId()).get();
+        Feed result = feedLikeService.decreaseLikeCount(feed.getId());
 
         //then
         assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(0);
@@ -150,11 +139,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.saveLike(user.getId(), feed.getId());
 
-        em.flush();
-        em.clear();
-
-        Feed result = feedRepository.findById(feed.getId()).get();
-        long feedLikeCount = result.getFeedLikeCount().getLikeCount();
+        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then
@@ -182,11 +167,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         //when
         feedLikeService.deleteLike(user.getId(), feed.getId());
 
-        em.flush();
-        em.clear();
-
-        Feed result = feedRepository.findById(feed.getId()).get();
-        long feedLikeCount = result.getFeedLikeCount().getLikeCount();
+        long feedLikeCount = feed.getFeedLikeCount().getLikeCount();
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAll();
 
         //then

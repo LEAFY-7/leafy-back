@@ -14,6 +14,19 @@ import java.util.Map;
 @RestControllerAdvice
 public class ControllerAdvisor {
 
+    @ExceptionHandler(PasswordNotMatchedException.class)
+    public ResponseEntity<ExceptionResponse> passwordNotMatchedException(PasswordNotMatchedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(FollowNotFoundException.class)
     public ResponseEntity<ExceptionResponse> followNotFoundException(FollowNotFoundException e) {
         int statusCode = e.getStatusCode();
@@ -111,6 +124,58 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(WriteFailedException.class)
     public ResponseEntity<ExceptionResponse> WriteFoundException(WriteFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(UserNotVerifiedException.class)
+    public ResponseEntity<ExceptionResponse> userNotVerifiedException(UserNotVerifiedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(AlarmDataAccessException.class)
+    public ResponseEntity<ExceptionResponse> alarmDataAccessException(AlarmDataAccessException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(AlarmNotExistException.class)
+    public ResponseEntity<ExceptionResponse> alarmNotExistException(AlarmNotExistException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(UserPasswordDataAccessException.class)
+    public ResponseEntity<ExceptionResponse> userPasswordDataAccessException(UserPasswordDataAccessException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()

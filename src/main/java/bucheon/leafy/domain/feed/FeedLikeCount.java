@@ -9,10 +9,12 @@ import javax.persistence.*;
 
 @Getter
 @Entity
+@Table(indexes = @Index(columnList = "feed_id"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedLikeCount {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "feed_like_count_id")
     private Long id;
 
     @OneToOne
@@ -38,4 +40,11 @@ public class FeedLikeCount {
         this.feed = feed;
     }
 
+    public void like() {
+        this.likeCount += 1;
+    }
+
+    public void likeCancel() {
+        this.likeCount -= 1;
+    }
 }

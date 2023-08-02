@@ -4,8 +4,13 @@ spring:
     #    username: root
     #    password: leafy1234
     #    driver-class-name: com.mysql.cj.jdbc.Driver
+<<<<<<< HEAD
     url: jdbc:mysql://localhost:3306
     username: castello
+=======
+    url: jdbc:mysql://localhost:3306/leafy_test
+    username: root
+>>>>>>> 3e05006a78524114d042c2cf7c9145655e6e678c
     password: 1234
 #    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -16,6 +16,7 @@ public class Qna extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "qna_id")
     private Long id;
 
     private String title;

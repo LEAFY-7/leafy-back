@@ -13,6 +13,6 @@ public class ExistException extends GlobalException {
 
     @Override
     public int getStatusCode() {
-        return 404;
+        return 409;
     }
 }

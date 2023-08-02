@@ -1,6 +1,6 @@
-package bucheon.leafy.application.response;
+package bucheon.leafy.application.component.response;
 
-import bucheon.leafy.domain.feed.response.FeedMonthlyInformation.FeedMonthlyResponse;
+import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.response.UserResponse;

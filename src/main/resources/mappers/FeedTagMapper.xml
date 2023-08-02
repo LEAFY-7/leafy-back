@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bucheon.leafy.application.mapper.FeedTagMapper">
+
+    <select id="findTagList" resultType="FeedTagResponse" parameterType="java.lang.Long">
+        select feed_tag_id, tag from feed_tag where feed_id = #{feedId}
+    </select>
+
+    <insert id="saveTag" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="feed_tag_id" keyProperty="request.feedTagId">
+        INSERT INTO feed_tag (feed_id, tag)
+        VALUES
+        <foreach collection="request" item="request" separator=",">
+            (#{feedId}, #{request.tag})
+        </foreach>
+    </insert>
+
+    <delete id="deleteTagNotIn" parameterType="java.util.List">
+        DELETE FROM feed_tag WHERE feed_id = #{feedId} AND feed_tag_id NOT IN
+        <foreach collection="request" item="request" open="(" separator="," close=")">
+            #{request.feedTagId}
+        </foreach>
+    </delete>
+</mapper>

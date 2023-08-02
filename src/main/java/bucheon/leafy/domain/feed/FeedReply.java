@@ -16,7 +16,7 @@ public class FeedReply extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="reply_id")
+    @Column(name="feed_reply_id")
     private Long id;
 
     private String reply;

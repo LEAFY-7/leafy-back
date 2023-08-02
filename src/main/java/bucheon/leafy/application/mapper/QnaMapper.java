@@ -13,9 +13,8 @@ public interface QnaMapper {
     boolean deleteById(Long id);
     Long save(QnaDto qnaDto);
     int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
-    QnaDto findQnaById(Long qnaId);
     int qnaStatusModify(Long id);
-    QnaDto selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
-    QnaDto adminSelectAll( PageRequest pageRequest);
+    PageResponse<QnaDto> selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
+    PageResponse<QnaDto> adminSelectAll( PageRequest pageRequest);
     int viewCnt(Long id);
 }

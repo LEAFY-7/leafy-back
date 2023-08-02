@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class FeedReplyResponse {
-    private Long replyId;
+    private Long feedReplyId;
     private Long userId;
     private Long feedId;
     private Long commentId;
@@ -18,8 +18,8 @@ public class FeedReplyResponse {
     private Date modifiedAt;
 
     @Builder
-    public FeedReplyResponse(Long replyId, Long userId, Long feedId, Long commentId, String reply, Date createdAt, Date modifiedAt) {
-        this.replyId = replyId;
+    public FeedReplyResponse(Long feedReplyId, Long userId, Long feedId, Long commentId, String reply, Date createdAt, Date modifiedAt) {
+        this.feedReplyId = feedReplyId;
         this.userId = userId;
         this.feedId = feedId;
         this.commentId = commentId;

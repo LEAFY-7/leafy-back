@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.feed.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FeedImageRequest {
-    private Long feedId;
+    @JsonIgnore
+    private Long feedImageId;
     private String imageName;
 
     @Builder
-    private FeedImageRequest(Long feedId, String imageName) {
-        this.feedId = feedId;
+    private FeedImageRequest(Long feedImageId, String imageName) {
+        this.feedImageId = feedImageId;
         this.imageName = imageName;
     }
 }
