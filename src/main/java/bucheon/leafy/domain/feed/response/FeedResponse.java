@@ -1,7 +1,5 @@
 package bucheon.leafy.domain.feed.response;
 
-
-import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedType;
 import lombok.Builder;
 import lombok.Data;
@@ -28,8 +26,13 @@ public class FeedResponse {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    // JPA 에서 DTO 타입으로 값을 받기 위해 public 으로 생성자를 열어 놓음
     @Builder
-    public FeedResponse(Long feedId, Long userId, String userName, String title, String content, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public FeedResponse(Long feedId, Long userId, String userName, String title,
+                        String content, String species, String nickname, Double temperature,
+                        Integer humidity, Double waterAmount, String wateringPeriod,
+                        FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+
         this.feedId = feedId;
         this.userId = userId;
         this.userName = userName;
@@ -44,17 +47,6 @@ public class FeedResponse {
         this.feedType = feedType;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
-    }
-
-    public static FeedResponse of(Feed feed) {
-        return FeedResponse.builder()
-                .feedId(feed.getId())
-                .title(feed.getTitle())
-                .content(feed.getContent())
-                .feedType(feed.getFeedType())
-                .createdAt(feed.getCreatedAt())
-                .modifiedAt(feed.getModifiedAt())
-                .build();
     }
 
 }
