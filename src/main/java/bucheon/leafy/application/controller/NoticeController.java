@@ -80,7 +80,7 @@ public class NoticeController {
     @PreAuthorize("hasAnyRole('MEMBER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> remove(@PathVariable("id") Long id) {
-      //모든관리자가 삭제할수있을려면 userId로 하면 x
+        //모든관리자가 삭제할수있을려면 userId로 하면 x
         return ResponseEntity.ok().body(noticeService.remove(id));
     }
     @ApiResponses({

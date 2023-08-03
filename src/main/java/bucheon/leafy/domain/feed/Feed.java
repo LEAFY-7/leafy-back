@@ -2,11 +2,8 @@ package bucheon.leafy.domain.feed;
 
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 

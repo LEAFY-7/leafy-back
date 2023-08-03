@@ -1,6 +1,5 @@
 package bucheon.leafy.domain.feed.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class FeedTagRequest {
-
-    @JsonIgnore
-    private Long feedTagId;
-    private String tag;
+    private Long feed_id;
+    private List<String> tag;
 
     @Builder
-    private FeedTagRequest(String tag) {
+    private FeedTagRequest(Long feed_id, List<String> tag) {
+        this.feed_id = feed_id;
         this.tag = tag;
     }
 }

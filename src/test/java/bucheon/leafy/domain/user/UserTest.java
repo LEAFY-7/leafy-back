@@ -13,11 +13,11 @@ class UserTest {
     void testUserDeleteFunction(){
         //given
         Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
+                .zipcode("01011")
+                .street("bucheon")
+                .lot("100")
+                .reference("ref")
+                .detail("hello world")
                 .build();
 
         UserImage image = UserImage.builder()

@@ -30,7 +30,7 @@ public class ReplyController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
-                                            @RequestBody ReplyDto replyDto) {
+                        @RequestBody ReplyDto replyDto) {
         Long userId = user.getUserId();
         replyDto.setUserId(userId);
         replyService.modify(replyDto);
@@ -44,7 +44,7 @@ public class ReplyController {
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public void write( @AuthenticationPrincipal AuthUser user,
-                                         @RequestBody ReplyDto replyDto) {
+                       @RequestBody ReplyDto replyDto) {
 
         Long userId = user.getUserId();
         replyDto.setUserId(userId);
@@ -60,7 +60,7 @@ public class ReplyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove( @AuthenticationPrincipal AuthUser user,
-                                          @PathVariable("id") Long id) {
+                        @PathVariable("id") Long id) {
         Long userId = user.getUserId();
         replyService.remove(id, userId);
     }

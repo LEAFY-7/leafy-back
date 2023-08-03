@@ -34,7 +34,7 @@ public class CommentController {
     @PatchMapping("/modifiy/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
-                                         @RequestBody CommentDto commentDto) {
+                       @RequestBody CommentDto commentDto) {
         Long userId = user.getUserId();
         commentDto.setUserId(userId);
         commentService.modify(commentDto);
@@ -50,8 +50,8 @@ public class CommentController {
     @PostMapping("/comments/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void write(@AuthenticationPrincipal AuthUser user,
-                                        @PathVariable("id") Long id,
-                                        @RequestBody CommentDto commentDto) {
+                      @PathVariable("id") Long id,
+                      @RequestBody CommentDto commentDto) {
 
         Long userId = user.getUserId();
         commentDto.setUserId(userId);
@@ -68,7 +68,7 @@ public class CommentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void remove(@AuthenticationPrincipal AuthUser user,
-                                         @PathVariable("id") Long id) {
+                       @PathVariable("id") Long id) {
 
         Long userId = user.getUserId();
         commentService.remove(id, userId);

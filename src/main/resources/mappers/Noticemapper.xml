@@ -24,7 +24,11 @@
         WHERE id = #{id}
     </update>
 
+<<<<<<< HEAD
     <select id="selectAll" resultType="PageResponse">
+=======
+    <select id="selectAll" resultType="NoticeDto">
+>>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
         SELECT *
         FROM notice
         ORDER BY created_at DESC, id DESC
@@ -36,6 +40,16 @@
         WHERE id = #{id}
     </select>
 
+<<<<<<< HEAD
+=======
+    <select id="selectPage" parameterType="map" resultType="NoticeDto">
+        SELECT *
+        ORDER BY reg_date DESC, bno DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+
+>>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
     <update id="update" parameterType="NoticeDto">
         UPDATE notice
            SET modified_at = now()
@@ -60,12 +74,17 @@
         </choose>
     </sql>
 
+<<<<<<< HEAD
     <select id="searchSelectPage" parameterType="PageRequest" resultType="NoticeDto">
+=======
+    <select id="searchSelectPage" parameterType="PageRequest" resultType="PageResponse">
+>>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
         SELECT *
         FROM notice
         WHERE true
         <include refid="SearchRequest"/>
         ORDER BY created_at DESC, id DESC
+<<<<<<< HEAD
         LIMIT #{offset}, #{limit}
     </select>
 
@@ -73,6 +92,9 @@
         SELECT table_id
         FROM alarm
         WHERE user_id = #{userId}
+=======
+        LIMIT #{offset}, #{pageSize}
+>>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
     </select>
 
 </mapper>

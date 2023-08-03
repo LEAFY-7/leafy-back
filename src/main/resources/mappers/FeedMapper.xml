@@ -16,18 +16,11 @@
     </select>
 
     <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="request.feedId">
-        insert into feed (user_id,title,species,nickname,temperature,
-                          humidity,water_amount,watering_period,
-                          content,is_delete,feed_type,created_at,modified_at) values
-                          (#{userId}, #{request.title}, #{request.species}, #{request.nickname}, #{request.temperature},
-                           #{request.humidity}, #{request.waterAmount}, #{request.wateringPeriod},
-                           #{request.content}, false, #{request.feedType}, now(), now())
+        insert into feed (user_id,title,content,is_delete,feed_type,created_at,modified_at) values (#{userId}, #{request.title}, #{request.content}, false, #{request.feedType}, now(), now())
     </insert>
 
     <update id="editFeed"  parameterType="FeedRequest">
-        update feed set title = #{request.title}, species = #{request.species}, nickname = #{request.nickname}, temperature = #{request.temperature},
-                        humidity = #{request.humidity}, water_amount = #{request.waterAmount}, watering_period = #{request.wateringPeriod},
-                        content = #{request.content}, feed_type = #{request.feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
+        update feed set title = #{request.title}, content = #{request.content}, feed_type = #{request.feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}
     </update>
 
     <delete id="deleteAllFeeds">

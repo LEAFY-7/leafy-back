@@ -16,13 +16,13 @@ public interface FeedCommentMapper {
 
     List<FeedCommentResponse> findCommentListScroll(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
 
-    FeedCommentResponse findCommentById(Long feedCommentId);
+    FeedCommentResponse findCommentById(Long commentId);
 
     Long saveComment(@Param("userId") Long userId, @Param("feedId") Long feedId, FeedCommentRequest request);
 
-    int editComment(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("feedCommentId") Long feedCommentId, FeedCommentRequest request);
+    int editComment(@Param("userId") Long userId, @Param("feedId") Long feedId, @Param("commentId") Long commentId, FeedCommentRequest request);
 
     void deleteAllComments();
 
-    int deleteComment(Long userId, Long feedId, Long feedCommentId);
+    int deleteComment(Long userId, Long feedId, Long commentId);
 }

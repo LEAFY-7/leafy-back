@@ -4,17 +4,16 @@
 <mapper namespace="bucheon.leafy.application.mapper.AlarmMapper">
 
     <insert id="saveAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmRequest">
-        insert into alarm(user_id, alarm_type, table_id, message, checked, created_at, modified_at, is_delete)
-        values (#{userId}, #{alarmType}, #{tableId}, #{message}, false, now(), now(), false)
+        insert into alarm(user_id, type, table_id, msg)
+        values (#{userId}, #{type}, #{tableId}, #{msg})
     </insert>
 
     <update id="updateCheckAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmCheckRequest">
         update alarm
-        set checked = true,
-            modified_at = now()
+        set checked = true
         where checked = false
           and user_id = #{userId}
-          and alarm_type = #{alarmType}
+          and type = #{type}
           and table_id = #{tableId}
     </update>
 
@@ -28,31 +27,31 @@
     <delete id="deleteOneAlarm">
         delete
         from alarm
-        where alarm_id = #{id}
+        where id = #{id}
     </delete>
 
     <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where user_id = #{userId}
-          and alarm_id &lt; #{scrollRequest.key}
+          and id &lt;= #{scrollRequest.key}
         order by created_at desc limit #{scrollRequest.size}
     </select>
 
-    <select id="countByUserId" resultType="int">
+    <select id="findCountByUserId" resultType="int">
         select ifnull(count(case when checked ='false' then 1 end), 0) as count
         from alarm
         where user_id = #{userId}
     </select>
 
     <select id="findById" resultType="Hashmap">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select id, user_id, type, checked, table_id, msg, created_at
         from alarm
-        where alarm_id = #{id}
+        where id = #{id}
     </select>
 
     <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select id, user_id, type, checked, table_id, msg, created_at
         from alarm
         where user_id = #{userId}
         order by created_at desc limit #{scrollRequest.size}

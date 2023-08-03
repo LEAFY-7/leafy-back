@@ -81,8 +81,8 @@ public class QnaController {
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
             @PathVariable Long id, PageRequest pageRequest) {
 
-            Long userId = user.getUserId();
-            QnaDto qnadto = qnaService.getQnaById(userId);
+        Long userId = user.getUserId();
+        QnaDto qnadto = qnaService.getQnaById(userId);
 
 
         if (userId.equals(qnadto.getUserId())) {

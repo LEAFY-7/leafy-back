@@ -14,7 +14,11 @@
         WHERE qna_comment_id = #{qnaCommentId}
     </select>
 
+<<<<<<< HEAD
     <delete id="delete" parameterType="map">
+=======
+    <delete id="delete" parameterType="map">notice_reply
+>>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
         DELETE FROM qna_reply WHERE id = #{id} AND user_id = #{userId}
     </delete>
 

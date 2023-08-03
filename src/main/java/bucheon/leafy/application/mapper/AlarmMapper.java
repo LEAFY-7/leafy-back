@@ -24,7 +24,7 @@ public interface AlarmMapper {
 
     List<AlarmResponse> findByUserId(@Param("userId") Long userId, @Param("scrollRequest") ScrollRequest scrollRequest);
 
-    int countByUserId(Long userId);
+    int findCountByUserId(Long userId);
 
     Optional<HashMap<String, Object>> findById(long id);
 
