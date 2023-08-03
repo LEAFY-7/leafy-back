@@ -65,4 +65,13 @@ public class UserBlockService {
         userBlockRepository.deleteByUserAndBlockUser(user, blockUser);
     }
 
+    public Boolean isBlockedUser(Long userId, Long blockUserId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        User blockUser = userRepository.findById(blockUserId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return userBlockRepository.existsByUserAndBlockUser(user, blockUser);
+    }
 }

@@ -29,7 +29,7 @@ public class UserBlockController {
     private final FollowService followService;
 
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "차단한 회원 목록 조회"),
+            @ApiResponse(responseCode = "200", description = "차단한 회원 목록 조회"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
     @Operation(summary = "회원 차단 목록")
@@ -40,6 +40,20 @@ public class UserBlockController {
         Long userId = authUser.getUserId();
         List<UserResponse> blockedUsers = userBlockService.getBlockedUsers(userId, pageable);
         return ResponseEntity.ok().body(blockedUsers);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "단일 회원 차단 여부 조회"),
+            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
+    })
+    @Operation(summary = "단일 회원 차단 여부")
+    @GetMapping("/{blockUserId}")
+    public ResponseEntity<Boolean> isBlockedUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                  @PathVariable Long blockUserId) {
+
+        Long userId = authUser.getUserId();
+        Boolean isBlock = userBlockService.isBlockedUser(userId, blockUserId);
+        return ResponseEntity.ok().body(isBlock);
     }
 
     @ApiResponses({
