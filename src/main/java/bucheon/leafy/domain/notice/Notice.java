@@ -16,14 +16,11 @@ import java.util.List;
 public class Notice extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_id")
     private Long id;
 
     private String title;
 
     private String contents;
-
-    private Long viewCount;
 
     private Boolean isHide;
 
@@ -32,13 +29,12 @@ public class Notice extends BaseDeleteEntity {
     private List<NoticeComment> noticeComments = new ArrayList<>();
 
     @Builder
-    private Notice(String title, String contents, Long viewCount,
+    private Notice(String title, String contents,
                    List<NoticeComment> noticeComments,
                    Boolean isHide) {
 
         this.title = title;
         this.contents = contents;
-        this.viewCount = viewCount;
         this.noticeComments = noticeComments;
         this.isHide = isHide;
     }

@@ -17,7 +17,6 @@ import java.util.List;
 public class NoticeComment extends BaseDeleteEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_comment_id")
     private Long id;
 
     @JoinColumn(name = "user_id")

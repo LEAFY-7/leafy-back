@@ -18,10 +18,9 @@ public class QnaComment extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "qna_comment_id")
     private Long id;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
@@ -38,4 +37,3 @@ public class QnaComment extends BaseDeleteEntity {
         this.qnaReplies = qnaReplies;
     }
 }
-
