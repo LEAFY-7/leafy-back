@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedReportService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.feed.response.FeedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "피드 신고")
 @RestController
@@ -32,8 +35,8 @@ public class FeedReportController {
                                           @PageableDefault(page = 1, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
-        feedReportService.getReportedFeeds(userId, pageable);
-        return ResponseEntity.ok().body(null);
+        List<FeedResponse> reportedFeeds = feedReportService.getReportedFeeds(userId, pageable);
+        return ResponseEntity.ok().body(reportedFeeds);
     }
 
     @ApiResponses({
