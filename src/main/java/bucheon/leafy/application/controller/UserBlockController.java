@@ -43,7 +43,8 @@ public class UserBlockController {
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "단일 회원 차단 여부 조회"),
+            @ApiResponse(responseCode = "204", description = "차단되어 있지 않음"),
+            @ApiResponse(responseCode = "409", description = "차단되어 있음"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
     @Operation(summary = "단일 회원 차단 여부")
