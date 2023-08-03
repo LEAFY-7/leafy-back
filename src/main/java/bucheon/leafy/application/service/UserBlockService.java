@@ -5,6 +5,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.domain.userblock.UserBlock;
+import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bucheon.leafy.exception.enums.ExceptionKey.USER_BLOCK;
 
 
 @Service
@@ -65,13 +68,15 @@ public class UserBlockService {
         userBlockRepository.deleteByUserAndBlockUser(user, blockUser);
     }
 
-    public Boolean isBlockedUser(Long userId, Long blockUserId) {
+    public void isBlockedUser(Long userId, Long blockUserId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         User blockUser = userRepository.findById(blockUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        return userBlockRepository.existsByUserAndBlockUser(user, blockUser);
+        Boolean isBlock = userBlockRepository.existsByUserAndBlockUser(user, blockUser);
+
+        if (isBlock) throw new ExistException(USER_BLOCK);
     }
 }

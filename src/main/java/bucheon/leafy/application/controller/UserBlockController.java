@@ -43,17 +43,17 @@ public class UserBlockController {
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "단일 회원 차단 여부 조회"),
+            @ApiResponse(responseCode = "204", description = "단일 회원 차단 여부 조회"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
     @Operation(summary = "단일 회원 차단 여부")
     @GetMapping("/{blockUserId}")
-    public ResponseEntity<Boolean> isBlockedUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void isBlockedUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                   @PathVariable Long blockUserId) {
 
         Long userId = authUser.getUserId();
-        Boolean isBlock = userBlockService.isBlockedUser(userId, blockUserId);
-        return ResponseEntity.ok().body(isBlock);
+        userBlockService.isBlockedUser(userId, blockUserId);
     }
 
     @ApiResponses({
@@ -65,6 +65,7 @@ public class UserBlockController {
     @ResponseStatus(HttpStatus.CREATED)
     public void blockUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                            @PathVariable Long blockUserId) {
+
         Long userId = authUser.getUserId();
         userBlockService.blockUser(userId, blockUserId);
         followService.unfollow(userId, blockUserId);
