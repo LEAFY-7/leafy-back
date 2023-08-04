@@ -21,14 +21,20 @@ public class User extends BaseDeleteEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
+    @Column(name = "phone", nullable = false)
     private String phone;
 
     @Enumerated(value = EnumType.STRING)
