@@ -53,6 +53,7 @@ public class UserImageService {
 //        createUserBackgroundImage(userId, file);
 //    }
 
+
     public void editUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
         UserImage userImage = user.getUserImage();
@@ -64,6 +65,7 @@ public class UserImageService {
 
         userImageRepository.save(userImage);
     }
+
 
     public void editUserBackgroundImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
