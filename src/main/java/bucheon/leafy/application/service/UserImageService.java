@@ -43,13 +43,26 @@ public class UserImageService {
         userBackgroundImageRepository.save(backgroundImage);
     }
 
+//    public void editUserImage(Long userId, MultipartFile file) {
+//        deleteUserImage(userId);
+//        createUserImage(userId, file);
+//    }
+//
+//    public void editUserBackgroundImage(Long userId, MultipartFile file) {
+//        deleteUserBackgroundImage(userId);
+//        createUserBackgroundImage(userId, file);
+//    }
+
     public void editUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
         UserImage userImage = user.getUserImage();
 
         imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+
         String renamedFile = imageComponent.uploadImage(USER_IMAGE_PATH, file);
         userImage.update(renamedFile);
+
+        userImageRepository.save(userImage);
     }
 
     public void editUserBackgroundImage(Long userId, MultipartFile file) {
@@ -57,8 +70,27 @@ public class UserImageService {
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
         imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+
         String renamedFile = imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file);
         userBackgroundImage.update(renamedFile);
+
+        userBackgroundImageRepository.save(userBackgroundImage);
+    }
+
+    public void deleteUserImage(Long userId) {
+        User user = userService.getUserById(userId);
+        UserImage userImage = user.getUserImage();
+
+        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+        userImageRepository.delete(userImage);
+    }
+
+    public void deleteUserBackgroundImage(Long userId) {
+        User user = userService.getUserById(userId);
+        UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
+
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+        userBackgroundImageRepository.delete(userBackgroundImage);
     }
 
 }

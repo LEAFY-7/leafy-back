@@ -71,7 +71,8 @@ public class User extends BaseDeleteEntity {
     private User(String password, String email, String nickName, String phone,
                  String name, String simpleIntroduction, List<Feed> feeds,
                  Gender gender, LocalDate birthDay, Address address, UserImage userImage,
-                 UserRole userRole, List<Qna> qna, List<Notice> notices, List<Alarm> alarms) {
+                 UserBackgroundImage userBackgroundImage, UserRole userRole, List<Qna> qna,
+                 List<Notice> notices, List<Alarm> alarms) {
 
         this.password = password;
         this.email = email;
@@ -82,6 +83,7 @@ public class User extends BaseDeleteEntity {
         this.feeds = feeds;
         this.address = address;
         this.userImage = userImage;
+        this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
         this.gender = gender;
         this.birthDay = birthDay;

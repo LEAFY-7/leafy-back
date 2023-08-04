@@ -21,8 +21,7 @@
     <delete id="deleteAlarm">
         delete
         from alarm
-        where checked = true
-          and date(DATE_SUB(NOW(), INTERVAL 7 DAY)) > date(created_at)
+        where date(DATE_SUB(NOW(), INTERVAL 7 DAY)) > date(created_at)
     </delete>
 
     <delete id="deleteOneAlarm">
