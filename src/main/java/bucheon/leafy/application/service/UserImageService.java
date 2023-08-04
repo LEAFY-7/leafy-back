@@ -43,6 +43,16 @@ public class UserImageService {
         userBackgroundImageRepository.save(backgroundImage);
     }
 
+//    public void editUserImage(Long userId, MultipartFile file) {
+//        deleteUserImage(userId);
+//        createUserImage(userId, file);
+//    }
+//
+//    public void editUserBackgroundImage(Long userId, MultipartFile file) {
+//        deleteUserBackgroundImage(userId);
+//        createUserBackgroundImage(userId, file);
+//    }
+
     public void editUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
         UserImage userImage = user.getUserImage();
@@ -65,6 +75,22 @@ public class UserImageService {
         userBackgroundImage.update(renamedFile);
 
         userBackgroundImageRepository.save(userBackgroundImage);
+    }
+
+    public void deleteUserImage(Long userId) {
+        User user = userService.getUserById(userId);
+        UserImage userImage = user.getUserImage();
+
+        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+        userImageRepository.delete(userImage);
+    }
+
+    public void deleteUserBackgroundImage(Long userId) {
+        User user = userService.getUserById(userId);
+        UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
+
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+        userBackgroundImageRepository.delete(userBackgroundImage);
     }
 
 }
