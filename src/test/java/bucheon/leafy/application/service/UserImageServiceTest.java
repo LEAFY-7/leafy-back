@@ -152,12 +152,14 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         return User.builder()
                 .address(address)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();
@@ -170,6 +172,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         UserImage image = UserImage.builder()
@@ -186,6 +189,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .userBackgroundImage(backgroundImage)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();

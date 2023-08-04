@@ -58,6 +58,7 @@ class FeedRepositoryTest extends IntegrationTestSupport {
         return User.builder()
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .feeds(feeds)
