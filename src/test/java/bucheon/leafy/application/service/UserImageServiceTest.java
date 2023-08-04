@@ -55,6 +55,8 @@ class UserImageServiceTest extends IntegrationTestSupport {
         );
 
         String renamedFile = UUID.randomUUID().toString();
+
+        // when
         when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
 
         userImageService.createUserImage(user.getId(), file);
@@ -79,6 +81,8 @@ class UserImageServiceTest extends IntegrationTestSupport {
         );
 
         String renamedFile = UUID.randomUUID().toString();
+
+        // when
         when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
 
         userImageService.createUserBackgroundImage(user.getId(), file);
@@ -88,61 +92,78 @@ class UserImageServiceTest extends IntegrationTestSupport {
         verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
     }
 
-//    @Test
-//    @DisplayName("회원이 이미지를 수정하면 S3 에서 이미지를 삭제한 뒤 변경할 이미지를 업로드하며 데이터베이스에 저장한다.")
-//    void testEditUserImage(){
-//        //given
-//        User user = createUser("ekxk1234@naver.com", "정철희");
-//        userRepository.save(user);
-//
-//        String oldFileName = UUID.randomUUID().toString();
-//
-//        MultipartFile file = new MockMultipartFile(
-//                "fileName",
-//                "originalName",
-//                "contentType",
-//                "fileContent".getBytes()
-//        );
-//
-//        String renamedFile = UUID.randomUUID().toString();
-//        when(imageComponent.deleteImage(anyString(), oldFileName));
-//        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
-//
-//        userImageService.createUserImage(user.getId(), file);
-//
-//        //then
-//        verify(userImageRepository, times(1)).save(any(UserImage.class));
-//        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
-//    }
-//
-//    @Test
-//    @DisplayName("회원이 배경 이미지를 수정하면 S3 에서 이미지를 삭제한 뒤 변경할 이미지를 업로드하며 데이터베이스에 저장한다.")
-//    void testEditUserBackGroundImage(){
-//        //given
-//        User user = createUser("ekxk1234@naver.com", "정철희");
-//        userRepository.save(user);
-//
-//        String oldFileName = UUID.randomUUID().toString();
-//
-//        MultipartFile file = new MockMultipartFile(
-//                "fileName",
-//                "originalName",
-//                "contentType",
-//                "fileContent".getBytes()
-//        );
-//
-//        String renamedFile = UUID.randomUUID().toString();
-//        when(imageComponent.deleteImage(anyString(), oldFileName));
-//        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
-//
-//        userImageService.createUserBackgroundImage(user.getId(), file);
-//
-//        //then
-//        verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
-//        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
-//    }
+    @Test
+    @DisplayName("회원이 이미지를 수정하면 S3 에서 이미지를 삭제한 뒤 변경할 이미지를 업로드하며 데이터베이스에 저장한다.")
+    void testEditUserImage(){
+        //given
+        User user = createUserWithImage("ekxk1234@naver.com", "정철희");
+        userRepository.save(user);
+
+        MultipartFile file = new MockMultipartFile(
+                "fileName",
+                "originalName",
+                "contentType",
+                "fileContent".getBytes()
+        );
+
+        String renamedFile = UUID.randomUUID().toString();
+
+        //when
+        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
+        userImageService.editUserImage(user.getId(), file);
+
+        //then
+        verify(userImageRepository, times(1)).save(any(UserImage.class));
+        verify(imageComponent, times(1)).deleteImage(anyString(), anyString());;
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
+
+    }
+
+    @Test
+    @DisplayName("회원이 배경 이미지를 수정하면 S3 에서 이미지를 삭제한 뒤 변경할 이미지를 업로드하며 데이터베이스에 저장한다.")
+    void testEditUserBackGroundImage(){
+        //given
+        User user = createUserWithImage("ekxk1234@naver.com", "정철희");
+        userRepository.save(user);
+
+        MultipartFile file = new MockMultipartFile(
+                "fileName",
+                "originalName",
+                "contentType",
+                "fileContent".getBytes()
+        );
+
+        String renamedFile = UUID.randomUUID().toString();
+
+        // when
+        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
+        userImageService.editUserBackgroundImage(user.getId(), file);
+
+        //then
+        verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
+        verify(imageComponent, times(1)).deleteImage(anyString(), anyString());
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));
+    }
 
     private User createUser(String email, String nickName) {
+        Address address = Address.builder()
+                .zoneCode("01011")
+                .address("bucheon")
+                .jibunAddress("100")
+                .roadAddress("ref")
+                .detailAddress("hello world")
+                .build();
+
+        return User.builder()
+                .address(address)
+                .email(email)
+                .phone("01012341234")
+                .nickName(nickName)
+                .password("비밀번호")
+                .build();
+    }
+
+    private User createUserWithImage(String email, String nickName) {
         Address address = Address.builder()
                 .zoneCode("01011")
                 .address("bucheon")
@@ -155,13 +176,19 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .image("이미지")
                 .build();
 
+        UserBackgroundImage backgroundImage = UserBackgroundImage.builder()
+                .image("이미지")
+                .build();
+
         return User.builder()
                 .address(address)
                 .userImage(image)
+                .userBackgroundImage(backgroundImage)
                 .email(email)
                 .phone("01012341234")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();
     }
+
 }

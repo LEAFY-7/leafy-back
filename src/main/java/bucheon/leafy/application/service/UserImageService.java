@@ -48,8 +48,11 @@ public class UserImageService {
         UserImage userImage = user.getUserImage();
 
         imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+
         String renamedFile = imageComponent.uploadImage(USER_IMAGE_PATH, file);
         userImage.update(renamedFile);
+
+        userImageRepository.save(userImage);
     }
 
     public void editUserBackgroundImage(Long userId, MultipartFile file) {
@@ -57,8 +60,11 @@ public class UserImageService {
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
         imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+
         String renamedFile = imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file);
         userBackgroundImage.update(renamedFile);
+
+        userBackgroundImageRepository.save(userBackgroundImage);
     }
 
 }
