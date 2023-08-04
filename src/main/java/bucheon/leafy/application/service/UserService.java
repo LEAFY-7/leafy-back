@@ -1,7 +1,6 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.AlarmMapper;
-import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.PasswordRequest;
@@ -9,13 +8,13 @@ import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
-import bucheon.leafy.exception.*;
-import bucheon.leafy.exception.enums.ExceptionKey;
+import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.PasswordNotMatchedException;
+import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
+import static bucheon.leafy.exception.enums.ExceptionKey.EMAIL;
+import static bucheon.leafy.exception.enums.ExceptionKey.NICKNAME;
+
 @Slf4j
 @Service
 @Transactional
@@ -34,12 +36,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final TokenProvider tokenProvider;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserMapper userMapper;
-
     private final AlarmMapper alarmMapper;
 
 
@@ -58,7 +56,6 @@ public class UserService {
         String role = authority.replace("ROLE_", "");
 
         String jwt = tokenProvider.createToken(authentication);
-//        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         return new TokenResponse(jwt, role);
     }
@@ -66,10 +63,8 @@ public class UserService {
     public Long signUp(SignUpRequest signUpRequest) {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
-        userRepository.findByEmail(signUpRequest.getEmail())
-                .ifPresent(u -> {
-                    throw new ExistException(ExceptionKey.EMAIL);
-                });
+        duplicationNickNameCheck(signUpRequest.getNickName());
+        duplicationEmailCheck(signUpRequest.getEmail());
 
         User user = User.of(signUpRequest);
 
@@ -81,20 +76,14 @@ public class UserService {
     }
 
 
-    public ResponseEntity<String> duplicationIdCheck(String email) {
-        userRepository.findByEmail(email)
-                .ifPresent(u -> {
-                    throw new ExistException(ExceptionKey.EMAIL);
-                });
-
-        return ResponseEntity.status(201).body("아이디가 사용 가능합니다.");
+    public void duplicationEmailCheck(String email) {
+        Boolean exists = userRepository.existsByEmail(email);
+        if (exists) throw new ExistException(EMAIL);
     }
 
     public void duplicationNickNameCheck(String nickName) {
-        userRepository.findByNickName(nickName)
-                .ifPresent(u -> {
-                    throw new ExistException(ExceptionKey.NICKNAME);
-                });
+        boolean exists = userRepository.existsByNickName(nickName);
+        if (exists) throw new ExistException(NICKNAME);
     }
 
     public User getUserById(Long userId){
@@ -112,33 +101,25 @@ public class UserService {
         return GetMeResponse.of(user, alarmCount);
     }
 
-    public void updateTemporaryPassword(String email, String phone) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+    public void editPassword(Long userId, PasswordRequest passwordRequest) {
+        comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
 
-        verifyUser(user, phone);
+        User user = getUserById(userId);
+        String encodedPassword = passwordEncoder.encode(passwordRequest.getPassword());
+        user.changePassword(encodedPassword);
+    }
+
+    public void updateTemporaryPassword(String email, String phone) {
+        User user = userRepository.findByEmailAndPhone(email, phone)
+                .orElseThrow(UserNotFoundException::new);
 
         String password = randomPassword(10);
 
-        // mybatis
-//        String encodedPassword = passwordEncoder.encode(password);
-//        if(userMapper.updatePassword(email, encodedPassword) != 1){
-//            throw new UserPasswordDataAccessException();
-//        }
-
-        // jpa
         String encodedPassword = passwordEncoder.encode(password);
         user.changePassword(encodedPassword);
         userRepository.save(user);
 
-
         // TODO 추후 임시비밀번호 메일 발송 로직 구현
-    }
-
-    public void verifyUser(User user, String phone) {
-        if (!user.getPhone().equals(phone)) {
-            throw new UserNotVerifiedException();
-        }
     }
 
     private String randomPassword(int length){
@@ -170,14 +151,6 @@ public class UserService {
         }
 
         return new String(charArray);
-    }
-
-    public void editPassword(Long userId, PasswordRequest passwordRequest) {
-        comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
-
-        User user = getUserById(userId);
-        String encodedPassword = passwordEncoder.encode(passwordRequest.getPassword());
-        user.changePassword(encodedPassword);
     }
 
     private void comparePasswords(String password, String confirmPassword) {
