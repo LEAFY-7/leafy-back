@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/feeds/**").permitAll()
                 .antMatchers("/api/v1/main").permitAll()
                 .antMatchers("/api/v1/feeds/{id}/like/**").authenticated()
+                .antMatchers("/api/v1/mails/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
