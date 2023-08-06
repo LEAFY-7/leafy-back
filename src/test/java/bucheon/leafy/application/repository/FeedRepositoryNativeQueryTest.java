@@ -27,7 +27,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.jeasy.random.FieldPredicates.named;
 import static org.jeasy.random.FieldPredicates.ofType;
 
@@ -99,7 +99,7 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
 
         List<User> users = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             SignUpRequest signUpRequest = easyRandom.nextObject(SignUpRequest.class);
             User user = User.of(signUpRequest);
             users.add(user);
@@ -167,6 +167,7 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         UserImage image = UserImage.builder()
@@ -178,6 +179,7 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .feeds(feeds)

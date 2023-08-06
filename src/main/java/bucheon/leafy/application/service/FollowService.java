@@ -74,10 +74,10 @@ public class FollowService {
         User followTarget = userRepository.findById(targetUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        followRepository.findByFollowerAndFollowing(user, followTarget)
-                .ifPresent(f -> {
-                    throw new ExistException(FOLLOW);
-                });
+        Boolean exists = followRepository.existsByFollowerAndFollowing(user, followTarget);
+        if (exists) {
+            throw new ExistException(FOLLOW);
+        }
 
         Follow follow = Follow.of(user, followTarget);
 

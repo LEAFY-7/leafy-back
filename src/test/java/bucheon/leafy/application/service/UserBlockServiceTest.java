@@ -1,7 +1,10 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
-import bucheon.leafy.application.repository.*;
+import bucheon.leafy.application.repository.AddressRepository;
+import bucheon.leafy.application.repository.UserBlockRepository;
+import bucheon.leafy.application.repository.UserImageRepository;
+import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
@@ -99,7 +102,7 @@ class UserBlockServiceTest extends IntegrationTestSupport {
         //given
         User user1 = createUser("ekxk1234@naver.com", "정철희");
         User user2 = createUser("abcd@gmail.com", "홍길동");
-        User user3 = createUser("abcd@gmail.com", "홍길동");
+        User user3 = createUser("qwer@naver.com", "박길동");
         userRepository.saveAll(List.of(user1, user2, user3));
 
         //when
@@ -136,6 +139,7 @@ class UserBlockServiceTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         UserImage image = UserImage.builder()
@@ -147,6 +151,7 @@ class UserBlockServiceTest extends IntegrationTestSupport {
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();
