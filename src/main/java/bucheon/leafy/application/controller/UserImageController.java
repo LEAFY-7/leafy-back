@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +30,9 @@ public class UserImageController {
     })
     @Operation(summary = "회원 이미지 등록")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/image")
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                            MultipartFile file) {
+                            @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
         userImageService.createUserImage(userId, file);
@@ -43,9 +44,9 @@ public class UserImageController {
     })
     @Operation(summary = "배경 이미지 등록")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/background-image")
+    @PostMapping(value = "/background-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void createBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                      MultipartFile file) {
+                                      @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
         userImageService.createUserBackgroundImage(userId, file);
@@ -57,9 +58,9 @@ public class UserImageController {
     })
     @Operation(summary = "회원 이미지 수정")
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/image")
+    @PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                            MultipartFile file) {
+                            @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
         if (file != null){
@@ -75,9 +76,9 @@ public class UserImageController {
     })
     @Operation(summary = "배경 이미지 수정")
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/background-image")
+    @PutMapping(value = "/background-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                      MultipartFile file) {
+                                      @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
         if (file != null){
