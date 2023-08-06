@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 public class AlarmCheckRequest {
 
     private Long userId;
-    private AlarmType type;
+    private AlarmType alarmType;
     private Long tableId;
 
     @Builder
-    public AlarmCheckRequest(Long userId, AlarmType type, Long tableId) {
+    public AlarmCheckRequest(Long userId, AlarmType alarmType, Long tableId) {
         this.userId = userId;
-        this.type = type;
+        this.alarmType = alarmType;
         this.tableId = tableId;
     }
 }

@@ -1,5 +1,6 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.application.service.UserBlockService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.response.UserResponse;
@@ -25,9 +26,10 @@ import java.util.List;
 public class UserBlockController {
 
     private final UserBlockService userBlockService;
+    private final FollowService followService;
 
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "차단한 회원 목록 조회"),
+            @ApiResponse(responseCode = "200", description = "차단한 회원 목록 조회"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
     @Operation(summary = "회원 차단 목록")
@@ -41,6 +43,21 @@ public class UserBlockController {
     }
 
     @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "차단되어 있지 않음"),
+            @ApiResponse(responseCode = "409", description = "차단되어 있음"),
+            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
+    })
+    @Operation(summary = "단일 회원 차단 여부")
+    @GetMapping("/{blockUserId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void isBlockedUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                  @PathVariable Long blockUserId) {
+
+        Long userId = authUser.getUserId();
+        userBlockService.isBlockedUser(userId, blockUserId);
+    }
+
+    @ApiResponses({
             @ApiResponse(responseCode = "201", description = "회원 차단 성공"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
@@ -49,8 +66,10 @@ public class UserBlockController {
     @ResponseStatus(HttpStatus.CREATED)
     public void blockUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                            @PathVariable Long blockUserId) {
+
         Long userId = authUser.getUserId();
         userBlockService.blockUser(userId, blockUserId);
+        followService.unfollow(userId, blockUserId);
     }
 
     @ApiResponses({

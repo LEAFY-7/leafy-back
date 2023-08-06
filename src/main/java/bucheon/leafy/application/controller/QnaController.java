@@ -6,6 +6,8 @@ import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
+import bucheon.leafy.util.response.PageResponse;
+import bucheon.leafy.util.response.SearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -77,7 +79,7 @@ public class QnaController {
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<QnaDto> list(
+    public ResponseEntity<PageResponse> list(
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
             @PathVariable Long id, PageRequest pageRequest) {
 
@@ -87,7 +89,7 @@ public class QnaController {
 
         if (userId.equals(qnadto.getUserId())) {
 
-            return ResponseEntity.ok().body(qnaService.getList(pageRequest, id));
+            return ResponseEntity.ok().body(qnaService.getList(userId, pageRequest, id));
 
         } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
 

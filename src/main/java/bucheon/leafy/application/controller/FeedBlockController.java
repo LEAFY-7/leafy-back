@@ -2,7 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedBlockService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.feed.response.FeedReplyResponse;
+import bucheon.leafy.domain.feed.response.FeedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "피드 차단")
 @RestController
@@ -37,8 +36,8 @@ public class FeedBlockController {
                                           @PageableDefault(page = 1, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
-        feedBlockService.getBlockedFeeds(userId, pageable);
-        return ResponseEntity.ok().body(null);
+        List<FeedResponse> blockedFeeds = feedBlockService.getBlockedFeeds(userId, pageable);
+        return ResponseEntity.ok().body(blockedFeeds);
     }
 
     @ApiResponses({

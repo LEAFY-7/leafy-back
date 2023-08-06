@@ -1,5 +1,6 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
@@ -28,6 +29,8 @@ public class NoticeService {
     private final UserRepository userRepository;
     private final NoticeMapper noticeMapper;
     private final AlarmService alarmService;
+    private final AlarmMapper alarmMapper;
+
 
     public int remove(Long id) {
         if (noticeMapper.delete(id) != 1) {
@@ -78,6 +81,7 @@ public class NoticeService {
 
     public GetMeResponse getMe(Long userId) {
         User user = getUserById(userId);
-        return GetMeResponse.of(user);
+        int alarmCount = alarmMapper.countByUserId(userId);
+        return GetMeResponse.of(user, alarmCount);
     }
 }

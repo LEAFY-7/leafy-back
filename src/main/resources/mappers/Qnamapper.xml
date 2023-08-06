@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
-<<<<<<< HEAD
 
     <delete id="delete" parameterType="map" >
         UPDATE qna
@@ -29,8 +28,7 @@
         FROM qna
         ORDER BY created_at DESC, id DESC
     </select>
-=======
->>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
+
 
     <delete id="delete" parameterType="map" >
         UPDATE qna
@@ -38,7 +36,7 @@
         WHERE id = #{id}
     </delete>
 
-<<<<<<< HEAD
+
     <select id="select" parameterType="long" resultType="QnaDto">
         -- QnaDto 형태의 결과를 반환하는 쿼리
         SELECT q.*, qc.id AS qna_comment_id, qc.comment AS qna_comment,
@@ -88,17 +86,26 @@
         WHERE  id = #{id}
     </update>
 
-=======
+
     <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
         VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
     </insert>
 
-    <select id="selectAll" resultType="QnaDto">
+<!--    <select id="selectAll" resultType="QnaDto">-->
+<!--        SELECT *-->
+<!--        FROM qna-->
+<!--        WHERE user_id = #{userId}-->
+<!--        ORDER BY created_at DESC, id DESC-->
+<!--    </select>-->
+
+    <select id="selectAll" resultType="com.example.dto.QnaDto">
         SELECT *
         FROM qna
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC, id DESC
+        WHERE id = #{id}
+        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
     </select>
 
     <select id="AdminSelectAll" resultType="QnaDto">
@@ -107,43 +114,4 @@
         ORDER BY created_at DESC, id DESC
     </select>
 
-    <select id="select" parameterType="long" resultType="QnaDto">
-        SELECT q.*, qc.id AS qna_comment_id
-        FROM qna q
-                 LEFT JOIN qna_comment qc ON q.id = qc.qna_id
-        WHERE q.id = #{id} AND q.user_id = #{userId}
-    </select>
-
-    <select id="findQnaById" parameterType="Long" resultType="QnaDto" >
-        select * from qna where qna_Id = #{qna_id} and is_delete = false
-    </select>
-
-    <select id="selectPage" parameterType="map" resultType="QnaDto">
-        SELECT *
-        ORDER BY reg_date DESC, bno DESC
-        LIMIT #{offset}, #{pageSize}
-    </select>
-
-    <update id="viewCnt" parameterType="long">
-        UPDATE qna
-        SET   view_cnt = view_cnt + 1
-        WHERE id = #{id}
-    </update>
-
-    <update id="update">
-        UPDATE qna
-        SET   title = #{title}
-          , contents = #{contents}
-          , modified_at = now()
-          , user_id = #{userId}
-        WHERE id = #{id}
-    </update>
-
-    <update id="updateQnaStatus" parameterType="QnaDto">
-        UPDATE qna
-        SET   qna_status = 1
-        WHERE  id = #{id}
-    </update>
-
->>>>>>> ab55635b2b92322470b1d02be0adbadc5260dbe1
 </mapper>

@@ -12,6 +12,9 @@ public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
 
     @EntityGraph(attributePaths = "blockUser")
     List<UserBlock> findByUser(User user, Pageable pageable);
+
     void deleteByUserAndBlockUser(User user, User blockUser);
+
+    Boolean existsByUserAndBlockUser(User user, User blockUser);
 
 }

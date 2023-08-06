@@ -27,22 +27,15 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void crateAlarm(long userId, AlarmType type, long tableId, String msg){
-        AlarmRequest request = new AlarmRequest();
-        request.setUserId(userId);
-        request.setType(type);
-        request.setTableId(tableId);
-        request.setMsg(msg);
+    public void createAlarm(long userId, AlarmType alarmType, long tableId, String message){
+        AlarmRequest request = new AlarmRequest(userId, alarmType, tableId, message);
         alarmMapper.saveAlarm(request);
     }
 
     @Async
     @Transactional
-    public void raedAlarm(long userId, AlarmType type, long tableId){
-        AlarmCheckRequest request = new AlarmCheckRequest();
-        request.setUserId(userId);
-        request.setType(type);
-        request.setTableId(tableId);
+    public void readAlarm(long userId, AlarmType alarmType, long tableId){
+        AlarmCheckRequest request = new AlarmCheckRequest(userId, alarmType, tableId);
         alarmMapper.updateCheckAlarm(request);
     }
 
@@ -51,7 +44,7 @@ public class AlarmService {
     public void deleteAlarm(){alarmMapper.deleteAlarm();}
 
     @Transactional
-    public String deleteAlarm(AuthUser user, long id){
+    public void deleteAlarm(AuthUser user, long id){
         Optional<HashMap<String, Object>> data = alarmMapper.findById(id);
         data.orElseThrow(AlarmNotExistException::new);
 
@@ -61,25 +54,34 @@ public class AlarmService {
         if(alarmMapper.deleteOneAlarm(id) != 1){
             throw new AlarmDataAccessException();
         }
-        return "댓글 삭제 성공";
     }
 
     public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
-        List<AlarmResponse> list;
-        if(scrollRequest.getKey() == null){
-            list =  alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+        if(scrollRequest.hasKey()){
+            List<AlarmResponse> alarms =  alarmMapper.findByUserId(user.getUserId(), scrollRequest);
+            ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, alarms);
         } else {
-            list = alarmMapper.findByUserId(user.getUserId(), scrollRequest);
+            List<AlarmResponse> alarms = alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+            ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, alarms);
         }
-
-        ScrollResponse scrollResponse = new ScrollResponse();
-        scrollResponse.setScrollRequest(scrollRequest);
-        scrollResponse.setBody(list);
-
-        return scrollResponse;
     }
 
+    private ScrollRequest getNextKey(List<AlarmResponse> alarms, ScrollRequest scrollRequest){
+        if(alarms.size() < ScrollRequest.size){
+            return scrollRequest.next(ScrollRequest.NONE_KEY);
+        } else {
+            long nextKey = alarms.stream()
+                    .reduce((first, second) -> second)
+                    .map(AlarmResponse::getAlarmId)
+                    .get();
+            return scrollRequest.next(nextKey);
+        }
+    }
+
+
     public int getNewAlarmCount(AuthUser user) {
-        return alarmMapper.findCountByUserId(user.getUserId());
+        return alarmMapper.countByUserId(user.getUserId());
     }
 }

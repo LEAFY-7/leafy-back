@@ -43,7 +43,7 @@ public class SchedulerService {
     }
 
 
-    // 읽음 알림 7일 경과후 삭제처리
+    // 알림 전부 7일 경과후 삭제처리
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     @Async

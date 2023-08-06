@@ -13,16 +13,20 @@ public class GetMeResponse {
 
     private Boolean isAdmin;
 
+    private int alarmCount;
+
     @Builder
-    private GetMeResponse(Long userId, Boolean isAdmin) {
+    private GetMeResponse(Long userId, Boolean isAdmin, int alarmCount) {
         this.userId = userId;
         this.isAdmin = isAdmin;
+        this.alarmCount = alarmCount;
     }
 
-    public static GetMeResponse of(User user) {
+    public static GetMeResponse of(User user, int alarmCount) {
         return GetMeResponse.builder()
                 .userId(user.getId())
                 .isAdmin( user.getUserRole().equals(ADMIN) ? true : false )
+                .alarmCount(alarmCount)
                 .build();
     }
 

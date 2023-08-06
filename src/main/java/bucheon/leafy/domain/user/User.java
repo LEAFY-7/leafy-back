@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user;
 
+import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.qna.Qna;
@@ -62,11 +63,16 @@ public class User extends BaseDeleteEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Notice> notices = new ArrayList<>();
 
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Alarm> alarms = new ArrayList<>();
+
     @Builder
     private User(String password, String email, String nickName, String phone,
                  String name, String simpleIntroduction, List<Feed> feeds,
                  Gender gender, LocalDate birthDay, Address address, UserImage userImage,
-                 UserRole userRole, List<Qna> qna, List<Notice> notices) {
+                 UserBackgroundImage userBackgroundImage, UserRole userRole, List<Qna> qna,
+                 List<Notice> notices, List<Alarm> alarms) {
 
         this.password = password;
         this.email = email;
@@ -77,11 +83,13 @@ public class User extends BaseDeleteEntity {
         this.feeds = feeds;
         this.address = address;
         this.userImage = userImage;
+        this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
         this.gender = gender;
         this.birthDay = birthDay;
         this.qna = qna;
         this.notices = notices;
+        this.alarms = alarms;
     }
 
     public static User of(SignUpRequest signUpRequest) {
@@ -101,16 +109,6 @@ public class User extends BaseDeleteEntity {
                 .feeds(new ArrayList<>())
                 .build();
 
-    }
-
-    public void addUserImage(String userBackgroundImage){
-        UserImage userImage = UserImage.of(userBackgroundImage, this);
-        this.userImage = userImage;
-    }
-
-    public void addUserBackgroundImage(String userBackgroundImage){
-        UserBackgroundImage backgroundImage = UserBackgroundImage.of(userBackgroundImage, this);
-        this.userBackgroundImage = backgroundImage;
     }
 
     public void changePassword(String encodePassword){

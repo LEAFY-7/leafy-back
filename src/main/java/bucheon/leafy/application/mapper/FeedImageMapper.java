@@ -1,18 +1,22 @@
 package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
+import bucheon.leafy.domain.feed.response.FeedImageResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface FeedImageMapper {
 
-    List<String> findImageList(Long feedId);
+    List<FeedImageResponse> findImageList(Long feedId);
 
-    void saveImage(List<FeedImageRequest> request);
+    String findImage(Long feedImageId);
+
+    void saveImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
 
     void deleteAllImages();
 
-    int deleteImage(Long feedId, String imageName);
+    int deleteImage(Long feedId, Long feedImageId);
 }

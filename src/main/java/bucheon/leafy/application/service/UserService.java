@@ -1,20 +1,20 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.mapper.AlarmMapper;
+import bucheon.leafy.application.mapper.UserMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
-import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.enums.ExceptionKey;
-import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,8 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Random;
+
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -36,8 +38,12 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserMapper userMapper;
 
-    public ResponseEntity signIn(SignInRequest signInRequest) {
+    private final AlarmMapper alarmMapper;
+
+
+    public TokenResponse signIn(SignInRequest signInRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
@@ -52,15 +58,13 @@ public class UserService {
         String role = authority.replace("ROLE_", "");
 
         String jwt = tokenProvider.createToken(authentication);
+//        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        return new ResponseEntity<>(new TokenResponse(jwt, role), httpHeaders, HttpStatus.OK);
-
+        return new TokenResponse(jwt, role);
     }
 
     public Long signUp(SignUpRequest signUpRequest) {
+        comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         userRepository.findByEmail(signUpRequest.getEmail())
                 .ifPresent(u -> {
@@ -72,8 +76,10 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
         User saveUser = userRepository.save(user);
+
         return saveUser.getId();
     }
+
 
     public ResponseEntity<String> duplicationIdCheck(String email) {
         userRepository.findByEmail(email)
@@ -81,7 +87,14 @@ public class UserService {
                     throw new ExistException(ExceptionKey.EMAIL);
                 });
 
-        return ResponseEntity.status(200).body("아이디가 사용 가능합니다.");
+        return ResponseEntity.status(201).body("아이디가 사용 가능합니다.");
+    }
+
+    public void duplicationNickNameCheck(String nickName) {
+        userRepository.findByNickName(nickName)
+                .ifPresent(u -> {
+                    throw new ExistException(ExceptionKey.NICKNAME);
+                });
     }
 
     public User getUserById(Long userId){
@@ -95,7 +108,81 @@ public class UserService {
 
     public GetMeResponse getMe(Long userId) {
         User user = getUserById(userId);
-        return GetMeResponse.of(user);
+        int alarmCount = alarmMapper.countByUserId(userId);
+        return GetMeResponse.of(user, alarmCount);
     }
 
+    public void updateTemporaryPassword(String email, String phone) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        verifyUser(user, phone);
+
+        String password = randomPassword(10);
+
+        // mybatis
+//        String encodedPassword = passwordEncoder.encode(password);
+//        if(userMapper.updatePassword(email, encodedPassword) != 1){
+//            throw new UserPasswordDataAccessException();
+//        }
+
+        // jpa
+        String encodedPassword = passwordEncoder.encode(password);
+        user.changePassword(encodedPassword);
+        userRepository.save(user);
+
+
+        // TODO 추후 임시비밀번호 메일 발송 로직 구현
+    }
+
+    public void verifyUser(User user, String phone) {
+        if (!user.getPhone().equals(phone)) {
+            throw new UserNotVerifiedException();
+        }
+    }
+
+    private String randomPassword(int length){
+        String upperAlphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerAlphabets = upperAlphabets.toLowerCase();
+        String numbers = "0123456789";
+        String specialCharacters = "!@#$%^&*()";
+
+        String allCharacters = upperAlphabets + lowerAlphabets + numbers + specialCharacters;
+
+        Random random = new Random();
+        StringBuilder randomString = new StringBuilder();
+
+        randomString.append(upperAlphabets.charAt(random.nextInt(upperAlphabets.length())));
+        randomString.append(lowerAlphabets.charAt(random.nextInt(lowerAlphabets.length())));
+        randomString.append(numbers.charAt(random.nextInt(numbers.length())));
+        randomString.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
+
+        for (int i = 4; i < length; i++) {
+            randomString.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+
+        char[] charArray = randomString.toString().toCharArray();
+        for (int i = charArray.length - 1; i > 0; i--) {
+            int index = random.nextInt(i + 1);
+            char temp = charArray[index];
+            charArray[index] = charArray[i];
+            charArray[i] = temp;
+        }
+
+        return new String(charArray);
+    }
+
+    public void editPassword(Long userId, PasswordRequest passwordRequest) {
+        comparePasswords( passwordRequest.getPassword(), passwordRequest.getConfirmPassword() );
+
+        User user = getUserById(userId);
+        String encodedPassword = passwordEncoder.encode(passwordRequest.getPassword());
+        user.changePassword(encodedPassword);
+    }
+
+    private void comparePasswords(String password, String confirmPassword) {
+        if ( !password.equals(confirmPassword) ){
+            throw new PasswordNotMatchedException();
+        }
+    }
 }

@@ -32,6 +32,7 @@ public class UserImageController {
     @PostMapping("/image")
     public void createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                             MultipartFile file) {
+
         Long userId = authUser.getUserId();
         userImageService.createUserImage(userId, file);
     }
@@ -45,6 +46,7 @@ public class UserImageController {
     @PostMapping("/background-image")
     public void createBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                       MultipartFile file) {
+
         Long userId = authUser.getUserId();
         userImageService.createUserBackgroundImage(userId, file);
     }
@@ -58,8 +60,13 @@ public class UserImageController {
     @PutMapping("/image")
     public void updateImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                             MultipartFile file) {
+
         Long userId = authUser.getUserId();
-        userImageService.editUserImage(userId, file);
+        if (file != null){
+            userImageService.editUserImage(userId, file);
+        } else {
+            userImageService.deleteUserImage(userId);
+        }
     }
 
     @ApiResponses({
@@ -71,9 +78,37 @@ public class UserImageController {
     @PutMapping("/background-image")
     public void updateBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                       MultipartFile file) {
+
         Long userId = authUser.getUserId();
-        userImageService.editUserBackgroundImage(userId, file);
+        if (file != null){
+            userImageService.editUserBackgroundImage(userId, file);
+        } else {
+            userImageService.deleteUserBackgroundImage(userId);
+        }
     }
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "이미지 삭제 성공"),
+            @ApiResponse(responseCode = "500", description = "이미지 삭제 실패")
+    })
+    @Operation(summary = "회원 이미지 삭제")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/image")
+    public void deleteImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userImageService.deleteUserImage(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "배경 이미지 삭제 성공"),
+            @ApiResponse(responseCode = "500", description = "배경 이미지 삭제 실패")
+    })
+    @Operation(summary = "배경 이미지 삭제")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/background-image")
+    public void deleteBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userImageService.deleteUserBackgroundImage(userId);
+    }
 
 }
