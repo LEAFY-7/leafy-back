@@ -16,4 +16,5 @@ public interface FeedBlockRepository extends JpaRepository<FeedBlock, Long> {
 
     void deleteByUserAndFeed(User user, Feed feed);
 
+    Boolean existsByUserAndFeed(User user, Feed feed);
 }

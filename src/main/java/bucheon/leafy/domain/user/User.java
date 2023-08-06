@@ -69,16 +69,13 @@ public class User extends BaseDeleteEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Notice> notices = new ArrayList<>();
 
-    @JoinColumn(name = "user_id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Alarm> alarms = new ArrayList<>();
 
     @Builder
     private User(String password, String email, String nickName, String phone,
                  String name, String simpleIntroduction, List<Feed> feeds,
                  Gender gender, LocalDate birthDay, Address address, UserImage userImage,
                  UserBackgroundImage userBackgroundImage, UserRole userRole, List<Qna> qna,
-                 List<Notice> notices, List<Alarm> alarms) {
+                 List<Notice> notices) {
 
         this.password = password;
         this.email = email;
@@ -95,13 +92,12 @@ public class User extends BaseDeleteEntity {
         this.birthDay = birthDay;
         this.qna = qna;
         this.notices = notices;
-        this.alarms = alarms;
     }
 
     public static User of(SignUpRequest signUpRequest) {
         Address address = Address.of(signUpRequest);
 
-        return User.builder()
+        User user = User.builder()
                 .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .name(signUpRequest.getName())
@@ -115,6 +111,8 @@ public class User extends BaseDeleteEntity {
                 .feeds(new ArrayList<>())
                 .build();
 
+        address.addUser(user);
+        return user;
     }
 
     public void changePassword(String encodePassword){

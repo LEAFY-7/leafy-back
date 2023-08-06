@@ -1,12 +1,12 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.repository.AlarmRepository;
 import bucheon.leafy.application.repository.FollowRepository;
 import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.follow.Follow;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.FollowNotFoundException;
 import bucheon.leafy.exception.SelfTargetException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static bucheon.leafy.exception.enums.ExceptionKey.FOLLOW;
+import static bucheon.leafy.domain.alarm.AlarmType.NEW_FOLLOW;
 
 @Service
 @Transactional
@@ -27,6 +27,7 @@ import static bucheon.leafy.exception.enums.ExceptionKey.FOLLOW;
 public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final AlarmRepository alarmRepository;
 
     // 나를 팔로우 한 사람들
     public Page<FollowersResponse> getFollowers(Long userId, Pageable pageable) {
@@ -75,13 +76,15 @@ public class FollowService {
                 .orElseThrow(UserNotFoundException::new);
 
         Boolean exists = followRepository.existsByFollowerAndFollowing(user, followTarget);
-        if (exists) {
-            throw new ExistException(FOLLOW);
+
+        if (!exists) {
+            Follow follow = Follow.of(user, followTarget);
+            followRepository.save(follow);
+
+            Alarm alarm = Alarm.of(followTarget, NEW_FOLLOW, user.getId());
+            alarmRepository.save(alarm);
         }
 
-        Follow follow = Follow.of(user, followTarget);
-
-        followRepository.save(follow);
     }
 
     public void unfollow(Long userId, Long targetUserId) {
@@ -93,10 +96,8 @@ public class FollowService {
         User followTarget = userRepository.findById(targetUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Follow follow = followRepository.findByFollowerAndFollowing(user, followTarget)
-                .orElseThrow(FollowNotFoundException::new);
-
-        followRepository.delete(follow);
+        followRepository.findByFollowerAndFollowing(user, followTarget)
+                .ifPresent(f -> followRepository.delete(f));
     }
 
     public Long getFollowerCount(Long userId) {

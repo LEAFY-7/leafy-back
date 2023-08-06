@@ -14,4 +14,5 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     List<UserReport> findByUser(User user, Pageable pageable);
     void deleteByUserAndReportUser(User user, User reportUser);
 
+    Boolean existsByUserAndReportUser(User user, User reportUser);
 }
