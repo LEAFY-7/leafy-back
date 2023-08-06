@@ -1,7 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.ImageComponent;
-import bucheon.leafy.application.component.response.FeedFindResponse;
+import bucheon.leafy.application.controller.response.FeedFindResponse;
 import bucheon.leafy.application.mapper.FeedImageMapper;
 import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.mapper.FeedTagMapper;
@@ -13,7 +13,7 @@ import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
-import bucheon.leafy.application.component.request.FeedUpdateRequest;
+import bucheon.leafy.application.controller.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
