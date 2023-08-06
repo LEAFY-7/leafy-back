@@ -44,8 +44,13 @@ public class FeedReportService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        FeedReport feedReport = FeedReport.of(user, feed);
-        feedReportRepository.save(feedReport);
+        Boolean exist = feedReportRepository.existsByUserAndFeed(user, feed);
+
+        if (!exist) {
+            FeedReport feedReport = FeedReport.of(user, feed);
+            feedReportRepository.save(feedReport);
+        }
+
     }
 
     public void reportCancelFeed(Long userId, Long feedId) {
