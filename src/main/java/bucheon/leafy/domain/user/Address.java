@@ -62,4 +62,8 @@ public class Address extends BaseDeleteEntity {
                 .build();
     }
 
+    public void addUser(User user) {
+        this.user = user;
+    }
+
 }
