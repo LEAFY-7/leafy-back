@@ -38,7 +38,8 @@ class UserControllerTest {
 
         //given
         SignUpRequest request = SignUpRequest.builder()
-                .password("1234")
+                .password("Ss12345!@")
+                .confirmPassword("Ss12345!@")
                 .email("abcd1234@gmail.com")
                 .name("김찬우")
                 .nickName("chanU kim")
@@ -51,6 +52,7 @@ class UserControllerTest {
                 .jibunAddress("상동")
                 .roadAddress("호수공원")
                 .detailAddress("1동 1호")
+                .addressIsHide(false)
                 .build();
 
         //when //then

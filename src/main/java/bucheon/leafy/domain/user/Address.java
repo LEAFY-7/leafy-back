@@ -22,12 +22,22 @@ public class Address extends BaseDeleteEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "zone_code", nullable = false)
     private String zoneCode; // 우편번호
+
+    @Column(name = "address", nullable = false)
     private String address; // 주소
+
+    @Column(name = "jibun_address", nullable = false)
     private String jibunAddress; // 지번주소
+
+    @Column(name = "road_address", nullable = false)
     private String roadAddress; // 도로명주소
+
+    @Column(name = "detail_address", nullable = false)
     private String detailAddress; // 상세주소
 
+    @Column(name = "is_hide", nullable = false)
     private Boolean isHide;
 
     @Builder

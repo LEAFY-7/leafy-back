@@ -67,6 +67,7 @@ class UserBlockRepositoryTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         UserImage image = UserImage.builder()
@@ -78,6 +79,7 @@ class UserBlockRepositoryTest extends IntegrationTestSupport {
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();

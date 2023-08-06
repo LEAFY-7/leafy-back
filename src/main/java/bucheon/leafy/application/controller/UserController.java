@@ -21,7 +21,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 
 
 @Tag(name = "회원정보")
@@ -74,7 +73,7 @@ public class UserController {
     @PostMapping("/check/email")
     @ResponseStatus(HttpStatus.CREATED)
     public void emailCheck(@RequestBody String email) {
-        userService.duplicationIdCheck(email);
+        userService.duplicationEmailCheck(email);
     }
 
     @ApiResponses({
@@ -92,6 +91,7 @@ public class UserController {
     @Operation(summary = "Get Me")
     @GetMapping
     public ResponseEntity<GetMeResponse> authorize(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+
         Long userId = authUser.getUserId();
         GetMeResponse getMe = userService.getMe(userId);
         return ResponseEntity.ok().body(getMe);
@@ -114,7 +114,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "임시 비밀번호 발급 성공"),
             @ApiResponse(responseCode = "400", description = "email, phone 비교 검증 불통과"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 email")
+            @ApiResponse(responseCode = "404", description = "유효하지 않은 email or phone")
     })
     @Operation(summary = "임시 비밀번호 발급")
     @PutMapping("/temporary-password")
