@@ -41,7 +41,8 @@ public class UserReportController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "회원 신고 성공"),
-            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
+            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함"),
+            @ApiResponse(responseCode = "500", description = "자기 자신을 대상으로 할 수 없음")
     })
     @Operation(summary = "회원 신고")
     @PostMapping("/{reportUserId}")
@@ -54,7 +55,8 @@ public class UserReportController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "회원 신고 취소 성공"),
-            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
+            @ApiResponse(responseCode = "404", description = "회원이 탈퇴함"),
+            @ApiResponse(responseCode = "500", description = "자기 자신을 대상으로 할 수 없음")
     })
     @Operation(summary = "회원 신고 취소")
     @DeleteMapping("/{reportUserId}")
