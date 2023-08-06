@@ -32,4 +32,10 @@
         order by good_name
     </select>
 
+    <select id="findGoodNameByPumName" resultType="bucheon.leafy.domain.search.response.goodNameResponse">
+        select distinct(good_name)
+        from search
+        where pum_name = #{searchName}
+    </select>
+
 </mapper>

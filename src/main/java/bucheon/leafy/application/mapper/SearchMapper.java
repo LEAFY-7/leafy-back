@@ -2,6 +2,7 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import bucheon.leafy.domain.search.response.SearchResponse;
+import bucheon.leafy.domain.search.response.goodNameResponse;
 import bucheon.leafy.util.request.PageRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,4 +18,6 @@ public interface SearchMapper {
     int deleteSearch();
 
     long count(String searchName);
+
+    List<goodNameResponse> findGoodNameByPumName(String searchName);
 }
