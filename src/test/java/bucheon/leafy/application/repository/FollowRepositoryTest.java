@@ -53,7 +53,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         User user2 = createUser("abcd@gmail.com", "홍길동");
         User user3 = createUser("qwer@gmail.com", "강호동");
         User user4 = createUser("zxcv@naver.com", "유재석");
-        User user5 = createUser("tyui@gmail.com", "강호동");
+        User user5 = createUser("tyui@gmail.com", "박호동");
 
         userRepository.saveAll( List.of(user1, user2, user3, user4, user5) );
 
@@ -87,7 +87,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         User user2 = createUser("abcd@gmail.com", "홍길동");
         User user3 = createUser("qwer@gmail.com", "강호동");
         User user4 = createUser("zxcv@naver.com", "유재석");
-        User user5 = createUser("tyui@gmail.com", "강호동");
+        User user5 = createUser("tyui@gmail.com", "박호동");
 
         userRepository.saveAll( List.of(user1, user2, user3, user4, user5) );
 
@@ -137,7 +137,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         User user2 = createUser("abcd@gmail.com", "홍길동");
         User user3 = createUser("qwer@gmail.com", "강호동");
         User user4 = createUser("zxcv@naver.com", "유재석");
-        User user5 = createUser("tyui@gmail.com", "강호동");
+        User user5 = createUser("tyui@gmail.com", "박호동");
 
         userRepository.saveAll( List.of(user1, user2, user3, user4, user5) );
 
@@ -181,6 +181,27 @@ class FollowRepositoryTest extends IntegrationTestSupport {
         assertThat(count).isEqualTo(3L);
     }
 
+    @Test
+    @DisplayName("회원이 특정 회원을 팔로우 했다면 True 를 반환한다.")
+    void testExistsByFollowerAndFollowing(){
+        //given
+        User user1 = createUser("ekxk1234@naver.com", "정철희");
+        User user2 = createUser("abcd@gmail.com", "홍길동");
+
+        userRepository.saveAll( List.of(user1, user2) );
+
+        Follow follow1 = Follow.of(user2, user1);
+        List<Follow> followList = List.of(follow1);
+
+        followRepository.saveAll(followList);
+
+        //when
+        Boolean exists = followRepository.existsByFollowerAndFollowing(user2, user1);
+
+        //then
+        assertThat(exists).isTrue();
+    }
+
 
     private User createUser(String email, String nickName) {
         Address address = Address.builder()
@@ -189,6 +210,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
                 .jibunAddress("100")
                 .roadAddress("ref")
                 .detailAddress("hello world")
+                .isHide(false)
                 .build();
 
         UserImage image = UserImage.builder()
@@ -200,6 +222,7 @@ class FollowRepositoryTest extends IntegrationTestSupport {
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")
+                .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
                 .build();
