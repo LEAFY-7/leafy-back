@@ -131,7 +131,7 @@ public class UserController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "임시 비밀번호 발급 성공"),
-            @ApiResponse(responseCode = "400", description = "email, phone 비교 검증 불통과"),
+            @ApiResponse(responseCode = "400", description = "임시 비밀번호 이메일 발송 실패"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 email or phone")
     })
     @Operation(summary = "임시 비밀번호 발급")

@@ -1,5 +1,6 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.component.MailComponent;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
@@ -9,6 +10,7 @@ import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.PasswordEmailSendException;
 import bucheon.leafy.exception.PasswordNotMatchedException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.TokenProvider;
@@ -39,6 +41,8 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final AlarmMapper alarmMapper;
+
+    private final MailComponent mailComponent;
 
 
     public TokenResponse signIn(SignInRequest signInRequest) {
@@ -119,7 +123,10 @@ public class UserService {
         user.changePassword(encodedPassword);
         userRepository.save(user);
 
-        // TODO 추후 임시비밀번호 메일 발송 로직 구현
+        String returnPassword = mailComponent.sendPassword(email, password);
+        if(returnPassword != password){
+            throw new PasswordEmailSendException();
+        }
     }
 
     private String randomPassword(int length){
