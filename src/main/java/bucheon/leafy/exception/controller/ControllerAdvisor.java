@@ -138,4 +138,17 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(PasswordEmailSendException.class)
+    public ResponseEntity<ExceptionResponse> passwordEmailSendException(PasswordEmailSendException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
 }
