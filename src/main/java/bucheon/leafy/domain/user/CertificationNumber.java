@@ -17,10 +17,8 @@ public class CertificationNumber extends BaseEntity {
     @Column(name="certification_number_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String email;
 
-    private Long number;
+    private String number;
 
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bucheon.leafy.application.mapper.CertificationNumberMapper">
+
+    <insert id="saveCertificationNumber" parameterType="java.lang.String" useGeneratedKeys="true" keyColumn="certification_number_id">
+        INSERT INTO certification_number (email,number,created_at) VALUES (#{email}, #{number}, now())
+    </insert>
+</mapper>

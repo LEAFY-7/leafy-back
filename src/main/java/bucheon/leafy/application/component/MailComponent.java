@@ -17,7 +17,7 @@ public class MailComponent {
 
     private final JavaMailSender javaMailSender;
 
-    private final String verificationCode = createKey();
+    private final String code = createCode();
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -33,7 +33,7 @@ public class MailComponent {
         msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">이메일 주소 확인</h1>";
         msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\">아래 확인 코드를 회원가입 화면에서 입력해주세요.</p>";
         msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; background-color: #F4F4F4; height: 70px; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\"text-align: center; vertical-align: middle; font-size: 30px;\">";
-        msg += verificationCode;
+        msg += code;
         msg += "</td></tr></tbody></table></div>";
 
         message.setText(msg, "utf-8", "html");
@@ -42,7 +42,7 @@ public class MailComponent {
         return message;
     }
 
-    public static String createKey() {
+    public static String createCode() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
 
@@ -52,11 +52,18 @@ public class MailComponent {
         return key.toString();
     }
 
-    public String sendSimpleMessage(String to)throws Exception {
-        MimeMessage message = createMessage(to);
+    public String sendCode(String to) {
+        MimeMessage message = null;
+        try {
+            message = createMessage(to);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
         javaMailSender.send(message);
 
-        return verificationCode;
+        return code;
     }
 }
