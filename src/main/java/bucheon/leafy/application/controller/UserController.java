@@ -19,8 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Tag(name = "회원정보")
@@ -66,30 +69,45 @@ public class UserController {
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "중복되는 아이디 (이메일)이 존재하지 않음"),
+            @ApiResponse(responseCode = "204", description = "중복되는 아이디 (이메일)이 존재하지 않음"),
             @ApiResponse(responseCode = "409", description = "아이디 (이메일)이 이미 존재")
     })
     @Operation(summary = "아이디, 이메일 중복체크")
-    @PostMapping("/check/email")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void emailCheck(@RequestBody String email) {
+    @GetMapping("/check/email")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void emailCheck(@RequestParam String email) {
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "형식이 맞지 않습니다.");
+        }
+
         userService.duplicationEmailCheck(email);
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "중복되는 닉네임이 존재하지 않음"),
+            @ApiResponse(responseCode = "204", description = "중복되는 닉네임이 존재하지 않음"),
+            @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
             @ApiResponse(responseCode = "409", description = "닉네임이 이미 존재")
     })
     @Operation(summary = "닉네임 중복체크")
-    @PostMapping("/check/nickname")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void nickNameCheck(@RequestBody String nickName) {
+    @GetMapping("/check/nickname")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void nickNameCheck(@RequestParam String nickName) {
+        Pattern pattern = Pattern.compile("^(?!admin|leafy)(?!.*\\\\s{2,})(?!.*\\\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\\\s]{3,12}$");
+        Matcher matcher = pattern.matcher(nickName);
+
+        if (!matcher.matches()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "형식이 맞지 않습니다.");
+        }
+
         userService.duplicationNickNameCheck(nickName);
     }
 
     @ApiResponse(responseCode = "200", description = "조회 성공")
     @Operation(summary = "Get Me")
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<GetMeResponse> authorize(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
 
         Long userId = authUser.getUserId();
@@ -102,7 +120,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
     })
     @Operation(summary = "비밀번호 변경")
-    @PutMapping("/password")
+    @PatchMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public void updatePassword(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                @RequestBody @Valid PasswordRequest passwordRequest) {
@@ -117,7 +135,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "유효하지 않은 email or phone")
     })
     @Operation(summary = "임시 비밀번호 발급")
-    @PutMapping("/temporary-password")
+    @PatchMapping("/temporary-password")
     public void updateTemporaryPassword(@RequestParam String email, String phone) {
         userService.updateTemporaryPassword(email, phone);
     }
