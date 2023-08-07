@@ -109,7 +109,6 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
             Feed feed = easyRandom.nextObject(Feed.class);
 
             for (int j = 0; j < 3; j++) {
-                //
                 FeedTag feedTag = FeedTag.of( generatePlantNames() );
                 feed.getFeedTags().add(feedTag);
             }
