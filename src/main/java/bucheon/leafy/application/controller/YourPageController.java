@@ -1,17 +1,13 @@
 package bucheon.leafy.application.controller;
 
-import bucheon.leafy.application.controller.response.MyPageResponse;
+import bucheon.leafy.application.controller.response.YourPageResponse;
 import bucheon.leafy.application.service.FeedLikeInfoService;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.application.service.UserService;
-import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
-import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,19 +15,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 
-@Tag(name = "회원정보")
+@Tag(name = "상대방 회원정보")
 @RestController
-@RequestMapping("/api/v1/users/my-page")
+@RequestMapping("/api/v1/users/your-page")
 @RequiredArgsConstructor
-public class MyPageController {
+public class YourPageController {
 
     private final FollowService followService;
 
@@ -46,31 +42,26 @@ public class MyPageController {
             @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "서버 코드 문제")
     })
-    @Operation(summary = "마이페이지")
-    @GetMapping
-    public ResponseEntity<MyPageResponse> myPage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                  @PageableDefault(page = 1, size = 6) Pageable pageable) {
+    @Operation(summary = "상대 페이지")
+    @GetMapping("/{userId}")
+    public ResponseEntity<YourPageResponse> yourPage(@PathVariable Long userId,
+                                  @PageableDefault(page = 1, size = 8) Pageable pageable) {
 
-        Long userId = authUser.getUserId();
         UserResponse userResponse = userService.getUserResponseByUserId(userId);
         Long followerCount = followService.getFollowerCount(userId);
         Long followingCount = followService.getFollowingCount(userId);
-        List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(userId);
-        List<FollowersResponse> followers = followService.getFollowers(userId, pageable).getContent();
-        List<FollowersResponse> followings = followService.getFollowings(userId, pageable).getContent();
+        Integer feedCount = feedService.getCountByUserId(userId);
         List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(userId, pageable);
 
-        MyPageResponse myPageResponse = MyPageResponse.builder()
+        YourPageResponse yourPageResponse = YourPageResponse.builder()
                 .userResponse(userResponse)
                 .followerCount(followerCount)
                 .followingCount(followingCount)
-                .feedMonthlyActivity(feedMonthlyResponses)
-                .followers(followers)
-                .followings(followings)
+                .feedCount(feedCount)
                 .feeds(feeds)
                 .build();
 
-        return ResponseEntity.ok().body(myPageResponse);
+        return ResponseEntity.ok().body(yourPageResponse);
     }
 
 }

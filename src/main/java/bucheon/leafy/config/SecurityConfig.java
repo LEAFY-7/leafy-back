@@ -46,7 +46,6 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/v1/users/sign**").permitAll()
-                .antMatchers("/api/v1/lets-go").permitAll()
                 .antMatchers("/api/v1/users/check**").permitAll()
                 .antMatchers("/api/v1/users/email-confirm").permitAll()
                 .antMatchers("/api/v1/users//temporary-password").permitAll()

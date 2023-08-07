@@ -191,4 +191,14 @@ public class FeedService {
                 .map(PopularTagResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public Integer getCountByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Feed> feeds = user.getFeeds();
+
+        if (feeds == null) return 0;
+        return feeds.size();
+    }
 }
