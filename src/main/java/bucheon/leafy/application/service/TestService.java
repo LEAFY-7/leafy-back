@@ -41,7 +41,7 @@ public class TestService {
 
         List<User> users = userRepository.findAll();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             FeedLikeCount feedLikeCount = easyRandom.nextObject(FeedLikeCount.class);
             Feed feed = easyRandom.nextObject(Feed.class);
             for (int j = 0; j < 3; j++) {
