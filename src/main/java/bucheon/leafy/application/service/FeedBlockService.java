@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +44,12 @@ public class FeedBlockService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        FeedBlock feedBlock = FeedBlock.of(user, feed);
-        feedBlockRepository.save(feedBlock);
+        Boolean exist = feedBlockRepository.existsByUserAndFeed(user, feed);
+
+        if (!exist) {
+            FeedBlock feedBlock = FeedBlock.of(user, feed);
+            feedBlockRepository.save(feedBlock);
+        }
     }
 
     public void noneBlockFeed(Long userId, Long feedId) {

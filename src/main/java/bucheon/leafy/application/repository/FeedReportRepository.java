@@ -15,4 +15,5 @@ public interface FeedReportRepository extends JpaRepository<FeedReport, Long> {
     List<FeedReport> findByUserId(Long userId, Pageable pageable);
     void deleteByUserAndFeed(User user, Feed feed);
 
+    Boolean existsByUserAndFeed(User user, Feed feed);
 }

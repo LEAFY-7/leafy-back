@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +74,11 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<String> responseStatusException(ResponseStatusException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
     @ExceptionHandler(FeedNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleFeedNotFoundException(FeedNotFoundException e) {
         int statusCode = e.getStatusCode();
@@ -127,6 +133,32 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(UserPasswordDataAccessException.class)
     public ResponseEntity<ExceptionResponse> userPasswordDataAccessException(UserPasswordDataAccessException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(SelfTargetException.class)
+    public ResponseEntity<ExceptionResponse> selfTargetException(SelfTargetException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(PasswordEmailSendException.class)
+    public ResponseEntity<ExceptionResponse> passwordEmailSendException(PasswordEmailSendException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()

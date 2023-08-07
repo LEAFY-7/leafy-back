@@ -36,8 +36,8 @@ public class SignUpRequest {
         private String name;
 
         @NotBlank(message = "넥네임을 입력해주세요")
-        @Pattern(regexp = "^(?!admin|leafy)(?!.*\\s{2,})(?!.*\\s$)(?!.*_{2,})(?!.*_$)(?=.*[a-zA-Z])(?=.*[0-9])(?=.*_)[a-zA-Z0-9_\\s]{3,12}$")
-        @Schema(description = "별칭", example = "리피")
+        @Pattern(regexp = "^(?!admin|leafy)(?!.*\\\\s{2,})(?!.*\\\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\\\s]{3,12}$")
+        @Schema(description = "별칭", example = "리피김")
         private String nickName;
 
         @NotBlank(message = "전화번호를 입력해주세요")

@@ -3,6 +3,7 @@ package bucheon.leafy.application.service;
 import bucheon.leafy.application.mapper.SearchMapper;
 import bucheon.leafy.domain.leafyapi.LeafyApiDto;
 import bucheon.leafy.domain.search.response.SearchResponse;
+import bucheon.leafy.domain.search.response.goodNameResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ public class SearchService {
     private final SearchMapper searchMapper;
 
     public PageResponse getSearch(String searchName, PageRequest pageRequest) {
-        pageRequest = new PageRequest(pageRequest.getPage(), pageRequest.getLimit(), pageRequest.getOffset(), pageRequest.getSortColumn(), pageRequest.getSortStatus());
         List<SearchResponse> list = searchMapper.findSearchByPumName(searchName, pageRequest);
         long total = searchMapper.count(searchName);
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
@@ -31,4 +31,8 @@ public class SearchService {
 
     @Transactional
     public int deleteSearch() {return searchMapper.deleteSearch();}
+
+    public List<goodNameResponse> getGoodName(String searchName) {
+        return searchMapper.findGoodNameByPumName(searchName);
+    }
 }
