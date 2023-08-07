@@ -12,13 +12,11 @@ public class AlarmRequest {
     private Long userId;
     private AlarmType alarmType;
     private Long tableId;
-    private String message;
 
     @Builder
-    public AlarmRequest(Long userId, AlarmType alarmType, Long tableId, String message) {
+    public AlarmRequest(Long userId, AlarmType alarmType, Long tableId) {
         this.userId = userId;
         this.alarmType = alarmType;
         this.tableId = tableId;
-        this.message = message;
     }
 }
