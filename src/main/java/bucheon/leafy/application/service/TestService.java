@@ -3,28 +3,16 @@ package bucheon.leafy.application.service;
 import bucheon.leafy.application.component.ImageComponent;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
-import bucheon.leafy.domain.feed.FeedImage;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.FeedTag;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.user.request.SignUpRequest;
-import bucheon.leafy.path.S3Path;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.impl.FileItemStreamImpl;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,7 +33,7 @@ public class TestService {
 
     public void createDummyFeed(List<MultipartFile> files) {
         EasyRandomParameters parameters = new EasyRandomParameters()
-                .randomize(Long.class, () -> ThreadLocalRandom.current().nextLong(0, 50001))
+                .randomize(Long.class, () -> ThreadLocalRandom.current().nextLong(0, 501))
                 .excludeField(named("feed_id").and(ofType(Long.class)))
                 .excludeField(named("id").and(ofType(Long.class)));
 
@@ -56,14 +44,15 @@ public class TestService {
         for (int i = 0; i < 30; i++) {
             FeedLikeCount feedLikeCount = easyRandom.nextObject(FeedLikeCount.class);
             Feed feed = easyRandom.nextObject(Feed.class);
-
             for (int j = 0; j < 3; j++) {
                 FeedTag feedTag = FeedTag.of( generatePlantNames() );
                 feed.getFeedTags().add(feedTag);
             }
 
-            List<String> fileNames = new ArrayList<>();
+            feed.initFeedLikeCount(feedLikeCount);
+            feedLikeCount.initFeed(feed);
 
+            List<String> fileNames = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
                 String uuid = imageComponent.uploadImage(FEED_PATH, files.get(((int) (Math.random() * files.size()))));
                 fileNames.add(uuid);
@@ -71,11 +60,7 @@ public class TestService {
 
             feed.addFeedImages(fileNames);
 
-            feed.initFeedLikeCount(feedLikeCount);
-            feedLikeCount.initFeed(feed);
-
             User randomUser = users.get((int) (Math.random() * users.size()));
-
             randomUser.getFeeds().add(feed);
         }
 
