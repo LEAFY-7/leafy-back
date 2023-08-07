@@ -125,7 +125,7 @@ class UserRepositoryTest extends IntegrationTestSupport {
                 .collect(Collectors.toList());
 
         //when
-        List<User> result = userRepository.findAllWithUserImageByIdIn(ids);
+        List<User> result = userRepository.findAllById(ids);
 
         //then
         assertThat(result).isNotNull();

@@ -20,12 +20,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
     Optional<User> findByEmail(String email);
 
-    @EntityGraph(attributePaths = "userImage")
-    List<User> findAllWithUserImageByIdIn(List<Long> ids);
-
     Boolean existsByNickName(String nickName);
 
     Boolean existsByEmail(String email);
 
     Optional<User> findByEmailAndPhone(String email, String phone);
+
+    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"} )
+    Optional<User> findByFeedsId(Long feedId);
 }
