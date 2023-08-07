@@ -1,10 +1,7 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.IntegrationTestSupport;
-import bucheon.leafy.application.repository.FeedLikeInfoRepository;
-import bucheon.leafy.application.repository.FeedLikeRepository;
-import bucheon.leafy.application.repository.FeedRepository;
-import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.application.repository.*;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
@@ -36,6 +33,9 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
     FeedLikeRepository feedLikeRepository;
 
     @Autowired
+    AlarmRepository alarmRepository;
+
+    @Autowired
     FeedLikeInfoRepository feedLikeInfoRepository;
 
     @AfterEach
@@ -43,6 +43,7 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
         feedLikeInfoRepository.deleteAllInBatch();
         feedLikeRepository.deleteAllInBatch();
         feedRepository.deleteAllInBatch();
+        alarmRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
 

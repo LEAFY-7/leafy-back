@@ -7,7 +7,6 @@ import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.follow.Follow;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.User;
-import bucheon.leafy.exception.SelfTargetException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,7 +37,7 @@ public class FollowService {
 
         List<Long> ids = getFollowersId( followers.getContent() );
 
-        List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
+        List<User> followUsers = userRepository.findAllById(ids);
 
         List<FollowersResponse> followersResponses = followUsers.stream()
                 .map(FollowersResponse::of)
@@ -56,7 +55,7 @@ public class FollowService {
 
         List<Long> ids = getFollowingsId(followings.getContent());
 
-        List<User> followUsers = userRepository.findAllWithUserImageByIdIn(ids);
+        List<User> followUsers = userRepository.findAllById(ids);
 
         List<FollowersResponse> followersResponses = followUsers.stream()
                 .map(FollowersResponse::of)
@@ -67,8 +66,6 @@ public class FollowService {
 
 
     public void follow(Long userId, Long targetUserId) {
-        if (userId == targetUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -88,8 +85,6 @@ public class FollowService {
     }
 
     public void unfollow(Long userId, Long targetUserId) {
-        if (userId == targetUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 

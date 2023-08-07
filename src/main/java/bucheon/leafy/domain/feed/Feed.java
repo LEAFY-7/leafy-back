@@ -58,7 +58,12 @@ public class Feed extends BaseDeleteEntity {
     private FeedType feedType;
 
     @Builder
-    public Feed(String title, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, String content, FeedLikeCount feedLikeCount, List<FeedComment> feedComments, List<FeedReply> feedReplies, List<FeedTag> feedTags, List<FeedImage> feedImages, FeedType feedType) {
+    public Feed(String title, String species, String nickname, Double temperature,
+                Integer humidity, Double waterAmount, String wateringPeriod,
+                String content, FeedLikeCount feedLikeCount, List<FeedComment> feedComments,
+                List<FeedReply> feedReplies, List<FeedTag> feedTags,
+                List<FeedImage> feedImages, FeedType feedType) {
+
         this.title = title;
         this.species = species;
         this.nickname = nickname;

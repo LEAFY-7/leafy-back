@@ -3,6 +3,7 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
+import bucheon.leafy.exception.SelfTargetException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,9 +62,15 @@ public class FollowController {
     @Operation(summary = "팔로우")
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                          @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
+
+        if (userId == targetUserId) {
+            throw new SelfTargetException();
+        }
+
         followService.follow(userId, targetUserId);
     }
 
@@ -74,9 +82,15 @@ public class FollowController {
     @Operation(summary = "언팔로우")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                            @PathVariable("id") Long targetUserId) {
         Long userId = authUser.getUserId();
+
+        if (userId == targetUserId) {
+            throw new SelfTargetException();
+        }
+
         followService.unfollow(userId, targetUserId);
     }
 

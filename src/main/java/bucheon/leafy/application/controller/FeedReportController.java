@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,7 @@ public class FeedReportController {
     @Operation(summary = "피드 신고")
     @PostMapping("/{feedId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void reportFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                           @PathVariable Long feedId) {
         Long userId = authUser.getUserId();
@@ -59,6 +61,7 @@ public class FeedReportController {
     @Operation(summary = "피드 신고 취소")
     @DeleteMapping("/{feedId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void reportCancelFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                               @PathVariable Long feedId) {
         Long userId = authUser.getUserId();

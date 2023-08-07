@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+import static bucheon.leafy.path.S3Path.*;
+
 @Data
 public class UserResponse {
 
@@ -21,6 +23,10 @@ public class UserResponse {
     private String nickName;
 
     private String phone;
+
+    private String profileImage;
+
+    private String backgroundImage;
 
     private String simpleIntroduction;
 
@@ -38,6 +44,7 @@ public class UserResponse {
     @Builder
     public UserResponse(String email, Gender gender, LocalDate birthDay,
                         String name, String nickName, String phone,
+                        String profileImage, String backgroundImage,
                         String simpleIntroduction, String zoneCode,
                         String address, String jibunAddress,
                         String roadAddress, String detailAddress) {
@@ -48,6 +55,8 @@ public class UserResponse {
         this.name = name;
         this.nickName = nickName;
         this.phone = phone;
+        this.profileImage = profileImage;
+        this.backgroundImage = backgroundImage;
         this.simpleIntroduction = simpleIntroduction;
         this.zoneCode = zoneCode;
         this.address = address;
@@ -64,6 +73,12 @@ public class UserResponse {
                 .phone(user.getPhone())
                 .birthDay(user.getBirthDay())
                 .gender(user.getGender())
+                .profileImage(
+                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage() : ""
+                )
+                .backgroundImage(
+                        user.getUserBackgroundImage() != null ? ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + user.getUserBackgroundImage().getImage() : ""
+                )
                 .simpleIntroduction(user.getSimpleIntroduction())
                 .zoneCode(user.getAddress().getDetailAddress())
                 .address(user.getAddress().getAddress())

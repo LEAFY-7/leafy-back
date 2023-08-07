@@ -6,7 +6,6 @@ import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.domain.userblock.UserBlock;
 import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.SelfTargetException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -49,8 +48,6 @@ public class UserBlockService {
     }
 
     public void blockUser(Long userId, Long blockUserId) {
-        if (userId == blockUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -66,8 +63,6 @@ public class UserBlockService {
     }
 
     public void noneBlockUser(Long userId, Long blockUserId) {
-        if (userId == blockUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -78,8 +73,6 @@ public class UserBlockService {
     }
 
     public void isBlockedUser(Long userId, Long blockUserId) {
-        if (userId == blockUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 

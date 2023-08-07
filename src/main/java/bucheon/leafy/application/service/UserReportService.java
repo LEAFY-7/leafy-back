@@ -5,7 +5,6 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.domain.userreport.UserReport;
-import bucheon.leafy.exception.SelfTargetException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +45,6 @@ public class UserReportService {
     }
 
     public void reportUser(Long userId, Long reportUserId) {
-        if (userId == reportUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -63,8 +60,6 @@ public class UserReportService {
     }
 
     public void reportCancelUser(Long userId, Long reportUserId) {
-        if (userId == reportUserId) throw new SelfTargetException();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 

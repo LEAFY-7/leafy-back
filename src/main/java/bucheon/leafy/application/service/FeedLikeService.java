@@ -1,10 +1,8 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.repository.AlarmRepository;
 import bucheon.leafy.application.repository.FeedLikeInfoRepository;
 import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static bucheon.leafy.domain.alarm.AlarmType.FEED_LIKE;
 
 
 @Service
@@ -28,7 +25,6 @@ public class FeedLikeService {
     private final UserRepository userRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedLikeInfoRepository feedLikeInfoRepository;
-    private final AlarmRepository alarmRepository;
 
 
     // 레코드에 직접적으로 락을 걸기 때문에 성능이 떨어질 수 있음
@@ -39,9 +35,6 @@ public class FeedLikeService {
 
         Feed feed = increaseLikeCount(feedId);
         saveLikeInfo(user, feed);
-
-        Alarm alarm = Alarm.of(user, FEED_LIKE, feedId);
-        alarmRepository.save(alarm);
     }
 
 

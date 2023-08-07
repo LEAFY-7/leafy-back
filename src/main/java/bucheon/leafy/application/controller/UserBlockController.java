@@ -4,6 +4,7 @@ import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.application.service.UserBlockService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.response.UserResponse;
+import bucheon.leafy.exception.SelfTargetException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,9 +54,14 @@ public class UserBlockController {
     @GetMapping("/{blockUserId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void isBlockedUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                  @PathVariable Long blockUserId) {
+                              @PathVariable Long blockUserId) {
 
         Long userId = authUser.getUserId();
+
+        if (userId == blockUserId) {
+            throw new SelfTargetException();
+        }
+
         userBlockService.isBlockedUser(userId, blockUserId);
     }
 
@@ -66,10 +73,16 @@ public class UserBlockController {
     @Operation(summary = "회원 차단")
     @PostMapping("/{blockUserId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void blockUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                           @PathVariable Long blockUserId) {
+                          @PathVariable Long blockUserId) {
 
         Long userId = authUser.getUserId();
+
+        if (userId == blockUserId) {
+            throw new SelfTargetException();
+        }
+
         userBlockService.blockUser(userId, blockUserId);
         followService.unfollow(userId, blockUserId);
     }
@@ -82,9 +95,16 @@ public class UserBlockController {
     @Operation(summary = "회원 차단 해제")
     @DeleteMapping("/{blockUserId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void noneBlockUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                 @PathVariable Long blockUserId) {
+                              @PathVariable Long blockUserId) {
+
         Long userId = authUser.getUserId();
+
+        if (userId == blockUserId) {
+            throw new SelfTargetException();
+        }
+
         userBlockService.noneBlockUser(userId, blockUserId);
     }
 

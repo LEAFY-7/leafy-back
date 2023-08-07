@@ -4,6 +4,9 @@ import bucheon.leafy.domain.feed.Feed;
 import lombok.Builder;
 import lombok.Data;
 
+import static bucheon.leafy.path.S3Path.ABSOLUTE_PATH;
+import static bucheon.leafy.path.S3Path.FEED_PATH;
+
 
 @Data
 public class FeedWithLikeCountResponse {
@@ -29,18 +32,14 @@ public class FeedWithLikeCountResponse {
     }
 
     public static FeedWithLikeCountResponse of(Feed feed) {
-        String feedImage = null;
-
-        if (feed.getFeedImages() != null){
-            feedImage = feed.getFeedImages().get(0).getImageName();
-        }
-
         return FeedWithLikeCountResponse.builder()
                 .feedId(feed.getId())
                 .title(feed.getTitle())
                 .content(feed.getContent())
                 .likeCount(feed.getFeedLikeCount().getLikeCount())
-                .image(feedImage)
+                .image(
+                        feed.getFeedImages().isEmpty() ? "" : ABSOLUTE_PATH + FEED_PATH + feed.getFeedImages().get(0).getImageName()
+                )
                 .build();
     }
 

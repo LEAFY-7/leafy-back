@@ -2,7 +2,6 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.MailComponent;
 import bucheon.leafy.application.mapper.AlarmMapper;
-import bucheon.leafy.application.mapper.CertificationNumberMapper;
 import bucheon.leafy.application.repository.CertificationNumberRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.CertificationNumber;
@@ -47,8 +46,6 @@ public class UserService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final AlarmMapper alarmMapper;
-
-    private final MailComponent mailComponent;
 
 
     public TokenResponse signIn(SignInRequest signInRequest) {

@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static bucheon.leafy.path.S3Path.ABSOLUTE_PATH;
+import static bucheon.leafy.path.S3Path.USER_IMAGE_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -42,11 +44,15 @@ class FollowServiceTest extends IntegrationTestSupport {
     @Autowired
     private FeedRepository feedRepository;
 
+    @Autowired
+    private AlarmRepository alarmRepository;
+
     @AfterEach
     void tearDown(){
         userImageRepository.deleteAllInBatch();
         addressRepository.deleteAllInBatch();
         followRepository.deleteAllInBatch();
+        alarmRepository.deleteAllInBatch();
         feedRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
@@ -115,9 +121,9 @@ class FollowServiceTest extends IntegrationTestSupport {
         assertThat(followers).hasSize(pageable.getPageSize())
                 .extracting("email", "nickName", "image")
                 .contains(
-                        new Tuple("tyui@gmail.com", "강호동" ,"이미지"),
-                        new Tuple("zxcv@naver.com", "유재석" ,"이미지"),
-                        new Tuple("qwer@gmail.com", "이수근" ,"이미지")
+                        new Tuple("tyui@gmail.com", "강호동" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
+                        new Tuple("zxcv@naver.com", "유재석" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
+                        new Tuple("qwer@gmail.com", "이수근" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지")
                 );
     }
 
@@ -151,9 +157,9 @@ class FollowServiceTest extends IntegrationTestSupport {
         assertThat(followers).hasSize(pageable.getPageSize())
                 .extracting("email", "nickName", "image")
                 .contains(
-                        new Tuple("tyui@gmail.com", "강호동" ,"이미지"),
-                        new Tuple("zxcv@naver.com", "유재석" ,"이미지"),
-                        new Tuple("qwer@gmail.com", "이수근" ,"이미지")
+                        new Tuple("tyui@gmail.com", "강호동" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
+                        new Tuple("zxcv@naver.com", "유재석" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
+                        new Tuple("qwer@gmail.com", "이수근" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지")
                 );
 
     }
