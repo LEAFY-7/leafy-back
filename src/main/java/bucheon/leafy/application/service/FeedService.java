@@ -25,6 +25,7 @@ import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 import static bucheon.leafy.path.S3Path.FEED_PATH;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FeedService {
     private final FeedMapper feedMapper;
@@ -193,7 +195,7 @@ public class FeedService {
     }
 
     public Integer getCountByUserId(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findWithFeedsById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         List<Feed> feeds = user.getFeeds();
