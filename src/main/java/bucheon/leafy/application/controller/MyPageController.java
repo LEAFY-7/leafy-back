@@ -48,7 +48,7 @@ public class MyPageController {
     })
     @Operation(summary = "마이페이지")
     @GetMapping
-    public ResponseEntity<MyPageResponse> signOut(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+    public ResponseEntity<MyPageResponse> myPage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                   @PageableDefault(page = 1, size = 6) Pageable pageable) {
 
         Long userId = authUser.getUserId();
@@ -58,7 +58,7 @@ public class MyPageController {
         List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(userId);
         List<FollowersResponse> followers = followService.getFollowers(userId, pageable).getContent();
         List<FollowersResponse> followings = followService.getFollowings(userId, pageable).getContent();
-        List<FeedWithLikeCountResponse> likedFeeds = feedLikeInfoService.getFeedByUserId(userId, pageable);
+        List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(userId, pageable);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
                 .userResponse(userResponse)
@@ -67,7 +67,7 @@ public class MyPageController {
                 .feedMonthlyActivity(feedMonthlyResponses)
                 .followers(followers)
                 .followings(followings)
-                .likedFeeds(likedFeeds)
+                .feeds(feeds)
                 .build();
 
         return ResponseEntity.ok().body(myPageResponse);
