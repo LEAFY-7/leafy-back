@@ -1,14 +1,17 @@
 package bucheon.leafy.domain.feed;
 
 import bucheon.leafy.util.entity.BaseDeleteEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -84,4 +87,11 @@ public class Feed extends BaseDeleteEntity {
         this.feedLikeCount = feedLikeCount;
     }
 
+    public void addFeedImages(List<String> imageNames){
+        List<FeedImage> feedImages = imageNames.stream()
+                .map(FeedImage::of)
+                .collect(Collectors.toList());
+
+        this.feedImages = feedImages;
+    }
 }

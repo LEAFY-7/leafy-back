@@ -20,7 +20,13 @@ public class FeedImage {
     private String imageName;
 
     @Builder
-    public FeedImage(String imageName) {
+    private FeedImage(String imageName) {
         this.imageName = imageName;
+    }
+
+    public static FeedImage of(String imageName) {
+        return FeedImage.builder()
+                .imageName(imageName)
+                .build();
     }
 }
