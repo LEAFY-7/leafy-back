@@ -25,6 +25,7 @@ public class FeedLikeController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "좋아요 등록 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @PostMapping
@@ -40,6 +41,7 @@ public class FeedLikeController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "좋아요 삭제 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @DeleteMapping

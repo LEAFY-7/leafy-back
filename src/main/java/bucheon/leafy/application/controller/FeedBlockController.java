@@ -29,6 +29,7 @@ public class FeedBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "피드 차단 목록 조회"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @Operation(summary = "피드 차단 목록")
@@ -43,6 +44,7 @@ public class FeedBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "피드 차단 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @Operation(summary = "피드 차단")
@@ -57,6 +59,7 @@ public class FeedBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "피드 차단 해제"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "피드가 삭제됨")
     })
     @Operation(summary = "피드 차단 해제")

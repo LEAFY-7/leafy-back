@@ -32,6 +32,7 @@ public class UserBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "차단한 회원 목록 조회"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함")
     })
     @Operation(summary = "회원 차단 목록")
@@ -46,6 +47,7 @@ public class UserBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "차단되어 있지 않음"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함"),
             @ApiResponse(responseCode = "409", description = "차단되어 있음"),
             @ApiResponse(responseCode = "500", description = "자기 자신을 대상으로 할 수 없음")
@@ -67,6 +69,7 @@ public class UserBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "회원 차단 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함"),
             @ApiResponse(responseCode = "500", description = "자기 자신을 대상으로 할 수 없음")
     })
@@ -89,6 +92,7 @@ public class UserBlockController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "회원 차단 해제 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "회원이 탈퇴함"),
             @ApiResponse(responseCode = "500", description = "자기 자신을 대상으로 할 수 없음")
     })

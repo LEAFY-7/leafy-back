@@ -27,6 +27,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "이미지 등록 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "이미지 등록 실패")
     })
     @Operation(summary = "회원 이미지 등록")
@@ -42,6 +43,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "배경 이미지 등록 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "배경 이미지 등록 실패")
     })
     @Operation(summary = "배경 이미지 등록")
@@ -57,6 +59,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "이미지 수정 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "이미지 수정 실패")
     })
     @Operation(summary = "회원 이미지 수정")
@@ -76,6 +79,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "배경 이미지 수정 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "배경 이미지 수정 실패")
     })
     @Operation(summary = "배경 이미지 수정")
@@ -95,6 +99,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "이미지 삭제 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "이미지 삭제 실패")
     })
     @Operation(summary = "회원 이미지 삭제")
@@ -108,6 +113,7 @@ public class UserImageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "배경 이미지 삭제 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "배경 이미지 삭제 실패")
     })
     @Operation(summary = "배경 이미지 삭제")
