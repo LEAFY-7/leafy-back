@@ -4,8 +4,8 @@
 <mapper namespace="bucheon.leafy.application.mapper.AlarmMapper">
 
     <insert id="saveAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmRequest">
-        insert into alarm(user_id, alarm_type, table_id, message, checked, created_at, modified_at, is_delete)
-        values (#{userId}, #{alarmType}, #{tableId}, #{message}, false, now(), now(), false)
+        insert into alarm(user_id, alarm_type, table_id, checked, created_at, modified_at, is_delete)
+        values (#{userId}, #{alarmType}, #{tableId}, false, now(), now(), false)
     </insert>
 
     <update id="updateCheckAlarm" parameterType="bucheon.leafy.domain.alarm.request.AlarmCheckRequest">
@@ -31,7 +31,7 @@
     </delete>
 
     <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, created_at
         from alarm
         where user_id = #{userId}
           and alarm_id &lt; #{scrollRequest.key}
@@ -45,13 +45,13 @@
     </select>
 
     <select id="findById" resultType="Hashmap">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, created_at
         from alarm
         where alarm_id = #{id}
     </select>
 
     <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, message, created_at
+        select alarm_id, user_id, alarm_type, checked, table_id, created_at
         from alarm
         where user_id = #{userId}
         order by created_at desc limit #{scrollRequest.size}

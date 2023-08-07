@@ -44,8 +44,8 @@ public class AlarmService {
 
     @Async
     @Transactional
-    public void createAlarm(long userId, AlarmType alarmType, long tableId, String message){
-        AlarmRequest request = new AlarmRequest(userId, alarmType, tableId, message);
+    public void createAlarm(long userId, AlarmType alarmType, long tableId){
+        AlarmRequest request = new AlarmRequest(userId, alarmType, tableId);
         alarmMapper.saveAlarm(request);
     }
 

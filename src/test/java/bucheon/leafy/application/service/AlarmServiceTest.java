@@ -45,9 +45,9 @@ class AlarmServiceTest extends IntegrationTestSupport {
     @DisplayName("알림을 저장한다")
     void testSaveAlarm(){
         AlarmService alarmService = mock(AlarmService.class);
-        alarmService.createAlarm(1, AlarmType.NOTICE, 1, "공지사항이 등록되었습니다.");
+        alarmService.createAlarm(1, AlarmType.NOTICE, 1);
 
-        verify(alarmService, times(1)).createAlarm(1, AlarmType.NOTICE, 1, "공지사항이 등록되었습니다.");
+        verify(alarmService, times(1)).createAlarm(1, AlarmType.NOTICE, 1);
     }
 
     @Test
