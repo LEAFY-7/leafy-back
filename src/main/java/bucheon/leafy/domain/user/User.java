@@ -1,12 +1,12 @@
 package bucheon.leafy.domain.user;
 
-import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.feed.Feed;
-import bucheon.leafy.domain.notice.Notice;
-import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -46,7 +46,7 @@ public class User extends BaseDeleteEntity {
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Feed> feeds = new ArrayList<>();
+    private List<Feed> feeds;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Address address;
@@ -61,21 +61,12 @@ public class User extends BaseDeleteEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    @JoinColumn(name = "user_id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Qna> qna = new ArrayList<>();
-
-    @JoinColumn(name = "user_id")
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Notice> notices = new ArrayList<>();
-
 
     @Builder
     private User(String password, String email, String nickName, String phone,
                  String name, String simpleIntroduction, List<Feed> feeds,
                  Gender gender, LocalDate birthDay, Address address, UserImage userImage,
-                 UserBackgroundImage userBackgroundImage, UserRole userRole, List<Qna> qna,
-                 List<Notice> notices) {
+                 UserBackgroundImage userBackgroundImage, UserRole userRole) {
 
         this.password = password;
         this.email = email;
@@ -90,8 +81,6 @@ public class User extends BaseDeleteEntity {
         this.userRole = userRole;
         this.gender = gender;
         this.birthDay = birthDay;
-        this.qna = qna;
-        this.notices = notices;
     }
 
     public static User of(SignUpRequest signUpRequest) {

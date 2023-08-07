@@ -40,25 +40,30 @@ public class Feed extends BaseDeleteEntity {
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedComment> feedComments = new ArrayList<>();
+    private List<FeedComment> feedComments;
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedReply> feedReplies = new ArrayList<>();
+    private List<FeedReply> feedReplies;
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTag> feedTags = new ArrayList<>();
+    private List<FeedTag> feedTags;
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedImage> feedImages = new ArrayList<>();
+    private List<FeedImage> feedImages;
 
     @Enumerated(EnumType.STRING)
     private FeedType feedType;
 
     @Builder
-    public Feed(String title, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, String content, FeedLikeCount feedLikeCount, List<FeedComment> feedComments, List<FeedReply> feedReplies, List<FeedTag> feedTags, List<FeedImage> feedImages, FeedType feedType) {
+    public Feed(String title, String species, String nickname, Double temperature,
+                Integer humidity, Double waterAmount, String wateringPeriod,
+                String content, FeedLikeCount feedLikeCount, List<FeedComment> feedComments,
+                List<FeedReply> feedReplies, List<FeedTag> feedTags,
+                List<FeedImage> feedImages, FeedType feedType) {
+
         this.title = title;
         this.species = species;
         this.nickname = nickname;

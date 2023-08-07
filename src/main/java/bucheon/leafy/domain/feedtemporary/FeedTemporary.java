@@ -25,11 +25,11 @@ public class FeedTemporary extends BaseDeleteEntity {
 
     @JoinColumn(name = "feed_temporary_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTemporaryTag> feedTemporaryTags = new ArrayList<>();
+    private List<FeedTemporaryTag> feedTemporaryTags;
 
     @JoinColumn(name = "feed_temporary_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTemporaryImage> feedTemporaryImages = new ArrayList<>();
+    private List<FeedTemporaryImage> feedTemporaryImages;
 
 
     @Builder

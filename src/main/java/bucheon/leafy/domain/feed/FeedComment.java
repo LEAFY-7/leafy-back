@@ -29,7 +29,7 @@ public class FeedComment extends BaseDeleteEntity {
 
     @JoinColumn(name = "comment_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedReply> feedReplies = new ArrayList<>();
+    private List<FeedReply> feedReplies;
 
     @Builder
     private FeedComment(String comment, List<FeedReply> feedReplies) {
