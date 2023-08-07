@@ -29,7 +29,7 @@ public class QnaComment extends BaseDeleteEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "qna_comment_id")
-    private List<QnaReply> qnaReplies;
+    private List<QnaReply> qnaReplies = new ArrayList<>();
 
     @Builder
     private QnaComment(User user, String comment, List<QnaReply> qnaReplies) {

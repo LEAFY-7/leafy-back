@@ -40,19 +40,19 @@ public class Feed extends BaseDeleteEntity {
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedComment> feedComments;
+    private List<FeedComment> feedComments = new ArrayList<>();
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedReply> feedReplies;
+    private List<FeedReply> feedReplies = new ArrayList<>();
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedTag> feedTags;
+    private List<FeedTag> feedTags = new ArrayList<>();
 
     @JoinColumn(name = "feed_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<FeedImage> feedImages;
+    private List<FeedImage> feedImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private FeedType feedType;

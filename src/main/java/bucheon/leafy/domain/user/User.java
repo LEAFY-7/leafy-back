@@ -46,7 +46,7 @@ public class User extends BaseDeleteEntity {
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Feed> feeds;
+    private List<Feed> feeds = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Address address;

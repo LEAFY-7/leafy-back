@@ -34,7 +34,7 @@ public class Notice extends BaseDeleteEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
-    private List<NoticeComment> noticeComments;
+    private List<NoticeComment> noticeComments = new ArrayList<>();
 
     @Builder
     private Notice(String title, String contents, Long viewCount, User user,
