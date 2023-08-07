@@ -2,11 +2,15 @@ package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.MailComponent;
 import bucheon.leafy.application.mapper.AlarmMapper;
+import bucheon.leafy.application.mapper.CertificationNumberMapper;
+import bucheon.leafy.application.repository.CertificationNumberRepository;
 import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.domain.user.CertificationNumber;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
@@ -36,6 +40,8 @@ import static bucheon.leafy.exception.enums.ExceptionKey.NICKNAME;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final MailComponent mailComponent;
+    private final CertificationNumberRepository certificationNumberRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
@@ -77,6 +83,15 @@ public class UserService {
         User saveUser = userRepository.save(user);
 
         return saveUser.getId();
+    }
+
+    public CertificationNumberResponse sendCertificationNumber(String email) {
+        String number = mailComponent.sendCode(email);
+        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
+
+        CertificationNumberResponse response = CertificationNumberResponse.builder()
+                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
+        return response;
     }
 
 
