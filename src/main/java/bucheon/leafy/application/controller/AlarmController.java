@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,7 @@ public class AlarmController {
     @Operation(summary = "유저의 알림 삭제 (단건)")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void deleteAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                               @PathVariable @Parameter(description = "삭제할 알림 id") long id){
         alarmService.deleteAlarm(user, id);

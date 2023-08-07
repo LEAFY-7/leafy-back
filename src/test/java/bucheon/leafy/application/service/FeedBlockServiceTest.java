@@ -148,11 +148,9 @@ class FeedBlockServiceTest extends IntegrationTestSupport {
     }
 
     private Feed createFeed(String title) {
-        Feed feed = Feed.builder()
+        return Feed.builder()
                 .title(title)
                 .content("내용")
                 .build();
-
-        return feed;
     }
 }

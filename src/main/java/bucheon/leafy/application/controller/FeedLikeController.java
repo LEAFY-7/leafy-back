@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class FeedLikeController {
     @PostMapping
     @Operation(summary = "좋아요 등록")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void like(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                        @PathVariable("id") Long feedId) {
         Long userId = user.getUserId();
@@ -40,6 +42,7 @@ public class FeedLikeController {
     @DeleteMapping
     @Operation(summary = "좋아요 삭제")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void deleteLike(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                              @PathVariable("id") Long feedId) {
         Long userId = user.getUserId();

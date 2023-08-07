@@ -3,6 +3,7 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.UserReportService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.response.UserResponse;
+import bucheon.leafy.exception.SelfTargetException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,9 +49,15 @@ public class UserReportController {
     @Operation(summary = "회원 신고")
     @PostMapping("/{reportUserId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void reportUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                            @PathVariable Long reportUserId) {
         Long userId = authUser.getUserId();
+
+        if (userId == reportUserId) {
+            throw new SelfTargetException();
+        }
+
         userReportService.reportUser(userId, reportUserId);
     }
 
@@ -61,10 +69,15 @@ public class UserReportController {
     @Operation(summary = "회원 신고 취소")
     @DeleteMapping("/{reportUserId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void reportCancelUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                  @PathVariable Long reportUserId) {
-
         Long userId = authUser.getUserId();
+
+        if (userId == reportUserId) {
+            throw new SelfTargetException();
+        }
+
         userReportService.reportCancelUser(userId, reportUserId);
     }
 }
