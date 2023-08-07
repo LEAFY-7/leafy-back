@@ -43,6 +43,7 @@ public class MyPageController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "서버 코드 문제")
     })
     @Operation(summary = "마이페이지")
