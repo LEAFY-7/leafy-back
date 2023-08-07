@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"} )
     Optional<User> findByFeedsId(Long feedId);
+
+    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage", "feeds"} )
+    Optional<User> findWithFeedsById(Long userId);
 }
