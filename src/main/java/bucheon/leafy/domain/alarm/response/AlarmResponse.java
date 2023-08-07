@@ -17,18 +17,16 @@ public class AlarmResponse {
     private AlarmType alarmType;
     private Boolean checked;
     private Long tableId;
-    private String message;
     private Date createdAt;
 
     @Builder
     public AlarmResponse(Long alarm_id, Long user_id, AlarmType alarmType,
-                         Boolean checked, Long table_id, String message, Date created_at) {
+                         Boolean checked, Long table_id, Date created_at) {
         this.alarmId = alarm_id;
         this.userId = user_id;
         this.alarmType = alarmType;
         this.checked = checked;
         this.tableId = table_id;
-        this.message = message;
         this.createdAt = created_at;
     }
 }

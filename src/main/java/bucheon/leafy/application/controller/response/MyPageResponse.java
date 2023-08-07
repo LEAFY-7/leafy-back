@@ -24,12 +24,12 @@ public class MyPageResponse {
 
     private List<FollowersResponse> followings;
 
-    private List<FeedWithLikeCountResponse> likedFeeds;
+    private List<FeedWithLikeCountResponse> feeds;
 
     @Builder
     private MyPageResponse(UserResponse userResponse, Long followerCount, Long followingCount,
                            List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
-                           List<FollowersResponse> followings, List<FeedWithLikeCountResponse> likedFeeds) {
+                           List<FollowersResponse> followings, List<FeedWithLikeCountResponse> feeds) {
 
         this.userResponse = userResponse;
         this.followerCount = followerCount;
@@ -37,12 +37,12 @@ public class MyPageResponse {
         this.feedMonthlyActivity = feedMonthlyActivity;
         this.followers = followers;
         this.followings = followings;
-        this.likedFeeds = likedFeeds;
+        this.feeds = feeds;
     }
 
     public static MyPageResponse of(UserResponse userResponse, Long followerCount, Long followingCount,
                                     List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
-                                    List<FollowersResponse> followings, List<FeedWithLikeCountResponse> likedFeeds) {
+                                    List<FollowersResponse> followings, List<FeedWithLikeCountResponse> feeds) {
 
         return MyPageResponse.builder()
                 .userResponse(userResponse)
@@ -51,7 +51,7 @@ public class MyPageResponse {
                 .feedMonthlyActivity(feedMonthlyActivity)
                 .followers(followers)
                 .followings(followings)
-                .likedFeeds(likedFeeds)
+                .feeds(feeds)
                 .build();
 
     }
