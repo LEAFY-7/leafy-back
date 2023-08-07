@@ -27,7 +27,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.jeasy.random.FieldPredicates.named;
 import static org.jeasy.random.FieldPredicates.ofType;
 
@@ -82,7 +82,6 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
                         new Tuple(2023, 2, 1L),
                         new Tuple(2023, 7, 2L)
                 );
-
     }
 
     @Test
