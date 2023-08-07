@@ -18,8 +18,7 @@ public class TestController {
 
     private final TestService testService;
 
-
-    // admin 으로 만
+    // admin 으로 만들기
     @Operation(summary = "가즈아!!")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void letsGo(@RequestPart List<MultipartFile> files) {
