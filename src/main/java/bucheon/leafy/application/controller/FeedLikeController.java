@@ -1,5 +1,6 @@
 package bucheon.leafy.application.controller;
 
+import bucheon.leafy.application.service.AlarmService;
 import bucheon.leafy.application.service.FeedLikeService;
 import bucheon.leafy.config.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class FeedLikeController {
 
     private final FeedLikeService feedLikeService;
+    private final AlarmService alarmService;
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "좋아요 등록 성공"),
@@ -33,6 +35,7 @@ public class FeedLikeController {
                                        @PathVariable("id") Long feedId) {
         Long userId = user.getUserId();
         feedLikeService.saveLike(userId, feedId);
+        alarmService.saveFeedLikeAlarm(feedId);
     }
 
     @ApiResponses({
