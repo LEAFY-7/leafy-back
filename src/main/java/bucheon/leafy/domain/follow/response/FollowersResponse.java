@@ -4,6 +4,9 @@ import bucheon.leafy.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
 
+import static bucheon.leafy.path.S3Path.ABSOLUTE_PATH;
+import static bucheon.leafy.path.S3Path.USER_IMAGE_PATH;
+
 @Data
 public class FollowersResponse {
 
@@ -26,7 +29,9 @@ public class FollowersResponse {
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
-                .image(user.getUserImage() == null ? null : user.getUserImage().getImage())
+                .image(
+                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage() : null
+                )
                 .build();
     }
 
