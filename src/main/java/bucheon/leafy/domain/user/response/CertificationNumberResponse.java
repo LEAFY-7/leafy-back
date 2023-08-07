@@ -10,17 +10,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CertificationNumberResponse {
 
-    private String email;
     private String number;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+
 
     @Builder
-
-    public CertificationNumberResponse(String email, String number, LocalDateTime createdAt, LocalDateTime modifiedAt) {
-        this.email = email;
+    public CertificationNumberResponse(String number, LocalDateTime createdAt) {
         this.number = number;
         this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 }

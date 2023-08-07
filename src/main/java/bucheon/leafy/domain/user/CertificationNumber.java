@@ -2,6 +2,7 @@ package bucheon.leafy.domain.user;
 
 import bucheon.leafy.util.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,9 @@ public class CertificationNumber extends BaseEntity {
 
     private String number;
 
+    @Builder
+    public CertificationNumber(String email, String number) {
+        this.email = email;
+        this.number = number;
+    }
 }

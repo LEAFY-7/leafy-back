@@ -5,6 +5,7 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenResponse;
@@ -51,6 +52,17 @@ public class UserController {
         tokenResponse.addUserId(userId);
         insertTokenInHeader(tokenResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "이메일 전송 성공"),
+            @ApiResponse(responseCode = "409", description = "이메일 전송 실패")
+    })
+    @Operation(summary = "이메일 인증")
+    @GetMapping("/email-confirm")
+    public ResponseEntity<CertificationNumberResponse> emailConfirm(@RequestParam @Valid String email) {
+        CertificationNumberResponse certificationNumberResponse =  userService.sendCertificationNumber(email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(certificationNumberResponse);
     }
 
     @ApiResponses({
