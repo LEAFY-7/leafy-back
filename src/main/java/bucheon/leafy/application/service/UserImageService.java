@@ -84,6 +84,7 @@ public class UserImageService {
         UserImage userImage = user.getUserImage();
 
         imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+        user.deleteImage();
         userImageRepository.delete(userImage);
     }
 
@@ -92,6 +93,7 @@ public class UserImageService {
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
         imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+        user.deleteBackgroundImage();
         userBackgroundImageRepository.delete(userBackgroundImage);
     }
 
