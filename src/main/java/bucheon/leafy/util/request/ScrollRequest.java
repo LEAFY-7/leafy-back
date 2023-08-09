@@ -17,7 +17,7 @@ public class ScrollRequest {
     }
 
     public Boolean hasKey() {
-        return key != null && !key.equals(NONE_KEY);
+        return key != null && !key.equals(NONE_KEY) && key != 0;
     }
 
     public ScrollRequest next(Long key) {

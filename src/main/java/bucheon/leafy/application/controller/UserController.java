@@ -131,7 +131,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
-            @ApiResponse(responseCode = "401, 403", description = "로그인 필요")
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
     })
     @Operation(summary = "비밀번호 변경")
     @PatchMapping("/password")
