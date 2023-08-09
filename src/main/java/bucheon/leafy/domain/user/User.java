@@ -108,6 +108,14 @@ public class User extends BaseDeleteEntity {
         this.password = encodePassword;
     }
 
+    public void deleteImage(){
+        this.userImage = null;
+    }
+
+    public void deleteBackgroundImage(){
+        this.userBackgroundImage = null;
+    }
+
     public void giveRole(){
         this.userRole = UserRole.ADMIN;
     }
