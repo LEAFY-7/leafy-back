@@ -30,7 +30,7 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
             "ORDER BY flc.like_count DESC " +
             "LIMIT 100 " +
             ") AS top_100_feeds " +
-            "INNER JOIN feed_Tag ft ON top_100_feeds.feed_id = ft.feed_id " +
+            "INNER JOIN feed_tag ft ON top_100_feeds.feed_id = ft.feed_id " +
             "GROUP BY ft.tag " +
             "ORDER BY count(*) DESC " +
             "LIMIT 10;",

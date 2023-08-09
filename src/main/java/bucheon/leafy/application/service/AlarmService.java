@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,24 +76,33 @@ public class AlarmService {
 
     public ScrollResponse getAlarm(AuthUser user, ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
-            List<AlarmResponse> alarms =  alarmMapper.findByUserId(user.getUserId(), scrollRequest);
+            LinkedList<AlarmResponse> alarms = alarmMapper.findByUserId(user.getUserId(), scrollRequest);
             ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
             return ScrollResponse.of(nextScrollRequest, alarms);
         } else {
-            List<AlarmResponse> alarms = alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
+            LinkedList<AlarmResponse> alarms = alarmMapper.findFirstByUserId(user.getUserId(), scrollRequest);
             ScrollRequest nextScrollRequest = getNextKey(alarms, scrollRequest);
             return ScrollResponse.of(nextScrollRequest, alarms);
         }
     }
 
-    private ScrollRequest getNextKey(List<AlarmResponse> alarms, ScrollRequest scrollRequest){
+//    private ScrollRequest getNextKey(List<AlarmResponse> alarms, ScrollRequest scrollRequest){
+//        if(alarms.size() < ScrollRequest.size){
+//            return scrollRequest.next(ScrollRequest.NONE_KEY);
+//        } else {
+//            long nextKey = alarms.stream()
+//                    .reduce((first, second) -> second)
+//                    .map(AlarmResponse::getAlarmId)
+//                    .get();
+//            return scrollRequest.next(nextKey);
+//        }
+//    }
+
+    private ScrollRequest getNextKey(LinkedList<AlarmResponse> alarms, ScrollRequest scrollRequest){
         if(alarms.size() < ScrollRequest.size){
             return scrollRequest.next(ScrollRequest.NONE_KEY);
         } else {
-            long nextKey = alarms.stream()
-                    .reduce((first, second) -> second)
-                    .map(AlarmResponse::getAlarmId)
-                    .get();
+            long nextKey = alarms.getLast().getAlarmId();
             return scrollRequest.next(nextKey);
         }
     }

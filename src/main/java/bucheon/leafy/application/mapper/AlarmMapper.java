@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +23,13 @@ public interface AlarmMapper {
 
     int deleteOneAlarm(Long id);
 
-    List<AlarmResponse> findByUserId(@Param("userId") Long userId, @Param("scrollRequest") ScrollRequest scrollRequest);
+    LinkedList<AlarmResponse> findByUserId(@Param("userId") Long userId,
+                                           @Param("scrollRequest") ScrollRequest scrollRequest);
 
     int countByUserId(Long userId);
 
     Optional<HashMap<String, Object>> findById(long id);
 
-    List<AlarmResponse> findFirstByUserId(@Param("userId") Long userId, @Param("scrollRequest") ScrollRequest scrollRequest);
+    LinkedList<AlarmResponse> findFirstByUserId(@Param("userId") Long userId,
+                                                @Param("scrollRequest") ScrollRequest scrollRequest);
 }

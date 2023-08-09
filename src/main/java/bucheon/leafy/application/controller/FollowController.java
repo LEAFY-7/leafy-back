@@ -57,7 +57,8 @@ public class FollowController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "팔로우 성공"),
-            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "팔로우 할 회원을 찾지 못함"),
             @ApiResponse(responseCode = "409", description = "이미 팔로우함"),
             @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
@@ -79,7 +80,8 @@ public class FollowController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "언팔로우 성공"),
-            @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "언팔로우 할 회원을 찾지 못함, 이미 언팔로우함"),
             @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
     })
