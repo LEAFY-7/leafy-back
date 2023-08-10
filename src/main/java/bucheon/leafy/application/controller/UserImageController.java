@@ -29,6 +29,7 @@ public class UserImageController {
             @ApiResponse(responseCode = "201", description = "이미지 등록 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
+            @ApiResponse(responseCode = "409", description = "이미지가 이미 존재함"),
             @ApiResponse(responseCode = "500", description = "이미지 등록 실패")
     })
     @Operation(summary = "회원 이미지 등록")
@@ -46,6 +47,7 @@ public class UserImageController {
             @ApiResponse(responseCode = "201", description = "배경 이미지 등록 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
+            @ApiResponse(responseCode = "409", description = "이미지가 이미 존재함"),
             @ApiResponse(responseCode = "500", description = "배경 이미지 등록 실패")
     })
     @Operation(summary = "배경 이미지 등록")
