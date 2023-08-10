@@ -6,11 +6,15 @@ import bucheon.leafy.application.repository.UserImageRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserBackgroundImage;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.enums.ExceptionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static bucheon.leafy.exception.enums.ExceptionKey.USER_BACKGROUND_IMAGE;
+import static bucheon.leafy.exception.enums.ExceptionKey.USER_IMAGE;
 import static bucheon.leafy.path.S3Path.USER_BACKGROUND_IMAGE_PATH;
 import static bucheon.leafy.path.S3Path.USER_IMAGE_PATH;
 
@@ -29,6 +33,11 @@ public class UserImageService {
 
     public void createUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
+
+        if(user.getUserImage() != null){
+            throw new ExistException(USER_IMAGE);
+        }
+
         String renamedFile = imageComponent.uploadImage(USER_IMAGE_PATH, file);
 
         UserImage userImage = UserImage.of(renamedFile, user);
@@ -38,6 +47,10 @@ public class UserImageService {
     public void createUserBackgroundImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
         String renamedFile = imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file);
+
+        if(user.getUserBackgroundImage() != null){
+            throw new ExistException(USER_BACKGROUND_IMAGE);
+        }
 
         UserBackgroundImage backgroundImage = UserBackgroundImage.of(renamedFile, user);
         userBackgroundImageRepository.save(backgroundImage);
