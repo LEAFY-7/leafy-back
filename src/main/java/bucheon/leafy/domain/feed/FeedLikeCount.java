@@ -18,7 +18,7 @@ public class FeedLikeCount {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "feed_id")
+    @JoinColumn(name = "feed_id", unique = true)
     private Feed feed;
 
     private Long likeCount;

@@ -18,7 +18,7 @@ public class UserBackgroundImage {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     private String image;
@@ -29,7 +29,6 @@ public class UserBackgroundImage {
         this.user = user;
     }
 
-    // TODO : 서버 띄우고 서버 주소에 맞게 이미지의 경로 설정 및 인코딩 로직이 별도로 들어가야함
     public static UserBackgroundImage of(String image, User user) {
         return UserBackgroundImage.builder()
                 .image(image)
