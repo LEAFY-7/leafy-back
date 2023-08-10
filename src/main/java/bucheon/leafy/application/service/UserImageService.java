@@ -37,22 +37,27 @@ public class UserImageService {
             throw new ExistException(USER_IMAGE);
         }
 
-        String renamedFile = imageComponent.uploadImage(USER_IMAGE_PATH, file);
+        String renamedFile = imageComponent.createUUID();
 
         UserImage userImage = UserImage.of(renamedFile, user);
         userImageRepository.save(userImage);
+
+        imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
     }
 
     public void createUserBackgroundImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
-        String renamedFile = imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file);
 
         if(user.getUserBackgroundImage() != null){
             throw new ExistException(USER_BACKGROUND_IMAGE);
         }
 
+        String renamedFile = imageComponent.createUUID();
+
         UserBackgroundImage backgroundImage = UserBackgroundImage.of(renamedFile, user);
         userBackgroundImageRepository.save(backgroundImage);
+
+        imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
     }
 
 //    public void editUserImage(Long userId, MultipartFile file) {
@@ -70,12 +75,12 @@ public class UserImageService {
         User user = userService.getUserById(userId);
         UserImage userImage = user.getUserImage();
 
-        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
-
-        String renamedFile = imageComponent.uploadImage(USER_IMAGE_PATH, file);
+        String renamedFile = imageComponent.createUUID();
         userImage.update(renamedFile);
-
         userImageRepository.save(userImage);
+
+        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+        imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
     }
 
 
@@ -83,30 +88,33 @@ public class UserImageService {
         User user = userService.getUserById(userId);
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
-        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
-
-        String renamedFile = imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file);
+        String renamedFile = imageComponent.createUUID();
         userBackgroundImage.update(renamedFile);
 
         userBackgroundImageRepository.save(userBackgroundImage);
+
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+        imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
     }
 
     public void deleteUserImage(Long userId) {
         User user = userService.getUserById(userId);
         UserImage userImage = user.getUserImage();
 
-        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
         user.deleteImage();
         userImageRepository.delete(userImage);
+
+        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
     }
 
     public void deleteUserBackgroundImage(Long userId) {
         User user = userService.getUserById(userId);
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
-        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
         user.deleteBackgroundImage();
         userBackgroundImageRepository.delete(userBackgroundImage);
+
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
     }
 
 }
