@@ -7,7 +7,6 @@ import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserBackgroundImage;
 import bucheon.leafy.domain.user.UserImage;
 import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.enums.ExceptionKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
