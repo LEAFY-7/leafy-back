@@ -19,7 +19,7 @@ public class Address extends BaseDeleteEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @Column(name = "zone_code", nullable = false)
