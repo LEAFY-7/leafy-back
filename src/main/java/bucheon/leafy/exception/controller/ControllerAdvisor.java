@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -168,6 +169,37 @@ public class ControllerAdvisor {
                 .build();
 
         return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ExceptionResponse> sqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
+        String errorMessage = e.getMessage();
+        Integer responseStatusCode;
+        String responseMessage;
+
+        if (errorMessage.contains("Duplicate entry")) {
+            responseMessage = "Unique Key 제약조건을 위배했습니다.";
+            responseStatusCode = 500;
+        } else if (errorMessage.contains("FOREIGN KEY")) {
+            responseMessage = "Foreign Key 관련 문제가 발생했습니다.";
+            responseStatusCode = 500;
+        } else if (errorMessage.contains("NOT NULL")) {
+            responseMessage = "NOT NULL 제약조건을 위배했습니다.";
+            responseStatusCode = 500;
+        } else if (errorMessage.contains("CHECK constraint")) {
+            responseMessage = "Check 제약조건을 위배했습니다.";
+            responseStatusCode = 500;
+        } else {
+            responseMessage = "기타 무결성 제약조건을 위배했습니다.";
+            responseStatusCode = 500;
+        }
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(e.getErrorCode()))
+                .message(responseMessage)
+                .build();
+
+        return ResponseEntity.status(responseStatusCode).body(response);
     }
 
 }
