@@ -54,8 +54,9 @@ public class TestService {
 
             List<String> fileNames = new ArrayList<>();
             for (int j = 0; j < 3; j++) {
-                String uuid = imageComponent.uploadImage(FEED_PATH, files.get(((int) (Math.random() * files.size()))));
-                fileNames.add(uuid);
+                String fileName = imageComponent.createUUID();
+                imageComponent.uploadImage(FEED_PATH, files.get(((int) (Math.random() * files.size()))), fileName);
+                fileNames.add(fileName);
             }
 
             feed.addFeedImages(fileNames);

@@ -27,9 +27,7 @@ public class ImageComponent {
 
     private final AmazonS3Client amazonS3Client;
 
-    public String uploadImage(String imagePath, MultipartFile image) {
-        String imageName = createUUID();
-
+    public void uploadImage(String imagePath, MultipartFile image, String imageName) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(image.getSize());
         metadata.setContentType(image.getContentType());
@@ -40,9 +38,8 @@ public class ImageComponent {
         } catch(IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
         }
-
-        return imageName;
     }
+
     public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) {
 
         List<String> imageNameList = new ArrayList<>();
@@ -72,7 +69,7 @@ public class ImageComponent {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
     }
 
-    private String createUUID() {
+    public String createUUID() {
         return UUID.randomUUID().toString();
     }
 
