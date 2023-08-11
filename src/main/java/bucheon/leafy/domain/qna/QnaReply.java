@@ -16,7 +16,6 @@ public class QnaReply extends BaseDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "qna_reply_id")
     private Long id;
 
     @JoinColumn(name = "user_id")
