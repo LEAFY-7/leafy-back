@@ -45,12 +45,10 @@ public class UserController {
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity<TokenResponse> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        Long userId = userService.signUp(signUpRequest);
-
+        userService.signUp(signUpRequest);
         SignInRequest signInRequest = SignInRequest.of(signUpRequest);
 
         TokenResponse tokenResponse = userService.signIn(signInRequest);
-        tokenResponse.addUserId(userId);
         insertTokenInHeader(tokenResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
