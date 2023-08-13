@@ -3,8 +3,11 @@ package bucheon.leafy.exception.controller;
 import bucheon.leafy.application.service.SlackService;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.dto.ExceptionResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -210,6 +213,26 @@ public class ControllerAdvisor {
                 .build();
 
         return ResponseEntity.status(responseStatusCode).body(response);
+    }
+
+    @ExceptionHandler({SecurityException.class, MalformedJwtException.class, ExpiredJwtException.class})
+    public ResponseEntity<ExceptionResponse> jwtException(Exception e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(400))
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(400).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> badCredentialsException(BadCredentialsException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(404))
+                .message("비밀번호가 잘못되었슴니다.")
+                .build();
+
+        return ResponseEntity.status(404).body(response);
     }
 
 }
