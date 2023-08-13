@@ -7,7 +7,6 @@ import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
-import bucheon.leafy.util.response.SearchRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
