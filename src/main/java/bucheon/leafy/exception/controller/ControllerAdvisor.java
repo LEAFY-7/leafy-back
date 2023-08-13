@@ -1,7 +1,9 @@
 package bucheon.leafy.exception.controller;
 
+import bucheon.leafy.application.service.SlackService;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.dto.ExceptionResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,7 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ControllerAdvisor {
+
+    private final SlackService slackService;
+
+    @ExceptionHandler(Exception.class)
+    public void SlackErrorMessage(Exception e){
+        slackService.sendErrorForSlack(e);
+    }
 
     @ExceptionHandler(PasswordNotMatchedException.class)
     public ResponseEntity<ExceptionResponse> passwordNotMatchedException(PasswordNotMatchedException e) {
