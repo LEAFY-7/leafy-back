@@ -19,9 +19,7 @@ public interface QnaMapper {
     Long save(QnaDto qnaDto);
     int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
     QnaDto findQnaById(Long qnaId);
-    int qnaStatusModify(Long id);
-    PageResponse selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
+    int editByIdQnaStatus(Long id);
     PageResponse adminSelectAll(PageRequest pageRequest);
     int viewCnt(Long id);
-    AlarmType findTableIdByUserId(Long userId);
 }
