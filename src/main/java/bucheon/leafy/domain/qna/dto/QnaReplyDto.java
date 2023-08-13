@@ -6,18 +6,17 @@ import java.util.Date;
 @Data
 public class QnaReplyDto {
     private Long id;
-    private Date  created_at;
-    private Date  modified_at;
-    private Integer is_delete;
+    private Date  createdAt;
+    private Date  modifiedAt;
+    private boolean isDelete;
     private String comment;
-    private Long user_user_id;
-    private Long notice_comment_id;
+    private Long userId;
+    private Long qnaCommentId;
 
 
-    public QnaReplyDto(Long id, Long user_user_id, String comment) {
-
-        this.id = id;
-        this.user_user_id = user_user_id;
+    public QnaReplyDto(String comment, Long userId, Long qnaCommentId) {
         this.comment = comment;
+        this.userId = userId;
+        this.qnaCommentId = qnaCommentId;
     }
 }
