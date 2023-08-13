@@ -2,18 +2,13 @@ package bucheon.leafy.application.controller;
 
 
 import bucheon.leafy.application.service.QnaCommentService;
-import bucheon.leafy.application.service.QnaService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.CommentDto;
-import bucheon.leafy.exception.ModifyFailedException;;
-import bucheon.leafy.exception.RemoveFailedException;
-import bucheon.leafy.exception.WriteFailedException;
+import bucheon.leafy.domain.comment.QnaCommentDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,10 +29,10 @@ public class QnaCommentController {
     @PatchMapping("/modifiy/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
-                       @RequestBody CommentDto commentDto) {
+                       @RequestBody QnaCommentDto qnacommentDto) {
         Long userId = user.getUserId();
-        commentDto.setUserId(userId);
-        qnacommentService.modify(commentDto);
+        qnacommentDto.setUserId(userId);
+        qnacommentService.modify(qnacommentDto);
 
     }
 
@@ -51,11 +46,11 @@ public class QnaCommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void write(@AuthenticationPrincipal AuthUser user,
                       @PathVariable("id") Long id,
-                      @RequestBody CommentDto commentDto) {
+                      @RequestBody QnaCommentDto qnaCommentDto) {
 
         Long userId = user.getUserId();
-        commentDto.setUserId(userId);
-        qnacommentService.write(commentDto);
+        qnaCommentDto.setUserId(userId);
+        qnacommentService.write(qnaCommentDto);
 
     }
 

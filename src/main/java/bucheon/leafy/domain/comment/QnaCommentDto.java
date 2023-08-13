@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
-public class CommentDto {
+public class QnaCommentDto {
 
     private Long id;
     private Date createdAt;
@@ -17,13 +17,13 @@ public class CommentDto {
     private Long qnaId;
     private String answerContent;
     private String email;
-    public CommentDto(Long id, String comment, Long userId) {
+    public QnaCommentDto(Long id, String comment, Long userId) {
         this.comment = comment;
         this.id = id;
         this.userId = userId;
     }
 
-    public CommentDto(String comment, Long userId, Long qnaId) {
+    public QnaCommentDto(String comment, Long userId, Long qnaId) {
 
         this.comment = comment;
         this.userId = userId;
