@@ -64,7 +64,7 @@ public class QnaService {
         String msg = "답장이 완료 됬습니다.";
 
         qnaMapper.viewCnt(id);
-        qnaMapper.qnaStatusModify(id);
+        qnaMapper.editByIdQnaStatus(id);
 
         return qnaMapper.findById(id);
     }
