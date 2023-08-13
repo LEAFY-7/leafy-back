@@ -4,7 +4,6 @@ import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.search.response.SearchResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.FeedNotFoundException;
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static bucheon.leafy.domain.alarm.AlarmType.QNA;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,7 +26,6 @@ public class QnaService {
 
     private final UserRepository userRepository;
     private final QnaMapper qnaMapper;
-    private final AlarmService alarmService;
     private final AlarmMapper alarmMapper;
 
 
@@ -53,12 +49,11 @@ public class QnaService {
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
         return pageResponse;
-//        return qnaMapper.selectAll(userId, pageRequest);
+
     }
-    public Long findTableIdByUserId(Long userId) { return qnaMapper.findTableIdByUserId(userId); }
 
     @Transactional
-    public QnaDto getRead(Long userId, Long id) {
+    public QnaDto getRead(Long id) {
 
         QnaDto qnaDto = qnaMapper.findById(id);
 
@@ -68,9 +63,6 @@ public class QnaService {
 
         String msg = "답장이 완료 됬습니다.";
 
-        Long tableId = findTableIdByUserId(userId);
-
-        alarmService.createAlarm(userId, QNA, tableId);
         qnaMapper.viewCnt(id);
         qnaMapper.qnaStatusModify(id);
 

@@ -4,6 +4,7 @@ import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.notice.NoticeDto;
 import bucheon.leafy.domain.user.User;
@@ -47,7 +48,7 @@ public class NoticeService {
         String msg = "글쓰기가 완료 됬습니다.";
 
         Long tableId = findTableIdByUserId(userId);
-        alarmService.createAlarm(userId, NOTICE, tableId);
+        alarmService.createAlarm(userId, AlarmType.NOTICE , tableId);
         return noticeMapper.insert(noticeDto);
     }
 

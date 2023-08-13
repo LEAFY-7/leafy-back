@@ -65,7 +65,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="findTableIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="findTableIdByUserId" parameterType="java.lang.Long" resultType="AlarmType">
         SELECT table_id
         FROM alarm
         WHERE user_id = #{userId}

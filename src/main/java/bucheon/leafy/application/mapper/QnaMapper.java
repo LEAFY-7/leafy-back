@@ -1,5 +1,6 @@
 package bucheon.leafy.application.mapper;
 
+import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.QnaDto;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
@@ -22,5 +23,5 @@ public interface QnaMapper {
     PageResponse selectAll(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);
     PageResponse adminSelectAll(PageRequest pageRequest);
     int viewCnt(Long id);
-    Long findTableIdByUserId(Long userId);
+    AlarmType findTableIdByUserId(Long userId);
 }
