@@ -6,7 +6,7 @@ import java.util.Date;
 @Data
 public class QnaCommentDto {
 
-    private Integer id;
+    private Long id;
     private Date created_at;
     private Date  modified_at;
     private Integer is_delete;
@@ -17,7 +17,7 @@ public class QnaCommentDto {
 
     public QnaCommentDto() {}
 
-    public QnaCommentDto(Integer id, Integer user_user_id, String comment) {
+    public QnaCommentDto(Long id, Integer user_user_id, String comment) {
 
         this.id = id;
         this.user_user_id = user_user_id;

@@ -3,7 +3,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.reply.ReplyDto;
+import bucheon.leafy.domain.reply.QnaReplyDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,10 +30,10 @@ public class QnaReplyController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
-                        @RequestBody ReplyDto replyDto) {
+                        @RequestBody QnaReplyDto qnaReplyDto) {
         Long userId = user.getUserId();
-        replyDto.setUserId(userId);
-        qnareplyService.modify(replyDto);
+        qnaReplyDto.setUserId(userId);
+        qnareplyService.modify(qnaReplyDto);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 쓰기 성공"),
@@ -43,12 +43,12 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 쓰기")
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public void write( @AuthenticationPrincipal AuthUser user,
-                       @RequestBody ReplyDto replyDto) {
+    public void write(@AuthenticationPrincipal AuthUser user,
+                      @RequestBody QnaReplyDto qnaReplyDto) {
 
         Long userId = user.getUserId();
-        replyDto.setUserId(userId);
-        qnareplyService.write(replyDto);
+        qnaReplyDto.setUserId(userId);
+        qnareplyService.write(qnaReplyDto);
     }
 
     @ApiResponses({

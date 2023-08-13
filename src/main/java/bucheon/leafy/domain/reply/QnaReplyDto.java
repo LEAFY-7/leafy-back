@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ReplyDto {
+public class QnaReplyDto {
 
     private Long id;
     private Date createdAt;
@@ -20,7 +20,7 @@ public class ReplyDto {
     private Long qnaCommentId;
 
 
-    public ReplyDto( String comment, Long userId, Long qnaCommentId) {
+    public QnaReplyDto( String comment, Long userId, Long qnaCommentId) {
         this.comment = comment;
         this.userId = userId;
         this.qnaCommentId = qnaCommentId;

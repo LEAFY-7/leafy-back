@@ -1,6 +1,6 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.comment.CommentDto;
+import bucheon.leafy.domain.comment.QnaCommentDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.List;
 
 @Mapper
 public interface QnaCommentMapper {
-    CommentDto select(Long id, Long userId) ;
+    QnaCommentDto select(Long id, Long userId) ;
     void delete(Long id, Long userId) ;
-    void insert(CommentDto commentDto) ;
-    void update(CommentDto commentDto) ;
+    void insert(QnaCommentDto qnaCommentDto) ;
+    void update(QnaCommentDto qnaCommentDto) ;
 }
