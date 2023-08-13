@@ -13,9 +13,6 @@ public class QnaReplyDto {
     private Long user_user_id;
     private Long notice_comment_id;
 
-
-    public QnaReplyDto() {}
-
     public QnaReplyDto(Long id, Long user_user_id, String comment) {
 
         this.id = id;
