@@ -20,7 +20,8 @@ public class QnaReplyDto {
     private Long qnaCommentId;
 
 
-    public QnaReplyDto( String comment, Long userId, Long qnaCommentId) {
+    public QnaReplyDto( Long id, String comment, Long userId, Long qnaCommentId) {
+        this.id = id;
         this.comment = comment;
         this.userId = userId;
         this.qnaCommentId = qnaCommentId;
