@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Data
 public class NoticeDto {
-    private Integer id;
+    private Long id;
     private Date created_At;
     private Date modified_At;
     private Integer id_delete;
