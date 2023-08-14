@@ -16,6 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -30,9 +32,11 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판 글 수정하기")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> modify(
+    @PutMapping("/{noticeId}")
+    public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
             @RequestBody NoticeDto noticeDto) {
+
+        Long userId = user.getUserId();
         return ResponseEntity.ok().body(noticeService.modify(noticeDto));
     }
     @ApiResponses({
@@ -44,30 +48,29 @@ public class NoticeController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Long> write(
-            @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+            @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
             @RequestBody NoticeDto noticeDto
 
     ) {
-        return ResponseEntity.ok().body(noticeService.write(user,noticeDto));
+        Long userId = authUser.getUserId();
+        return ResponseEntity.ok().body(noticeService.write(authUser,noticeDto));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 읽기  성공"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "Notice 글 읽기 실패")
     })
     @Operation(summary = "Notice 게시판 클릭 글 읽기")
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> read( @PathVariable Long id) {
-        return ResponseEntity.ok().body(noticeService.getRead(id));
+    @GetMapping("/{noticeId}")
+    public ResponseEntity<Object> read( @PathVariable Long noticeId) {
+        return ResponseEntity.ok().body(noticeService.getRead(noticeId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 목록 보여주기 성공"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
     })
     @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
     @GetMapping
-    public ResponseEntity<PageResponse> list(PageRequest pageRequest) {
+    public ResponseEntity<List<PageResponse>> list(PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
     }
 
@@ -79,9 +82,11 @@ public class NoticeController {
     @Operation(summary = "Notice 게시판 글 삭제하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> remove(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+            @PathVariable("id") Long noticeId) {
+        Long userId = authUser.getUserId();
         //모든관리자가 삭제할수있을려면 userId로 하면 x
-        return ResponseEntity.ok().body(noticeService.remove(id));
+        return ResponseEntity.ok().body(noticeService.remove(noticeId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice Get Me 성공"),

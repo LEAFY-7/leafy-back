@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static bucheon.leafy.domain.alarm.AlarmType.NOTICE;
 
 
@@ -39,22 +41,21 @@ public class NoticeService {
         }
         return noticeMapper.delete(id);
     }
-    public Long write(AuthUser user, NoticeDto noticeDto)  {
+    public Long write(AuthUser authUser, NoticeDto noticeDto)  {
 
-        if (noticeMapper.insert(noticeDto) != 1) {
+        if (noticeMapper.save(noticeDto) != 1) {
             throw new ReadFailedException();
         }
-        Long userId = user.getUserId();
+        Long userId = authUser.getUserId();
         String msg = "글쓰기가 완료 됬습니다.";
 
         Long tableId = findTableIdByUserId(userId);
         alarmService.createAlarm(userId, AlarmType.NOTICE , tableId);
-        return noticeMapper.insert(noticeDto);
+        return noticeMapper.save(noticeDto);
     }
 
-    public PageResponse getList(PageRequest pageRequest)  {
-        noticeMapper.searchSelectPage(pageRequest);
-        return noticeMapper.selectAll(); }
+    public List<PageResponse> getList(PageRequest pageRequest)  {
+        return noticeMapper.pageFindById(pageRequest); }
 
     @Transactional
     public NoticeDto getRead(Long id) {
@@ -68,7 +69,7 @@ public class NoticeService {
     }
     public NoticeDto modify(NoticeDto noticeDto)  {
 
-        if (noticeMapper.update(noticeDto) != 1) {
+        if (noticeMapper.editById(noticeDto) != 1) {
             throw new ModifyFailedException();
         }
         Long id = noticeDto.getId();

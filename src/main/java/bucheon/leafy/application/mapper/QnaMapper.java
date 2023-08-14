@@ -11,15 +11,14 @@ import java.util.List;
 
 @Mapper
 public interface QnaMapper {
-
     long count();
-    QnaDto findById(Long id);
-    List<PageResponse> pageFindById(@Param("id")Long id, @Param("pageRequest")PageRequest pageRequest);
-    boolean deleteById(Long id);
-    Long save(QnaDto qnaDto);
-    int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
-    QnaDto findQnaById(Long qnaId);
-    int editByIdQnaStatus(Long id);
-    PageResponse adminSelectAll(PageRequest pageRequest);
-    int viewCnt(Long id);
+    QnaDto findById(Long qnaId);   //클릭해서 읽기(select)
+    boolean deleteById(Long qnaId);  //삭제
+    Long save(QnaDto qnaDto);   //저장
+    int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);//수정
+    QnaDto findQnaById(Long qnaId); //qnaId가지고 오기
+    int editByIdQnaStatus(Long qnaId);//상태 변경
+    PageResponse adminSelectAll(PageRequest pageRequest);   //관리자리스트
+    List<PageResponse> pageFindById(@Param("id")Long qnaId, @Param("pageRequest")PageRequest pageRequest);//리스트
+    int viewCnt(Long qnaId);
 }

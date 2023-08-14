@@ -5,81 +5,76 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
-    <delete id="delete" parameterType="map" >
+    <delete id="deleteById" parameterType="map" >
         UPDATE qna
         SET is_delete = 1
-        WHERE id = #{id}
+        WHERE qna_id = #{qnaId}
     </delete>
 
-    <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
         VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
     </insert>
 
-    <select id="select" parameterType="long" resultType="QnaDto">
-        -- QnaDto 형태의 결과를 반환하는 쿼리
-        SELECT q.*, qc.id AS qna_comment_id, qc.comment AS qna_comment,
-               qr.id AS qna_reply_id, qr.comment AS qna_reply_comment
-               -- qna 테이블과 qna_comment, qna_reply 테이블을 조인
+<!--    <select id="findById" parameterType="long" resultType="QnaDto">-->
+<!--        &#45;&#45; QnaDto 형태의 결과를 반환하는 쿼리-->
+<!--        SELECT q.*, qc.id AS qna_comment_id, qc.comment AS qna_comment,-->
+<!--               qr.id AS qna_reply_id, qr.comment AS qna_reply_comment-->
+<!--               &#45;&#45; qna 테이블과 qna_comment, qna_reply 테이블을 조인-->
+<!--        FROM qna q-->
+<!--                 LEFT JOIN qna_comment qc ON q.id = qc.qna_id-->
+<!--                 LEFT JOIN qna_reply qr ON qc.id = qr.qna_comment_id-->
+<!--             &#45;&#45; q 테이블의 id와 userId 조건으로 필터링-->
+<!--        WHERE q.qna_id = #{qnaId} AND q.user_id = #{userId}-->
+<!--    </select>-->
+
+    <select id="findById" parameterType="long" resultType="QnaDto">
+        SELECT q.*, qc.qna_comment_id, qc.qna_comment,
+        qr.qna_reply_id, qr.qna_reply_comment
         FROM qna q
-                 LEFT JOIN qna_comment qc ON q.id = qc.qna_id
-                 LEFT JOIN qna_reply qr ON qc.id = qr.qna_comment_id
-             -- q 테이블의 id와 userId 조건으로 필터링
-        WHERE q.id = #{id} AND q.user_id = #{userId}
+        LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
+        LEFT JOIN qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
+        WHERE q.qna_id = #{qnaId} AND q.user_id = #{userId}
     </select>
 
     <select id="findQnaById" parameterType="Long" resultType="QnaDto" >
-        select * from qna where qna_Id = #{qna_id} and is_delete = false
+        select * from qna where qna_id = #{qndId} and is_delete = false
     </select>
-
 
     <update id="viewCnt" parameterType="long">
         UPDATE qna
         SET   view_cnt = view_cnt + 1
-        WHERE id = #{id}
+        WHERE qna_id = #{qnaId}
     </update>
 
-    <select id="findTableIdByUserId" parameterType="java.lang.Long" resultType="AlarmType">
-        SELECT table_id
-        FROM alarm
-        WHERE user_id = #{userId}
-    </select>
-
-    <update id="update">
+    <update id="editById">
         UPDATE qna
         SET   title = #{title}
           , contents = #{contents}
           , modified_at = now()
           , user_id = #{userId}
-        WHERE id = #{id}
+        WHERE qna_id = #{qnaId}
     </update>
 
-    <update id="updateQnaStatus" parameterType="QnaDto">
+    <update id="editByIdQnaStatus" parameterType="QnaDto">
         UPDATE qna
         SET   qna_status = 1
-        WHERE  id = #{id}
+        WHERE  qna_id = #{qnaId}
     </update>
 
-
-    <insert id="insert" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
-        VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
-    </insert>
-
-
-    <select id="selectAll" resultType="com.example.dto.QnaDto">
+    <select id="pageFindById" resultType="QnaDto">
         SELECT *
         FROM qna
-        WHERE id = #{id}
+        WHERE qna_id = #{qnaId}
         ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
 
-    <select id="AdminSelectAll" resultType="QnaDto">
+    <select id="adminSelectAll" resultType="QnaDto">
         SELECT *
         FROM qna
-        ORDER BY created_at DESC, id DESC
+        ORDER BY created_at DESC, qna_id DESC
     </select>
 
 </mapper>
