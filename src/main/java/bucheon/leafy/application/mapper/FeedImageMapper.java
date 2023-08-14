@@ -15,8 +15,6 @@ public interface FeedImageMapper {
     String findImage(Long feedImageId);
 
     void saveImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
-
-    void deleteAllImages();
-
-    int deleteImage(Long feedId, Long feedImageId);
+    
+    void deleteImage(Long feedId);
 }

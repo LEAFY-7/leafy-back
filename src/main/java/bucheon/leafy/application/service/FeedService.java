@@ -1,6 +1,8 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.ImageComponent;
+import bucheon.leafy.application.controller.request.FeedSaveRequest;
+import bucheon.leafy.application.controller.request.FeedUpdateRequest;
 import bucheon.leafy.application.controller.response.FeedFindResponse;
 import bucheon.leafy.application.mapper.FeedImageMapper;
 import bucheon.leafy.application.mapper.FeedMapper;
@@ -11,9 +13,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
-import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
-import bucheon.leafy.application.controller.request.FeedUpdateRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
@@ -28,7 +28,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static bucheon.leafy.path.S3Path.FEED_PATH;
@@ -68,7 +73,8 @@ public class FeedService {
     public FeedFindResponse getFeedById(Long feedId) {
         FeedFindResponse response =  FeedFindResponse.builder()
                 .feedResponse(Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new))
-                .tagResponseList(findTagList(feedId)).build();
+                .tagResponseList(findTagList(feedId))
+                .feedImageResponseList(getFeedImages(feedId)).build();
 
         Long userId = response.getFeedResponse().getUserId();
         Optional<User> user = Optional.of(userRepository.findById(userId)).orElseThrow(UserNotFoundException::new);
@@ -80,11 +86,12 @@ public class FeedService {
         return feedTagMapper.findTagList(feedId);
     }
 
-    public Long saveFeed(Long userId, FeedRequest request, List<String> tagList) {
+    public Long saveFeed(Long userId, FeedSaveRequest request) throws IOException {
         feedMapper.saveFeed(userId, request);
         Long feedId = request.getFeedId();
+        saveFeedImages(feedId, request.getFileList());
         List<FeedTagRequest> tagRequestList = new ArrayList<>();
-        for(String tag : tagList) {
+        for(String tag : request.getTagList()) {
             FeedTagRequest tagRequest = FeedTagRequest.builder().tag(tag).build();
             tagRequestList.add(tagRequest);
         }
@@ -107,7 +114,7 @@ public class FeedService {
         feedTagMapper.saveTag(feedId, saveFeedList);
     }
 
-    public String updateFeed(Long feedId, Long userId, FeedUpdateRequest request) {
+    public String updateFeed(Long feedId, Long userId, FeedUpdateRequest request, List<MultipartFile> fileList) throws IOException {
         if( feedMapper.editFeed(feedId, userId, request.getFeedRequest()) == 1 ) {
             List<FeedTagRequest> deleteTagList = new ArrayList<>();
             List<FeedTagRequest> saveFeedList = new ArrayList<>();
@@ -121,6 +128,8 @@ public class FeedService {
             }
             deleteFeedTag(feedId, deleteTagList);
             saveFeedTag(feedId, saveFeedList);
+            deleteFeedImages(feedId);
+            saveFeedImages(feedId, fileList);
             return "피드 수정 완료";
         } else {
             throw new FeedDataAccessException();
@@ -161,30 +170,33 @@ public class FeedService {
         return responseList;
     }
 
-    public void saveImage(Long feedId, List<MultipartFile> imageList) {
+    public void saveFeedImages(Long feedId, List<MultipartFile> imageList) throws IOException {
         List<FeedImageRequest> requestList = new ArrayList<>();
-
         List<String> imageNameList = imageComponent.uploadImages(imagePath, imageList);
 
-        for(String imageName : imageNameList) {
-            FeedImageRequest request = FeedImageRequest.builder().imageName(imageName).build();
+        for(MultipartFile image : imageList) {
+            BufferedImage inputImage = ImageIO.read(image.getInputStream());
+            int imageHeight = inputImage.getHeight();
 
-            requestList.add(request);
+            for(String imageName : imageNameList) {
+                FeedImageRequest request = FeedImageRequest.builder().imageName(imageName).imageHeight(imageHeight).build();
+                requestList.add(request);
+            }
         }
 
         feedImageMapper.saveImage(feedId, requestList);
     }
 
-    public String deleteFeedImage(Long feedId, Long imageId) {
-        String imageName = feedImageMapper.findImage(imageId);
+    public void deleteFeedImages(Long feedId) {
+        List<FeedImageResponse> responseList = feedImageMapper.findImageList(feedId);
+        List<String> imageNameList = new ArrayList<>();
 
-        imageComponent.deleteImage(FEED_PATH, imageName);
-
-        if(feedImageMapper.deleteImage(feedId, imageId) == 1) {
-            return "이미지 삭제 완료";
-        }  else {
-        throw new FeedDataAccessException();
+        for(FeedImageResponse response : responseList) {
+            imageNameList.add(response.getImageName());
         }
+
+        imageComponent.deleteImages(FEED_PATH, imageNameList);
+        feedImageMapper.deleteImage(feedId);
     }
 
     public List<PopularTagResponse> getPopularTags() {

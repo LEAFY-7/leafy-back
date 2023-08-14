@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class ImageComponent {
 
         return imageName;
     }
-    public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) {
+    public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) throws IOException {
 
         List<String> imageNameList = new ArrayList<>();
 
@@ -70,6 +70,12 @@ public class ImageComponent {
 
     public void deleteImage(String imagePath, String imageName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
+    }
+
+    public void deleteImages(String imagePath, List<String> imageNameList) {
+        for(String imageName : imageNameList) {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
+        }
     }
 
     private String createUUID() {

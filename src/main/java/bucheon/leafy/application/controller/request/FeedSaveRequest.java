@@ -1,15 +1,15 @@
-package bucheon.leafy.domain.feed.request;
+package bucheon.leafy.application.controller.request;
 
 import bucheon.leafy.domain.feed.FeedType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class FeedRequest {
+public class FeedSaveRequest {
 
     @JsonIgnore
     private Long feedId;
@@ -23,9 +23,17 @@ public class FeedRequest {
     private String content;
     private FeedType feedType;
 
+    private List<String> tagList;
+
+    private List<MultipartFile> fileList;
+
+
     @Builder
-    public FeedRequest(Long feedId, String title, String species, String nickname, Double temperature, Integer humidity, Double waterAmount, String wateringPeriod, String content, FeedType feedType) {
-        this.feedId = feedId;
+    public FeedSaveRequest(String title, String species, String nickname,
+                           Double temperature, Integer humidity, Double waterAmount,
+                           String wateringPeriod, String content, FeedType feedType,
+                           List<String> tagList, List<MultipartFile> fileList) {
+
         this.title = title;
         this.species = species;
         this.nickname = nickname;
@@ -35,5 +43,7 @@ public class FeedRequest {
         this.wateringPeriod = wateringPeriod;
         this.content = content;
         this.feedType = feedType;
+        this.tagList = tagList;
+        this.fileList = fileList;
     }
 }

@@ -11,19 +11,15 @@
     </select>
 
     <insert id="saveImage" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="feed_image_id" keyProperty="request.feedImageId">
-        INSERT INTO feed_image (feed_id, image_name)
+        INSERT INTO feed_image (feed_id, image_name, image_height)
         VALUES
         <foreach collection="request" item="request" separator=",">
-            (#{feedId}, #{request.imageName})
+            (#{feedId}, #{request.imageName}, #{request.imageHeight})
         </foreach>
     </insert>
 
-    <delete id="deleteAllImages">
-        delete from feed_image
-    </delete>
-
     <delete id="deleteImage">
-        delete from feed_image where feed_id = #{feedId} and feed_image_id = #{feedImageId}
+        delete from feed_image where feed_id = #{feedId}
     </delete>
 
 </mapper>
