@@ -39,6 +39,7 @@ public class ImageComponent {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
         }
     }
+
     public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) throws IOException {
 
         List<String> imageNameList = new ArrayList<>();
