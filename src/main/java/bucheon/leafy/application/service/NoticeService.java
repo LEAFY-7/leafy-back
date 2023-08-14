@@ -36,10 +36,10 @@ public class NoticeService {
 
 
     public int remove(Long id) {
-        if (noticeMapper.delete(id) != 1) {
+        if (noticeMapper.deleteById(id) != 1) {
             throw new RemoveFailedException();
         }
-        return noticeMapper.delete(id);
+        return noticeMapper.deleteById(id);
     }
     public Long write(AuthUser authUser, NoticeDto noticeDto)  {
 
