@@ -81,9 +81,9 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판 글 삭제하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{noticeId}")
     public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-            @PathVariable("id") Long noticeId) {
+            @PathVariable("noticeId") Long noticeId) {
         Long userId = authUser.getUserId();
         //모든관리자가 삭제할수있을려면 userId로 하면 x
         return ResponseEntity.ok().body(noticeService.remove(noticeId));

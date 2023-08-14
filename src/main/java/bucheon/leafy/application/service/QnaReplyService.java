@@ -15,7 +15,7 @@ import java.util.List;
 public class QnaReplyService {
 
     private final QnaReplyMapper qnareplyMapper;
-    public void remove(Long id, Long userId) { qnareplyMapper.delete(id, userId); }
+    public void remove(Long qnaReplyId, Long userId) { qnareplyMapper.delete(qnaReplyId, userId); }
     public void write(QnaReplyDto qnaReplyDto) { qnareplyMapper.insert(qnaReplyDto); }
     public void modify(QnaReplyDto qnaReplyDto) { qnareplyMapper.update(qnaReplyDto); }
     public List<QnaReplyDto> getList(Long qnaCommentId) {

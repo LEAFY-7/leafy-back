@@ -10,7 +10,6 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class NoticeDto {
     private Long id;

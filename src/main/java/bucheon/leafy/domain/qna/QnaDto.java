@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class QnaDto {
     private Long id;

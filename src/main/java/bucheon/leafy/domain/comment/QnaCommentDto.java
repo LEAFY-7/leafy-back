@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Date;
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class QnaCommentDto {
 
