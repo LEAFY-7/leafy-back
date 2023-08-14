@@ -54,16 +54,13 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
-        String renamedFile = UUID.randomUUID().toString();
-
         // when
-        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
-
+        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
         userImageService.createUserImage(user.getId(), file);
 
         //then
         verify(userImageRepository, times(1)).save(any(UserImage.class));
-        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file), anyString());;
     }
 
     @Test
@@ -80,16 +77,13 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
-        String renamedFile = UUID.randomUUID().toString();
-
         // when
-        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
-
+        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
         userImageService.createUserBackgroundImage(user.getId(), file);
 
         //then
         verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
-        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file), anyString());;
     }
 
     @Test
@@ -106,16 +100,14 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
-        String renamedFile = UUID.randomUUID().toString();
-
         //when
-        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
+        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
         userImageService.editUserImage(user.getId(), file);
 
         //then
         verify(userImageRepository, times(1)).save(any(UserImage.class));
         verify(imageComponent, times(1)).deleteImage(anyString(), anyString());;
-        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));;
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file), anyString());;
 
     }
 
@@ -133,16 +125,14 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
-        String renamedFile = UUID.randomUUID().toString();
-
         // when
-        when(imageComponent.uploadImage(anyString(), eq(file))).thenReturn(renamedFile);
+        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
         userImageService.editUserBackgroundImage(user.getId(), file);
 
         //then
         verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
         verify(imageComponent, times(1)).deleteImage(anyString(), anyString());
-        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file));
+        verify(imageComponent, times(1)).uploadImage(anyString(), eq(file), anyString());
     }
 
     private User createUser(String email, String nickName) {

@@ -4,6 +4,7 @@ import bucheon.leafy.application.component.MailComponent;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.repository.CertificationNumberRepository;
 import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.CertificationNumber;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.PasswordRequest;
@@ -56,18 +57,17 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
         String authority = authentication.getAuthorities().stream()
                 .map(g -> g.getAuthority()).findFirst()
                 .orElseThrow(UserNotFoundException::new);
 
         String role = authority.replace("ROLE_", "");
-
         String jwt = tokenProvider.createToken(authentication);
-
-        return new TokenResponse(jwt, role);
+        return TokenResponse.of(jwt, role, authUser.getUserId());
     }
 
-    public Long signUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpRequest signUpRequest) {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         duplicationNickNameCheck(signUpRequest.getNickName());
@@ -78,8 +78,6 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
         User saveUser = userRepository.save(user);
-
-        return saveUser.getId();
     }
 
     public CertificationNumberResponse sendCertificationNumber(String email) {

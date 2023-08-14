@@ -1,78 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
+<mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
+    <!--Test-->
+    <delete id="deleteAll">
+        DELETE FROM qna_comment
+    </delete>
 
-        <delete id="deleteAll">
-            DELETE FROM qna
-        </delete>
+    <select id="count" parameterType="int" resultType="int">
+        SELECT count(*)
+          FROM qna_comment
+    </select>
+    <!---->
+    <delete id="delete" parameterType="map">
+        DELETE
+          FROM qna_comment
+         WHERE id = #{id}
+           AND user_id = #{userId}
+    </delete>
 
-        <delete id="delete" parameterType="map">
-            DELETE FROM qna WHERE id = #{id} and user_user_id = #{user_user_id}
-        </delete>
+    <insert id="insert" parameterType="QnaCommentDto">
+        INSERT INTO qna_comment
+            ( created_at, is_delete, comment, user_id, qna_id)
+        VALUES
+            (now(), 0, #{comment}, #{userId}, #{qnaId})
+    </insert>
 
-        <insert id="insert" parameterType="QnaCommentDto">
-            INSERT INTO qna
-                (title, contents, id, qan_status)
-            VALUES
-                (#{title}, #{contents}, #{id}, #{qan_status})
-        </insert>
+    <select id="selectAll" resultType="QnaCommentDto">
+        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
+        FROM qna_comment
+    </select>
 
-        <select id="selectAll" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
-            FROM qna
-            ORDER BY created_at DESC, id DESC
-        </select>
+    <select id="select" parameterType="long" resultType="QnaCommentDto">
+        SELECT *
+        FROM qna_comment
+        WHERE id = #{id}
+    </select>
 
-        <sql id="selectFrom">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
-            FROM qna
-        </sql>
+    <update id="update" parameterType="QnaCommentDto">
+        UPDATE qna_comment
+        SET comment = #{comment}
+          , modified_at = now()
+        WHERE id = #{id} and user_id = #{userId}
+    </update>
 
-        <select id="select" parameterType="int" resultType="QnaCommentDto">
-            <include refid="selectFrom"/>
-            WHERE id = #{id}
-        </select>
-
-        <select id="selectPage" parameterType="map" resultType="QnaCommentDto">
-            <include refid="selectFrom"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pageSize}
-        </select>
-
-        <update id="update" parameterType="QnaCommentDto">
-            UPDATE qna
-            SET   title = #{title}
-              , contents = #{contents}
-              , modified_at = now()
-            WHERE user_user_id = #{user_user_id}
-        </update>
-
-
-        <sql id="searchCondition">
-            <choose>
-                <when test='option=="T"'>
-                    AND title LIKE concat('%', #{keyword}, '%')
-                </when>
-                <when test='option=="U"'>
-                    AND user_user_id LIKE concat('%', #{keyword}, '%')
-                </when>
-                <otherwise>
-                    AND (title   LIKE concat('%', #{keyword}, '%')
-                    OR   contents LIKE concat('%', #{keyword}, '%'))
-                </otherwise>
-            </choose>
-        </sql>
-
-        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaCommentDto">
-            SELECT id, created_at, modified_at, is_delete ,contents, qna_status, title, user_user_id
-            FROM qna
-            WHERE true
-            <include refid="searchCondition"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pateSize}
-        </select>
-
-    </mapper>
+    <select id="selectId" parameterType="long" resultType="QnaCommentDto">
+        SELECT id
+        FROM qna_comment
+    </select>
+</mapper>

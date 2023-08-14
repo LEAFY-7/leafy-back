@@ -1,0 +1,11 @@
+diff a/src/main/java/bucheon/leafy/domain/reply/QnaReplyDto.java b/src/main/java/bucheon/leafy/domain/reply/QnaReplyDto.java	(rejected hunks)
+@@ -20,7 +20,8 @@
+     private Long qnaCommentId;
+ 
+ 
+-    public QnaReplyDto( String comment, Long userId, Long qnaCommentId) {
++    public QnaReplyDto( Long id, String comment, Long userId, Long qnaCommentId) {
++        this.id = id;
+         this.comment = comment;
+         this.userId = userId;
+         this.qnaCommentId = qnaCommentId;

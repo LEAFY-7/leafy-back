@@ -1,24 +1,25 @@
 package bucheon.leafy.application.mapper;
 
-
+import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.qna.SearchCondition;
+import bucheon.leafy.util.request.PageRequest;
+import bucheon.leafy.util.response.PageResponse;
 import org.apache.ibatis.annotations.Mapper;
-import java.rmi.server.ExportException;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface QnaMapper {
 
-
-    int deleteAll() throws ExportException;
-    QnaDto select(Integer id) throws Exception;
-    int delete(Integer id, String userId) throws Exception;
-    int insert(QnaDto dto) throws Exception;
-    int update(QnaDto dto) throws Exception;
-    List<QnaDto> selectPage(Map map) throws Exception;
-    List<QnaDto> selectAll() throws Exception;
-    List<QnaDto> searchSelectPage(SearchCondition sc) throws Exception;
-
+    long count();
+    QnaDto findById(Long id);
+    List<PageResponse> pageFindById(@Param("id")Long id, @Param("pageRequest")PageRequest pageRequest);
+    boolean deleteById(Long id);
+    Long save(QnaDto qnaDto);
+    int editById(@Param("qnaDto") QnaDto qnaDto, @Param("id") Long id);
+    QnaDto findQnaById(Long qnaId);
+    int editByIdQnaStatus(Long id);
+    PageResponse adminSelectAll(PageRequest pageRequest);
+    int viewCnt(Long id);
 }

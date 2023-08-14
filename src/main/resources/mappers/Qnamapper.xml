@@ -1,85 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-    <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
+<mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
+    <delete id="deleteById" parameterType="map" >
+        UPDATE qna
+        SET is_delete = 1
+        WHERE id = #{id}
+    </delete>
 
-        <delete id="deleteAll">
-            DELETE FROM qna
-        </delete>
+    <update id="editById">
+        UPDATE qna
+        SET   title = #{title}
+          , contents = #{contents}
+          , modified_at = now()
+          , user_id = #{userId}
+        WHERE id = #{id}
+    </update>
 
-        <delete id="deleteQna" parameterType="map">
-            DELETE FROM qna WHERE id = #{id} and id = #{id}
-        </delete>
+    <update id="editByIdQnaStatus" parameterType="QnaDto">
+        UPDATE qna
+        SET   qna_status = 1
+        WHERE  id = #{id}
+    </update>
 
-        <insert id="insert" parameterType="QnaDto">
-            INSERT INTO qna
-                (title, contents, id)
-            VALUES
-                (#{title}, #{contents}, #{id})
-        </insert>
+    <select id="findById" parameterType="long" resultType="QnaDto">
+        -- QnaDto 형태의 결과를 반환하는 쿼리
+        SELECT q.*, qc.id AS qna_comment_id, qc.comment AS qna_comment,
+               qr.id AS qna_reply_id, qr.comment AS qna_reply_comment
+               -- qna 테이블과 qna_comment, qna_reply 테이블을 조인
+        FROM qna q
+                 LEFT JOIN qna_comment qc ON q.id = qc.qna_id
+                 LEFT JOIN qna_reply qr ON qc.id = qr.qna_comment_id
+             -- q 테이블의 id와 userId 조건으로 필터링
+        WHERE q.id = #{id} AND q.user_id = #{userId}
+    </select>
 
-        <select id="selectAll" resultType="QnaDto">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
-            FROM qna
-            ORDER BY created_at DESC, id DESC
-        </select>
+    <select id="findQnaById" parameterType="Long" resultType="QnaDto">
+        select * from qna where qna_Id = #{qna_id} and is_delete = false
+    </select>
 
-        <sql id="selectFrom">
-            SELECT id, title, contents, id, view_cnt, comment_cnt, created_at
-            FROM qna
-        </sql>
+    <update id="viewCnt" parameterType="long">
+        UPDATE qna
+        SET   view_cnt = view_cnt + 1
+        WHERE id = #{id}
+    </update>
 
-        <select id="select" parameterType="int" resultType="QnaDto">
-            <include refid="selectFrom"/>
-            WHERE id = #{id}
-        </select>
+    <insert id="save" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
+        VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
+    </insert>
 
-        <select id="selectPage" parameterType="map" resultType="QnaDto">
-            <include refid="selectFrom"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pageSize}
-        </select>
+    <select id="pageFindById" parameterType="pageRequest" resultType="PageResponse">
+        SELECT *
+        FROM qna
+        WHERE id = #{id}
+        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
+    </select>
 
-        <update id="update" parameterType="QnaDto">
-            UPDATE qna
-            SET   title = #{title}
-              , contents = #{contents}
-              , modified_at = now()
-            WHERE user_id = #{user_id}
-        </update>
+    <select id="adminSelectAll" resultType="QnaDto">
+        SELECT *
+        FROM qna
+        ORDER BY created_at DESC, id DESC
+    </select>
 
-
-        <sql id="searchCondition">
-            <choose>
-                <when test='option=="T"'>
-                    AND title LIKE concat('%', #{keyword}, '%')
-                </when>
-                <when test='option=="U"'>
-                    AND user_id LIKE concat('%', #{keyword}, '%')
-                </when>
-                <otherwise>
-                    AND (title   LIKE concat('%', #{keyword}, '%')
-                    OR   contents LIKE concat('%', #{keyword}, '%'))
-                </otherwise>
-            </choose>
-        </sql>
-
-        <select id="searchSelectPage" parameterType="SearchCondition" resultType="QnaDto">
-            SELECT id, title, contents, user_id, view_cnt, comment_cnt, created_at
-            FROM qna
-            WHERE truef
-            <include refid="searchCondition"/>
-            ORDER BY created_at DESC, id DESC
-            LIMIT #{offset}, #{pateSize}
-        </select>
-
-        <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
-            SELECT count(*)
-            FROM qna
-            WHERE true
-            <include refid="searchCondition"/>
-        </select>
-    </mapper>
+</mapper>
