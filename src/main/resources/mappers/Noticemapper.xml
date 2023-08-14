@@ -30,7 +30,7 @@
         ORDER BY created_at DESC, id DESC
     </select>
 
-    <select id="select" parameterType="long" resultType="NoticeDto">
+    <select id="findById" parameterType="long" resultType="NoticeDto">
         SELECT *
         FROM notice
         WHERE id = #{id}
