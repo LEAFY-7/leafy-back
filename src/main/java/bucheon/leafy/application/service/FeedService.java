@@ -1,18 +1,18 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.component.ImageComponent;
-import bucheon.leafy.application.controller.request.FeedSaveRequest;
-import bucheon.leafy.application.controller.request.FeedUpdateRequest;
-import bucheon.leafy.application.controller.response.FeedFindResponse;
+import bucheon.leafy.application.controller.response.FeedByIdResponse;
 import bucheon.leafy.application.mapper.FeedImageMapper;
 import bucheon.leafy.application.mapper.FeedMapper;
 import bucheon.leafy.application.mapper.FeedTagMapper;
 import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.application.repository.UserRepository;
+import bucheon.leafy.domain.alarm.response.AlarmResponse;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
+import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.request.FeedTagRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
@@ -32,6 +32,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,26 +53,31 @@ public class FeedService {
 
     private String imagePath = FEED_PATH;
 
+    // 피드 리스트 조회
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
-        if (scrollRequest.hasKey()) {
-            List<FeedResponse> responseList = feedMapper.findFeedListScroll(scrollRequest);
-            responseList.forEach(feedResponse -> {
-                Long userId = feedResponse.getUserId();
-                Optional<User> user = Optional.of(userRepository.findById(userId)).orElseThrow(UserNotFoundException::new);
-                feedResponse.setUserName(user.map(User::getName).orElseThrow(UserNotFoundException::new));
-            });
-            ScrollResponse scrollResponse = ScrollResponse.of(scrollRequest, responseList);
-            return scrollResponse;
-        } else if (scrollRequest.getKey() == null) {
-             feedMapper.findFeedListFirst(scrollRequest);
-            return null;
+        if(scrollRequest.hasKey()){
+            LinkedList<FeedResponse> responseList = feedMapper.findFeedList(scrollRequest);
+            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, responseList);
         } else {
-            return null;
+            LinkedList<FeedResponse> responseList = feedMapper.findFeedListFirst(scrollRequest);
+            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, responseList);
         }
     }
 
-    public FeedFindResponse getFeedById(Long feedId) {
-        FeedFindResponse response =  FeedFindResponse.builder()
+    private ScrollRequest getNextKey(LinkedList<FeedResponse> responseList, ScrollRequest scrollRequest){
+        if(responseList.size() < ScrollRequest.size){
+            return scrollRequest.next(ScrollRequest.NONE_KEY);
+        } else {
+            long nextKey = responseList.getLast().getFeedId();
+            return scrollRequest.next(nextKey);
+        }
+    }
+
+    // 피드 상세 조회
+    public FeedByIdResponse getFeedById(Long feedId) {
+        FeedByIdResponse response =  FeedByIdResponse.builder()
                 .feedResponse(Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new))
                 .tagResponseList(findTagList(feedId))
                 .feedImageResponseList(getFeedImages(feedId)).build();
@@ -82,94 +88,55 @@ public class FeedService {
         return response;
     }
 
-    public List<FeedTagResponse> findTagList(Long feedId) {
-        return feedTagMapper.findTagList(feedId);
-    }
-
-    public Long saveFeed(Long userId, FeedSaveRequest request) throws IOException {
+    // 피드 등록
+    public void saveFeed(Long userId, FeedRequest request) throws IOException {
         feedMapper.saveFeed(userId, request);
         Long feedId = request.getFeedId();
-        saveFeedImages(feedId, request.getFileList());
-        List<FeedTagRequest> tagRequestList = new ArrayList<>();
-        for(String tag : request.getTagList()) {
-            FeedTagRequest tagRequest = FeedTagRequest.builder().tag(tag).build();
-            tagRequestList.add(tagRequest);
-        }
-        saveFeedTag(feedId, tagRequestList);
+        saveFeedTags(feedId, request.getTagList());
+        saveFeedImages(feedId, request.getImageList());
         initFeedLike(feedId);
-
-        return feedId;
     }
 
-    public void initFeedLike(Long feedId) {
-        FeedLikeCount likeCount = FeedLikeCount.builder().likeCount(0L).build();
-        Optional<Feed> feed = feedRepository.findById(feedId);
-
-        likeCount.initFeed(feed.orElseThrow());
-
-        feedLikeRepository.save(likeCount);
-    }
-
-    public void saveFeedTag(Long feedId, List<FeedTagRequest> saveFeedList) {
-        feedTagMapper.saveTag(feedId, saveFeedList);
-    }
-
-    public String updateFeed(Long feedId, Long userId, FeedUpdateRequest request, List<MultipartFile> fileList) throws IOException {
-        if( feedMapper.editFeed(feedId, userId, request.getFeedRequest()) == 1 ) {
-            List<FeedTagRequest> deleteTagList = new ArrayList<>();
-            List<FeedTagRequest> saveFeedList = new ArrayList<>();
-            for( FeedTagRequest tagRequest : request.getTagRequestList() ) {
-                Long tagId = tagRequest.getFeedTagId();
-                if (tagId != null && tagId > 0) {
-                    deleteTagList.add(tagRequest);
-                } else {
-                    saveFeedList.add(tagRequest);
-                }
-            }
-            deleteFeedTag(feedId, deleteTagList);
-            saveFeedTag(feedId, saveFeedList);
+    // 피드 수정
+    public void updateFeed(Long feedId, Long userId, FeedRequest request) throws IOException {
+        if( feedMapper.editFeed(feedId, userId, request) == 1 ) {
+            deleteFeedTags(feedId);
+            saveFeedTags(feedId, request.getTagList());
             deleteFeedImages(feedId);
-            saveFeedImages(feedId, fileList);
-            return "피드 수정 완료";
+            saveFeedImages(feedId, request.getImageList());
         } else {
             throw new FeedDataAccessException();
         }
     }
 
-    public void deleteFeedTag(Long feedId, List<FeedTagRequest> deleteTagList) {
-        feedTagMapper.deleteTagNotIn(feedId, deleteTagList);
+    // 피드 삭제
+    public void deleteFeed(Long feedId, Long userId) {
+        if( feedMapper.deleteFeed(feedId, userId) != 1 ) throw new FeedDataAccessException();
     }
 
-    public String deleteFeed(Long feedId, Long userId) {
-        if( feedMapper.deleteFeed(feedId, userId) == 1 ) {
-            return "피드 삭제 완료";
-        } else {
-            throw new FeedDataAccessException();
-        }
+    // 피드 태그 조회
+    public List<FeedTagResponse> findTagList(Long feedId) {
+        return feedTagMapper.findFeedTagList(feedId);
     }
 
-    public List<FeedMonthlyResponse> getCountGroupByMonthly(Long userId) {
-        List<FeedMonthlyInformation> feedMonthlyResponse = feedRepository.groupByMonthlyCountByUserId(userId);
-
-        return feedMonthlyResponse.stream()
-                .map(FeedMonthlyResponse::of)
-                .collect(Collectors.toList());
-    }
-
+    // 피드 이미지 조회
     public List<FeedImageResponse> getFeedImages(Long feedId) {
-
-        List<FeedImageResponse> responseList =  feedImageMapper.findImageList(feedId);
+        List<FeedImageResponse> responseList =  feedImageMapper.findFeedImageList(feedId);
 
         for(FeedImageResponse response : responseList) {
-
             String imageUrl = imageComponent.getImageUrl(FEED_PATH, response.getImageName());
-
             response.setImageUrl(imageUrl);
         }
 
         return responseList;
     }
 
+    // 피드 태그 저장
+    public void saveFeedTags(Long feedId, List<FeedTagRequest> saveFeedList) {
+        feedTagMapper.saveFeedTag(feedId, saveFeedList);
+    }
+
+    // 피드 이미지 저장
     public void saveFeedImages(Long feedId, List<MultipartFile> imageList) throws IOException {
         List<FeedImageRequest> requestList = new ArrayList<>();
         List<String> imageNameList = imageComponent.uploadImages(imagePath, imageList);
@@ -184,11 +151,17 @@ public class FeedService {
             }
         }
 
-        feedImageMapper.saveImage(feedId, requestList);
+        feedImageMapper.saveFeedImage(feedId, requestList);
     }
 
+    // 피드 태그 삭제
+    public void deleteFeedTags(Long feedId) {
+        feedTagMapper.deleteFeedTag(feedId);
+    }
+
+    // 피드 이미지 삭제
     public void deleteFeedImages(Long feedId) {
-        List<FeedImageResponse> responseList = feedImageMapper.findImageList(feedId);
+        List<FeedImageResponse> responseList = feedImageMapper.findFeedImageList(feedId);
         List<String> imageNameList = new ArrayList<>();
 
         for(FeedImageResponse response : responseList) {
@@ -196,7 +169,25 @@ public class FeedService {
         }
 
         imageComponent.deleteImages(FEED_PATH, imageNameList);
-        feedImageMapper.deleteImage(feedId);
+        feedImageMapper.deleteFeedImage(feedId);
+    }
+
+    // 피드 좋아요 초기화
+    public void initFeedLike(Long feedId) {
+        FeedLikeCount likeCount = FeedLikeCount.builder().likeCount(0L).build();
+        Optional<Feed> feed = feedRepository.findById(feedId);
+
+        likeCount.initFeed(feed.orElseThrow());
+
+        feedLikeRepository.save(likeCount);
+    }
+
+    public List<FeedMonthlyResponse> getCountGroupByMonthly(Long userId) {
+        List<FeedMonthlyInformation> feedMonthlyResponse = feedRepository.groupByMonthlyCountByUserId(userId);
+
+        return feedMonthlyResponse.stream()
+                .map(FeedMonthlyResponse::of)
+                .collect(Collectors.toList());
     }
 
     public List<PopularTagResponse> getPopularTags() {

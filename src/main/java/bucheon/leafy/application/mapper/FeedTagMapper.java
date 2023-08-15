@@ -9,9 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface FeedTagMapper {
-    List<FeedTagResponse> findTagList(Long feedId);
+    List<FeedTagResponse> findFeedTagList(Long feedId);
 
-    void saveTag(@Param("feedId") Long feedId, @Param("request") List<FeedTagRequest> request);
+    void saveFeedTag(@Param("feedId") Long feedId, @Param("request") List<FeedTagRequest> request);
 
-    int deleteTagNotIn(@Param("feedId") Long feedId, @Param("request") List<FeedTagRequest> request);
+    void deleteFeedTag(Long feedId);
 }

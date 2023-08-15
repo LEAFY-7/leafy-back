@@ -6,15 +6,14 @@ import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.LinkedList;
 
 @Mapper
 public interface FeedCommentMapper {
 
-    List<FeedCommentResponse> findCommentListFirst(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
+    LinkedList<FeedCommentResponse> findCommentListFirst(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
 
-    List<FeedCommentResponse> findCommentListScroll(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
+    LinkedList<FeedCommentResponse> findCommentList(@Param("feedId") Long feedId, ScrollRequest scrollRequest);
 
     FeedCommentResponse findCommentById(Long feedCommentId);
 

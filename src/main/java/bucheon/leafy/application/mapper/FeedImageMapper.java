@@ -9,12 +9,9 @@ import java.util.List;
 
 @Mapper
 public interface FeedImageMapper {
+    List<FeedImageResponse> findFeedImageList(Long feedId);
 
-    List<FeedImageResponse> findImageList(Long feedId);
-
-    String findImage(Long feedImageId);
-
-    void saveImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
+    void saveFeedImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
     
-    void deleteImage(Long feedId);
+    void deleteFeedImage(Long feedId);
 }
