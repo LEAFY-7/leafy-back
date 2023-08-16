@@ -5,16 +5,16 @@ import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.mybatis.spring.annotation.MapperScan;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Mapper
 public interface FeedMapper {
 
-    List<FeedResponse> findFeedListFirst(ScrollRequest scrollRequest);
+    LinkedList<FeedResponse> findFeedListFirst(ScrollRequest scrollRequest);
 
-    List<FeedResponse> findFeedListScroll(ScrollRequest scrollRequest);
+    LinkedList<FeedResponse> findFeedList(ScrollRequest scrollRequest);
 
     FeedResponse findFeedById(Long feedId);
 

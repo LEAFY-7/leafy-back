@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 @Entity
@@ -87,9 +88,9 @@ public class Feed extends BaseDeleteEntity {
         this.feedLikeCount = feedLikeCount;
     }
 
-    public void addFeedImages(List<String> imageNames){
-        List<FeedImage> feedImages = imageNames.stream()
-                .map(FeedImage::of)
+    public void addFeedImages(List<String> imageNames, List<Integer> imageHeights){
+        List<FeedImage> feedImages = IntStream.range(0, Math.min(imageNames.size(), imageHeights.size()))
+                .mapToObj(i -> FeedImage.of(imageNames.get(i), imageHeights.get(i)))
                 .collect(Collectors.toList());
 
         this.feedImages = feedImages;

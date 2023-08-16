@@ -4,11 +4,19 @@
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
     <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed where is_delete = false ORDER BY feed_id DESC LIMIT #{size}
+        select * from feed f
+        join feed_like_count flc on f.feed_id = flc.feed_id
+        where is_delete = false and feed_id &lt; #{key}
+        order by created_at desc, f.created_at desc
+        limit #{size}
     </select>
 
-    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed where is_delete = false and feed_id &lt; #{key} ORDER BY feed_id DESC LIMIT #{size}
+    <select id="findFeedList" resultType="FeedResponse" parameterType="ScrollRequest">
+        select * from feed f
+        join feed_like_count flc on f.feed_id = flc.feed_id
+        where is_delete = false
+        order by created_at desc, f.created_at desc
+        limit #{size}
     </select>
 
     <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >

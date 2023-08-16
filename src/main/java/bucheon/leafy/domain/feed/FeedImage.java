@@ -18,15 +18,18 @@ public class FeedImage {
     private Long id;
 
     private String imageName;
+    private Integer imageHeight;
 
     @Builder
-    private FeedImage(String imageName) {
+    private FeedImage(String imageName, Integer imageHeight) {
         this.imageName = imageName;
+        this.imageHeight = imageHeight;
     }
 
-    public static FeedImage of(String imageName) {
+    public static FeedImage of(String imageName, Integer imageHeight) {
         return FeedImage.builder()
                 .imageName(imageName)
+                .imageHeight(imageHeight)
                 .build();
     }
 }
