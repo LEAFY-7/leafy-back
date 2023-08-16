@@ -1,34 +1,28 @@
 package bucheon.leafy.domain.qna;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode
 public class QnaDto {
-    private Integer id;
-    private String userId;
+    private Long id;
+    private Long userId;
     private String title;
     private String contents;
     private Date modifiedAt;
     private Date createdAt;
-    private Integer viewCnt;
-    private Integer commentCnt;
+    private Long viewCnt;
+    private Long commentCnt;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        QnaDto qnaDto = (QnaDto) o;
-        return viewCnt == qnaDto.viewCnt && commentCnt == qnaDto.commentCnt && Objects.equals(id, qnaDto.id) && Objects.equals(userId, qnaDto.userId) && Objects.equals(title, qnaDto.title) && Objects.equals(contents, qnaDto.contents) && Objects.equals(id, qnaDto.id);
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, contents, userId);
-    }
-    public QnaDto() { this("","",""); }
-    public QnaDto(String title, String contents, String userId) {
+    public QnaDto(String title, String contents, Long userId) {
         this.title = title;
         this.contents = contents;
         this.userId = userId;

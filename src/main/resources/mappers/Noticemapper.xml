@@ -4,16 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bucheon.leafy.application.mapper.NoticeMapper">
 
-    <delete id="delete" parameterType="map">
+    <delete id="deleteById" parameterType="map">
         UPDATE notice
         SET is_delete = 1
     </delete>
 
-    <delete id="deleteAll">
-        DELETE FROM notice
-    </delete>
-
-    <insert id="insert" parameterType="NoticeDto" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="NoticeDto" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO notice (created_at, is_delete, contents, is_hide, title, user_id)
         VALUES (now(), 0, #{contents}, #{isHide}, #{title}, #{userId})
     </insert>
@@ -21,36 +17,28 @@
     <update id="viewCnt" parameterType="long">
         UPDATE notice
         SET   view_cnt = view_cnt + 1
-        WHERE id = #{id}
+        WHERE noitce_id = #{noitceId}
     </update>
 
-    <select id="selectAll" resultType="NoticeDto">
+    <select id="pageFindById" resultType="NoticeDto">
         SELECT *
         FROM notice
-        ORDER BY created_at DESC, id DESC
+        ORDER BY created_at DESC, notice_id DESC
     </select>
 
-    <select id="select" parameterType="long" resultType="NoticeDto">
+    <select id="findById" parameterType="long" resultType="NoticeDto">
         SELECT *
         FROM notice
-        WHERE id = #{id}
+        WHERE notice_id = #{noitceId}
     </select>
 
-
-    <select id="selectPage" parameterType="map" resultType="NoticeDto">
-        SELECT *
-        ORDER BY reg_date DESC, bno DESC
-            LIMIT #{offset}, #{pageSize}
-    </select>
-
-
-    <update id="update" parameterType="NoticeDto">
+    <update id="editById" parameterType="NoticeDto">
         UPDATE notice
            SET modified_at = now()
              , contents = #{contents}
              , is_hide = #{isHide}
              , title = #{title}
-        WHERE id = #{id}
+        WHERE notice_id = #{noitceId}
     </update>
 
     <sql id="NoticeSearchRequest">
@@ -69,12 +57,11 @@
     </sql>
 
     <select id="searchSelectPage" parameterType="PageRequest" resultType="PageResponse">
-
         SELECT *
         FROM notice
         WHERE true
         <include refid="NoticeSearchRequest"/>
-        ORDER BY created_at DESC, id DESC
+        ORDER BY created_at DESC, notice_id DESC
         LIMIT #{offset}, #{limit}
     </select>
 

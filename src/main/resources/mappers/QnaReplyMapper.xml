@@ -4,39 +4,38 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
-    <delete id="deleteAll">
-        DELETE FROM qna_reply
-    </delete>
-
     <select id="getCount" parameterType="long" resultType="int">
         SELECT count(*)
-        FROM qna_reply
-        WHERE qna_comment_id = #{qnaCommentId}
+          FROM qna_reply
+         WHERE qna_reply_id = #{qnaReplyId}
     </select>
 
 
-    <delete id="delete" parameterType="map">
-        DELETE FROM qna_reply WHERE id = #{id} AND user_id = #{userId}
+    <delete id="deleteByQnaReplyId" parameterType="map">
+        DELETE FROM qna_reply
+               WHERE qna_reply_id = #{qnaReplyId}
+                 AND user_id = #{userId}
     </delete>
 
-    <insert id="insert" parameterType="QnaReplyDto">
+    <insert id="save" parameterType="QnaReplyDto">
         INSERT INTO qna_reply
             ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
-        VALUES
+             VALUES
             ( now(), now(), false, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
-    <select id="selectAll" parameterType="int" resultType="QnaReplyDto">
-        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
-        FROM qna_reply
-        WHERE id = #{id}
-        ORDER BY created_at ASC, id ASC
+    <select id="pageFindByQnaReplyId" parameterType="int" resultType="QnaReplyDto">
+        SELECT qna_reply_id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
+          FROM qna_reply
+         WHERE qna_reply_id = #{qnaReplyId}
+         ORDER BY created_at ASC, qna_reply_id ASC
     </select>
 
-    <update id="update" parameterType="QnaReplyDto">
+    <update id="editByQnaReplyId" parameterType="QnaReplyDto">
         UPDATE qna_reply
-        SET user_id = #{userId}
-          , modified_at = now()
-        WHERE id = #{id} and user_id = #{userId}
+           SET user_id = #{userId}
+             , modified_at = now()
+         WHERE qna_reply_id = #{qnaReplyId}
+           AND user_id = #{userId}
     </update>
 </mapper>

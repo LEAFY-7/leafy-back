@@ -3,24 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
-    <!--Test-->
-    <delete id="deleteAll">
-        DELETE FROM qna_comment
-    </delete>
 
     <select id="count" parameterType="int" resultType="int">
         SELECT count(*)
           FROM qna_comment
     </select>
-    <!---->
-    <delete id="delete" parameterType="map">
+
+    <delete id="deleteByQnaCommentId" parameterType="map">
         DELETE
           FROM qna_comment
-         WHERE id = #{id}
+         WHERE qna_comment_id = #{qnaCommentId}
            AND user_id = #{userId}
     </delete>
 
-    <insert id="insert" parameterType="QnaCommentDto">
+    <insert id="save" parameterType="QnaCommentDto">
         INSERT INTO qna_comment
             ( created_at, is_delete, comment, user_id, qna_id)
         VALUES
@@ -28,25 +24,26 @@
     </insert>
 
     <select id="selectAll" resultType="QnaCommentDto">
-        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
+        SELECT qna_comment_id, created_at, modified_at, is_delete, comment, user_id, qna_id
         FROM qna_comment
     </select>
 
-    <select id="select" parameterType="long" resultType="QnaCommentDto">
+    <select id="pageFindByQnaCommentId" parameterType="long" resultType="QnaCommentDto">
         SELECT *
         FROM qna_comment
-        WHERE id = #{id}
+        WHERE qna_comment_id = #{qnaCommentId}
     </select>
 
-    <update id="update" parameterType="QnaCommentDto">
+    <update id="editByQnaCommentId" parameterType="QnaCommentDto">
         UPDATE qna_comment
         SET comment = #{comment}
           , modified_at = now()
-        WHERE id = #{id} and user_id = #{userId}
+        WHERE qna_comment_id = #{qnaCommentId}
+          AND user_id = #{userId}
     </update>
 
     <select id="selectId" parameterType="long" resultType="QnaCommentDto">
-        SELECT id
+        SELECT qna_comment_id
         FROM qna_comment
     </select>
 </mapper>

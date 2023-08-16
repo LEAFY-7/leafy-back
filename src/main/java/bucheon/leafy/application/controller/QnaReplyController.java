@@ -27,7 +27,6 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 수정 실패")
     })
     @Operation(summary = "대댓글 수정")
-    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
                         @RequestBody QnaReplyDto qnaReplyDto) {
@@ -57,12 +56,12 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 삭제 실패")
     })
     @Operation(summary = "대댓글 삭제")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove( @AuthenticationPrincipal AuthUser user,
-                        @PathVariable("id") Long id) {
+                        @PathVariable("qnaReplyId") Long qnaReplyId) {
         Long userId = user.getUserId();
-        qnareplyService.remove(id, userId);
+        qnareplyService.remove(qnaReplyId, userId);
     }
 }
 

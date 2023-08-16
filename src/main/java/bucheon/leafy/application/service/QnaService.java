@@ -29,8 +29,8 @@ public class QnaService {
     private final AlarmMapper alarmMapper;
 
 
-    public boolean remove(Long id) {
-        boolean deleteStatus = qnaMapper.deleteById(id);
+    public boolean remove(Long qnaId) {
+        boolean deleteStatus = qnaMapper.deleteById(qnaId);
         if (!deleteStatus) {
             throw new RemoveFailedException();
         }
@@ -39,12 +39,12 @@ public class QnaService {
 
     public Long write(QnaDto qnaDto) { return qnaMapper.save(qnaDto); }
 
-    public PageResponse admingetList(PageRequest pageRequest,Long id){
-//        qnaMapper.pageFindById(id);
+    public PageResponse admingetList(PageRequest pageRequest,Long qnaId){
+//        qnaMapper.pageFindById(qnaId);
         return qnaMapper.adminSelectAll(pageRequest);
     }
-    public PageResponse getList(Long userId, PageRequest pageRequest, Long id){
-        List<PageResponse> list = qnaMapper.pageFindById(id, pageRequest);
+    public PageResponse getList(Long userId, PageRequest pageRequest, Long qnaId){
+        List<PageResponse> list = qnaMapper.pageFindById(qnaId, pageRequest);
         long total = qnaMapper.count();
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
@@ -53,9 +53,9 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaDto getRead(Long id) {
+    public QnaDto getRead(Long qnaId) {
 
-        QnaDto qnaDto = qnaMapper.findById(id);
+        QnaDto qnaDto = qnaMapper.findById(qnaId);
 
         if (qnaDto == null) {
             throw new ReadFailedException();
@@ -63,13 +63,13 @@ public class QnaService {
 
         String msg = "답장이 완료 됬습니다.";
 
-        qnaMapper.viewCnt(id);
-        qnaMapper.editByIdQnaStatus(id);
+        qnaMapper.viewCnt(qnaId);
+        qnaMapper.editByIdQnaStatus(qnaId);
 
-        return qnaMapper.findById(id);
+        return qnaMapper.findById(qnaId);
     }
-    public int modify(QnaDto qnaDto,Long id) {
-        return qnaMapper.editById(qnaDto, id);
+    public int modify(QnaDto qnaDto,Long qnaId) {
+        return qnaMapper.editById(qnaDto, qnaId);
     }
 
     public QnaDto getQnaById(Long qnaId) {
