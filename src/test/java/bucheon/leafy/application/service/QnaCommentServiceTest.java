@@ -11,9 +11,7 @@ class QnaCommentServiceTest {
     @Autowired
     QnaCommentService qnaCommentService;
     @Test
-    void remove() {
-        qnaCommentService.remove(1L,11111L);
-    }
+    void remove() { qnaCommentService.remove(1L,11111L); }
     @Test
     void write() {
         qnaCommentService.write(new QnaCommentDto("comment",11111L,1L));
