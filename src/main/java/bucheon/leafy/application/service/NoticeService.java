@@ -5,14 +5,10 @@ import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.notice.NoticeDto;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
-import bucheon.leafy.exception.ModifyFailedException;
-import bucheon.leafy.exception.ReadFailedException;
-import bucheon.leafy.exception.RemoveFailedException;
-import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static bucheon.leafy.domain.alarm.AlarmType.NOTICE;
 
 
 @Service
@@ -41,17 +36,25 @@ public class NoticeService {
         }
         return noticeMapper.deleteById(id);
     }
-    public Long write(AuthUser authUser, NoticeDto noticeDto)  {
 
-        if (noticeMapper.save(noticeDto) != 1) {
-            throw new ReadFailedException();
-        }
+
+    public void write(AuthUser authUser, NoticeDto noticeDto)  {
+
         Long userId = authUser.getUserId();
-        String msg = "글쓰기가 완료 됬습니다.";
 
-        Long tableId = findTableIdByUserId(userId);
-        alarmService.createAlarm(userId, AlarmType.NOTICE , tableId);
-        return noticeMapper.save(noticeDto);
+
+        // 공지 저장
+        if (noticeMapper.save(noticeDto) != 1) {
+            throw new WriteFailedException();
+        }
+        // 모든 사용자에게 알림 보내기
+        List<Long> userIds = noticeMapper.findAllUserIds();
+        for (Long id : userIds) {
+            // 자신에게는 알림을 보내지 않도록 조건 추가
+            if (!id.equals(userId)) {
+                alarmService.createAlarm(id, AlarmType.NOTICE, noticeDto.getNoticeId());
+            }
+        }
     }
 
     public List<PageResponse> getList(PageRequest pageRequest)  {
@@ -72,11 +75,9 @@ public class NoticeService {
         if (noticeMapper.editById(noticeDto) != 1) {
             throw new ModifyFailedException();
         }
-        Long id = noticeDto.getId();
-        return noticeMapper.findById(id);
+        Long noticeId = noticeDto.getNoticeId();
+        return noticeMapper.findById(noticeId);
     }
-    public Long findTableIdByUserId(Long userId) { return noticeMapper.findTableIdByUserId(userId); }
-
     public User getUserById(Long userId){
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }

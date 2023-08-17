@@ -44,6 +44,7 @@ public class QnaController {
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
+    @PutMapping
     public ResponseEntity<Long> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @RequestBody QnaDto qnaDto) {
 
         Long userId = user.getUserId();
@@ -60,7 +61,7 @@ public class QnaController {
     public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,@PathVariable Long qnaId) {
 
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.getRead(qnaId));
+        return ResponseEntity.ok().body(qnaService.getRead(qnaId, userId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 삭제 성공"),
@@ -93,9 +94,9 @@ public class QnaController {
         QnaDto qnadto = qnaService.getQnaById(userId);
 
         if (userId.equals(qnadto.getUserId())) {
-            return ResponseEntity.ok().body(qnaService.getList(userId, pageRequest, qnaId));
+            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
         } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
-            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest, qnaId));
+            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
         }
         throw new ReadFailedException();
     }

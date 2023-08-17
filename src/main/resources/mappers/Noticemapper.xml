@@ -9,15 +9,15 @@
         SET is_delete = 1
     </delete>
 
-    <insert id="save" parameterType="NoticeDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO notice (created_at, is_delete, contents, is_hide, title, user_id)
-        VALUES (now(), 0, #{contents}, #{isHide}, #{title}, #{userId})
+    <insert id="save" parameterType="NoticeDto"  >
+        INSERT INTO notice (created_at,  contents,  title, user_id)
+        VALUES (now(),  #{contents},  #{title}, #{userId})
     </insert>
 
     <update id="viewCnt" parameterType="long">
         UPDATE notice
-        SET   view_cnt = view_cnt + 1
-        WHERE noitce_id = #{noitceId}
+        SET   view_count = view_count + 1
+        WHERE notice_id = #{noticeId}
     </update>
 
     <select id="pageFindById" resultType="NoticeDto">
@@ -29,7 +29,7 @@
     <select id="findById" parameterType="long" resultType="NoticeDto">
         SELECT *
         FROM notice
-        WHERE notice_id = #{noitceId}
+        WHERE notice_id = #{noticeId}
     </select>
 
     <update id="editById" parameterType="NoticeDto">
@@ -65,11 +65,16 @@
         LIMIT #{offset}, #{limit}
     </select>
 
-    <select id="findTableIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
-        SELECT table_id
-        FROM alarm
-        WHERE user_id = #{userId}
-        LIMIT #{offset}, #{pageSize}
+<!--    <select id="findTableIdByUserIds" parameterType="Long" resultType="Long">-->
+<!--        SELECT table_id-->
+<!--        FROM alarm-->
+<!--        WHERE user_id = #{userId}-->
+<!--        LIMIT #{offset}, #{pageSize}-->
+<!--    </select>-->
+
+    <select id="findAllUserIds" resultType="long">
+        SELECT user_id(*)
+          FROM user
     </select>
 
 </mapper>

@@ -1,7 +1,7 @@
 package bucheon.leafy.exception;
 
 public class WriteFailedException extends GlobalException {
-    private static final String MESSAGE = "수정이 실패했습니다.";
+    private static final String MESSAGE = "등록이 실패했습니다.";
 
     public WriteFailedException() {
         super(MESSAGE);

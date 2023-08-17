@@ -47,13 +47,13 @@ public class NoticeController {
     @Operation(summary = "Notice 게시판에 글 작성하기")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Long> write(
+    public void write(
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
             @RequestBody NoticeDto noticeDto
 
     ) {
         Long userId = authUser.getUserId();
-        return ResponseEntity.ok().body(noticeService.write(authUser,noticeDto));
+        noticeService.write(authUser,noticeDto);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 읽기  성공"),

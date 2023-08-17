@@ -39,12 +39,12 @@ public class QnaService {
 
     public Long write(QnaDto qnaDto) { return qnaMapper.save(qnaDto); }
 
-    public PageResponse admingetList(PageRequest pageRequest,Long qnaId){
+    public PageResponse admingetList(PageRequest pageRequest){
 //        qnaMapper.pageFindById(qnaId);
         return qnaMapper.adminSelectAll(pageRequest);
     }
-    public PageResponse getList(Long userId, PageRequest pageRequest, Long qnaId){
-        List<PageResponse> list = qnaMapper.pageFindById(qnaId, pageRequest);
+    public PageResponse getList(Long qnaId, Long userId, PageRequest pageRequest){
+        List<PageResponse> list = qnaMapper.pageFindById(qnaId, userId, pageRequest);
         long total = qnaMapper.count();
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
@@ -53,27 +53,24 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaDto getRead(Long qnaId) {
+    public QnaDto getRead(Long qnaId, Long userId) {
 
-        QnaDto qnaDto = qnaMapper.findById(qnaId);
+        QnaDto qnaDto = qnaMapper.findById(qnaId, userId);
 
         if (qnaDto == null) {
             throw new ReadFailedException();
         }
-
-        String msg = "답장이 완료 됬습니다.";
-
         qnaMapper.viewCnt(qnaId);
         qnaMapper.editByIdQnaStatus(qnaId);
 
-        return qnaMapper.findById(qnaId);
+        return qnaMapper.findById(qnaId, userId);
     }
     public int modify(QnaDto qnaDto,Long qnaId) {
         return qnaMapper.editById(qnaDto, qnaId);
     }
 
-    public QnaDto getQnaById(Long qnaId) {
-        return Optional.of(qnaMapper.findQnaById(qnaId)).orElseThrow(FeedNotFoundException::new);
+    public QnaDto getQnaById( Long userId) {
+        return Optional.of(qnaMapper.findQnaById(userId)).orElseThrow(FeedNotFoundException::new);
     }
 
     public User getUserById(Long userId){

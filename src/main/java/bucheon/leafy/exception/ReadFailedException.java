@@ -1,7 +1,7 @@
 package bucheon.leafy.exception;
 
 public class ReadFailedException extends GlobalException {
-    private static final String MESSAGE = "수정이 실패했습니다.";
+    private static final String MESSAGE = "불러오기가 실패했습니다.";
 
     public ReadFailedException() {
         super(MESSAGE);

@@ -11,27 +11,21 @@
     </select>
 
 
-    <delete id="deleteByQnaReplyId" parameterType="map">
-        DELETE FROM qna_reply
-               WHERE qna_reply_id = #{qnaReplyId}
-                 AND user_id = #{userId}
-    </delete>
+    <update id="deleteByQnaReplyId" parameterType="Long">
+        UPDATE qna_reply
+           SET is_delete = 1
+         WHERE qna_reply_id = #{qnaReplyId}
+           AND user_id = #{userId}
+    </update>
 
     <insert id="save" parameterType="QnaReplyDto">
         INSERT INTO qna_reply
-            ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
+            ( created_at, is_delete, comment, user_id, qna_comment_id)
              VALUES
-            ( now(), now(), false, #{comment}, #{userId}, #{qnaCommentId})
+            ( now(),  false, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
-    <select id="pageFindByQnaReplyId" parameterType="int" resultType="QnaReplyDto">
-        SELECT qna_reply_id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
-          FROM qna_reply
-         WHERE qna_reply_id = #{qnaReplyId}
-         ORDER BY created_at ASC, qna_reply_id ASC
-    </select>
-
-    <update id="editByQnaReplyId" parameterType="QnaReplyDto">
+    <update id="edit" parameterType="QnaReplyDto">
         UPDATE qna_reply
            SET user_id = #{userId}
              , modified_at = now()
