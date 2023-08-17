@@ -11,10 +11,12 @@ public class FeedImageRequest {
     @JsonIgnore
     private Long feedImageId;
     private String imageName;
+    private Integer imageHeight;
 
     @Builder
-    private FeedImageRequest(Long feedImageId, String imageName) {
+    private FeedImageRequest(Long feedImageId, String imageName, Integer imageHeight) {
         this.feedImageId = feedImageId;
         this.imageName = imageName;
+        this.imageHeight = imageHeight;
     }
 }

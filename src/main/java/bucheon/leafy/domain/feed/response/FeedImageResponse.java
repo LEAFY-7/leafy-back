@@ -10,10 +10,12 @@ public class FeedImageResponse {
     private Long feedImageId;
     private String imageName;
     private String imageUrl;
+    private Integer imageHeight;
 
     @Builder
-    public FeedImageResponse(Long feedImageId, String imageName) {
+    public FeedImageResponse(Long feedImageId, String imageName, Integer imageHeight) {
         this.feedImageId = feedImageId;
         this.imageName = imageName;
+        this.imageHeight = imageHeight;
     }
 }
