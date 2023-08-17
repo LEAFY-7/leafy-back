@@ -13,18 +13,19 @@ import java.util.Objects;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class QnaDto {
-    private Long id;
-    private Long userId;
-    private String title;
-    private String contents;
-    private Date modifiedAt;
+    private Long qnaId;
     private Date createdAt;
-    private Long viewCnt;
-    private Long commentCnt;
+    private Date modifiedAt;
+    private Boolean isDelete;
+    private String contents;
+    private String qnaStatus;
+    private String title;
+    private Long viewCount;
+    private Long userId;
 
-    public QnaDto(String title, String contents, Long userId) {
-        this.title = title;
+    public QnaDto(String contents, String title, Long userId) {
         this.contents = contents;
+        this.title = title;
         this.userId = userId;
 
     }

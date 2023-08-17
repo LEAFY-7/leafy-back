@@ -13,7 +13,7 @@ import java.util.Date;
 @EqualsAndHashCode
 public class QnaReplyDto {
 
-    private Long id;
+    private Long qnaReplyId;
     private Date createdAt;
     private Date modifiedAt;
     private boolean isDelete;
@@ -22,10 +22,14 @@ public class QnaReplyDto {
     private Long qnaCommentId;
 
 
+    public QnaReplyDto(Long qnaReplyId, String comment, Long userId) {
+        this.qnaReplyId = qnaReplyId;
+        this.comment = comment;
+        this.userId = userId;
+    }
     public QnaReplyDto( String comment, Long userId, Long qnaCommentId) {
         this.comment = comment;
         this.userId = userId;
         this.qnaCommentId = qnaCommentId;
-
     }
 }

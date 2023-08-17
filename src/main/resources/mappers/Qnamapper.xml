@@ -5,13 +5,18 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
-    <delete id="deleteById" parameterType="map" >
+    <select id="count" parameterType="int" resultType="int">
+        SELECT count(*)
+          FROM qna
+    </select>
+
+    <update id="deleteById" parameterType="long" >
         UPDATE qna
         SET is_delete = 1
         WHERE qna_id = #{qnaId}
-    </delete>
+    </update>
 
-    <insert id="save" parameterType="QnaDto" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="QnaDto">
         INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
         VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
     </insert>
@@ -26,27 +31,31 @@
     </select>
 
     <select id="findQnaById" parameterType="Long" resultType="QnaDto" >
-        select * from qna where qna_id = #{qndId} and is_delete = false
+        select *
+          from qna
+         where qna_id = #{qndId}
+           and is_delete = false
     </select>
 
     <update id="viewCnt" parameterType="long">
         UPDATE qna
-        SET   view_cnt = view_cnt + 1
+        SET   view_count = view_count + 1
         WHERE qna_id = #{qnaId}
     </update>
 
     <update id="editById">
         UPDATE qna
-        SET   title = #{title}
-          , contents = #{contents}
+        SET contents    = #{qnaDto.contents}
+          , title       = #{qnaDto.title}
           , modified_at = now()
-          , user_id = #{userId}
-        WHERE qna_id = #{qnaId}
+          , user_id     = #{qnaDto.userId}
+        WHERE qna_id      = #{qnaId}
     </update>
+
 
     <update id="editByIdQnaStatus" parameterType="QnaDto">
         UPDATE qna
-        SET   qna_status = 1
+        SET   qna_status = "답변 완료"
         WHERE  qna_id = #{qnaId}
     </update>
 

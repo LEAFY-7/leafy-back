@@ -235,4 +235,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(404).body(response);
     }
 
+    @ExceptionHandler(ReadFailedException.class)
+    public ResponseEntity<ExceptionResponse> ReadFailedException(ReadFailedException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(404))
+                .message("불러오기가 실패했습니다.")
+                .build();
+
+        return ResponseEntity.status(404).body(response);
+    }
+
 }

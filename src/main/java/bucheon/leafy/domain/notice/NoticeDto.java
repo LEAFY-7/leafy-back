@@ -12,13 +12,21 @@ import java.util.Objects;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class NoticeDto {
-    private Long id;
-    private Date created_At;
-    private Date modified_At;
-    private Integer id_delete;
+    private Long noticeId;
+    private Date createdAt;
+    private Date modifiedAt;
+    private Boolean isDelete;
     private String contents;
-    private Boolean is_hide;
+    private Boolean isHide;
     private String title;
-    private Integer userId;
+    private Boolean viewCount;
+    private Long userId;
+
+    public NoticeDto(String contents, String title, Long userId) {
+        this.contents = contents;
+        this.title = title;
+        this.userId = userId;
+    }
+
 
 }
