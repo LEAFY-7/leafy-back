@@ -4,17 +4,12 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
 
-    <select id="count" parameterType="int" resultType="int">
-        SELECT count(*)
-          FROM qna_comment
-    </select>
-
-    <delete id="deleteByQnaCommentId" parameterType="map">
-        DELETE
-          FROM qna_comment
+    <update id="deleteByQnaCommentId" parameterType="Long">
+        UPDATE  qna_comment
+           SET is_delete = 1
          WHERE qna_comment_id = #{qnaCommentId}
            AND user_id = #{userId}
-    </delete>
+    </update>
 
     <insert id="save" parameterType="QnaCommentDto">
         INSERT INTO qna_comment
@@ -22,17 +17,6 @@
         VALUES
             (now(), 0, #{comment}, #{userId}, #{qnaId})
     </insert>
-
-    <select id="selectAll" resultType="QnaCommentDto">
-        SELECT qna_comment_id, created_at, modified_at, is_delete, comment, user_id, qna_id
-        FROM qna_comment
-    </select>
-
-    <select id="pageFindByQnaCommentId" parameterType="long" resultType="QnaCommentDto">
-        SELECT *
-        FROM qna_comment
-        WHERE qna_comment_id = #{qnaCommentId}
-    </select>
 
     <update id="editByQnaCommentId" parameterType="QnaCommentDto">
         UPDATE qna_comment
@@ -42,8 +26,4 @@
           AND user_id = #{userId}
     </update>
 
-    <select id="selectId" parameterType="long" resultType="QnaCommentDto">
-        SELECT qna_comment_id
-        FROM qna_comment
-    </select>
 </mapper>

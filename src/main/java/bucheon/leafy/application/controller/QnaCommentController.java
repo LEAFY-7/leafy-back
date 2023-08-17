@@ -45,7 +45,6 @@ public class QnaCommentController {
     @PostMapping("/comments/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void write(@AuthenticationPrincipal AuthUser user,
-                      @PathVariable("id") Long id,
                       @RequestBody QnaCommentDto qnaCommentDto) {
 
         Long userId = user.getUserId();
@@ -63,9 +62,9 @@ public class QnaCommentController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void remove(@AuthenticationPrincipal AuthUser user,
-                       @PathVariable("id") Long id) {
+                       @PathVariable("qnaCommentId") Long qnaCommentId) {
 
         Long userId = user.getUserId();
-        qnacommentService.remove(id, userId);
+        qnacommentService.remove(qnaCommentId, userId);
     }
 }
