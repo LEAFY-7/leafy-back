@@ -1,6 +1,6 @@
 package bucheon.leafy.exception.controller;
 
-import bucheon.leafy.application.service.SlackService;
+import bucheon.leafy.slack.SlackApi;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.dto.ExceptionResponse;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -22,11 +22,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ControllerAdvisor {
 
-    private final SlackService slackService;
+    private final SlackApi slackApi;
 
     @ExceptionHandler(Exception.class)
     public void SlackErrorMessage(Exception e){
-        slackService.sendErrorForSlack(e);
+        slackApi.sendErrorForSlack(e);
     }
 
     @ExceptionHandler(PasswordNotMatchedException.class)
