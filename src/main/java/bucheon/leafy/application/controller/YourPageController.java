@@ -25,7 +25,7 @@ import java.util.List;
 
 @Tag(name = "상대방 회원정보")
 @RestController
-@RequestMapping("/api/v1/users/your-page")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class YourPageController {
 
