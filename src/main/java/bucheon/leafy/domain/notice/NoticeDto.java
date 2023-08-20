@@ -19,7 +19,7 @@ public class NoticeDto {
     private String contents;
     private Boolean isHide;
     private String title;
-    private Boolean viewCount;
+    private Long viewCount;
     private Long userId;
 
     public NoticeDto(String contents, String title, Long userId) {

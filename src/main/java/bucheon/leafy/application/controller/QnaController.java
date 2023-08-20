@@ -87,7 +87,7 @@ public class QnaController {
     })
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping("/list")
+    @GetMapping("{qnaId}")
     public ResponseEntity<PageResponse> list(@PathVariable Long qnaId,
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
              PageRequest pageRequest) {
@@ -101,18 +101,5 @@ public class QnaController {
             return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
         }
         throw new ReadFailedException();
-    }
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Qna Get Me 성공"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
-            @ApiResponse(responseCode = "500", description = "Qna Get Me 실패")
-    })
-    @Operation(summary = "Get Me")
-    @GetMapping
-    public ResponseEntity<GetMeResponse> authorize(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
-
-        Long userId = authUser.getUserId();
-        GetMeResponse getMe = qnaService.getMe(userId);
-        return ResponseEntity.ok().body(getMe);
     }
 }

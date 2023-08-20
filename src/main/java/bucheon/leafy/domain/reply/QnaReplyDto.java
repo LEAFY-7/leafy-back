@@ -16,7 +16,7 @@ public class QnaReplyDto {
     private Long qnaReplyId;
     private Date createdAt;
     private Date modifiedAt;
-    private boolean isDelete;
+    private Boolean isDelete;
     private String comment;
     private Long userId;
     private Long qnaCommentId;

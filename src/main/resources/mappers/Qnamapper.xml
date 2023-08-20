@@ -17,8 +17,8 @@
     </update>
 
     <insert id="save" parameterType="QnaDto">
-        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, user_id)
-        VALUES (now(), 0, #{contents}, 0,  #{title}, #{userId})
+        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, view_count, user_id)
+        VALUES (now(), 0, #{contents}, 0,  #{title}, 0, #{userId})
     </insert>
 
     <select id="findById" parameterType="long" resultType="QnaDto">

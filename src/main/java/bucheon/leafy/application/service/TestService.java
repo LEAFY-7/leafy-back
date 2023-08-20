@@ -59,7 +59,7 @@ public class TestService {
                 fileNames.add(fileName);
             }
 
-            feed.addFeedImages(fileNames);
+//            feed.addFeedImages(fileNames);
 
             User randomUser = users.get((int) (Math.random() * users.size()));
             randomUser.getFeeds().add(feed);
