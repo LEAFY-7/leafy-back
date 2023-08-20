@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+import static bucheon.leafy.domain.user.UserRole.ADMIN;
 import static bucheon.leafy.path.S3Path.*;
 
 @Data
@@ -28,7 +29,7 @@ public class UserResponse {
 
     private String backgroundImage;
 
-    private String simpleIntroduction;
+    private String introduction;
 
     private String zoneCode;
 
@@ -39,15 +40,16 @@ public class UserResponse {
     private String roadAddress;
 
     private String detailAddress;
+    private Boolean isAdmin;
 
 
     @Builder
     public UserResponse(String email, Gender gender, LocalDate birthDay,
                         String name, String nickName, String phone,
                         String profileImage, String backgroundImage,
-                        String simpleIntroduction, String zoneCode,
-                        String address, String jibunAddress,
-                        String roadAddress, String detailAddress) {
+                        String introduction, String zoneCode,
+                        String address, String jibunAddress, String roadAddress,
+                        String detailAddress, Boolean isAdmin) {
 
         this.email = email;
         this.gender = gender;
@@ -57,12 +59,13 @@ public class UserResponse {
         this.phone = phone;
         this.profileImage = profileImage;
         this.backgroundImage = backgroundImage;
-        this.simpleIntroduction = simpleIntroduction;
+        this.introduction = introduction;
         this.zoneCode = zoneCode;
         this.address = address;
         this.jibunAddress = jibunAddress;
         this.roadAddress = roadAddress;
         this.detailAddress = detailAddress;
+        this.isAdmin = isAdmin;
     }
 
     public static UserResponse of(User user) {
@@ -79,12 +82,15 @@ public class UserResponse {
                 .backgroundImage(
                         user.getUserBackgroundImage() != null ? ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + user.getUserBackgroundImage().getImage() : ""
                 )
-                .simpleIntroduction(user.getSimpleIntroduction())
+                .introduction(user.getIntroduction())
                 .zoneCode(user.getAddress().getDetailAddress())
                 .address(user.getAddress().getAddress())
                 .jibunAddress(user.getAddress().getJibunAddress())
                 .roadAddress(user.getAddress().getRoadAddress())
                 .detailAddress(user.getAddress().getDetailAddress())
+                .isAdmin(
+                        user.getUserRole().equals(ADMIN) ? true : false
+                )
                 .build();
     }
 
