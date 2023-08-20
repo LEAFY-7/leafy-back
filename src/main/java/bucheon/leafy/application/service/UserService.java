@@ -77,7 +77,7 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
-        User saveUser = userRepository.save(user);
+        userRepository.save(user);
     }
 
     public CertificationNumberResponse sendCertificationNumber(String email) {

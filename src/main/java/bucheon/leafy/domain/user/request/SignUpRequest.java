@@ -47,7 +47,7 @@ public class SignUpRequest {
 
         @NotBlank(message = "간단 소개를 입력해주세요")
         @Schema(description = "간단 소개", example = "리피입니다.")
-        private String simpleIntroduction;
+        private String introduction;
 
         @NotNull(message = "생일을 입력해주세요")
         @Schema(description = "생년월일", example = "1999-02-11")
@@ -79,7 +79,7 @@ public class SignUpRequest {
 
         @Builder
         private SignUpRequest(String password, String confirmPassword, String email, String nickName,
-                              String name, String simpleIntroduction, String phone, String zoneCode,
+                              String name, String introduction, String phone, String zoneCode,
                               String address, String jibunAddress, String roadAddress, String detailAddress,
                               Boolean addressIsHide, LocalDate birthDay, Gender gender) {
 
@@ -88,7 +88,7 @@ public class SignUpRequest {
                 this.email = email;
                 this.nickName = nickName;
                 this.name = name;
-                this.simpleIntroduction = simpleIntroduction;
+                this.introduction = introduction;
                 this.phone = phone;
                 this.zoneCode = zoneCode;
                 this.address = address;

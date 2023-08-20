@@ -43,7 +43,7 @@ class UserControllerTest {
                 .email("abcd1234@gmail.com")
                 .name("김찬우")
                 .nickName("chanU kim")
-                .simpleIntroduction("안녕!~!")
+                .introduction("안녕!~!")
                 .phone("01012345678")
                 .birthDay(LocalDate.now())
                 .gender(Gender.MALE)
