@@ -13,9 +13,9 @@
 
     <insert id="save" parameterType="QnaCommentDto">
         INSERT INTO qna_comment
-            ( created_at, is_delete, comment, user_id, qna_id)
+            ( created_at, is_delete, comment, user_id, qna_id, )
         VALUES
-            (now(), 0, #{comment}, #{userId}, #{qnaId})
+            (now(), 0, #{comment}, #{userId}, #{qnaId}, )
     </insert>
 
     <update id="editByQnaCommentId" parameterType="QnaCommentDto">

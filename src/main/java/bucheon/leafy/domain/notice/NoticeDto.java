@@ -13,13 +13,8 @@ import java.util.Objects;
 @EqualsAndHashCode
 public class NoticeDto {
     private Long noticeId;
-    private Date createdAt;
-    private Date modifiedAt;
-    private Boolean isDelete;
     private String contents;
-    private Boolean isHide;
     private String title;
-    private Long viewCount;
     private Long userId;
 
     public NoticeDto(String contents, String title, Long userId) {
