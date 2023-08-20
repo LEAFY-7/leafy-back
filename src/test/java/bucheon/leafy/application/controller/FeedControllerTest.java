@@ -7,8 +7,11 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.config.AuthUserDetailService;
+import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedType;
+import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
+import bucheon.leafy.domain.feed.request.FeedTagRequest;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
@@ -26,6 +29,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 public class FeedControllerTest {
     @Autowired
@@ -73,8 +84,9 @@ public class FeedControllerTest {
                 .userImage(image)
                 .email("email@email.com")
                 .phone("01012341234")
+                .name("전혜진")
                 .nickName("별명")
-                .password("비밀번호")
+                .password("Abcd1234!")
                 .userRole(UserRole.MEMBER)
                 .build();
 
@@ -95,8 +107,13 @@ public class FeedControllerTest {
         AuthUser authUser = (AuthUser) authUserDetailService.loadUserByUsername("email@email.com");
         Authentication authentication = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        List<FeedTagRequest> feedTagRequestList = new ArrayList<>();
+        List<FeedImageRequest> feedImageRequestList = new ArrayList<>();
+        FeedTagRequest feedTagRequest = FeedTagRequest.builder().tag("새태그").build();
+        FeedImageRequest feedImageRequest = FeedImageRequest.builder().imageName("새이미지").imageHeight(339).build();
 
-        FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC).build();
+        FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC)
+                .tagList(feedTagRequestList).imageList((List<MultipartFile>) feedImageRequest).build();
 
         ResultActions result = mockMvc.perform(post("/api/v1/feeds")
                         .content(objectMapper.writeValueAsString(feedRequest))
