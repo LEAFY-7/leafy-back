@@ -4,6 +4,7 @@ import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.qna.QnaDto;
+import bucheon.leafy.domain.search.response.SearchResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.FeedNotFoundException;
@@ -40,8 +41,10 @@ public class QnaService {
     public Long write(QnaDto qnaDto) { return qnaMapper.save(qnaDto); }
 
     public PageResponse admingetList(PageRequest pageRequest){
-//        qnaMapper.pageFindById(qnaId);
-        return qnaMapper.adminSelectAll(pageRequest);
+        List<PageResponse> list = qnaMapper.adminSelectAll(pageRequest);
+        long total = qnaMapper.count();
+        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
+        return pageResponse;
     }
     public PageResponse getList(Long qnaId, Long userId, PageRequest pageRequest){
         List<PageResponse> list = qnaMapper.pageFindById(qnaId, userId, pageRequest);
@@ -69,8 +72,8 @@ public class QnaService {
         return qnaMapper.editById(qnaDto, qnaId);
     }
 
-    public QnaDto getQnaById( Long userId) {
-        return Optional.of(qnaMapper.findQnaById(userId)).orElseThrow(FeedNotFoundException::new);
+    public Long getQnaById( Long qnaId) {
+        return Optional.of(qnaMapper.findQnaById(qnaId)).orElseThrow(FeedNotFoundException::new);
     }
 
     public User getUserById(Long userId){

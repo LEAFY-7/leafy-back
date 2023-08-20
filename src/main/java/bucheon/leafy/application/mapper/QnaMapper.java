@@ -15,10 +15,10 @@ public interface QnaMapper {
     QnaDto findById(@Param("qnaId")Long qnaId, @Param("userId")Long userId);   //클릭해서 읽기(select)
     boolean deleteById(Long qnaId);  //삭제
     Long save(QnaDto qnaDto);   //저장
-    int editById(QnaDto qnaDto, Long qnaId);//수정
-    QnaDto findQnaById(Long qnaId); //qnaId가지고 오기
+    int editById(@Param("qnaDto")QnaDto qnaDto, @Param("qnaId")Long qnaId);//수정
+    Long findQnaById(Long qnaId); //qnaId가지고 오기
     int editByIdQnaStatus(Long qnaId);//상태 변경
-    PageResponse adminSelectAll(PageRequest pageRequest);   //관리자리스트
+    List<PageResponse> adminSelectAll(@Param("pageRequest")PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("qnaId")Long qnaId, @Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
     int viewCnt(Long qnaId);
 }

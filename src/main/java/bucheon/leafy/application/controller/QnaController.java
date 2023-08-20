@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/v1/Qna")
@@ -86,14 +88,14 @@ public class QnaController {
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<PageResponse> list(
+    public ResponseEntity<PageResponse> list(@PathVariable Long qnaId,
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-            @PathVariable Long qnaId, PageRequest pageRequest) {
+             PageRequest pageRequest) {
 
         Long userId = user.getUserId();
-        QnaDto qnadto = qnaService.getQnaById(userId);
+        Long qnaUserId = qnaService.getQnaById(qnaId);
 
-        if (userId.equals(qnadto.getUserId())) {
+        if (userId.equals(qnaUserId)) {
             return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
         } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
             return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));

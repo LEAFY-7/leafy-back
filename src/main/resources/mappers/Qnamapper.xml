@@ -22,16 +22,19 @@
     </insert>
 
     <select id="findById" parameterType="long" resultType="QnaDto">
-        SELECT q.*, qc.qna_comment_id, qc.qna_comment,
-        qr.qna_reply_id, qr.qna_reply_comment
+        SELECT
+        q.*,
+        qc.qna_comment_id AS qnaCommentId,
+        qc.comment AS comment,
+        (SELECT COUNT(qr.qna_comment_id) FROM qna_reply qr WHERE qr.qna_comment_id = qc.qna_comment_id) AS qnaReplyCount
         FROM qna q
         LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
-        LEFT JOIN qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
-        WHERE q.qna_id = #{qnaId} AND q.user_id = #{userId}
+        WHERE q.qna_id = #{qnaId}
+        LIMIT 1
     </select>
 
-    <select id="findQnaById" parameterType="Long" resultType="QnaDto" >
-        select *
+    <select id="findQnaById" parameterType="Long" resultType="Long" >
+        select user_id
           from qna
          where qna_id = #{qndId}
            and is_delete = false
@@ -43,12 +46,12 @@
         WHERE qna_id = #{qnaId}
     </update>
 
-    <update id="editById">
+    <update id="editById" parameterType="QnaDto">
         UPDATE qna
-        SET contents    = #{qnaDto.contents}
-          , title       = #{qnaDto.title}
+        SET contents    = #{contents}
+          , title       = #{title}
           , modified_at = now()
-          , user_id     = #{qnaDto.userId}
+          , user_id     = #{userId}
         WHERE qna_id      = #{qnaId}
     </update>
 
@@ -59,19 +62,26 @@
         WHERE  qna_id = #{qnaId}
     </update>
 
-    <select id="pageFindById" resultType="QnaDto">
+    <select id="pageFindById" parameterType="PageRequest" resultType="PageResponse">
         SELECT *
         FROM qna
         WHERE qna_id = #{qnaId}
-        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+          AND user_id #{userId}
+        <if test="pageRequest.sortColumn != null and pageRequest.sortStatus != null">
+            ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
+        </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
 
-    <select id="adminSelectAll" resultType="QnaDto">
+    <select id="adminSelectAll" parameterType="PageRequest" resultType="PageResponse">
         SELECT *
         FROM qna
-        ORDER BY created_at DESC, qna_id DESC
+        <if test="pageRequest.sortColumn != null and pageRequest.sortStatus != null">
+            ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
+        </if>
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
     </select>
 
 </mapper>
