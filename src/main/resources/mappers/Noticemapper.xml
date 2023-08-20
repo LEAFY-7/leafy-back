@@ -16,7 +16,7 @@
     </update>
 
     <insert id="save" parameterType="NoticeDto"  >
-        INSERT INTO notice (created_at, id_delete ,contents,  is_hide, title, view_count, user_id)
+        INSERT INTO notice (created_at, is_delete ,contents,  is_hide, title, view_count, user_id)
         VALUES (now(),0,  #{contents}, 0, #{title}, 0, #{userId})
     </insert>
 
