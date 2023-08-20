@@ -4,6 +4,7 @@ import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.qna.QnaDto;
+import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.domain.search.response.SearchResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;

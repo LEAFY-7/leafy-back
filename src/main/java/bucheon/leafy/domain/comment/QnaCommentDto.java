@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.comment;
 
+import bucheon.leafy.domain.qna.QnaStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,6 @@ import java.util.Date;
 public class QnaCommentDto {
 
     private Long qnaCommentId;
-    private Date createdAt;
-    private Date modifiedAt;
-    private Boolean isDelete;
     private String comment;
     private Long userId;
     private Long qnaId;

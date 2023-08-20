@@ -14,9 +14,6 @@ import java.util.Date;
 public class QnaReplyDto {
 
     private Long qnaReplyId;
-    private Date createdAt;
-    private Date modifiedAt;
-    private Boolean isDelete;
     private String comment;
     private Long userId;
     private Long qnaCommentId;

@@ -3,6 +3,7 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.qna.QnaDto;
 
+import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.util.SortStatus;
 import bucheon.leafy.util.request.PageRequest;
 import org.junit.jupiter.api.Test;
