@@ -53,7 +53,7 @@ public class NoticeController {
 
     ) {
         Long userId = authUser.getUserId();
-        noticeService.write(authUser,noticeDto);
+        noticeService.write(userId,noticeDto);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 읽기  성공"),
@@ -61,7 +61,7 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판 클릭 글 읽기")
     @GetMapping("/{noticeId}")
-    public ResponseEntity<Object> read( @PathVariable Long noticeId) {
+    public ResponseEntity<Object> read( @PathVariable("noticeId")  Long noticeId) {
         return ResponseEntity.ok().body(noticeService.getRead(noticeId));
     }
     @ApiResponses({
@@ -70,7 +70,7 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
     @GetMapping
-    public ResponseEntity<List<PageResponse>> list(PageRequest pageRequest) {
+    public ResponseEntity<PageResponse> list(PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
     }
 
@@ -82,8 +82,9 @@ public class NoticeController {
     @Operation(summary = "Notice 게시판 글 삭제하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @DeleteMapping("/{noticeId}")
-    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-            @PathVariable("noticeId") Long noticeId) {
+    public ResponseEntity<Object> remove(@PathVariable("noticeId") Long noticeId,
+                                         @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser
+            ) {
         Long userId = authUser.getUserId();
         //모든관리자가 삭제할수있을려면 userId로 하면 x
         return ResponseEntity.ok().body(noticeService.remove(noticeId));

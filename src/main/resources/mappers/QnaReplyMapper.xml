@@ -10,7 +10,6 @@
          WHERE qna_reply_id = #{qnaReplyId}
     </select>
 
-
     <update id="deleteByQnaReplyId" parameterType="Long">
         UPDATE qna_reply
            SET is_delete = 1
@@ -32,4 +31,12 @@
          WHERE qna_reply_id = #{qnaReplyId}
            AND user_id = #{userId}
     </update>
+
+    <select id="pageFindById" resultType="QnaReplyDto">
+        SELECT comment, user_id
+        FROM qna_reply_id
+        ORDER BY created_at
+         WHERE qna_comment_id =#{qnaCommentId}
+    </select>
+
 </mapper>

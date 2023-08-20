@@ -30,18 +30,15 @@ public class NoticeService {
     private final AlarmMapper alarmMapper;
 
 
-    public int remove(Long id) {
-        if (noticeMapper.deleteById(id) != 1) {
+    public int remove(Long noticeId) {
+        if (noticeMapper.deleteById(noticeId) != 1) {
             throw new RemoveFailedException();
         }
-        return noticeMapper.deleteById(id);
+        return noticeMapper.deleteById(noticeId);
     }
 
 
-    public void write(AuthUser authUser, NoticeDto noticeDto)  {
-
-        Long userId = authUser.getUserId();
-
+    public void write(Long userId, NoticeDto noticeDto)  {
 
         // 공지 저장
         if (noticeMapper.save(noticeDto) != 1) {
@@ -57,18 +54,24 @@ public class NoticeService {
         }
     }
 
-    public List<PageResponse> getList(PageRequest pageRequest)  {
-        return noticeMapper.pageFindById(pageRequest); }
+    public PageResponse getList(PageRequest pageRequest)  {
+
+        List<PageResponse> list = noticeMapper.pageFindById(pageRequest);
+        long total = noticeMapper.count();
+        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
+
+        return pageResponse;
+    }
 
     @Transactional
-    public NoticeDto getRead(Long id) {
+    public NoticeDto getRead(Long noticeId) {
 
-        if (noticeMapper.findById(id) == null) {
+        if (noticeMapper.findById(noticeId) == null) {
             throw new ReadFailedException();
         }
-        noticeMapper.viewCnt(id);
+        noticeMapper.viewCnt(noticeId);
 
-        return noticeMapper.findById(id);
+        return noticeMapper.findById(noticeId);
     }
     public NoticeDto modify(NoticeDto noticeDto)  {
 

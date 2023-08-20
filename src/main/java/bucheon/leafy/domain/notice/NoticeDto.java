@@ -28,5 +28,11 @@ public class NoticeDto {
         this.userId = userId;
     }
 
+    public NoticeDto(Long noticeId, String contents, String title){
+        this.noticeId = noticeId;
+        this.contents = contents;
+        this.title = title;
+    }
+
 
 }

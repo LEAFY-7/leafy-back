@@ -3,6 +3,7 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.qna.QnaDto;
 
+import bucheon.leafy.util.SortStatus;
 import bucheon.leafy.util.request.PageRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,9 @@ import static bucheon.leafy.util.SortStatus.DESC;
 
 @SpringBootTest
 class QnaMapperTest {
+
     @Autowired
     QnaMapper qnaMapper;
-
 
     @Test
     void save() {
@@ -31,7 +32,12 @@ class QnaMapperTest {
 
     @Test
     void findById() {
-        qnaMapper.findById(1L,1111L);
+        QnaDto qnaDto = qnaMapper.findById(1L, 11111L);
+        if (qnaDto != null) {
+            System.out.println("Found QnaDto: " + qnaDto);
+        } else {
+            System.out.println("QnaDto not found.");
+        }
     }
 
     @Test
@@ -57,11 +63,15 @@ class QnaMapperTest {
 
     @Test
     void adminSelectAll() {
-        qnaMapper.adminSelectAll(new PageRequest(10,10,10L,"오름차순" , DESC));
+        PageRequest pageRequest = new PageRequest(10, 10, 10L, null, null);
+        System.out.println("답" + pageRequest);
+        qnaMapper.adminSelectAll(pageRequest);
     }
 
     @Test
     void pageFindById() {
+        PageRequest pageRequest = new PageRequest(10, 10, 10L, null, null);
+        qnaMapper.pageFindById(1L,11111L, pageRequest);
     }
 
     @Test
