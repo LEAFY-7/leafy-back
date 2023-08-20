@@ -59,7 +59,9 @@ public class FeedController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                         @ModelAttribute FeedRequest request) throws IOException {
+                                         @RequestBody FeedRequest request) throws IOException {
+        System.out.println("user = " + user);
+        System.out.println("request = " + request);
         Long userId = user.getUserId();
         service.saveFeed(userId, request);
     }
