@@ -3,7 +3,6 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.application.service.QnaService;
 import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
@@ -17,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 
 @RestController
@@ -59,7 +58,7 @@ public class QnaController {
     })
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @GetMapping("/{qnaId}")
+    @GetMapping("/read/{qnaId}")
     public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,@PathVariable Long qnaId) {
 
         Long userId = user.getUserId();
@@ -87,7 +86,7 @@ public class QnaController {
     })
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping("{qnaId}")
+    @GetMapping("/list/{qnaId}")
     public ResponseEntity<PageResponse> list(@PathVariable Long qnaId,
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
              PageRequest pageRequest) {
