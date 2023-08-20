@@ -8,7 +8,6 @@ import bucheon.leafy.application.mapper.FeedTagMapper;
 import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.alarm.response.AlarmResponse;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
@@ -77,7 +76,7 @@ public class FeedService {
 
     // 피드 상세 조회
     public FeedByIdResponse getFeedById(Long feedId) {
-        FeedByIdResponse response =  FeedByIdResponse.builder()
+        FeedByIdResponse response = FeedByIdResponse.builder()
                 .feedResponse(Optional.of(feedMapper.findFeedById(feedId)).orElseThrow(FeedNotFoundException::new))
                 .tagResponseList(findTagList(feedId))
                 .feedImageResponseList(getFeedImages(feedId)).build();

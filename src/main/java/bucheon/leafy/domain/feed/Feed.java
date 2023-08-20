@@ -89,9 +89,15 @@ public class Feed extends BaseDeleteEntity {
     }
 
     public void addFeedImages(List<String> imageNames, List<Integer> imageHeights){
-        List<FeedImage> feedImages = IntStream.range(0, Math.min(imageNames.size(), imageHeights.size()))
-                .mapToObj(i -> FeedImage.of(imageNames.get(i), imageHeights.get(i)))
-                .collect(Collectors.toList());
+        if (imageNames.size() != imageHeights.size()) {
+            throw new RuntimeException();
+        }
+
+        List<FeedImage> feedImages = new ArrayList<>();
+        for (int i = 0; i < imageNames.size(); i++) {
+            FeedImage feedImage = FeedImage.of(imageNames.get(i), imageHeights.get(i));
+            feedImages.add(feedImage);
+        }
 
         this.feedImages = feedImages;
     }

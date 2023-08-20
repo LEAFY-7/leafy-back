@@ -1,4 +1,4 @@
-package bucheon.leafy.application.service;
+package bucheon.leafy.slack;
 
 import com.slack.api.Slack;
 import com.slack.api.webhook.Payload;
@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SlackService {
+public class SlackApi {
 
     @Value("${notification.slack.webhook.url}")
     private String slackWebhookUrl;

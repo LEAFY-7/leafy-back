@@ -36,22 +36,32 @@ public class PageResponse <T> {
     }
 
     public static <T> PageResponse of(PageRequest pageRequest, List<T> body, Long total){
+        if (total == 0){
+            return PageResponse.<T>builder()
+                    .pageRequest(pageRequest)
+                    .body(body)
+                    .total(total)
+                    .totalPage(1)
+                    .isFirst(true)
+                    .isLast(true)
+                    .build();
 
-        Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
-        totalPage = total % Long.valueOf(pageRequest.limit) == 0 ? totalPage : totalPage + 1;
-        boolean isFirst = pageRequest.getPage() == 1;
-        boolean isLast = pageRequest.getPage() == totalPage;
+        } else {
+            Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
+            totalPage = total % Long.valueOf(pageRequest.limit) == 0 ? totalPage : totalPage + 1;
+            boolean isFirst = pageRequest.getPage() == 1;
+            boolean isLast = pageRequest.getPage() == totalPage;
 
-        return PageResponse.<T>builder()
-                .pageRequest(pageRequest)
-                .body(body)
-                .total(total)
-                .totalPage(totalPage.intValue())
-                .isFirst(isFirst)
-                .isLast(isLast)
-                .build();
+            return PageResponse.<T>builder()
+                    .pageRequest(pageRequest)
+                    .body(body)
+                    .total(total)
+                    .totalPage(totalPage.intValue())
+                    .isFirst(isFirst)
+                    .isLast(isLast)
+                    .build();
+        }
+
     }
-
-
 
 }
