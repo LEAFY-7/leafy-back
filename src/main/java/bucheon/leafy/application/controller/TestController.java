@@ -27,7 +27,6 @@ public class TestController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void letsGo(@RequestPart List<MultipartFile> files) {
-        testService.createDummyFeed(files);
         try {
             testService.createDummyFeed(files);
         } catch (IOException e) {
