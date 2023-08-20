@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,6 +33,7 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판 글 수정하기")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{noticeId}")
     public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
             @RequestBody NoticeDto noticeDto) {
@@ -46,6 +48,7 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판에 글 작성하기")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping
     public void write(
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
@@ -60,6 +63,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "500", description = "Notice 글 읽기 실패")
     })
     @Operation(summary = "Notice 게시판 클릭 글 읽기")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/{noticeId}")
     public ResponseEntity<Object> read( @PathVariable("noticeId")  Long noticeId) {
         return ResponseEntity.ok().body(noticeService.getRead(noticeId));
@@ -69,6 +73,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
     })
     @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
     public ResponseEntity<PageResponse> list(PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
@@ -81,6 +86,7 @@ public class NoticeController {
     })
     @Operation(summary = "Notice 게시판 글 삭제하기")
     @PreAuthorize("hasAnyRole('MEMBER')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<Object> remove(@PathVariable("noticeId") Long noticeId,
                                          @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser
@@ -88,17 +94,5 @@ public class NoticeController {
         Long userId = authUser.getUserId();
         //모든관리자가 삭제할수있을려면 userId로 하면 x
         return ResponseEntity.ok().body(noticeService.remove(noticeId));
-    }
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Notice Get Me 성공"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
-            @ApiResponse(responseCode = "500", description = "Notice Get Me 실패")
-    })
-    @Operation(summary = "Get Me")
-    @GetMapping("/me") // 엔드포인트를 /v1/me로 수정합니다.
-    public ResponseEntity<GetMeResponse> authorize(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
-        Long userId = authUser.getUserId();
-        GetMeResponse getMe = noticeService.getMe(userId);
-        return ResponseEntity.ok().body(getMe);
     }
 }
