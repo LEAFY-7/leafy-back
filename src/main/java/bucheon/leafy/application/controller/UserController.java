@@ -5,6 +5,7 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.jwt.JwtFilter;
@@ -124,6 +125,15 @@ public class UserController {
         Long userId = authUser.getUserId();
         GetMeResponse getMe = userService.getMe(userId);
         return ResponseEntity.ok().body(getMe);
+    }
+
+    @ApiResponse(responseCode = "200", description = "수정 성공")
+    @Operation(summary = "회원 정보 수정")
+    @PutMapping
+    public void editUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                  @RequestBody UserRequest userRequest) {
+        Long userId = authUser.getUserId();
+        userService.updateUser(userId, userRequest);
     }
 
     @ApiResponses({
