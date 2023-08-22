@@ -13,7 +13,7 @@ public interface SearchMapper {
 
     List<SearchResponse> findSearchByPumName(String searchName, PageRequest pageRequest);
 
-    int SaveSearch(LeafyApiDto req);
+    int saveSearch(List<LeafyApiDto> request);
 
     int deleteSearch();
 
