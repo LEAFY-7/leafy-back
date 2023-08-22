@@ -27,7 +27,7 @@ public class SearchService {
     }
 
     @Transactional
-    public int SaveSearch(LeafyApiDto req){return searchMapper.SaveSearch(req);}
+    public int saveSearch(List<LeafyApiDto> request){return searchMapper.saveSearch(request);}
 
     @Transactional
     public int deleteSearch() {return searchMapper.deleteSearch();}

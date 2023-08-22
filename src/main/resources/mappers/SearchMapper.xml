@@ -13,9 +13,13 @@
         offset #{pageRequest.offset}
     </select>
 
-    <insert id="SaveSearch" parameterType="bucheon.leafy.domain.leafyapi.LeafyApiDto">
+    <insert id="saveSearch" parameterType="java.util.List">
         insert into search(avg_amt, flower_gubn, good_name, lv, max_amt, min_amt, pum_name, sale_date, created_at, modified_at)
-        values (#{avgAmt}, #{flowerGubn}, #{goodName}, #{lv}, #{maxAmt}, #{minAmt}, #{pumName}, #{saleDate}, sysdate(), sysdate())
+        values
+        <foreach collection="request" item="request" separator=",">
+            (#{request.avgAmt}, #{request.flowerGubn}, #{request.goodName}, #{request.lv}, #{request.maxAmt},
+             #{request.minAmt}, #{request.pumName}, #{request.saleDate}, sysdate(), sysdate())
+        </foreach>
     </insert>
 
     <delete id="deleteSearch">

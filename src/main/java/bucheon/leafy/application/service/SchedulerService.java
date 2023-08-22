@@ -27,9 +27,7 @@ public class SchedulerService {
         for (int i=1; i < 5; i++){
             List<LeafyApiDto> leafyApiDtoList = leafyApiService.getSearchList(Integer.toString(i));
             if(!(leafyApiDtoList == null) && !leafyApiDtoList.isEmpty()){
-                for(LeafyApiDto leafyApiDto: leafyApiDtoList){
-                    searchService.SaveSearch(leafyApiDto);
-                }
+                searchService.saveSearch(leafyApiDtoList);
             }
         }
     }
