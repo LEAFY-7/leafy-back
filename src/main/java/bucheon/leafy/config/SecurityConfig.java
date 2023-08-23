@@ -54,9 +54,6 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/feeds/**").permitAll()
                 .antMatchers("/api/v1/main").permitAll()
                 .antMatchers("/api/v1/feeds/{id}/like/**").authenticated()
-                .antMatchers("/error-slack").permitAll()
-                .antMatchers("/error/v1").permitAll()
-                .antMatchers("/error/v2").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

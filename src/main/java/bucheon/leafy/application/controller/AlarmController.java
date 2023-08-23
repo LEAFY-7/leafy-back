@@ -26,7 +26,8 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "유저의 알림 리스트 조회 성공")
+            @ApiResponse(responseCode = "200", description = "유저의 알림 리스트 조회 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요")
     })
     @Operation(summary = "유저의 알림 리스트 조회")
     @GetMapping
@@ -35,7 +36,8 @@ public class AlarmController {
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "유저의 새 알림 갯수 조회 성공")
+            @ApiResponse(responseCode = "200", description = "유저의 새 알림 갯수 조회 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요")
     })
     @Operation(summary = "유저의 새 알림 갯수 조회")
     @GetMapping("/count")
@@ -45,13 +47,13 @@ public class AlarmController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "유저의 알림 삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "유저의 알림 삭제 실패")
     })
     @Operation(summary = "유저의 알림 삭제 (단건)")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void deleteAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                               @PathVariable @Parameter(description = "삭제할 알림 id") long id){
         alarmService.deleteAlarm(user, id);

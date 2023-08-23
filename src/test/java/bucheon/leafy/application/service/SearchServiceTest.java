@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -20,10 +23,11 @@ class SearchServiceTest extends IntegrationTestSupport {
     @DisplayName("식물 정보를 저장한다")
     void testSaveSearch(){
         //given
-        LeafyApiDto dto = createSearch();
+        List<LeafyApiDto> dto = new ArrayList<>();
+        dto.add(createSearch());
 
         //when
-        int result = searchService.SaveSearch(dto);
+        int result = searchService.saveSearch(dto);
 
         //then
         assertThat(result)
