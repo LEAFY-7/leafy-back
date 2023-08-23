@@ -64,11 +64,11 @@ public class FollowController {
             @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
     })
     @Operation(summary = "팔로우")
-    @PostMapping("/{id}")
+    @PostMapping("/{targetUserId}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void follow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                         @PathVariable("id") Long targetUserId) {
+                                         @PathVariable Long targetUserId) {
         Long userId = authUser.getUserId();
 
         if (userId == targetUserId) {
@@ -86,11 +86,11 @@ public class FollowController {
             @ApiResponse(responseCode = "500", description = "자기 자신을 팔로우 했을 때 발생")
     })
     @Operation(summary = "언팔로우")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{targetUserId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                           @PathVariable("id") Long targetUserId) {
+                                           @PathVariable Long targetUserId) {
         Long userId = authUser.getUserId();
 
         if (userId == targetUserId) {

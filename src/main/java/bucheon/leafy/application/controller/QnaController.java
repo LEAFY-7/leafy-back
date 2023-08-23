@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/v1/Qna")
+@RequestMapping("/api/v1/qna")
 @RequiredArgsConstructor
 public class QnaController {
 
@@ -58,8 +58,9 @@ public class QnaController {
     })
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @GetMapping("/read/{qnaId}")
-    public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,@PathVariable Long qnaId) {
+    @GetMapping("/{qnaId}")
+    public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                       @PathVariable Long qnaId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnaService.getRead(qnaId, userId));
@@ -73,7 +74,8 @@ public class QnaController {
     //Mypage이니까 자신만 삭제가능
     @Operation(summary = "Qna 게시판 글 삭제하기")
     @DeleteMapping("{qnaId}")
-    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("qnaId") Long qnaId) {
+    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                         @PathVariable("qnaId") Long qnaId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnaService.remove(qnaId));
@@ -86,19 +88,19 @@ public class QnaController {
     })
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping("/list/{qnaId}")
-    public ResponseEntity<PageResponse> list(@PathVariable Long qnaId,
-            @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-             PageRequest pageRequest) {
+    @GetMapping
+    public ResponseEntity<PageResponse> list(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                             PageRequest pageRequest) {
 
-        Long userId = user.getUserId();
-        Long qnaUserId = qnaService.getQnaById(qnaId);
-
-        if (userId.equals(qnaUserId)) {
-            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
-        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
-            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
-        }
-        throw new ReadFailedException();
+//        Long userId = user.getUserId();
+//        Long qnaUserId = qnaService.getQnaById(qnaId);
+//
+//        if (userId.equals(qnaUserId)) {
+//            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
+//        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
+//            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
+//        }
+//        throw new ReadFailedException();
+        return null;
     }
 }
