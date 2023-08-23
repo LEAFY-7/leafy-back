@@ -54,8 +54,10 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
+        String uuid = UUID.randomUUID().toString();
+
         // when
-        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
+        when(imageComponent.createUUID()).thenReturn(uuid);
         userImageService.createUserImage(user.getId(), file);
 
         //then
@@ -77,8 +79,10 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
+        String uuid = UUID.randomUUID().toString();
+
         // when
-        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
+        when(imageComponent.createUUID()).thenReturn(uuid);
         userImageService.createUserBackgroundImage(user.getId(), file);
 
         //then
@@ -100,8 +104,10 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
+        String uuid = UUID.randomUUID().toString();
+
         //when
-        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
+        when(imageComponent.createUUID()).thenReturn(uuid);
         userImageService.editUserImage(user.getId(), file);
 
         //then
@@ -125,8 +131,10 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 "fileContent".getBytes()
         );
 
+        String uuid = UUID.randomUUID().toString();
+
         // when
-        when(imageComponent.createUUID()).thenReturn(UUID.randomUUID().toString());
+        when(imageComponent.createUUID()).thenReturn(uuid);
         userImageService.editUserBackgroundImage(user.getId(), file);
 
         //then
