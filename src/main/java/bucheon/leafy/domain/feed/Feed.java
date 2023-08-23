@@ -25,18 +25,23 @@ public class Feed extends BaseDeleteEntity {
     private Long id;
 
     private String title;
-
+    // 학명
     @Length(max = 50)
     @Pattern(regexp = "^[a-zA-Z가-힣\\s]*$", message = "숫자와 특수문자는 입력할 수 없습니다.")
     private String species;
+    // 별명
     @Length(max = 50)
     @Pattern(regexp = "^[a-zA-Z가-힣\\s]*$", message = "숫자와 특수문자는 입력할 수 없습니다.")
     private String nickname;
+    // 온도
     private Double temperature;
+    // 습도
     private Integer humidity;
+    // 물양
     private Double waterAmount;
+    // 물주는기간
     private String wateringPeriod;
-
+    // 상세입력
     private String content;
 
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
