@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .antMatchers("/api/v1/search/**").permitAll()
                 .antMatchers("/api/v1/feeds/**").permitAll()
+                .antMatchers("/api/v1/notice/**").permitAll()
                 .antMatchers("/api/v1/main").permitAll()
                 .antMatchers("/api/v1/feeds/{id}/like/**").authenticated()
                 .anyRequest().authenticated()

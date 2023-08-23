@@ -5,6 +5,7 @@ import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.QnaCommentDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class QnaCommentController {
     @Operation(summary = "댓글 수정하기")
     @PatchMapping("/modifiy/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void modify(@AuthenticationPrincipal AuthUser user,
+    public void modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @RequestBody QnaCommentDto qnacommentDto) {
         Long userId = user.getUserId();
         qnacommentDto.setUserId(userId);
@@ -44,7 +45,7 @@ public class QnaCommentController {
     @Operation(summary = "댓글 쓰기")
     @PostMapping("/comments/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void write(@AuthenticationPrincipal AuthUser user,
+    public void write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                       @RequestBody QnaCommentDto qnaCommentDto) {
 
         Long userId = user.getUserId();
@@ -61,7 +62,7 @@ public class QnaCommentController {
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void remove(@AuthenticationPrincipal AuthUser user,
+    public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
 
         Long userId = user.getUserId();

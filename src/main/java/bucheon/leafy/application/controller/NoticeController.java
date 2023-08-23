@@ -3,7 +3,6 @@ package bucheon.leafy.application.controller;
 import bucheon.leafy.application.service.NoticeService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.notice.NoticeDto;
-import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,12 +16,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/notice")
+@RequestMapping("/api/v1/notice")
 public class NoticeController {
 
     private final NoticeService noticeService;
@@ -53,7 +50,6 @@ public class NoticeController {
     public void write(
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
             @RequestBody NoticeDto noticeDto
-
     ) {
         Long userId = authUser.getUserId();
         noticeService.write(userId,noticeDto);
@@ -75,7 +71,7 @@ public class NoticeController {
     @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
-    public ResponseEntity<PageResponse> list(PageRequest pageRequest) {
+    public ResponseEntity<PageResponse> list(@ModelAttribute PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
     }
 
