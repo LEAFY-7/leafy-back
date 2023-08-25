@@ -60,8 +60,6 @@ public class FeedController {
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                          @RequestBody FeedRequest request) throws IOException {
-        System.out.println("user = " + user);
-        System.out.println("request = " + request);
         Long userId = user.getUserId();
         service.saveFeed(userId, request);
     }

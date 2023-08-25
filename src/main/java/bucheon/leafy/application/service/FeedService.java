@@ -53,6 +53,29 @@ public class FeedService {
     private String imagePath = FEED_PATH;
 
     // 피드 리스트 조회
+    public ScrollResponse getMainFeedsWhenNotLogin(ScrollRequest scrollRequest) {
+        LinkedList<FeedResponse> feeds = feedMapper.findFeedList(scrollRequest);
+        ScrollRequest next = getNextKey(feeds, scrollRequest);
+        return ScrollResponse.of(next, feeds);
+    }
+
+    public ScrollResponse getMainFeedsWhenLogin(Long userId, ScrollRequest scrollRequest) {
+        LinkedList<FeedResponse> feeds = feedMapper.findFeedsToFollowers(userId);
+
+        List<Long> feedIds = feeds.stream()
+                .map(FeedResponse::getFeedId)
+                .collect(Collectors.toList());
+
+        Integer nextKeySize = scrollRequest.size - feeds.size();
+
+        LinkedList<FeedResponse> notFollowersFeeds = feedMapper.findFeedsNotInFollowersFeeds(feedIds, nextKeySize);
+        feeds.addAll(notFollowersFeeds);
+
+        ScrollRequest next = getNextKey(feeds, scrollRequest);
+        return ScrollResponse.of(next, feeds);
+    }
+
+
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
             LinkedList<FeedResponse> responseList = feedMapper.findFeedList(scrollRequest);

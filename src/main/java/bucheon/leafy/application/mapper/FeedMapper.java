@@ -12,6 +12,11 @@ import java.util.List;
 @Mapper
 public interface FeedMapper {
 
+    // 팔로워 10명의 최신 게시물을 조회한다.
+    LinkedList<FeedResponse> findFeedsToFollowers(Long userId);
+    LinkedList<FeedResponse> findFeedsNotInFollowersFeeds(@Param("feedIds") List<Long> feedIds,
+                                                    @Param("size") Integer size);
+
     LinkedList<FeedResponse> findFeedListFirst(ScrollRequest scrollRequest);
 
     LinkedList<FeedResponse> findFeedList(ScrollRequest scrollRequest);
@@ -25,4 +30,6 @@ public interface FeedMapper {
     void deleteAllFeeds();
 
     int deleteFeed(Long feedId, Long userId);
+
+
 }
