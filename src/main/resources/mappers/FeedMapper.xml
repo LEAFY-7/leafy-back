@@ -3,6 +3,21 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
+    <select id="findFeedsToFollowers" resultType="FeedResponse" parameterType="java.lang.Long">
+        select * from feed f
+        <!--        join user u-->
+        <!--        on f.user_id = u.user_id-->
+        <!--        join feed_like_count flc -->
+        <!--        on f.feed_id = flc.feed_id-->
+        <!--        where is_delete = false-->
+        <!--        order by created_at desc, f.created_at desc-->
+        <!--        limit 10-->
+    </select>
+
+    <select id="findFeedsNotInFollowersFeeds" resultType="FeedResponse">
+        select * from feed f
+    </select>
+
     <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
         select * from feed f
         join feed_like_count flc on f.feed_id = flc.feed_id
