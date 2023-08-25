@@ -10,7 +10,7 @@ public class PageRequest {
 
     private Integer page;
 
-    private Integer limit;
+    public Integer limit;
 
     @JsonIgnore
     private Long offset;
