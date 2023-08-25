@@ -3,7 +3,9 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.reply.QnaReplyDto;
+import bucheon.leafy.domain.reply.request.QnaReplyEditReqeust;
+import bucheon.leafy.domain.reply.request.QnaReplySaveReqeust;
+import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/reply")
+@RequestMapping("/api/v1/reply")
 public class QnaReplyController {
 
     private final QnaReplyService qnareplyService;
@@ -32,8 +34,8 @@ public class QnaReplyController {
     })
     @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @GetMapping("/{qnaCommentId}")
-    public ResponseEntity<QnaReplyDto> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable Long qnaCommentId) {
+    @GetMapping("/{qnaReplyId}")
+    public ResponseEntity<QnaReplyResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable Long qnaCommentId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnareplyService.getRead(qnaCommentId));
@@ -47,10 +49,10 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 수정")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
-                        @RequestBody QnaReplyDto qnaReplyDto) {
+                        @RequestBody QnaReplyEditReqeust qnaReplyEditReqeust) {
         Long userId = user.getUserId();
-        qnaReplyDto.setUserId(userId);
-        qnareplyService.modify(qnaReplyDto);
+        qnaReplyEditReqeust.setUserId(userId);
+        qnareplyService.modify(qnaReplyEditReqeust);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 쓰기 성공"),
@@ -58,14 +60,14 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 쓰기 실패")
     })
     @Operation(summary = "대댓글 쓰기")
-    @PostMapping("/comments")
+    @PostMapping("/qnaReplyId")
     @ResponseStatus(HttpStatus.CREATED)
     public void write(@AuthenticationPrincipal AuthUser user,
-                      @RequestBody QnaReplyDto qnaReplyDto) {
+                      @RequestBody QnaReplySaveReqeust qnaReplySaveReqeust) {
 
         Long userId = user.getUserId();
-        qnaReplyDto.setUserId(userId);
-        qnareplyService.write(qnaReplyDto);
+        qnaReplySaveReqeust.setUserId(userId);
+        qnareplyService.write(qnaReplySaveReqeust);
     }
 
     @ApiResponses({

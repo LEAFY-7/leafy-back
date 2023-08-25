@@ -1,7 +1,5 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.notice.NoticeDto;
-import bucheon.leafy.util.SortStatus;
 import bucheon.leafy.util.request.PageRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,7 @@ class NoticeMapperTest {
 
     @Test
     void save() {
-        int savedNoticeId = noticeMapper.save(new NoticeDto("rrr", "rrr", 22222L));
+        int savedNoticeId = noticeMapper.saveById(new NoticeDto("rrr", "rrr", 22222L));
         System.out.println(savedNoticeId);
     }
 

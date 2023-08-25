@@ -17,17 +17,17 @@
            AND user_id = #{userId}
     </update>
 
-    <insert id="save" parameterType="QnaReplyDto">
+    <insert id="save" parameterType="QnaReplySaveReqeust" >
         INSERT INTO qna_reply
-            ( created_at, is_delete, comment, user_id, qna_comment_id)
+            ( created_at, modified_at is_delete, comment, user_id, qna_comment_id)
              VALUES
-            ( now(),  false, #{comment}, #{userId}, #{qnaCommentId})
+            ( now(), now(),  0, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
-    <update id="edit" parameterType="QnaReplyDto">
+    <update id="edit" parameterType="QnaReplyEditReqeust" >
         UPDATE qna_reply
-           SET user_id = #{userId}
-             , modified_at = now()
+           SET  modified_at = now()
+               ,comment = #{comment}
          WHERE qna_reply_id = #{qnaReplyId}
            AND user_id = #{userId}
     </update>

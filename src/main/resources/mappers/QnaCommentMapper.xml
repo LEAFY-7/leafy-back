@@ -11,14 +11,14 @@
            AND user_id = #{userId}
     </update>
 
-    <insert id="save" parameterType="QnaCommentDto">
+    <insert id="save" parameterType="QnaCommentSaveReqeust">
         INSERT INTO qna_comment
-            ( created_at, is_delete, comment, user_id, qna_id, )
+            ( created_at, modified_at, is_delete, comment, user_id  )
         VALUES
-            (now(), 0, #{comment}, #{userId}, #{qnaId}, )
+            (now(), now(), 0, #{comment}, #{userId})
     </insert>
 
-    <update id="editByQnaCommentId" parameterType="QnaCommentDto">
+    <update id="editByQnaCommentId" parameterType="QnaCommentEditReqeust">
         UPDATE qna_comment
         SET comment = #{comment}
           , modified_at = now()

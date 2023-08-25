@@ -1,17 +1,13 @@
-package bucheon.leafy.domain.reply;
+package bucheon.leafy.domain.reply.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Date;
 
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
-public class QnaReplyDto {
+public class QnaReplyResponse {
 
     private Long qnaReplyId;
     private String comment;
@@ -19,12 +15,12 @@ public class QnaReplyDto {
     private Long qnaCommentId;
 
 
-    public QnaReplyDto(Long qnaReplyId, String comment, Long userId) {
+    public QnaReplyResponse(Long qnaReplyId, String comment, Long userId) {
         this.qnaReplyId = qnaReplyId;
         this.comment = comment;
         this.userId = userId;
     }
-    public QnaReplyDto( String comment, Long userId, Long qnaCommentId) {
+    public QnaReplyResponse(String comment, Long userId, Long qnaCommentId) {
         this.comment = comment;
         this.userId = userId;
         this.qnaCommentId = qnaCommentId;

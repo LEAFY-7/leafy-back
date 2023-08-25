@@ -16,12 +16,12 @@
         WHERE qna_id = #{qnaId}
     </update>
 
-    <insert id="save" parameterType="QnaDto">
-        INSERT INTO qna (created_at ,is_delete , contents, qna_status, title, view_count, user_id)
-        VALUES (now(), 0, #{contents}, 0,  #{title}, 0, #{userId})
+    <insert id="save" parameterType="QnaSaveRequest">
+        INSERT INTO qna (created_at ,modified_at,is_delete , contents, qna_status, title, view_count, user_id)
+        VALUES (now(), now(), 0, #{contents}, 0,  #{title}, 0, #{userId})
     </insert>
 
-    <select id="findById" parameterType="long" resultType="QnaDto">
+    <select id="findById" parameterType="long" resultType="QnaResponse">
         SELECT
         q.*,
         qc.qna_comment_id AS qnaCommentId,
@@ -46,7 +46,7 @@
         WHERE qna_id = #{qnaId}
     </update>
 
-    <update id="editById" parameterType="QnaDto">
+    <update id="editById" parameterType="QnaEditRequest">
         UPDATE qna
         SET contents    = #{contents}
           , title       = #{title}
@@ -56,7 +56,7 @@
     </update>
 
 
-    <update id="editByIdQnaStatus" parameterType="QnaDto">
+    <update id="editByIdQnaStatus" parameterType="QnaStatusResponse">
         UPDATE qna
         SET   qna_status = "답변 완료"
         WHERE  qna_id = #{qnaId}

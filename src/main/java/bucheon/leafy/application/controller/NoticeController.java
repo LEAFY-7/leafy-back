@@ -2,8 +2,9 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.NoticeService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.notice.NoticeDto;
-import bucheon.leafy.domain.user.response.GetMeResponse;
+import bucheon.leafy.domain.notice.request.NoticeEditRequest;
+import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
+import bucheon.leafy.domain.notice.response.NoticeEditResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,12 +18,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/notice")
+@RequestMapping("/api/v1/notice")
 public class NoticeController {
 
     private final NoticeService noticeService;
@@ -35,11 +34,11 @@ public class NoticeController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{noticeId}")
-    public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-            @RequestBody NoticeDto noticeDto) {
+    public ResponseEntity<NoticeEditResponse> modify(@PathVariable("noticeId")  Long noticeId, @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                     @RequestBody NoticeEditRequest noticeEditRequest) {
 
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(noticeService.modify(noticeDto));
+        return ResponseEntity.ok().body(noticeService.modify(noticeId, noticeEditRequest));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 작성 성공"),
@@ -50,13 +49,14 @@ public class NoticeController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping
-    public void write(
+    public void write(@PathVariable("noticeId")  Long noticeId,
             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-            @RequestBody NoticeDto noticeDto
+            @RequestBody NoticeSaveRequest noticeSaveRequest
 
     ) {
         Long userId = authUser.getUserId();
-        noticeService.write(userId,noticeDto);
+
+        noticeService.write(noticeId, noticeSaveRequest);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Notice 글 읽기  성공"),
@@ -94,5 +94,16 @@ public class NoticeController {
         Long userId = authUser.getUserId();
         //모든관리자가 삭제할수있을려면 userId로 하면 x
         return ResponseEntity.ok().body(noticeService.remove(noticeId));
+    }
+
+    @Operation(summary = "Notice 게시판 글 숨기기")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{noticeId}")
+    public void hide(@PathVariable("noticeId") Long noticeId,
+                                         @AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser
+    ) {
+        Long userId = authUser.getUserId();
+        noticeService.hideByNoticeId(noticeId);
     }
 }

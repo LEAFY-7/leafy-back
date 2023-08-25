@@ -24,10 +24,10 @@ public class ControllerAdvisor {
 
     private final SlackApi slackApi;
 
-    @ExceptionHandler(Exception.class)
-    public void SlackErrorMessage(Exception e){
-        slackApi.sendErrorForSlack(e);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public void SlackErrorMessage(Exception e){
+//        slackApi.sendErrorForSlack(e);
+//    }
 
     @ExceptionHandler(PasswordNotMatchedException.class)
     public ResponseEntity<ExceptionResponse> passwordNotMatchedException(PasswordNotMatchedException e) {

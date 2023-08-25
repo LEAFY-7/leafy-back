@@ -3,7 +3,8 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.QnaCommentDto;
+import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
+import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/comment")
+@RequestMapping("/api/v1/comment")
 public class QnaCommentController {
 
     private final QnaCommentService qnacommentService;
@@ -26,13 +27,13 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
     @Operation(summary = "댓글 수정하기")
-    @PatchMapping("/modifiy/{id}")
+    @PatchMapping("/modifiy/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
-                       @RequestBody QnaCommentDto qnacommentDto) {
+                       @RequestBody QnaCommentEditReqeust qnaCommentEditReqeust) {
         Long userId = user.getUserId();
-        qnacommentDto.setUserId(userId);
-        qnacommentService.modify(qnacommentDto);
+        qnaCommentEditReqeust.setUserId(userId);
+        qnacommentService.modify(userId, qnaCommentEditReqeust);
 
     }
 
@@ -42,14 +43,14 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 쓰기")
-    @PostMapping("/comments/{id}")
+    @PostMapping("/comments/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void write(@AuthenticationPrincipal AuthUser user,
-                      @RequestBody QnaCommentDto qnaCommentDto) {
+                      @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
 
         Long userId = user.getUserId();
-        qnaCommentDto.setUserId(userId);
-        qnacommentService.write(qnaCommentDto);
+        qnaCommentSaveReqeust.setUserId(userId);
+        qnacommentService.write(qnaCommentSaveReqeust);
 
     }
 
@@ -59,7 +60,7 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 삭제")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void remove(@AuthenticationPrincipal AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
