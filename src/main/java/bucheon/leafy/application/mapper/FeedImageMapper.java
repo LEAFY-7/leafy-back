@@ -14,4 +14,6 @@ public interface FeedImageMapper {
     void saveFeedImage(@Param("feedId") Long feedId, @Param("request") List<FeedImageRequest> request);
     
     void deleteFeedImage(Long feedId);
+
+    List<FeedImageResponse> findFeedImagesByFeedId(@Param("feedIds") List<Long> feedIds);
 }

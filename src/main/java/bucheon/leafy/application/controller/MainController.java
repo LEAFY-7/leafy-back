@@ -2,10 +2,12 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FeedService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.feed.response.MainResponse;
 import bucheon.leafy.domain.feed.response.PopularTagResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,20 +34,21 @@ public class MainController {
     })
     @Operation(summary = "메인 페이지 불러오기")
     @GetMapping
-    public ResponseEntity getMain(@AuthenticationPrincipal AuthUser authUser) {
-        Long userId = authUser.getUserId();
+    public ResponseEntity<MainResponse> getMain(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
         List<PopularTagResponse> popularTags = feedService.getPopularTags();
 
         ScrollRequest scrollRequest = new ScrollRequest(0L);
         ScrollResponse scrollResponse;
 
-        if (userId == null) {
+        if (authUser == null) {
             scrollResponse = feedService.getMainFeedsWhenNotLogin(scrollRequest);
         } else {
+            Long userId = authUser.getUserId();
             scrollResponse = feedService.getMainFeedsWhenLogin(userId, scrollRequest);
         }
 
-        return ResponseEntity.ok().body(popularTags);
+        MainResponse mainResponse = MainResponse.of(popularTags, scrollResponse);
+        return ResponseEntity.ok().body(mainResponse);
     }
 
 }
