@@ -1,11 +1,9 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.controller.response.FeedByIdResponse;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.notice.request.NoticeEditRequest;
 import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
 import bucheon.leafy.domain.notice.response.NoticeEditResponse;
@@ -17,12 +15,10 @@ import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
