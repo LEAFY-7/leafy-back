@@ -96,7 +96,7 @@ public class FeedControllerTest {
         FeedImageRequest feedImageRequest = FeedImageRequest.builder().imageName("새이미지").imageHeight(339).build();
 
         FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC)
-                .imageList((List<MultipartFile>) feedImageRequest).build();
+                .images((List<MultipartFile>) feedImageRequest).build();
 
         ResultActions result = mockMvc.perform(post("/api/v1/feeds")
                         .content(objectMapper.writeValueAsString(feedRequest))
