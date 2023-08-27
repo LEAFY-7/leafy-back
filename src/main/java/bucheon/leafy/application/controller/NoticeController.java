@@ -77,7 +77,7 @@ public class NoticeController {
             @ApiResponse(responseCode = "200", description = "Notice 글 목록 보여주기 성공"),
             @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
     })
-    @Operation(summary = "공지사항 리스트!")
+    @Operation(summary = "공지사항 리스트")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
     public ResponseEntity<PageResponse> list(@ModelAttribute
