@@ -16,14 +16,14 @@ import java.util.List;
 @Mapper
 public interface NoticeMapper {
     int count();
-    NoticeResponse findById(Long noticeId);    //id찾기
-    int viewCnt(Long noticeId);   //view카운트
-    int deleteById(Long noticeId);    //삭제
-    NoticeSaveResponse save(NoticeSaveRequest noticeSaveRequest);// 저장
-    NoticeEditResponse editById(@Param("noticeId")Long noticeId,@Param("noticeEditRequest") NoticeEditRequest noticeEditRequest);//수정
-    void hideByNoticeId(Long noticeId);
-    List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);//리스트 보여주기
+    NoticeResponse findById(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalse(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalseAndIsHideFalse(Long noticeId);
+    int viewCnt(Long noticeId);
+    int deleteById(Long noticeId);
+    Long save(@Param("userId")Long userId, @Param("noticeSaveRequest")NoticeSaveRequest noticeSaveRequest);
+    Long editById(@Param("noticeId")Long noticeId, @Param("noticeEditRequest")NoticeEditRequest noticeEditRequest);
+    List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);
     List<Long> findAllUserIds();
-    //    NoticeDto searchSelectPage(PageRequest pageRequest);    //공지사항 검색 나중에 추가
 
 }
