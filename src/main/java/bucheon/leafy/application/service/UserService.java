@@ -83,6 +83,11 @@ public class UserService {
 
     public void updateUser(Long userId, UserRequest userRequest) {
         User user = getUserById(userId);
+
+        if ( !user.getNickName().equals( userRequest.getNickName() ) ) {
+            duplicationNickNameCheck( userRequest.getNickName() );
+        }
+
         user.update(userRequest);
 
         PasswordRequest passwordRequest = PasswordRequest.of(userRequest);
