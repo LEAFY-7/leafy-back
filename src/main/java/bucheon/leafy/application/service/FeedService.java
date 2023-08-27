@@ -109,7 +109,7 @@ public class FeedService {
         FeedResponse feedResponse = feedMapper.findFeedById(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        List<FeedTagResponse> tagList = findTagList(feedId);
+        List<FeedTagResponse> tagList = findTags(feedId);
         List<FeedImageResponse> feedImages = getFeedImages(feedId);;
         FeedAuthorResponse feedAuthorResponse = feedMapper.findUserByFeedId(feedId);
 
@@ -128,8 +128,8 @@ public class FeedService {
     public void saveFeed(Long userId, FeedRequest request) throws IOException {
         if ( feedMapper.saveFeed(userId, request) > 0 ) {
             Long feedId = request.getFeedId();
-            saveFeedTags(feedId, request.getTagList());
-            saveFeedImages(feedId, request.getImageList());
+            saveFeedTags(feedId, request.getTags());
+            saveFeedImages(feedId, request.getImages());
             initFeedLike(feedId);
         } else {
             throw new FeedDataAccessException();
@@ -141,9 +141,9 @@ public class FeedService {
         if (feedMapper.editFeed(feedId, userId, request) == 1) {
 
             deleteFeedTags(feedId);
-            saveFeedTags(feedId, request.getTagList());
+            saveFeedTags(feedId, request.getTags());
             deleteFeedImages(feedId);
-            saveFeedImages(feedId, request.getImageList());
+            saveFeedImages(feedId, request.getImages());
 
         }
         else if (userId != feedMapper.findUserByFeedId(feedId).getUserId()) {
@@ -171,8 +171,8 @@ public class FeedService {
     }
 
     // 피드 태그 조회
-    public List<FeedTagResponse> findTagList(Long feedId) {
-        return feedTagMapper.findFeedTagList(feedId);
+    public List<FeedTagResponse> findTags(Long feedId) {
+        return feedTagMapper.findFeedTags(feedId);
     }
 
 

@@ -53,15 +53,15 @@ public class FeedRequest {
     @NotNull
     private FeedType feedType;
 
-    private List<String> tagList;
+    private List<String> tags;
 
-    private List<MultipartFile> imageList;
+    private List<MultipartFile> images;
 
     @Builder
     public FeedRequest(String title, String species, String nickname,
                            Double temperature, Integer humidity, Double waterAmount,
                            String wateringPeriod, String content, FeedType feedType,
-                           List<String> tagList, List<MultipartFile> imageList) {
+                           List<String> tags, List<MultipartFile> images) {
 
         this.title = title;
         this.species = species;
@@ -72,7 +72,7 @@ public class FeedRequest {
         this.wateringPeriod = wateringPeriod;
         this.content = content;
         this.feedType = feedType;
-        this.tagList = tagList;
-        this.imageList = imageList;
+        this.tags = tags;
+        this.images = images;
     }
 }
