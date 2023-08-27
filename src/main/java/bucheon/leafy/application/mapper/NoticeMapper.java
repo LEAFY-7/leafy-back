@@ -20,12 +20,10 @@ public interface NoticeMapper {
     NoticeResponse findById(Long noticeId);    //id찾기
     int viewCnt(Long noticeId);   //view카운트
     int deleteById(Long noticeId);    //삭제
-    int save(NoticeSaveRequest noticeSaveRequest);// 저장
-    NoticeSaveResponse saveResponse(NoticeSaveRequest noticeSaveRequest);
-    int editById(@Param("noticeId")Long noticeId,@Param("noticeEditRequest") NoticeEditRequest noticeEditRequest);//수정
-    NoticeEditResponse modifiedAt(Long noticeId);
+    NoticeSaveResponse save(NoticeSaveRequest noticeSaveRequest);// 저장
+    NoticeEditResponse editById(@Param("noticeId")Long noticeId,@Param("noticeEditRequest") NoticeEditRequest noticeEditRequest);//수정
     void hideByNoticeId(Long noticeId);
-    List<PageResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);//리스트 보여주기
+    List<PageResponse> pageFindById(PageRequest pageRequest);//리스트 보여주기
     List<Long> findAllUserIds();
     //    NoticeDto searchSelectPage(PageRequest pageRequest);    //공지사항 검색 나중에 추가
 

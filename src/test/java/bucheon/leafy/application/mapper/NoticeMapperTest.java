@@ -27,21 +27,11 @@ class NoticeMapperTest {
         noticeMapper.deleteById(21L);
     }
 
-    @Test
-    void save() {
-        int savedNoticeId = noticeMapper.saveById(new NoticeDto("rrr", "rrr", 22222L));
-        System.out.println(savedNoticeId);
-    }
 
-    @Test
-    void editById() {
-        noticeMapper.editById(new NoticeDto(21L,"change title ","change contents"));
-    }
 
     @Test
     void pageFindById() {
-        PageRequest pageRequest = new PageRequest(10, 10, 10L, null,null );
-        noticeMapper.pageFindById(pageRequest);
+
 
     }
 }

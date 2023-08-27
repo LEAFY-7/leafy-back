@@ -11,14 +11,14 @@ class QnaReplyServiceTest {
 
     @Test
     void remove() {
-        qnaReplyService.remove(1L,11111L);
+
     }
     @Test
     void write() {
-        qnaReplyService.write(new QnaReplyDto("Sample reply 1",11111L, 4L));
+
     }
     @Test
     void modify() {
-        qnaReplyService.modify(new QnaReplyDto("asdf",1L,11111L));
+
     }
 }

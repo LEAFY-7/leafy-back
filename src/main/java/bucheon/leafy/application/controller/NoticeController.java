@@ -55,7 +55,7 @@ public class NoticeController {
                                                     @RequestBody NoticeSaveRequest noticeSaveRequest) {
         Long userId = authUser.getUserId();
 
-        NoticeSaveResponse response = noticeService.write(noticeSaveRequest);
+        NoticeSaveResponse response = noticeService.write(noticeSaveRequest , userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

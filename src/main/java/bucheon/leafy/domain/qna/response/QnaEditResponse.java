@@ -7,12 +7,10 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class QnaSaveResponse {
-    private Date createAt;
-
-    public QnaSaveResponse( Date createAt) {
-        this.createAt = createAt;
+public class QnaEditResponse {
+    private Date modifiedAt;
+    public QnaEditResponse(Date modifiedAt){
+        this.modifiedAt = modifiedAt;
 
     }
-
 }

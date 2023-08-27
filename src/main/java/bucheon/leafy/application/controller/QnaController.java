@@ -2,11 +2,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.application.service.QnaService;
-import bucheon.leafy.domain.notice.response.NoticeSaveResponse;
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
+import bucheon.leafy.domain.qna.response.QnaEditResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
-import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +36,10 @@ public class QnaController {
     @Operation(summary = "Qna 게시물 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("{qnaId}")
-    public ResponseEntity<Object> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @RequestBody QnaEditRequest qnaEditRequest, @PathVariable("qnaId") Long qnaId) {
+    public ResponseEntity<QnaEditResponse> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("qnaId") Long qnaId, @RequestBody QnaEditRequest qnaEditRequest) {
 
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.modify(qnaEditRequest, qnaId));
+        return ResponseEntity.ok().body(qnaService.modify(qnaId, qnaEditRequest));
 
     }    @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 쓰기 성공"),
@@ -54,7 +53,7 @@ public class QnaController {
 
         Long userId = user.getUserId();
 
-        QnaSaveResponse response = qnaService.write(qnaSaveRequest);
+        QnaSaveResponse response = qnaService.write(userId, qnaSaveRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

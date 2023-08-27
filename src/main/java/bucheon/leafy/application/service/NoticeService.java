@@ -44,19 +44,17 @@ public class NoticeService {
     }
 
 
-    public NoticeSaveResponse write(NoticeSaveRequest noticeSaveRequest) {
+    public NoticeSaveResponse write(NoticeSaveRequest noticeSaveRequest , Long userId) {
 
 
-        if (noticeMapper.save(noticeSaveRequest) != 1) {
+        if (noticeMapper.save(noticeSaveRequest) == null) {
             throw new WriteFailedException();
         }
-        NoticeSaveResponse noticeSaveResponse = noticeMapper.saveResponse(noticeSaveRequest);
-
-        Long authorUserId = noticeSaveRequest.getUserId();
+        NoticeSaveResponse noticeSaveResponse = noticeMapper.save(noticeSaveRequest);
 
         List<Long> userIds = noticeMapper.findAllUserIds();
         for (Long id : userIds) {
-            if (!id.equals(authorUserId)) {
+            if (!id.equals(userId)) {
                 alarmService.createAlarm(id, AlarmType.NOTICE, noticeSaveResponse.getNoticeId());
             }
         }
@@ -86,11 +84,13 @@ public class NoticeService {
     }
     public NoticeEditResponse modify(Long noticeId, NoticeEditRequest noticeEditRequest)  {
 
-        if (noticeMapper.editById(noticeId, noticeEditRequest) == 0) {
+        NoticeEditResponse noticeEditResponse = noticeMapper.editById(noticeId, noticeEditRequest);
+
+        if (noticeEditResponse == null) {
             throw new ModifyFailedException();
         }
 
-        return noticeMapper.modifiedAt(noticeId);
+        return noticeEditResponse;
     }
 
     public void hideByNoticeId(Long noticeId){
