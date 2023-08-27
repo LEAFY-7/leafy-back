@@ -6,11 +6,11 @@
         select feed_tag_id, tag from feed_tag where feed_id = #{feedId}
     </select>
 
-    <insert id="saveFeedTag" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="feed_tag_id" keyProperty="request.feedTagId">
+    <insert id="saveFeedTag" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="feed_tag_id">
         INSERT INTO feed_tag (feed_id, tag)
         VALUES
-        <foreach collection="request" item="request" separator=",">
-            (#{feedId}, #{request.tag})
+        <foreach collection="tagList" item="tag" separator=",">
+            (#{feedId}, #{tag})
         </foreach>
     </insert>
 

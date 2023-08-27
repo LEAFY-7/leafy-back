@@ -52,14 +52,13 @@ public class FeedController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "피드 등록 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "500", description = "피드 등록 실패")
     })
     @Operation(summary = "피드 등록")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                         @RequestBody FeedRequest request) throws IOException {
+                                         @ModelAttribute FeedRequest request) throws IOException {
         Long userId = user.getUserId();
         service.saveFeed(userId, request);
     }

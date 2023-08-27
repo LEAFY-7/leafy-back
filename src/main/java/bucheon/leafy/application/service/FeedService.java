@@ -12,13 +12,13 @@ import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
-import bucheon.leafy.domain.feed.request.FeedTagRequest;
 import bucheon.leafy.domain.feed.response.*;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse.FeedMonthlyInformation;
 import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformation;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.FeedDataAccessException;
 import bucheon.leafy.exception.FeedNotFoundException;
+import bucheon.leafy.exception.FeedUserNotSameException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
@@ -119,20 +119,25 @@ public class FeedService {
 
     // 피드 등록
     public void saveFeed(Long userId, FeedRequest request) throws IOException {
-        feedMapper.saveFeed(userId, request);
-        Long feedId = request.getFeedId();
-        saveFeedTags(feedId, request.getTagList());
-        saveFeedImages(feedId, request.getImageList());
-        initFeedLike(feedId);
+        if ( feedMapper.saveFeed(userId, request) > 0 ) {
+            Long feedId = request.getFeedId();
+            saveFeedTags(feedId, request.getTagList());
+            saveFeedImages(feedId, request.getImageList());
+            initFeedLike(feedId);
+        } else {
+            throw new FeedDataAccessException();
+        }
     }
 
     // 피드 수정
     public void updateFeed(Long feedId, Long userId, FeedRequest request) throws IOException {
-        if( feedMapper.editFeed(feedId, userId, request) == 1 ) {
+        if (feedMapper.editFeed(feedId, userId, request) == 1) {
             deleteFeedTags(feedId);
             saveFeedTags(feedId, request.getTagList());
             deleteFeedImages(feedId);
             saveFeedImages(feedId, request.getImageList());
+        } else if (userId != feedMapper.findFeedById(feedId).getUserId()) {
+            throw new FeedUserNotSameException();
         } else {
             throw new FeedDataAccessException();
         }
@@ -140,7 +145,8 @@ public class FeedService {
 
     // 피드 삭제
     public void deleteFeed(Long feedId, Long userId) {
-        if( feedMapper.deleteFeed(feedId, userId) != 1 ) throw new FeedDataAccessException();
+        if( userId != feedMapper.findFeedById(feedId).getUserId() ) throw new FeedUserNotSameException();
+        else if( feedMapper.deleteFeed(feedId, userId) != 1 ) throw new FeedDataAccessException();
     }
 
     // 피드 태그 조회
@@ -161,7 +167,7 @@ public class FeedService {
     }
 
     // 피드 태그 저장
-    public void saveFeedTags(Long feedId, List<FeedTagRequest> saveFeedList) {
+    public void saveFeedTags(Long feedId, List<String> saveFeedList) {
         feedTagMapper.saveFeedTag(feedId, saveFeedList);
     }
 
