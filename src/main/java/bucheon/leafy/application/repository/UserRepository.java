@@ -10,14 +10,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Override
-    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
+    @EntityGraph( attributePaths = {"userImage", "userBackgroundImage"})
     Optional<User> findById(Long userId);
 
     @Override
-    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"} )
+    @EntityGraph( attributePaths = {"userImage", "userBackgroundImage"} )
     List<User> findAllById(Iterable<Long> userIds);
 
-    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"})
+    @EntityGraph( attributePaths = {"userImage", "userBackgroundImage"})
     Optional<User> findByEmail(String email);
 
     Boolean existsByNickName(String nickName);
@@ -26,9 +26,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmailAndPhone(String email, String phone);
 
-    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage"} )
+    @EntityGraph( attributePaths = {"userImage", "userBackgroundImage"} )
     Optional<User> findByFeedsId(Long feedId);
 
-    @EntityGraph( attributePaths = {"userImage", "address", "userBackgroundImage", "feeds"} )
+    @EntityGraph( attributePaths = {"userImage", "userBackgroundImage", "feeds"} )
     Optional<User> findWithFeedsById(Long userId);
+
+    Optional<User> findByNameAndPhone(String name, String phone);
 }

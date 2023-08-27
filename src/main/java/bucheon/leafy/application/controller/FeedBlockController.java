@@ -35,7 +35,7 @@ public class FeedBlockController {
     @Operation(summary = "피드 차단 목록")
     @GetMapping
     public ResponseEntity getBlockedFeeds(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                          @PageableDefault(page = 1, size = 20) Pageable pageable) {
+                                          @PageableDefault(page = 0, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
         List<FeedResponse> blockedFeeds = feedBlockService.getBlockedFeeds(userId, pageable);

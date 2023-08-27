@@ -35,7 +35,7 @@ public class UserReportController {
     @Operation(summary = "회원 차단 목록")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getReportedUsers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                               @PageableDefault(page = 1, size = 20) Pageable pageable) {
+                                                               @PageableDefault(page = 0, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
         List<UserResponse> blockedUsers = userReportService.getReportedUsers(userId, pageable);

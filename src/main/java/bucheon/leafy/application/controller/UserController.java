@@ -68,8 +68,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
-            @ApiResponse(responseCode = "401", description = "비밀번호가 틀림"),
-            @ApiResponse(responseCode = "404", description = "아이디가 틀림"),
+            @ApiResponse(responseCode = "401, 404", description = "아이디나 비밀번호가 틀림"),
             @ApiResponse(responseCode = "500", description = "서버 코드 문제로 로그인 실패")
     })
     @Operation(summary = "로그인")
@@ -162,6 +161,17 @@ public class UserController {
     @PatchMapping("/temporary-password")
     public void updateTemporaryPassword(@RequestParam String email, String phone) {
         userService.updateTemporaryPassword(email, phone);
+    }
+
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "이메일 조회"),
+            @ApiResponse(responseCode = "404", description = "이름과 전화번호로 가입된 이메일이 존재하지 않음")
+    })
+    @Operation(summary = "아이디 찾기")
+    @GetMapping("/email")
+    public String getUserEmail(@RequestParam String name, String phone) {
+        return userService.getEmailByNameAndPhone(name, phone);
     }
 
     private void insertTokenInHeader(TokenResponse tokenResponse) {

@@ -2,15 +2,14 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.FollowService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.exception.SelfTargetException;
+import bucheon.leafy.util.response.JpaPageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -34,10 +33,10 @@ public class FollowController {
     })
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
-    public ResponseEntity<Page<FollowersResponse>> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                                @PageableDefault(page = 1, size = 20) Pageable pageable) {
+    public ResponseEntity<JpaPageResponse> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                                @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
-        Page<FollowersResponse> result = followService.getFollowers(userId, pageable);
+        JpaPageResponse result = followService.getFollowers(userId, pageable);
         return ResponseEntity.ok().body(result);
     }
 
@@ -48,10 +47,10 @@ public class FollowController {
     })
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
-    public ResponseEntity<Page<FollowersResponse>> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                                 @PageableDefault(page = 1, size = 20) Pageable pageable) {
+    public ResponseEntity<JpaPageResponse> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                                 @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
-        Page<FollowersResponse> result = followService.getFollowings(userId, pageable);
+        JpaPageResponse result = followService.getFollowings(userId, pageable);
         return ResponseEntity.ok().body(result);
     }
 

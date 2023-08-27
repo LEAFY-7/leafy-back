@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -34,63 +32,22 @@ public class SignUpRequest {
         @Schema(description = "이름", example = "김리피")
         private String name;
 
-        @NotBlank(message = "넥네임을 입력해주세요")
-        @Pattern(regexp = "^(?!admin|leafy)(?!.*\\\\s{2,})(?!.*\\\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\\\s]{3,12}$")
-        @Schema(description = "별칭", example = "리피김")
-        private String nickName;
 
         @NotBlank(message = "전화번호를 입력해주세요")
         @Pattern(regexp = "([0|1|6|7|8|9]{3})([0-9]{3,4})?([0-9]{4})")
         @Schema(description = "전화번호", example = "01012345678")
         private String phone;
 
-        @NotNull(message = "생일을 입력해주세요")
-        @Schema(description = "생년월일", example = "1999-02-11")
-        private LocalDate birthDay;
-
-
-        // TODO : 주소
-        @NotNull(message = "우편번호를 입력해주세요")
-        @Schema(description = "우편번호", example = "12345")
-        private String zoneCode;
-
-        @NotNull(message = "주소를 입력해주세요")
-        @Schema(description = "주소", example = "경기도")
-        private String address;
-
-        @NotNull(message = "지번주소를 입력해주세요")
-        @Schema(description = "지번주소", example = "부천시")
-        private String jibunAddress;
-
-        @NotNull(message = "도로명주소를 입력해주세요")
-        @Schema(description = "도로명주소", example = "소향로 11")
-        private String roadAddress;
-
-        @Schema(description = "상세주소", example = "1동 1호")
-        private String detailAddress;
-
-        @Schema(description = "주소 공개 여부", example = "true")
-        private Boolean addressIsHide;
 
         @Builder
-        private SignUpRequest(String password, String confirmPassword, String email,
-                              String nickName, String name, String phone, String zoneCode,
-                              String address, String jibunAddress, String roadAddress,
-                              String detailAddress, Boolean addressIsHide, LocalDate birthDay) {
+        private SignUpRequest(String password, String confirmPassword,
+                              String email, String name, String phone) {
 
                 this.password = password;
                 this.confirmPassword = confirmPassword;
                 this.email = email;
-                this.nickName = nickName;
                 this.name = name;
                 this.phone = phone;
-                this.zoneCode = zoneCode;
-                this.address = address;
-                this.jibunAddress = jibunAddress;
-                this.roadAddress = roadAddress;
-                this.detailAddress = detailAddress;
-                this.addressIsHide = addressIsHide == null ? true : false;
-                this.birthDay = birthDay;
         }
 
 }

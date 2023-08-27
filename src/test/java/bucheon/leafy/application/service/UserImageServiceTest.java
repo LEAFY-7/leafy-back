@@ -58,7 +58,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
 
         // when
         when(imageComponent.createUUID()).thenReturn(uuid);
-        userImageService.createUserImage(user.getId(), file);
+        userImageService.createUserImage(user, file);
 
         //then
         verify(userImageRepository, times(1)).save(any(UserImage.class));
@@ -83,7 +83,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
 
         // when
         when(imageComponent.createUUID()).thenReturn(uuid);
-        userImageService.createUserBackgroundImage(user.getId(), file);
+        userImageService.createUserBackgroundImage(user, file);
 
         //then
         verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
@@ -108,7 +108,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
 
         //when
         when(imageComponent.createUUID()).thenReturn(uuid);
-        userImageService.editUserImage(user.getId(), file);
+        userImageService.editUserImage(user, file);
 
         //then
         verify(userImageRepository, times(1)).save(any(UserImage.class));
@@ -135,7 +135,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
 
         // when
         when(imageComponent.createUUID()).thenReturn(uuid);
-        userImageService.editUserBackgroundImage(user.getId(), file);
+        userImageService.editUserBackgroundImage(user, file);
 
         //then
         verify(userBackgroundImageRepository, times(1)).save(any(UserBackgroundImage.class));
@@ -144,17 +144,7 @@ class UserImageServiceTest extends IntegrationTestSupport {
     }
 
     private User createUser(String email, String nickName) {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
-
         return User.builder()
-                .address(address)
                 .email(email)
                 .phone("01012341234")
                 .name("홍길동")
@@ -164,14 +154,6 @@ class UserImageServiceTest extends IntegrationTestSupport {
     }
 
     private User createUserWithImage(String email, String nickName) {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
 
         UserImage image = UserImage.builder()
                 .image("이미지")
@@ -182,7 +164,6 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .build();
 
         return User.builder()
-                .address(address)
                 .userImage(image)
                 .userBackgroundImage(backgroundImage)
                 .email(email)

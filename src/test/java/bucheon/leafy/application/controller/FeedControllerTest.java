@@ -10,7 +10,6 @@ import bucheon.leafy.config.AuthUserDetailService;
 import bucheon.leafy.domain.feed.FeedType;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
-import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
 import bucheon.leafy.domain.user.UserRole;
@@ -62,21 +61,12 @@ public class FeedControllerTest {
 
     @BeforeEach
     void setUp() {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
 
         UserImage image = UserImage.builder()
                 .image("이미지")
                 .build();
 
         User user = User.builder()
-                .address(address)
                 .userImage(image)
                 .email("email@email.com")
                 .phone("01012341234")
@@ -106,7 +96,7 @@ public class FeedControllerTest {
         FeedImageRequest feedImageRequest = FeedImageRequest.builder().imageName("새이미지").imageHeight(339).build();
 
         FeedRequest feedRequest = FeedRequest.builder().title("새제목").content("새내용").feedType(FeedType.PUBLIC)
-                .imageList((List<MultipartFile>) feedImageRequest).build();
+                .images((List<MultipartFile>) feedImageRequest).build();
 
         ResultActions result = mockMvc.perform(post("/api/v1/feeds")
                         .content(objectMapper.writeValueAsString(feedRequest))

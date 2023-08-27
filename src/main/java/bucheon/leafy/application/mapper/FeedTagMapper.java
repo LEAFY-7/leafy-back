@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface FeedTagMapper {
-    List<FeedTagResponse> findFeedTagList(Long feedId);
+    List<FeedTagResponse> findFeedTags(Long feedId);
 
     void saveFeedTag(@Param("feedId") Long feedId, @Param("tagList") List<String> tagList);
 

@@ -2,12 +2,14 @@ package bucheon.leafy.application.mapper;
 
 import bucheon.leafy.domain.feed.request.FeedRequest;
 import bucheon.leafy.domain.feed.response.FeedResponse;
+import bucheon.leafy.domain.user.response.FeedAuthorResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface FeedMapper {
@@ -17,11 +19,11 @@ public interface FeedMapper {
     LinkedList<FeedResponse> findFeedsNotInFollowersFeeds(@Param("feedIds") List<Long> feedIds,
                                                     @Param("size") Integer size);
 
-    LinkedList<FeedResponse> findFeedListFirst(ScrollRequest scrollRequest);
+    LinkedList<FeedResponse> findFeedsFirst(ScrollRequest scrollRequest);
 
-    LinkedList<FeedResponse> findFeedList(ScrollRequest scrollRequest);
+    LinkedList<FeedResponse> findFeeds(ScrollRequest scrollRequest);
 
-    FeedResponse findFeedById(Long feedId);
+    Optional<FeedResponse> findFeedById(Long feedId);
 
     Long saveFeed(@Param("userId") Long userId, @Param("request") FeedRequest request);
 
@@ -31,5 +33,7 @@ public interface FeedMapper {
 
     int deleteFeed(Long feedId, Long userId);
 
+
+    FeedAuthorResponse findUserByFeedId(Long feedId);
 
 }

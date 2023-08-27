@@ -1,15 +1,12 @@
 package bucheon.leafy.domain.user.request;
 
-import bucheon.leafy.domain.user.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -43,42 +40,11 @@ public class UserRequest {
         @Schema(description = "간단 소개", example = "리피입니다.")
         private String introduction;
 
-        @NotNull(message = "생일을 입력해주세요")
-        @Schema(description = "생년월일", example = "1999-02-11")
-        private LocalDate birthDay;
 
-        @Schema(description = "성별", example = "FEMALE")
-        private Gender gender;
-
-
-        // TODO : 주소
-        @NotNull(message = "우편번호를 입력해주세요")
-        @Schema(description = "우편번호", example = "12345")
-        private String zoneCode;
-
-        @NotNull(message = "주소를 입력해주세요")
-        @Schema(description = "주소", example = "경기도")
-        private String address;
-
-        @NotNull(message = "지번주소를 입력해주세요")
-        @Schema(description = "지번주소", example = "부천시")
-        private String jibunAddress;
-
-        @NotNull(message = "도로명주소를 입력해주세요")
-        @Schema(description = "도로명주소", example = "소향로 11")
-        private String roadAddress;
-
-        @Schema(description = "상세주소", example = "1동 1호")
-        private String detailAddress;
-
-        @Schema(description = "주소 공개 여부", example = "true")
-        private Boolean addressIsHide;
 
         @Builder
         private UserRequest(String password, String confirmPassword, String nickName,
-                            String name, String introduction, String phone, String zoneCode,
-                            String address, String jibunAddress, String roadAddress, String detailAddress,
-                            Boolean addressIsHide, LocalDate birthDay, Gender gender) {
+                            String name, String introduction, String phone) {
 
                 this.password = password;
                 this.confirmPassword = confirmPassword;
@@ -86,14 +52,6 @@ public class UserRequest {
                 this.name = name;
                 this.introduction = introduction;
                 this.phone = phone;
-                this.zoneCode = zoneCode;
-                this.address = address;
-                this.jibunAddress = jibunAddress;
-                this.roadAddress = roadAddress;
-                this.detailAddress = detailAddress;
-                this.addressIsHide = addressIsHide == null ? true : false;
-                this.birthDay = birthDay;
-                this.gender = gender;
         }
 
 
