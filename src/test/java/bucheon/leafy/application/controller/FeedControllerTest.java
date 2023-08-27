@@ -10,7 +10,6 @@ import bucheon.leafy.config.AuthUserDetailService;
 import bucheon.leafy.domain.feed.FeedType;
 import bucheon.leafy.domain.feed.request.FeedImageRequest;
 import bucheon.leafy.domain.feed.request.FeedRequest;
-import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
 import bucheon.leafy.domain.user.UserRole;
@@ -62,21 +61,12 @@ public class FeedControllerTest {
 
     @BeforeEach
     void setUp() {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
 
         UserImage image = UserImage.builder()
                 .image("이미지")
                 .build();
 
         User user = User.builder()
-                .address(address)
                 .userImage(image)
                 .email("email@email.com")
                 .phone("01012341234")
