@@ -71,7 +71,6 @@ public class UserService {
     public void signUp(SignUpRequest signUpRequest) {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
-        duplicationNickNameCheck(signUpRequest.getNickName());
         duplicationEmailCheck(signUpRequest.getEmail());
 
         User user = User.of(signUpRequest);
@@ -189,4 +188,10 @@ public class UserService {
         }
     }
 
+    public String getEmailByNameAndPhone(String name, String phone) {
+        User user = userRepository.findByNameAndPhone(name, phone)
+                .orElseThrow(UserNotFoundException::new);
+
+        return user.getEmail();
+    }
 }
