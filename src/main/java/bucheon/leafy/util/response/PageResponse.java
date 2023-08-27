@@ -11,53 +11,37 @@ import java.util.List;
 @NoArgsConstructor
 public class PageResponse <T> {
 
-    private PageRequest pageRequest;
-
     private List<T> body;
 
     private Long total;
 
     private Integer totalPage;
 
-    private boolean isFirst;
-
-    private boolean isLast;
 
     @Builder
-    public PageResponse(PageRequest pageRequest, List<T> body, Long total,
-                        Integer totalPage, boolean isFirst, boolean isLast) {
+    public PageResponse(List<T> body, Long total,
+                        Integer totalPage) {
 
-        this.pageRequest = pageRequest;
         this.body = body;
         this.total = total;
         this.totalPage = totalPage;
-        this.isFirst = isFirst;
-        this.isLast = isLast;
     }
 
     public static <T> PageResponse of(PageRequest pageRequest, List<T> body, Long total){
         if (total == 0){
             return PageResponse.<T>builder()
-                    .pageRequest(pageRequest)
                     .body(body)
                     .total(total)
                     .totalPage(1)
-                    .isFirst(true)
-                    .isLast(true)
                     .build();
         } else {
             Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
             totalPage = total % Long.valueOf(pageRequest.limit) == 0 ? totalPage : totalPage + 1;
-            boolean isFirst = pageRequest.getPage() == 1;
-            boolean isLast = pageRequest.getPage() == totalPage;
 
             return PageResponse.<T>builder()
-                    .pageRequest(pageRequest)
                     .body(body)
                     .total(total)
                     .totalPage(totalPage.intValue())
-                    .isFirst(isFirst)
-                    .isLast(isLast)
                     .build();
         }
     }
