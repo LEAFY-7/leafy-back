@@ -6,8 +6,8 @@
     <select id="findSearchByPumName" resultType="bucheon.leafy.domain.search.response.SearchResponse">
         select *
         from search
-        where (pum_name = #{keyword} or good_name =#{keyword})
-          and sale_date = (select max(sale_date) from search)
+        where (pum_name = #{keyword} or good_name = #{keyword})
+          and sale_date = (select max(sale_date) from search where (pum_name = #{keyword} or good_name = #{keyword}))
         order by good_name
         limit #{pageRequest.limit}
         offset #{pageRequest.offset}
@@ -32,8 +32,7 @@
         select count(1) as total
         from search
         where (pum_name = #{keyword} or good_name =#{keyword})
-          and sale_date = (select max(sale_date) from search)
-        order by good_name
+          and sale_date = (select max(sale_date) from search where (pum_name = #{keyword} or good_name = #{keyword}))
     </select>
 
     <select id="findGoodNameByPumName" resultType="bucheon.leafy.domain.search.response.goodNameResponse">
