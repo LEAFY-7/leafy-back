@@ -1,7 +1,5 @@
 package bucheon.leafy.domain.user;
 
-import bucheon.leafy.domain.user.request.SignUpRequest;
-import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,27 +50,8 @@ public class Address extends BaseDeleteEntity {
         this.isHide = isHide;
     }
 
-    public static Address of(SignUpRequest signUpRequest) {
-        return Address.builder()
-                .zoneCode(signUpRequest.getZoneCode())
-                .address(signUpRequest.getAddress())
-                .jibunAddress(signUpRequest.getJibunAddress())
-                .roadAddress(signUpRequest.getRoadAddress())
-                .detailAddress(signUpRequest.getDetailAddress())
-                .isHide(signUpRequest.getAddressIsHide())
-                .build();
-    }
-
     public void addUser(User user) {
         this.user = user;
     }
 
-    public void update(UserRequest userRequest) {
-        this.zoneCode = userRequest.getZoneCode();
-        this.address = userRequest.getAddress();
-        this.jibunAddress = userRequest.getJibunAddress();
-        this.roadAddress = userRequest.getRoadAddress();
-        this.detailAddress = userRequest.getDetailAddress();
-        this.isHide = userRequest.getAddressIsHide();
-    }
 }

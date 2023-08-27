@@ -1,8 +1,8 @@
 package bucheon.leafy.application.controller.response;
 
-import bucheon.leafy.domain.feed.response.FeedImageResponse;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.domain.feed.response.FeedTagResponse;
+import bucheon.leafy.domain.user.response.FeedAuthorResponse;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 public class FeedByIdResponse {
     private FeedResponse feedResponse;
-    private List<FeedTagResponse> tagResponseList;
-    private List<FeedImageResponse> feedImageResponseList;
+    private List<FeedTagResponse> tagResponses;
+    private FeedAuthorResponse feedAuthorResponse;
 
     @Builder
-    public FeedByIdResponse(FeedResponse feedResponse, List<FeedTagResponse> tagResponseList, List<FeedImageResponse> feedImageResponseList) {
+    public FeedByIdResponse(FeedResponse feedResponse, List<FeedTagResponse> tagResponses,
+                            FeedAuthorResponse feedAuthorResponse) {
+
         this.feedResponse = feedResponse;
-        this.tagResponseList = tagResponseList;
-        this.feedImageResponseList = feedImageResponseList;
+        this.tagResponses = tagResponses;
+        this.feedAuthorResponse = feedAuthorResponse;
     }
 }

@@ -7,6 +7,7 @@ import bucheon.leafy.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,10 +52,11 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/users//temporary-password").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .antMatchers("/api/v1/search/**").permitAll()
-                .antMatchers("/api/v1/feeds/**").permitAll()
-                .antMatchers("/api/v1/notice/**").permitAll()
+                .antMatchers("/api/v1/feeds/{feedId}").permitAll()
                 .antMatchers("/api/v1/main").permitAll()
-                .antMatchers("/api/v1/feeds/{id}/like/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/v1/notice").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/notice/{noticeId}").permitAll()
+                .antMatchers("/api/v1/notice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
 
                 .and()

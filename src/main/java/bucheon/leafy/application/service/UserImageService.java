@@ -30,13 +30,27 @@ public class UserImageService {
 
     private final ImageComponent imageComponent;
 
-    public void createUserImage(Long userId, MultipartFile file) {
+    public void createOrUpdateUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
 
-        if(user.getUserImage() != null){
-            throw new ExistException(USER_IMAGE);
+        if(user.getUserImage() == null){
+            createUserImage(user, file);
+        } else {
+            editUserImage(user, file);
         }
+    }
 
+    public void createOrUpdateUserBackgroundImage(Long userId, MultipartFile file) {
+        User user = userService.getUserById(userId);
+
+        if(user.getUserBackgroundImage() == null){
+            createUserBackgroundImage(user, file);
+        } else {
+            editUserBackgroundImage(user, file);
+        }
+    }
+
+    public void createUserImage(User user, MultipartFile file) {
         String renamedFile = imageComponent.createUUID();
 
         UserImage userImage = UserImage.of(renamedFile, user);
@@ -45,13 +59,7 @@ public class UserImageService {
         imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
     }
 
-    public void createUserBackgroundImage(Long userId, MultipartFile file) {
-        User user = userService.getUserById(userId);
-
-        if(user.getUserBackgroundImage() != null){
-            throw new ExistException(USER_BACKGROUND_IMAGE);
-        }
-
+    public void createUserBackgroundImage(User user, MultipartFile file) {
         String renamedFile = imageComponent.createUUID();
 
         UserBackgroundImage backgroundImage = UserBackgroundImage.of(renamedFile, user);
@@ -60,19 +68,7 @@ public class UserImageService {
         imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
     }
 
-//    public void editUserImage(Long userId, MultipartFile file) {
-//        deleteUserImage(userId);
-//        createUserImage(userId, file);
-//    }
-//
-//    public void editUserBackgroundImage(Long userId, MultipartFile file) {
-//        deleteUserBackgroundImage(userId);
-//        createUserBackgroundImage(userId, file);
-//    }
-
-
-    public void editUserImage(Long userId, MultipartFile file) {
-        User user = userService.getUserById(userId);
+    public void editUserImage(User user, MultipartFile file) {
         UserImage userImage = user.getUserImage();
 
         String renamedFile = imageComponent.createUUID();
@@ -84,8 +80,7 @@ public class UserImageService {
     }
 
 
-    public void editUserBackgroundImage(Long userId, MultipartFile file) {
-        User user = userService.getUserById(userId);
+    public void editUserBackgroundImage(User user, MultipartFile file) {
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
 
         String renamedFile = imageComponent.createUUID();

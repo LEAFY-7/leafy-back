@@ -5,14 +5,18 @@
     <select id="findFeedImagesByFeedId" resultType="FeedImageResponse">
         select feed_id, feed_image_id, image_name, image_height
         from feed_image
-        where feed_id in
-        <foreach item="feedId" collection="feedIds" open="(" separator="," close=")">
-            #{feedId}
-        </foreach>
+        <if test="feedIds.size != 0">
+            where feed_id in
+            <foreach item="feedId" collection="feedIds" open="(" separator="," close=")">
+                #{feedId}
+            </foreach>
+        </if>
     </select>
 
-    <select id="findFeedImageList" resultType="FeedImageResponse" parameterType="java.lang.Long">
-        select feed_image_id, image_name, image_height from feed_image where feed_id = #{feedId}
+    <select id="findFeedImages" resultType="FeedImageResponse" parameterType="java.lang.Long">
+        select feed_id, feed_image_id, image_name, image_height
+        from feed_image
+        where feed_id = #{feedId}
     </select>
 
     <insert id="saveFeedImage" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="feed_image_id" keyProperty="request.feedImageId">

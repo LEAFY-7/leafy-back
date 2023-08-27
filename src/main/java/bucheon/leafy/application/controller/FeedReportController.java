@@ -34,7 +34,7 @@ public class FeedReportController {
     @Operation(summary = "피드 신고 목록")
     @GetMapping
     public ResponseEntity getReportedFeeds(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                          @PageableDefault(page = 1, size = 20) Pageable pageable) {
+                                          @PageableDefault(page = 0, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
         List<FeedResponse> reportedFeeds = feedReportService.getReportedFeeds(userId, pageable);

@@ -7,7 +7,6 @@ import bucheon.leafy.domain.notice.response.NoticeEditResponse;
 import bucheon.leafy.domain.notice.response.NoticeResponse;
 import bucheon.leafy.domain.notice.response.NoticeSaveResponse;
 import bucheon.leafy.util.request.PageRequest;
-import bucheon.leafy.util.response.PageResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,15 +16,15 @@ import java.util.List;
 @Mapper
 public interface NoticeMapper {
     int count();
-    NoticeResponse findById(Long noticeId);    //id찾기
-    int viewCnt(Long noticeId);   //view카운트
-    int deleteById(Long noticeId);    //삭제
-    int save(NoticeSaveRequest noticeSaveRequest);// 저장
-    NoticeSaveResponse savefind(@Param("userId")Long userId , @Param("noticeEditRequest") NoticeSaveRequest noticeSaveRequest);   //저장 조회오기
-    int editById(@Param("noticeId")Long noticeId,@Param("noticeEditRequest") NoticeEditRequest noticeEditRequest);//수정
-    NoticeEditResponse eidtfind(NoticeEditRequest noticeEditRequest);    //수정 조회오기
-    void hideByNoticeId(Long noticeId);
-    List<PageResponse> pageFindById(PageRequest pageRequest);//리스트 보여주기
+
+    NoticeResponse findById(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalse(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalseAndIsHideFalse(Long noticeId);
+    int viewCnt(Long noticeId);
+    int deleteById(Long noticeId);
+    Long save(@Param("userId")Long userId, @Param("noticeSaveRequest")NoticeSaveRequest noticeSaveRequest);
+    Long editById(@Param("noticeId")Long noticeId, @Param("noticeEditRequest")NoticeEditRequest noticeEditRequest);
+    List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);
     List<Long> findAllUserIds();
 
 }

@@ -44,14 +44,7 @@ class UserControllerTest {
                 .confirmPassword("Ss12345!@")
                 .email("abcd1234@gmail.com")
                 .name("김찬우")
-                .nickName("chanU_Kim")
                 .phone("01012345678")
-                .birthDay(LocalDate.now())
-                .zoneCode("12578")
-                .address("부천")
-                .jibunAddress("상동")
-                .roadAddress("호수공원")
-                .addressIsHide(false)
                 .build();
 
         TokenResponse tokenResponse = TokenResponse.builder().build();
