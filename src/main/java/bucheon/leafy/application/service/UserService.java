@@ -10,6 +10,7 @@ import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
@@ -77,18 +78,16 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
-        User saveUser = userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public CertificationNumberResponse sendCertificationNumber(String email) {
-        String number = mailComponent.sendCode(email);
-        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
+    public void updateUser(Long userId, UserRequest userRequest) {
+        User user = getUserById(userId);
+        user.update(userRequest);
 
-        CertificationNumberResponse response = CertificationNumberResponse.builder()
-                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
-        return response;
+        PasswordRequest passwordRequest = PasswordRequest.of(userRequest);
+        editPassword(userId, passwordRequest);
     }
-
 
     public void duplicationEmailCheck(String email) {
         Boolean exists = userRepository.existsByEmail(email);
@@ -139,6 +138,15 @@ public class UserService {
         }
     }
 
+    public CertificationNumberResponse sendCertificationNumber(String email) {
+        String number = mailComponent.sendCode(email);
+        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
+
+        CertificationNumberResponse response = CertificationNumberResponse.builder()
+                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
+        return response;
+    }
+
     private String randomPassword(int length){
         String upperAlphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lowerAlphabets = upperAlphabets.toLowerCase();
@@ -175,4 +183,5 @@ public class UserService {
             throw new PasswordNotMatchedException();
         }
     }
+
 }

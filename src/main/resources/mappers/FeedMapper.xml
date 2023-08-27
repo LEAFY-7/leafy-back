@@ -3,24 +3,82 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
+    <select id="findFeedsToFollowers" resultType="FeedResponse" parameterType="java.lang.Long">
+        SELECT f.*, u.nick_name as user_nick_name
+        FROM feed f
+        INNER JOIN (
+
+                SELECT f.feed_id, f.content, f.user_id,
+                ROW_NUMBER() OVER(PARTITION BY f.user_id ORDER BY f.created_at DESC) AS row_num
+                FROM feed f
+                JOIN feed_like_count flc ON f.feed_id = flc.feed_id
+                WHERE f.is_delete = false
+                AND
+                f.user_id IN (
+                        SELECT f.following_user_id
+                        FROM user u
+                        JOIN follow f ON u.user_id = #{userId}
+                        AND u.user_id = f.follower_user_id
+                )
+
+            ) AS following_users_feeds
+        ON following_users_feeds.feed_id = f.feed_id
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+        ORDER BY f.created_at DESC
+        LIMIT 10
+    </select>
+
+    <select id="findFeedsNotInFollowersFeeds" resultType="FeedResponse">
+        SELECT f.*, u.nick_name as user_nick_name
+        FROM feed f
+        JOIN feed_like_count flc
+        ON f.feed_id = flc.feed_id
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+        WHERE f.is_delete = false
+        AND f.feed_id NOT IN
+        <foreach item="feedId" collection="feedIds" open="(" separator="," close=")">
+            #{feedId}
+        </foreach>
+        ORDER BY flc.like_count DESC, f.created_at DESC
+        LIMIT #{size};
+    </select>
+
     <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed f
-        join feed_like_count flc on f.feed_id = flc.feed_id
-        where is_delete = false and feed_id &lt; #{key}
-        order by created_at desc, f.created_at desc
+        select f.*, u.nick_name as user_nick_name
+        from feed f
+        join feed_like_count flc
+        on f.feed_id = flc.feed_id
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+        where f.is_delete = false
+        and feed_id &lt; #{key}
+        order by flc.like_count desc, f.created_at desc
         limit #{size}
     </select>
 
     <select id="findFeedList" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed f
-        join feed_like_count flc on f.feed_id = flc.feed_id
-        where is_delete = false
-        order by created_at desc, f.created_at desc
+        select f.*, u.nick_name as user_nick_name
+        from feed f
+        join feed_like_count flc
+        on f.feed_id = flc.feed_id
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+        where f.is_delete = false
+        order by flc.like_count desc, f.created_at desc
         limit #{size}
     </select>
 
     <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >
-        select * from feed where feed_id = #{feedId} and is_delete = false
+        select f.*, u.nick_name as user_nick_name
+        from feed
+        INNER JOIN user
+        on user.user_id = feed.feed_id
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+        where feed_id = #{feedId}
+        and f.is_delete = false
     </select>
 
     <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="request.feedId">

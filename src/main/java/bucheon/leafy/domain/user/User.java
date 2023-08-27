@@ -2,6 +2,7 @@ package bucheon.leafy.domain.user;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,7 +43,7 @@ public class User extends BaseDeleteEntity {
 
     private LocalDate birthDay;
 
-    private String simpleIntroduction;
+    private String introduction;
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -64,7 +65,7 @@ public class User extends BaseDeleteEntity {
 
     @Builder
     private User(String password, String email, String nickName, String phone,
-                 String name, String simpleIntroduction, List<Feed> feeds,
+                 String name, String introduction, List<Feed> feeds,
                  Gender gender, LocalDate birthDay, Address address, UserImage userImage,
                  UserBackgroundImage userBackgroundImage, UserRole userRole) {
 
@@ -73,7 +74,7 @@ public class User extends BaseDeleteEntity {
         this.name = name;
         this.nickName = nickName;
         this.phone = phone;
-        this.simpleIntroduction = simpleIntroduction;
+        this.introduction = introduction;
         this.feeds = feeds;
         this.address = address;
         this.userImage = userImage;
@@ -92,8 +93,6 @@ public class User extends BaseDeleteEntity {
                 .name(signUpRequest.getName())
                 .nickName(signUpRequest.getNickName())
                 .phone(signUpRequest.getPhone())
-                .simpleIntroduction(signUpRequest.getSimpleIntroduction())
-                .gender(signUpRequest.getGender())
                 .birthDay(signUpRequest.getBirthDay())
                 .address(address)
                 .userRole(UserRole.MEMBER)
@@ -102,6 +101,17 @@ public class User extends BaseDeleteEntity {
 
         address.addUser(user);
         return user;
+    }
+
+    public void update(UserRequest userRequest) {
+        this.address.update(userRequest);
+
+        this.name = userRequest.getName();
+        this.nickName = userRequest.getNickName();
+        this.phone = userRequest.getPhone();
+        this.introduction = userRequest.getIntroduction();
+        this.gender = userRequest.getGender();
+        this.birthDay = userRequest.getBirthDay();
     }
 
     public void changePassword(String encodePassword){

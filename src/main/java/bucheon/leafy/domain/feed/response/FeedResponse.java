@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +15,7 @@ public class FeedResponse {
 
     private Long feedId;
     private Long userId;
-    private String userName;
+    private String userNickName;
     private String title;
     private String content;
     private String species;
@@ -25,17 +27,17 @@ public class FeedResponse {
     private FeedType feedType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private List<FeedImageResponse> feedImages = new ArrayList<>();
 
-    // JPA 에서 DTO 타입으로 값을 받기 위해 public 으로 생성자를 열어 놓음
     @Builder
-    public FeedResponse(Long feedId, Long userId, String userName, String title,
-                        String content, String species, String nickname, Double temperature,
-                        Integer humidity, Double waterAmount, String wateringPeriod,
-                        FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+    public FeedResponse(Long feedId, Long userId, String userNickName, String title,
+                            String content, String species, String nickname, Double temperature,
+                            Integer humidity, Double waterAmount, String wateringPeriod,
+                            FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 
         this.feedId = feedId;
         this.userId = userId;
-        this.userName = userName;
+        this.userNickName = userNickName;
         this.title = title;
         this.content = content;
         this.species = species;

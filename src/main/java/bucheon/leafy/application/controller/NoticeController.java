@@ -76,7 +76,7 @@ public class NoticeController {
     @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
-    public ResponseEntity<PageResponse> list(PageRequest pageRequest) {
+    public ResponseEntity<PageResponse> list(@ModelAttribute PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
     }
 

@@ -1,11 +1,11 @@
 package bucheon.leafy.domain.user.request;
 
+import bucheon.leafy.domain.user.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -13,12 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class SignUpRequest {
-
-        @NotBlank(message = "이메일을 입력해주세요")
-        @Email(message = "이메일 형식을 맞춰주세요")
-        @Schema(description = "이메일", example = "test@email.com")
-        private String email;
+public class UserRequest {
 
         @NotBlank(message = "비밀번호를 입력해주세요")
         @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
@@ -44,9 +39,16 @@ public class SignUpRequest {
         @Schema(description = "전화번호", example = "01012345678")
         private String phone;
 
+        @NotBlank(message = "간단 소개를 입력해주세요")
+        @Schema(description = "간단 소개", example = "리피입니다.")
+        private String introduction;
+
         @NotNull(message = "생일을 입력해주세요")
         @Schema(description = "생년월일", example = "1999-02-11")
         private LocalDate birthDay;
+
+        @Schema(description = "성별", example = "FEMALE")
+        private Gender gender;
 
 
         // TODO : 주소
@@ -73,16 +75,16 @@ public class SignUpRequest {
         private Boolean addressIsHide;
 
         @Builder
-        private SignUpRequest(String password, String confirmPassword, String email,
-                              String nickName, String name, String phone, String zoneCode,
-                              String address, String jibunAddress, String roadAddress,
-                              String detailAddress, Boolean addressIsHide, LocalDate birthDay) {
+        private UserRequest(String password, String confirmPassword, String nickName,
+                            String name, String introduction, String phone, String zoneCode,
+                            String address, String jibunAddress, String roadAddress, String detailAddress,
+                            Boolean addressIsHide, LocalDate birthDay, Gender gender) {
 
                 this.password = password;
                 this.confirmPassword = confirmPassword;
-                this.email = email;
                 this.nickName = nickName;
                 this.name = name;
+                this.introduction = introduction;
                 this.phone = phone;
                 this.zoneCode = zoneCode;
                 this.address = address;
@@ -91,6 +93,8 @@ public class SignUpRequest {
                 this.detailAddress = detailAddress;
                 this.addressIsHide = addressIsHide == null ? true : false;
                 this.birthDay = birthDay;
+                this.gender = gender;
         }
+
 
 }

@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bucheon.leafy.application.mapper.FeedImageMapper">
 
+    <select id="findFeedImagesByFeedId" resultType="FeedImageResponse">
+        select feed_id, feed_image_id, image_name, image_height
+        from feed_image
+        where feed_id in
+        <foreach item="feedId" collection="feedIds" open="(" separator="," close=")">
+            #{feedId}
+        </foreach>
+    </select>
+
     <select id="findFeedImageList" resultType="FeedImageResponse" parameterType="java.lang.Long">
         select feed_image_id, image_name, image_height from feed_image where feed_id = #{feedId}
     </select>

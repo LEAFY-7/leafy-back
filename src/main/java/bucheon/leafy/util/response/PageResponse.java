@@ -45,7 +45,6 @@ public class PageResponse <T> {
                     .isFirst(true)
                     .isLast(true)
                     .build();
-
         } else {
             Integer totalPage = (int) (total / Long.valueOf(pageRequest.limit));
             totalPage = total % Long.valueOf(pageRequest.limit) == 0 ? totalPage : totalPage + 1;
@@ -61,7 +60,6 @@ public class PageResponse <T> {
                     .isLast(isLast)
                     .build();
         }
-
     }
 
 }

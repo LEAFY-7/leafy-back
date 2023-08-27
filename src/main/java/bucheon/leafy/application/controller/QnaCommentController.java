@@ -8,6 +8,7 @@ import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public class QnaCommentController {
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void remove(@AuthenticationPrincipal AuthUser user,
+    public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
 
         Long userId = user.getUserId();

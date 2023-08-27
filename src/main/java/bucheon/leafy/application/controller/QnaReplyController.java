@@ -34,6 +34,7 @@ public class QnaReplyController {
     })
     @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
     @PreAuthorize("hasAnyRole('MEMBER')")
+
     @GetMapping("/{qnaReplyId}")
     public ResponseEntity<QnaReplyResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable Long qnaCommentId) {
 
@@ -80,7 +81,7 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 삭제")
     @DeleteMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remove( @AuthenticationPrincipal AuthUser user,
+    public void remove( @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                         @PathVariable("qnaReplyId") Long qnaReplyId) {
         Long userId = user.getUserId();
         qnareplyService.remove(qnaReplyId);

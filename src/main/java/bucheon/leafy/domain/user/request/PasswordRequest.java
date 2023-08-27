@@ -1,6 +1,7 @@
 package bucheon.leafy.domain.user.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,5 +21,18 @@ public class PasswordRequest {
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,16}$")
     @Schema(description = "비밀번호 재입력", example = "Abcd1234!")
     private String confirmPassword;
+
+    @Builder
+    private PasswordRequest(String password, String confirmPassword) {
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
+    public static PasswordRequest of(UserRequest userRequest) {
+        return PasswordRequest.builder()
+                .password(userRequest.getPassword())
+                .confirmPassword(userRequest.getConfirmPassword())
+                .build();
+    }
 
 }

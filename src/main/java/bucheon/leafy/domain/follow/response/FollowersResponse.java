@@ -10,15 +10,15 @@ import static bucheon.leafy.path.S3Path.USER_IMAGE_PATH;
 @Data
 public class FollowersResponse {
 
-    private Long id;
+    private Long userId;
     private String email;
     private String nickName;
 
     private String image;
 
     @Builder
-    private FollowersResponse(Long id, String email, String nickName, String image) {
-        this.id = id;
+    private FollowersResponse(Long userId, String email, String nickName, String image) {
+        this.userId = userId;
         this.email = email;
         this.nickName = nickName;
         this.image = image;
@@ -26,7 +26,7 @@ public class FollowersResponse {
 
     public static FollowersResponse of(User user) {
         return FollowersResponse.builder()
-                .id(user.getId())
+                .userId(user.getId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
                 .image(

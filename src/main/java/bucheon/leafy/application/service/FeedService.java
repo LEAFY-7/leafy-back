@@ -53,6 +53,36 @@ public class FeedService {
     private String imagePath = FEED_PATH;
 
     // 피드 리스트 조회
+    public ScrollResponse getMainFeedsWhenNotLogin(ScrollRequest scrollRequest) {
+        LinkedList<FeedResponse> feeds = feedMapper.findFeedList(scrollRequest);
+        List<FeedImageResponse> feedImages = getFeedImages(feeds);
+
+        injectFeedImages(feeds, feedImages);
+
+        ScrollRequest next = getNextKey(feeds, scrollRequest);
+        return ScrollResponse.of(next, feeds);
+    }
+
+    public ScrollResponse getMainFeedsWhenLogin(Long userId, ScrollRequest scrollRequest) {
+        LinkedList<FeedResponse> feeds = feedMapper.findFeedsToFollowers(userId);
+
+        List<Long> feedIds = feeds.stream()
+                .map(FeedResponse::getFeedId)
+                .collect(Collectors.toList());
+
+        Integer nextKeySize = scrollRequest.size - feeds.size();
+
+        LinkedList<FeedResponse> notFollowersFeeds = feedMapper.findFeedsNotInFollowersFeeds(feedIds, nextKeySize);
+        feeds.addAll(notFollowersFeeds);
+
+        List<FeedImageResponse> feedImages = getFeedImages(feeds);
+        injectFeedImages(feeds, feedImages);
+
+        ScrollRequest next = getNextKey(feeds, scrollRequest);
+        return ScrollResponse.of(next, feeds);
+    }
+
+    // getFeeds 에 findFeedsToFollowers 조회 데이터 not in 으로 필터링 추가 해야함
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
             LinkedList<FeedResponse> responseList = feedMapper.findFeedList(scrollRequest);
@@ -83,7 +113,7 @@ public class FeedService {
 
         Long userId = response.getFeedResponse().getUserId();
         Optional<User> user = Optional.of(userRepository.findById(userId)).orElseThrow(UserNotFoundException::new);
-        response.getFeedResponse().setUserName(user.map(User::getName).orElseThrow(UserNotFoundException::new));
+        response.getFeedResponse().setUserNickName(user.map(User::getNickName).orElseThrow(UserNotFoundException::new));
         return response;
     }
 
@@ -119,8 +149,8 @@ public class FeedService {
     }
 
     // 피드 이미지 조회
-    public List<FeedImageResponse> getFeedImages(Long feedId) {
-        List<FeedImageResponse> responseList =  feedImageMapper.findFeedImageList(feedId);
+    public List<FeedImageResponse> findFeedImages(List<Long> feedIds) {
+        List<FeedImageResponse> responseList =  feedImageMapper.findFeedImagesByFeedId(feedIds);
 
         for(FeedImageResponse response : responseList) {
             String imageUrl = imageComponent.getImageUrl(FEED_PATH, response.getImageName());
@@ -204,5 +234,36 @@ public class FeedService {
 
         if (feeds == null) return 0;
         return feeds.size();
+    }
+
+    // 피드 이미지 조회
+    public List<FeedImageResponse> getFeedImages(Long feedId) {
+        List<FeedImageResponse> responseList =  feedImageMapper.findFeedImageList(feedId);
+
+        for(FeedImageResponse response : responseList) {
+            String imageUrl = imageComponent.getImageUrl(FEED_PATH, response.getImageName());
+            response.setImageUrl(imageUrl);
+        }
+
+        return responseList;
+    }
+
+
+    private List<FeedImageResponse> getFeedImages(LinkedList<FeedResponse> feeds) {
+        List<Long> feedIds = feeds.stream()
+                .map(FeedResponse::getFeedId)
+                .collect(Collectors.toList());
+
+        return findFeedImages(feedIds);
+    }
+
+    private void injectFeedImages(LinkedList<FeedResponse> feeds, List<FeedImageResponse> feedImages) {
+        for (FeedResponse feed : feeds) {
+            for (FeedImageResponse feedImage : feedImages) {
+                if (feed.getFeedId() == feedImage.getFeedId()) {
+                    feed.getFeedImages().add(feedImage);
+                }
+            }
+        }
     }
 }
