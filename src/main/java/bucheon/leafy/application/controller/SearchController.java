@@ -31,8 +31,8 @@ public class SearchController {
     })
     @Operation(summary = "식물 검색")
     @GetMapping
-    public ResponseEntity<PageResponse> getSearch(@RequestParam String searchName, PageRequest pageRequest) {
-        return ResponseEntity.ok().body(searchService.getSearch(searchName, pageRequest));
+    public ResponseEntity<PageResponse> getSearch(@RequestParam String keyword, PageRequest pageRequest) {
+        return ResponseEntity.ok().body(searchService.getSearch(keyword, pageRequest));
 
     }
 
@@ -40,9 +40,9 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "식물별 학명 검색 조회 성공")
     })
     @Operation(summary = "식물별 학명 검색")
-    @GetMapping("/goodName")
-    public ResponseEntity<List<goodNameResponse>> getGoodName(@RequestParam String searchName) {
-        return ResponseEntity.ok().body(searchService.getGoodName(searchName));
+    @GetMapping("/good-name")
+    public ResponseEntity<List<goodNameResponse>> getGoodName(@RequestParam String keyword) {
+        return ResponseEntity.ok().body(searchService.getGoodName(keyword));
 
     }
 
