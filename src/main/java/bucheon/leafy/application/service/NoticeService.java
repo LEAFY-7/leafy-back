@@ -64,8 +64,7 @@ public class NoticeService {
 
 
     public PageResponse getList(PageRequest pageRequest)  {
-
-        List<PageResponse> list = noticeMapper.pageFindById(pageRequest);
+        List<NoticeResponse> list = noticeMapper.pageFindById(pageRequest);
         long total = noticeMapper.count();
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
