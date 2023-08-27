@@ -68,7 +68,7 @@
         ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
         </if>
         <if test="pageRequest.sortColumn == null">
-        ORDER BY created_at desc, modified_at desc
+        ORDER BY modified_at desc, created_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
