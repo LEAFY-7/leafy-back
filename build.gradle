@@ -78,24 +78,24 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//task copyMainResources(type: Copy) {
-//	copy {
-//		from './submodule-config'
-//		include "application-main.yml"
-//		into './src/main/resources'
-//		rename { String fileName ->
-//			fileName.replace("application-main.yml", "application.yml")
-//		}
-//	}
-//}
-//
-//task copyTestResources(type: Copy) {
-//	copy {
-//		from './submodule-config'
-//		include "application-test.yml"
-//		into './src/test/resources'
-//		rename { String fileName ->
-//			fileName.replace("application-test.yml", "application.yml")
-//		}
-//	}
-//}
+task copyMainResources(type: Copy) {
+	copy {
+		from './submodule-config'
+		include "application-main.yml"
+		into './src/main/resources'
+		rename { String fileName ->
+			fileName.replace("application-main.yml", "application.yml")
+		}
+	}
+}
+
+task copyTestResources(type: Copy) {
+	copy {
+		from './submodule-config'
+		include "application-test.yml"
+		into './src/test/resources'
+		rename { String fileName ->
+			fileName.replace("application-test.yml", "application.yml")
+		}
+	}
+}
