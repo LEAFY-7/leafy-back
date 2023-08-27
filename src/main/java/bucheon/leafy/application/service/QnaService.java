@@ -33,11 +33,12 @@ public class QnaService {
     }
 
     public QnaSaveResponse write(Long userId, QnaSaveRequest qnaSaveRequest) {
-        QnaSaveResponse qnaSaveResponse = qnaMapper.save(userId ,qnaSaveRequest);
 
-        if (qnaSaveResponse == null) {
+        if (qnaMapper.save(userId, qnaSaveRequest) != 1) {
             throw new WriteFailedException();
         }
+        QnaSaveResponse qnaSaveResponse = qnaMapper.savefind(userId, qnaSaveRequest);
+
         return qnaSaveResponse;
     }
 
@@ -70,7 +71,13 @@ public class QnaService {
         return qnaMapper.findById(qnaId);
     }
     public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest) {
-        return qnaMapper.editById(qnaId, qnaEditRequest );
+
+
+        if (qnaMapper.editById(qnaId, qnaEditRequest) != 1) {
+            throw new WriteFailedException();
+        }
+        QnaEditResponse qnaEditResponse = qnaMapper.eidtfind(qnaEditRequest);
+        return qnaEditResponse;
     }
 
     public Long getQnaById( Long qnaId) {

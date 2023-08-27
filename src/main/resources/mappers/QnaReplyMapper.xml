@@ -31,7 +31,7 @@
           AND user_id = #{userId}
     </select>
 
-    <update id="edit" parameterType="QnaReplyEditReqeust" >
+    <update id="edit" >
         UPDATE qna_reply
            SET  modified_at = now()
                ,comment = #{comment}

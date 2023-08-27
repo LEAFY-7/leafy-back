@@ -20,6 +20,14 @@
         VALUES (now(),now(), 0,  #{contents}, 0, #{title}, 0, #{userId})
     </insert>
 
+    <select id="savefind" parameterType="NoticeSaveRequest" resultType="NoticeSaveResponse">
+        SELECT notice_id, created_at
+        FROM notice
+        WHERE contents = #{noticeSaveRequest.contents}
+          AND title = #{noticeSaveRequest.title}
+          AND user_id = #{userId}
+    </select>
+
     <update id="viewCnt" parameterType="long">
         UPDATE notice
         SET   view_count = view_count + 1
@@ -30,6 +38,7 @@
         SELECT *
         FROM notice
         WHERE notice_id = #{noticeId}
+          AND is_delete = 0
     </select>
 
     <update id="editById" >
@@ -39,6 +48,13 @@
              , title = #{noticeEditRequest.title}
         WHERE notice_id = #{noticeId}
     </update>
+
+    <select id="eidtfind" parameterType="NoticeEditRequest" resultType="NoticeSaveResponse">
+        SELECT  modified_at
+        FROM notice
+        WHERE contents = #{contents}
+          AND title = #{title}
+    </select>
 
     <update id="hideByNoticeId" parameterType="NoticeRequest">
         UPDATE notice
@@ -60,6 +76,4 @@
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
-
-
 </mapper>

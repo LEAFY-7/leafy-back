@@ -12,7 +12,7 @@ public class QnaSaveRequest {
 
 
     // 게시물 내용과 제목, 작성자 ID를 받아서 초기화하는 생성자
-    public QnaSaveRequest(String contents, String title, String userId) {
+    public QnaSaveRequest(String contents, String title ) {
         this.contents = contents;
         this.title = title;
 

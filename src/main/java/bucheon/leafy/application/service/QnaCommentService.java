@@ -6,7 +6,8 @@ import bucheon.leafy.application.mapper.QnaCommentMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
-import bucheon.leafy.domain.qna.response.QnaSaveResponse;
+
+import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
 import bucheon.leafy.exception.WriteFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,11 @@ public class QnaCommentService {
 
     private final QnaCommentMapper qnacommentMapper;
     private final QnaMapper qnaMapper;
-    public void remove(Long qnaCommentId, Long userId) {  qnacommentMapper.deleteByQnaCommentId(qnaCommentId, userId); }
+
+    public void remove(Long qnaCommentId, Long userId) {
+        qnacommentMapper.deleteByQnaCommentId(qnaCommentId, userId);
+    }
+
     public QnaCommentSaveResponse write(QnaCommentSaveReqeust qnaCommentSaveReqeust) {
 
         if (qnacommentMapper.save(qnaCommentSaveReqeust) != 1) {
@@ -32,10 +37,13 @@ public class QnaCommentService {
 
         QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.saveResponse(qnaCommentSaveReqeust);
 
-    return qnaSaveResponse;
+        return qnaSaveResponse;
 
     }
-    public void modify(Long userId ,String comment ) {  qnacommentMapper.editByQnaCommentId(userId ,comment); }
+
+    public QnaReplyEditResponse modify(Long qnaReplyId, String comment) {
+        return qnacommentMapper.editByQnaCommentId(qnaReplyId, comment);
+    }
 
 }
 

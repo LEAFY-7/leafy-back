@@ -3,10 +3,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
 import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
+import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,11 +33,14 @@ public class QnaCommentController {
     @Operation(summary = "댓글 수정하기")
     @PatchMapping("/modifiy/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void modify(@AuthenticationPrincipal AuthUser user,
-                       @RequestBody String comment ) {
+    public ResponseEntity<QnaReplyEditResponse> modify(@AuthenticationPrincipal AuthUser user,
+                                                       @PathVariable("qnaReplyId") Long qnaReplyId,
+                                                       @RequestBody String comment ) {
         Long userId = user.getUserId();
 
-        qnacommentService.modify(userId, comment);
+        QnaReplyEditResponse response = qnacommentService.modify(qnaReplyId, comment);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
     }
 

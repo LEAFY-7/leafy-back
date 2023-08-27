@@ -21,8 +21,10 @@ public interface QnaMapper {
     int count();
     QnaResponse findById(Long qnaId);   //클릭해서 읽기(select)
     boolean deleteById(Long qnaId);  //삭제
-    QnaSaveResponse save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
-    QnaEditResponse editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest);//수정
+    int save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
+    QnaSaveResponse savefind(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장 조회오기
+    int editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest);//수정
+    QnaEditResponse eidtfind(QnaEditRequest qnaEditRequest);    //수정 조회오기
     Long findQnaById(Long qnaId); //qnaId가지고 오기
     int  editByIdQnaStatus(Long qnaId);//상태 변경
     List<PageResponse> adminSelectAll(PageRequest pageRequest);   //관리자리스트

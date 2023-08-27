@@ -1,11 +1,9 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.controller.response.FeedByIdResponse;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.notice.request.NoticeEditRequest;
 import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
 import bucheon.leafy.domain.notice.response.NoticeEditResponse;
@@ -17,12 +15,10 @@ import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -47,10 +43,10 @@ public class NoticeService {
     public NoticeSaveResponse write(NoticeSaveRequest noticeSaveRequest , Long userId) {
 
 
-        if (noticeMapper.save(noticeSaveRequest) == null) {
+        if (noticeMapper.save(noticeSaveRequest) != 1) {
             throw new WriteFailedException();
         }
-        NoticeSaveResponse noticeSaveResponse = noticeMapper.save(noticeSaveRequest);
+        NoticeSaveResponse noticeSaveResponse = noticeMapper.savefind(userId, noticeSaveRequest);
 
         List<Long> userIds = noticeMapper.findAllUserIds();
         for (Long id : userIds) {
@@ -84,11 +80,11 @@ public class NoticeService {
     }
     public NoticeEditResponse modify(Long noticeId, NoticeEditRequest noticeEditRequest)  {
 
-        NoticeEditResponse noticeEditResponse = noticeMapper.editById(noticeId, noticeEditRequest);
 
-        if (noticeEditResponse == null) {
+        if (noticeMapper.editById(noticeId, noticeEditRequest) != 1) {
             throw new ModifyFailedException();
         }
+        NoticeEditResponse noticeEditResponse = noticeMapper.eidtfind(noticeEditRequest);
 
         return noticeEditResponse;
     }

@@ -5,7 +5,9 @@ import bucheon.leafy.application.service.QnaService;
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
 import bucheon.leafy.domain.qna.response.QnaEditResponse;
+import bucheon.leafy.domain.qna.response.QnaResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
+import bucheon.leafy.exception.ReadFailedException;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,8 +67,8 @@ public class QnaController {
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{qnaId}")
-    public ResponseEntity<Object> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                       @PathVariable Long qnaId) {
+    public ResponseEntity<QnaResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                            @PathVariable Long qnaId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnaService.getRead(qnaId));
@@ -96,17 +98,17 @@ public class QnaController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<PageResponse> list(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                             @PathVariable("qnaId") Long qnaId,
                                              PageRequest pageRequest) {
 
-//        Long userId = user.getUserId();
-//        Long qnaUserId = qnaService.getQnaById(qnaId);
-//
-//        if (userId.equals(qnaUserId)) {
-//            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
-//        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
-//            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
-//        }
-//        throw new ReadFailedException();
-        return null;
+        Long userId = user.getUserId();
+        Long qnaUserId = qnaService.getQnaById(qnaId);
+
+        if (userId.equals(qnaUserId)) {
+            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
+        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
+            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
+        }
+        throw new ReadFailedException();
     }
 }
