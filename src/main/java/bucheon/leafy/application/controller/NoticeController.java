@@ -73,10 +73,12 @@ public class NoticeController {
             @ApiResponse(responseCode = "200", description = "Notice 글 목록 보여주기 성공"),
             @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
     })
-    @Operation(summary = "전체 글 목록 보기")
+    @Operation(summary = "전체 공지사항 보기")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
-    public ResponseEntity<PageResponse> list(@ModelAttribute PageRequest pageRequest) {
+    public ResponseEntity<PageResponse> list(@ModelAttribute
+                                                 @Parameter(description = "page, limit, sortColum, sortStatus 전부 옵션, " +
+                                                         "sortColum는 CREATE_DATE, MODIFY_DATE 가능, ASC, DESC 가능")PageRequest pageRequest) {
         return ResponseEntity.ok().body(noticeService.getList(pageRequest));
     }
 
