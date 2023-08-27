@@ -7,6 +7,7 @@
     <select id="count" parameterType="int" resultType="int">
         SELECT count(*)
         FROM notice
+        WHERE is_delete = false and is_hide = false
     </select>
 
     <update id="deleteById" parameterType="long">
@@ -51,11 +52,15 @@
           FROM user
     </select>
 
-    <select id="pageFindById" parameterType="PageRequest" resultType="PageResponse">
+    <select id="pageFindById" resultType="bucheon.leafy.domain.notice.response.NoticeResponse">
         SELECT *
         FROM notice
-        <if test="pageRequest.sortColumn != null and pageRequest.sortStatus != null">
+        WHERE is_delete = false and is_hide = false
+        <if test="pageRequest.sortColumn != null">
         ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        </if>
+        <if test="pageRequest.sortColumn == null">
+        ORDER BY created_at desc, modified_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
