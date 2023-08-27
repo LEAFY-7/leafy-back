@@ -21,6 +21,14 @@
         VALUES (now(), now(), 0, #{contents}, 0,  #{title}, 0, #{userId})
     </insert>
 
+    <select id="saveResponse" parameterType="QnaSaveRequest" resultType="QnaResponse">
+        SELECT qna_id, created_at
+        FROM qna
+        WHERE contnets = #{contnets}
+          AND title = #{title}
+          AND user_id = #{userId}
+    </select>
+
     <select id="findById" parameterType="long" resultType="QnaResponse">
         SELECT
         q.*,
@@ -54,7 +62,6 @@
           , user_id     = #{userId}
         WHERE qna_id      = #{qnaId}
     </update>
-
 
     <update id="editByIdQnaStatus" parameterType="QnaStatusResponse">
         UPDATE qna

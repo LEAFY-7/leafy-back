@@ -1,24 +1,28 @@
 package bucheon.leafy.application.service;
 
+import bucheon.leafy.application.controller.response.FeedByIdResponse;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.alarm.AlarmType;
+import bucheon.leafy.domain.notice.Notice;
 import bucheon.leafy.domain.notice.request.NoticeEditRequest;
 import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
 import bucheon.leafy.domain.notice.response.NoticeEditResponse;
 import bucheon.leafy.domain.notice.response.NoticeResponse;
+import bucheon.leafy.domain.notice.response.NoticeSaveResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Service
@@ -40,21 +44,26 @@ public class NoticeService {
     }
 
 
-    public void write(Long noticeId, NoticeSaveRequest noticeSaveRequest)  {
+    public NoticeSaveResponse write(NoticeSaveRequest noticeSaveRequest) {
 
-        // 공지 저장
+
         if (noticeMapper.save(noticeSaveRequest) != 1) {
             throw new WriteFailedException();
         }
-        // 모든 사용자에게 알림 보내기
+        NoticeSaveResponse noticeSaveResponse = noticeMapper.saveResponse(noticeSaveRequest);
+
+        Long authorUserId = noticeSaveRequest.getUserId();
+
         List<Long> userIds = noticeMapper.findAllUserIds();
         for (Long id : userIds) {
-            // 자신에게는 알림을 보내지 않도록 조건 추가
-            if (!id.equals(noticeSaveRequest.getUserId())) {
-                alarmService.createAlarm(id, AlarmType.NOTICE, noticeId);
+            if (!id.equals(authorUserId)) {
+                alarmService.createAlarm(id, AlarmType.NOTICE, noticeSaveResponse.getNoticeId());
             }
         }
+
+        return noticeSaveResponse;
     }
+
 
     public PageResponse getList(PageRequest pageRequest)  {
 

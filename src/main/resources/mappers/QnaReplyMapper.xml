@@ -4,39 +4,45 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
-    <select id="getCount" parameterType="long" resultType="int">
-        SELECT count(*)
-          FROM qna_reply
-         WHERE qna_reply_id = #{qnaReplyId}
-    </select>
+<!--    <select id="getCount" parameterType="long" resultType="int">-->
+<!--        SELECT count(*)-->
+<!--          FROM qna_reply-->
+<!--         WHERE qna_reply_id = #{qnaReplyId}-->
+<!--    </select>-->
 
     <update id="deleteByQnaReplyId" parameterType="Long">
         UPDATE qna_reply
            SET is_delete = 1
          WHERE qna_reply_id = #{qnaReplyId}
-           AND user_id = #{userId}
     </update>
 
-    <insert id="save" parameterType="QnaReplySaveReqeust" >
+    <insert id="save" parameterType="QnaReplySaveRequest" >
         INSERT INTO qna_reply
             ( created_at, modified_at is_delete, comment, user_id, qna_comment_id)
              VALUES
             ( now(), now(),  0, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
+    <select id="saveResponse" parameterType="QnaReplySaveRequest" resultType="QnaReplySaveResponse">
+        SELECT qna_reply_id, created_at
+        FROM qna
+        WHERE contnets = #{contnets}
+          AND title = #{title}
+          AND user_id = #{userId}
+    </select>
+
     <update id="edit" parameterType="QnaReplyEditReqeust" >
         UPDATE qna_reply
            SET  modified_at = now()
                ,comment = #{comment}
          WHERE qna_reply_id = #{qnaReplyId}
-           AND user_id = #{userId}
     </update>
 
-    <select id="pageFindById" resultType="QnaReplyDto">
-        SELECT comment, user_id
-        FROM qna_reply_id
-        ORDER BY created_at
-         WHERE qna_comment_id =#{qnaCommentId}
-    </select>
+<!--    <select id="pageFindById`" parameterType="Long" resultType="QnaReplyResponse">-->
+<!--        SELECT comment, user_id-->
+<!--        FROM qna_reply_id-->
+<!--        ORDER BY created_at-->
+<!--         WHERE qna_comment_id =#{qnaCommentId}-->
+<!--    </select>-->
 
 </mapper>

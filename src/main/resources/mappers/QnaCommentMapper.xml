@@ -8,7 +8,6 @@
         UPDATE  qna_comment
            SET is_delete = 1
          WHERE qna_comment_id = #{qnaCommentId}
-           AND user_id = #{userId}
     </update>
 
     <insert id="save" parameterType="QnaCommentSaveReqeust">
@@ -23,7 +22,6 @@
         SET comment = #{comment}
           , modified_at = now()
         WHERE qna_comment_id = #{qnaCommentId}
-          AND user_id = #{userId}
     </update>
 
 </mapper>

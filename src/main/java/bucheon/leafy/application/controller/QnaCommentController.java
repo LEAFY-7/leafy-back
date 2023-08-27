@@ -5,11 +5,14 @@ import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
 import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
+import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
+import bucheon.leafy.domain.qna.response.QnaSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +33,10 @@ public class QnaCommentController {
     @PatchMapping("/modifiy/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
-                       @RequestBody QnaCommentEditReqeust qnaCommentEditReqeust) {
+                       @RequestBody String comment ) {
         Long userId = user.getUserId();
-        qnaCommentEditReqeust.setUserId(userId);
-        qnacommentService.modify(userId, qnaCommentEditReqeust);
+
+        qnacommentService.modify(userId, comment);
 
     }
 
@@ -45,13 +48,14 @@ public class QnaCommentController {
     @Operation(summary = "댓글 쓰기")
     @PostMapping("/comments/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void write(@AuthenticationPrincipal AuthUser user,
-                      @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
+    public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
+                                        @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
 
         Long userId = user.getUserId();
-        qnaCommentSaveReqeust.setUserId(userId);
-        qnacommentService.write(qnaCommentSaveReqeust);
 
+        QnaCommentSaveResponse response = qnacommentService.write(qnaCommentSaveReqeust);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiResponses({

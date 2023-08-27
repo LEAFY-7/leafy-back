@@ -3,9 +3,9 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.reply.request.QnaReplyEditReqeust;
-import bucheon.leafy.domain.reply.request.QnaReplySaveReqeust;
+import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
 import bucheon.leafy.domain.reply.response.QnaReplyResponse;
+import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,10 +49,10 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 수정")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
-                        @RequestBody QnaReplyEditReqeust qnaReplyEditReqeust) {
+                        @PathVariable("qnaReplyId") Long qnaReplyId,
+                        @RequestBody String comment) {
         Long userId = user.getUserId();
-        qnaReplyEditReqeust.setUserId(userId);
-        qnareplyService.modify(qnaReplyEditReqeust);
+        qnareplyService.modify(qnaReplyId, comment);
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 쓰기 성공"),
@@ -62,12 +62,14 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 쓰기")
     @PostMapping("/qnaReplyId")
     @ResponseStatus(HttpStatus.CREATED)
-    public void write(@AuthenticationPrincipal AuthUser user,
-                      @RequestBody QnaReplySaveReqeust qnaReplySaveReqeust) {
+    public ResponseEntity<QnaReplySaveResponse> write(@AuthenticationPrincipal AuthUser user,
+                                                      @RequestBody QnaReplySaveRequest qnaReplySaveRequest) {
 
         Long userId = user.getUserId();
-        qnaReplySaveReqeust.setUserId(userId);
-        qnareplyService.write(qnaReplySaveReqeust);
+
+        QnaReplySaveResponse response = qnareplyService.write(qnaReplySaveRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiResponses({
@@ -81,7 +83,7 @@ public class QnaReplyController {
     public void remove( @AuthenticationPrincipal AuthUser user,
                         @PathVariable("qnaReplyId") Long qnaReplyId) {
         Long userId = user.getUserId();
-        qnareplyService.remove(qnaReplyId, userId);
+        qnareplyService.remove(qnaReplyId);
     }
 }
 

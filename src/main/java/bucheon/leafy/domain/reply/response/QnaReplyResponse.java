@@ -9,20 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QnaReplyResponse {
 
-    private Long qnaReplyId;
     private String comment;
     private Long userId;
-    private Long qnaCommentId;
-
 
     public QnaReplyResponse(Long qnaReplyId, String comment, Long userId) {
-        this.qnaReplyId = qnaReplyId;
+
         this.comment = comment;
         this.userId = userId;
     }
-    public QnaReplyResponse(String comment, Long userId, Long qnaCommentId) {
-        this.comment = comment;
-        this.userId = userId;
-        this.qnaCommentId = qnaCommentId;
-    }
+
 }

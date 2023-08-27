@@ -7,14 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QnaCommentEditReqeust {
 
-    private Long qnaCommentId;
     private String comment;
-    private Long userId;
 
-    public QnaCommentEditReqeust(Long qnaCommentId, String comment, Long userId) {
-        this.qnaCommentId = qnaCommentId;
+    public QnaCommentEditReqeust( String comment) {
         this.comment = comment;
-        this.userId = userId;
     }
 
 }

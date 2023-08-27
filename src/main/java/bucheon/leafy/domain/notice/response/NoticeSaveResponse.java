@@ -3,17 +3,18 @@ package bucheon.leafy.domain.notice.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 public class NoticeSaveResponse {
-    private String contents;
-    private String title;
-    private Long userId;
+    private Long noticeId;
+    private Date createAt;
 
-    public NoticeSaveResponse(String contents, String title, Long userId) {
-        this.contents = contents;
-        this.title = title;
-        this.userId = userId;
+    public NoticeSaveResponse(Long noticeId, Date createAt) {
+        this.noticeId = noticeId;
+        this.createAt = createAt;
+
     }
 
 
