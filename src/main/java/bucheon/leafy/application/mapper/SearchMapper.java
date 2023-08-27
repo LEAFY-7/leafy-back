@@ -17,7 +17,7 @@ public interface SearchMapper {
 
     int deleteSearch();
 
-    long count(String searchName);
+    long count(String keyword);
 
     List<goodNameResponse> findGoodNameByPumName(String keyword);
 }

@@ -5,6 +5,7 @@ import bucheon.leafy.domain.search.response.goodNameResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,9 @@ public class SearchController {
     })
     @Operation(summary = "식물 검색")
     @GetMapping
-    public ResponseEntity<PageResponse> getSearch(@RequestParam String keyword, PageRequest pageRequest) {
+    public ResponseEntity<PageResponse> getSearch(@RequestParam String keyword,
+                                                  @Parameter(description = "page, limit, sortColum, sortStatus 전부 옵션, " +
+                                                          "식물 검색에서 sortColum, sortStatus는 데이터 보내도 해당 데이터로 정렬안됨, 디폴트 goodName(품종명)으로 정렬") PageRequest pageRequest) {
         return ResponseEntity.ok().body(searchService.getSearch(keyword, pageRequest));
 
     }
