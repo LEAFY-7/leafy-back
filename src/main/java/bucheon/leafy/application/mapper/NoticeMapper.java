@@ -7,7 +7,6 @@ import bucheon.leafy.domain.notice.response.NoticeEditResponse;
 import bucheon.leafy.domain.notice.response.NoticeResponse;
 import bucheon.leafy.domain.notice.response.NoticeSaveResponse;
 import bucheon.leafy.util.request.PageRequest;
-import bucheon.leafy.util.response.PageResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +22,7 @@ public interface NoticeMapper {
     NoticeSaveResponse save(NoticeSaveRequest noticeSaveRequest);// 저장
     NoticeEditResponse editById(@Param("noticeId")Long noticeId,@Param("noticeEditRequest") NoticeEditRequest noticeEditRequest);//수정
     void hideByNoticeId(Long noticeId);
-    List<PageResponse> pageFindById(PageRequest pageRequest);//리스트 보여주기
+    List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);//리스트 보여주기
     List<Long> findAllUserIds();
     //    NoticeDto searchSelectPage(PageRequest pageRequest);    //공지사항 검색 나중에 추가
 

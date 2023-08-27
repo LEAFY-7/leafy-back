@@ -70,10 +70,10 @@ public class NoticeController {
         return ResponseEntity.ok().body(noticeService.getRead(noticeId));
     }
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Notice 글 목록 보여주기 성공"),
+            @ApiResponse(responseCode = "200", description = "Notice 글 목록 보여주기 성공"),
             @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
     })
-    @Operation(summary = "Notice 게시판의 전체 글 목록 보기")
+    @Operation(summary = "전체 글 목록 보기")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
     public ResponseEntity<PageResponse> list(@ModelAttribute PageRequest pageRequest) {

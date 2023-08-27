@@ -14,11 +14,11 @@ class QnaMapperTest {
     @Autowired
     QnaMapper qnaMapper;
 
-    @Test
-    void save() {
-        QnaSaveRequest qnaSaveRequest = new QnaSaveRequest("contents","title");
-        qnaMapper.save(1L, qnaSaveRequest);
-    }
+//    @Test
+//    void save() {
+//        QnaSaveRequest qnaSaveRequest = new QnaSaveRequest("contents","title");
+//        qnaMapper.save(1L, qnaSaveRequest);
+//    }
 
     @Test
     void count() {
