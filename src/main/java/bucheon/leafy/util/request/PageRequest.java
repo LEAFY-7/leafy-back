@@ -19,13 +19,14 @@ public class PageRequest {
 
     private SortStatus sortStatus;
 
-    public PageRequest(Integer page, Integer limit, SortType sortColumn, SortStatus sortStatus) {
 
+    public PageRequest(Integer page, Integer limit, SortType sortColumn, SortStatus sortStatus) {
+        System.out.println("page, limit, sortColum, sortStatus");
         this.page = page == null ? 1 : page;
         this.limit = limit == null ? 20 : limit;
         this.offset = Long.valueOf(this.limit * (this.page - 1));
-        this.sortColumn = sortColumn.getText();
-        this.sortStatus = sortStatus;
+        this.sortColumn = sortColumn == null ? null : sortColumn.getText();
+        this.sortStatus = sortStatus == null ? SortStatus.DESC : sortStatus;
     }
 
 }
