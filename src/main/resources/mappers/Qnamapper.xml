@@ -21,14 +21,6 @@
         VALUES (now(), now(), 0, #{contents}, 0,  #{title}, 0, #{userId})
     </insert>
 
-    <select id="saveResponse" parameterType="QnaSaveRequest" resultType="QnaResponse">
-        SELECT qna_id, created_at
-        FROM qna
-        WHERE contnets = #{contnets}
-          AND title = #{title}
-          AND user_id = #{userId}
-    </select>
-
     <select id="findById" parameterType="long" resultType="QnaResponse">
         SELECT
         q.*,
@@ -54,22 +46,21 @@
         WHERE qna_id = #{qnaId}
     </update>
 
-    <update id="editById" parameterType="QnaEditRequest">
+    <update id="editById">
         UPDATE qna
-        SET contents    = #{contents}
-          , title       = #{title}
+        SET contents = #{qnaEditRequest.contents}
+          , title = #{qnaEditRequest.title}
           , modified_at = now()
-          , user_id     = #{userId}
-        WHERE qna_id      = #{qnaId}
+        WHERE qna_id = #{qnaId}
     </update>
 
-    <update id="editByIdQnaStatus" parameterType="QnaStatusResponse">
+    <update id="editByIdQnaStatus" parameterType="QnaStatusRequest">
         UPDATE qna
         SET   qna_status = "답변 완료"
         WHERE  qna_id = #{qnaId}
     </update>
 
-    <select id="pageFindById" parameterType="PageRequest" resultType="PageResponse">
+    <select id="pageFindById" resultType="PageResponse">
         SELECT *
         FROM qna
         WHERE qna_id = #{qnaId}

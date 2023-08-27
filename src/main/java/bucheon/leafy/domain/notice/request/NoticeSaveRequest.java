@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 public class NoticeSaveRequest {
     private String contents;
     private String title;
-    private Long userId;
 
-    public NoticeSaveRequest(String contents, String title, Long userId) {
+    public NoticeSaveRequest(String contents, String title) {
         this.contents = contents;
         this.title = title;
-        this.userId = userId;
     }
 
 

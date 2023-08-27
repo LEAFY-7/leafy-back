@@ -32,25 +32,11 @@
         WHERE notice_id = #{noticeId}
     </select>
 
-    <select id="saveResponse" parameterType="NoticeSaveRequest" resultType="NoticeResponse">
-        SELECT notice_id, created_at
-        FROM notice
-        WHERE contnets = #{contnets}
-          AND title = #{title}
-          AND user_id = #{userId}
-    </select>
-
-    <select id="modifiedAt" parameterType="long" resultType="NoticeEditResponse">
-        SELECT modified_at
-        FROM notice
-        WHERE notice_id = #{noticeId}
-    </select>
-
-    <update id="editById" parameterType="NoticeEditRequest" >
+    <update id="editById" >
         UPDATE notice
            SET modified_at = now()
-             , contents = #{contents}
-             , title = #{title}
+             , contents = #{noticeEditRequest.contents}
+             , title = #{noticeEditRequest.title}
         WHERE notice_id = #{noticeId}
     </update>
 

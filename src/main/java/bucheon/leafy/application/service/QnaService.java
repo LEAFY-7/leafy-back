@@ -1,14 +1,12 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
-import bucheon.leafy.application.repository.UserRepository;
+
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
+import bucheon.leafy.domain.qna.response.QnaEditResponse;
 import bucheon.leafy.domain.qna.response.QnaResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
-import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
@@ -24,10 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QnaService {
 
-    private final UserRepository userRepository;
     private final QnaMapper qnaMapper;
-    private final AlarmMapper alarmMapper;
-
 
     public boolean remove(Long qnaId) {
         boolean deleteStatus = qnaMapper.deleteById(qnaId);
@@ -37,14 +32,12 @@ public class QnaService {
         return true;
     }
 
-    public QnaSaveResponse write(QnaSaveRequest qnaSaveRequest) {
+    public QnaSaveResponse write(Long userId, QnaSaveRequest qnaSaveRequest) {
+        QnaSaveResponse qnaSaveResponse = qnaMapper.save(userId ,qnaSaveRequest);
 
-        if (qnaMapper.save(qnaSaveRequest) != 1) {
+        if (qnaSaveResponse == null) {
             throw new WriteFailedException();
         }
-
-        QnaSaveResponse qnaSaveResponse = qnaMapper.saveResponse(qnaSaveRequest);
-
         return qnaSaveResponse;
     }
 
@@ -76,21 +69,13 @@ public class QnaService {
 
         return qnaMapper.findById(qnaId);
     }
-    public int modify(QnaEditRequest qnaEditRequest, Long qnaId) {
-        return qnaMapper.editById(qnaEditRequest, qnaId);
+    public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest) {
+        return qnaMapper.editById(qnaId, qnaEditRequest );
     }
 
     public Long getQnaById( Long qnaId) {
         return Optional.of(qnaMapper.findQnaById(qnaId)).orElseThrow(FeedNotFoundException::new);
     }
 
-    public User getUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-    }
 
-    public GetMeResponse getMe(Long userId) {
-        User user = getUserById(userId);
-        int alarmCount = alarmMapper.countByUserId(userId);
-        return GetMeResponse.of(user, alarmCount);
-    }
 }
