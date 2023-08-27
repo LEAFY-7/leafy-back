@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bucheon.leafy.application.mapper.FeedTagMapper">
 
-    <select id="findFeedTagList" resultType="FeedTagResponse" parameterType="java.lang.Long">
+    <select id="findFeedTags" resultType="FeedTagResponse" parameterType="java.lang.Long">
         select feed_tag_id, tag from feed_tag where feed_id = #{feedId}
     </select>
 
