@@ -24,6 +24,7 @@ public class ControllerAdvisor {
 
     private final SlackApi slackApi;
 
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> SlackErrorMessage(Exception e){
         slackApi.sendErrorForSlack(e);

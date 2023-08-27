@@ -1,14 +1,11 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.util.SortStatus;
 import bucheon.leafy.util.request.PageRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class QnaServiceTest {
 
@@ -38,7 +35,7 @@ class QnaServiceTest {
     }
 
     @Test
-    void getRead() { qnaService.getRead(1L,11111L);
+    void getRead() { qnaService.getRead(1L);
     }
 
     @Test

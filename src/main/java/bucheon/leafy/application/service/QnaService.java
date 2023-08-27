@@ -3,15 +3,13 @@ package bucheon.leafy.application.service;
 import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.qna.QnaStatus;
-import bucheon.leafy.domain.search.response.SearchResponse;
+import bucheon.leafy.domain.qna.request.QnaEditRequest;
+import bucheon.leafy.domain.qna.request.QnaSaveRequest;
+import bucheon.leafy.domain.qna.response.QnaResponse;
+import bucheon.leafy.domain.qna.response.QnaSaveResponse;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.GetMeResponse;
-import bucheon.leafy.exception.FeedNotFoundException;
-import bucheon.leafy.exception.ReadFailedException;
-import bucheon.leafy.exception.RemoveFailedException;
-import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +37,16 @@ public class QnaService {
         return true;
     }
 
-    public Long write(QnaDto qnaDto) { return qnaMapper.save(qnaDto); }
+    public QnaSaveResponse write(QnaSaveRequest qnaSaveRequest) {
+
+        if (qnaMapper.save(qnaSaveRequest) != 1) {
+            throw new WriteFailedException();
+        }
+
+        QnaSaveResponse qnaSaveResponse = qnaMapper.saveResponse(qnaSaveRequest);
+
+        return qnaSaveResponse;
+    }
 
     public PageResponse admingetList(PageRequest pageRequest){
         List<PageResponse> list = qnaMapper.adminSelectAll(pageRequest);
@@ -57,20 +64,20 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaDto getRead(Long qnaId, Long userId) {
+    public QnaResponse getRead(Long qnaId) {
 
-        QnaDto qnaDto = qnaMapper.findById(qnaId, userId);
+        QnaResponse qnaResponse = qnaMapper.findById(qnaId);
 
-        if (qnaDto == null) {
+        if (qnaResponse == null) {
             throw new ReadFailedException();
         }
         qnaMapper.viewCnt(qnaId);
         qnaMapper.editByIdQnaStatus(qnaId);
 
-        return qnaMapper.findById(qnaId, userId);
+        return qnaMapper.findById(qnaId);
     }
-    public int modify(QnaDto qnaDto,Long qnaId) {
-        return qnaMapper.editById(qnaDto, qnaId);
+    public int modify(QnaEditRequest qnaEditRequest, Long qnaId) {
+        return qnaMapper.editById(qnaEditRequest, qnaId);
     }
 
     public Long getQnaById( Long qnaId) {
