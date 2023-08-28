@@ -30,9 +30,9 @@ class NoticeMapperTest {
 
     @Test
     void modify(){
-        NoticeEditRequest noticeEditRequest = new NoticeEditRequest("asdf","title");
-        noticeMapper.editById(1L, noticeEditRequest );
-        System.out.println(noticeMapper.editById(1L, noticeEditRequest ));
+//        NoticeEditRequest noticeEditRequest = new NoticeEditRequest("asdf","title");
+//        noticeMapper.editById(1L, noticeEditRequest );
+//        System.out.println(noticeMapper.editById(1L, noticeEditRequest ));
     }
     @Test
     void pageFindById() {

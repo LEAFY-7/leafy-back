@@ -51,13 +51,9 @@ public class QnaController {
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PostMapping()
-    public ResponseEntity<QnaSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @RequestBody QnaSaveRequest qnaSaveRequest) {
-
-        Long userId = user.getUserId();
-
-        QnaSaveResponse response = qnaService.write(userId, qnaSaveRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<QnaSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                 @RequestBody QnaSaveRequest qnaSaveRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
@@ -82,11 +78,10 @@ public class QnaController {
     //Mypage이니까 자신만 삭제가능
     @Operation(summary = "Qna 게시판 글 삭제하기")
     @DeleteMapping("{qnaId}")
-    public ResponseEntity<Object> remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+    public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                          @PathVariable("qnaId") Long qnaId) {
+        qnaService.remove(qnaId, user);
 
-        Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.remove(qnaId));
     }
 
     @ApiResponses({
@@ -95,20 +90,16 @@ public class QnaController {
             @ApiResponse(responseCode = "500", description = "Qna List 보여주기 실패")
     })
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<PageResponse> list(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                             @PathVariable("qnaId") Long qnaId,
+                                             @ModelAttribute
+                                             @Parameter(description = "page, limit, sortColum, sortStatus 전부 옵션, " +
+                                                     "sortColum는 CREATE_DATE, MODIFY_DATE 가능, ASC, DESC 가능")
                                              PageRequest pageRequest) {
 
-        Long userId = user.getUserId();
-        Long qnaUserId = qnaService.getQnaById(qnaId);
-
-        if (userId.equals(qnaUserId)) {
-            return ResponseEntity.ok().body(qnaService.getList(qnaId, userId, pageRequest));
-        } else if (user.getAuthorities().contains("ROLE_ADMIN")) {
-            return ResponseEntity.ok().body(qnaService.admingetList(pageRequest));
-        }
-        throw new ReadFailedException();
+        return ResponseEntity.ok().body(qnaService.getList(user, pageRequest));
     }
+
 }
+
+

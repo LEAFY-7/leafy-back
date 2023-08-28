@@ -12,17 +12,16 @@
 
     <update id="deleteById" parameterType="long" >
         UPDATE qna
-        SET is_delete = 1
+        SET is_delete = true
         WHERE qna_id = #{qnaId}
     </update>
 
-
-    <insert id="save" parameterType="QnaSaveRequest">
+    <insert id="save" parameterType="QnaSaveRequest" useGeneratedKeys="true" keyColumn="qna_id" keyProperty="qnaSaveRequest.qnaId">
         INSERT INTO qna (created_at ,modified_at,is_delete , contents, qna_status, title, view_count, user_id)
         VALUES (now(), now(), 0, #{qnaSaveRequest.contents}, 0, #{qnaSaveRequest.title}, 0, #{userId})
     </insert>
 
-    <select id="savefind" parameterType="QnaSaveRequest" resultType="QnaSaveResponse">
+    <select id="savefind" resultType="QnaSaveResponse">
         SELECT qna_id, created_at
         FROM qna
         WHERE contents = #{qnaSaveRequest.contents}
@@ -42,7 +41,7 @@
         LIMIT 1
     </select>
 
-    <select id="findQnaById" parameterType="Long" resultType="Long" >
+    <select id="findQnaById" parameterType="Long" resultType="QnaResponse" >
         select user_id
           from qna
          where qna_id = #{qndId}
@@ -63,7 +62,7 @@
         WHERE qna_id = #{qnaId}
     </update>
 
-    <select id="eidtfind" parameterType="QnaEditRequest" resultType="QnaSaveResponse">
+    <select id="eidtfind" parameterType="QnaEditRequest" resultType="QnaEditResponse">
         SELECT  modified_at
         FROM qna
         WHERE contents = #{contents}
@@ -76,23 +75,30 @@
         WHERE  qna_id = #{qnaId}
     </update>
 
-    <select id="pageFindById" resultType="PageResponse">
+    <select id="pageFindById" resultType="QnaResponse">
         SELECT *
         FROM qna
-        WHERE qna_id = #{qnaId}
-          AND user_id #{userId}
-        <if test="pageRequest.sortColumn != null and pageRequest.sortStatus != null">
+        WHERE user_id = #{userId}
+        AND is_delete = false
+        <if test="pageRequest.sortColumn != null" >
             ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
+        </if>
+        <if test="pageRequest.sortColumn == null">
+            ORDER BY modified_at desc, created_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
 
-    <select id="adminSelectAll" parameterType="PageRequest" resultType="PageResponse">
+    <select id="adminSelectAll"  resultType="QnaResponse">
         SELECT *
         FROM qna
-        <if test="pageRequest.sortColumn != null and pageRequest.sortStatus != null">
+        WHERE is_delete = false
+        <if test="pageRequest.sortColumn != null ">
             ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
+        </if>
+        <if test="pageRequst.sortColumn == null">
+            ORDER BY moidied_at desc, created_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}

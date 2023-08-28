@@ -21,14 +21,6 @@
         VALUES (now(), now(), false,  #{noticeSaveRequest.contents}, false, #{noticeSaveRequest.title}, 0, #{userId})
     </insert>
 
-    <select id="savefind" parameterType="NoticeSaveRequest" resultType="NoticeSaveResponse">
-        SELECT notice_id, created_at
-        FROM notice
-        WHERE contents = #{noticeSaveRequest.contents}
-          AND title = #{noticeSaveRequest.title}
-          AND user_id = #{userId}
-    </select>
-
     <update id="viewCnt" parameterType="long">
         UPDATE notice
         SET   view_count = view_count + 1
@@ -39,7 +31,6 @@
         SELECT *
         FROM notice
         WHERE notice_id = #{noticeId}
-          AND is_delete = 0
     </select>
 
     <select id="findByIdAndIsDeleteFalse" parameterType="long" resultType="NoticeResponse">
@@ -47,7 +38,6 @@
         FROM notice
         WHERE notice_id = #{noticeId} and is_delete = false
     </select>
-
 
     <select id="findByIdAndIsDeleteFalseAndIsHideFalse" parameterType="long" resultType="NoticeResponse">
         SELECT *
@@ -57,16 +47,16 @@
 
     <update id="editById" parameterType="NoticeEditRequest">
         UPDATE notice
-           SET modified_at = now(),
-               contents = #{noticeEditRequest.contents},
-               title = #{noticeEditRequest.title},
-               is_hide = #{noticeEditRequest.isHide}
+        SET modified_at = now(),
+            contents = #{noticeEditRequest.contents},
+            title = #{noticeEditRequest.title},
+            is_hide = #{noticeEditRequest.isHide}
         WHERE notice_id = #{noticeId}
     </update>
 
     <select id="findAllUserIds" resultType="long">
         SELECT user_id
-          FROM user
+        FROM user
         WHERE is_delete = false
     </select>
 
@@ -75,12 +65,14 @@
         FROM notice
         WHERE is_delete = false and is_hide = false
         <if test="pageRequest.sortColumn != null">
-        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+            ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
         </if>
         <if test="pageRequest.sortColumn == null">
-        ORDER BY modified_at desc, created_at desc
+            ORDER BY modified_at desc, created_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
+
+
 </mapper>

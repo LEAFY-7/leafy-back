@@ -1,6 +1,5 @@
 package bucheon.leafy.application.service;
 
-
 import bucheon.leafy.application.mapper.NoticeMapper;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
@@ -46,9 +45,7 @@ public class NoticeService {
 
         if (noticeMapper.save(userId, noticeSaveRequest) != 1) { throw new WriteFailedException(); }
 
-
         NoticeResponse result = noticeMapper.findById(noticeSaveRequest.getNoticeId());
-
 
         // 알림 발송
         List<Long> userIds = noticeMapper.findAllUserIds();
@@ -80,7 +77,6 @@ public class NoticeService {
         return noticeMapper.findByIdAndIsDeleteFalseAndIsHideFalse(noticeId);
     }
 
-
     public NoticeEditResponse modify(Long noticeId, NoticeEditRequest noticeEditRequest, AuthUser user)  {
 
         NoticeResponse result = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
@@ -89,11 +85,9 @@ public class NoticeService {
 
         if(result.getUserId() != user.getUserId()){ throw new NoticeNotUserIdException(); }
 
-
         if (noticeMapper.editById(noticeId, noticeEditRequest) != 1) {
             throw new ModifyFailedException();
         }
-        NoticeEditResponse noticeEditResponse = noticeMapper.eidtfind(noticeEditRequest);
 
         NoticeResponse editResult = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
         return NoticeEditResponse.of(editResult.getModifiedAt());

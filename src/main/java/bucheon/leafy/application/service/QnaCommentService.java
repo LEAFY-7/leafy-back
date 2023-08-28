@@ -4,10 +4,14 @@ import bucheon.leafy.application.mapper.QnaCommentMapper;
 
 
 import bucheon.leafy.application.mapper.QnaMapper;
-import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
+import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
+import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
+import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
 
-import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
+
+import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.WriteFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,24 +31,32 @@ public class QnaCommentService {
         qnacommentMapper.deleteByQnaCommentId(qnaCommentId, userId);
     }
 
-    public QnaCommentSaveResponse write(QnaCommentSaveReqeust qnaCommentSaveReqeust) {
+    public QnaCommentSaveResponse write(AuthUser user, QnaCommentSaveRequest qnaCommentSaveRequest) {
 
-        if (qnacommentMapper.save(qnaCommentSaveReqeust) != 1) {
+        Long userId = user.getUserId();
+
+        if (qnacommentMapper.save(qnaCommentSaveRequest, userId) != 1) {
             throw new WriteFailedException();
         }
-        // 답변상태 완료 코드작성하기
-        qnaMapper.editByIdQnaStatus(qnaCommentSaveReqeust.getQnaId());
 
-        QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.saveResponse(qnaCommentSaveReqeust);
+        QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.qnaSaveFind(qnaCommentSaveRequest);
+        // 답변상태 완료 코드작성하기
+        qnaMapper.editByIdQnaStatus(qnaSaveResponse.getQnaId());
 
         return qnaSaveResponse;
 
     }
 
-    public QnaReplyEditResponse modify(Long qnaReplyId, String comment) {
-        return qnacommentMapper.editByQnaCommentId(qnaReplyId, comment);
-    }
+    public QnaCommentEditResponse modify(Long qnaReplyId, QnaCommentEditRequest qnaCommentEditRequest) {
 
+        if(qnacommentMapper.editByQnaCommentId(qnaReplyId, qnaCommentEditRequest) != 1){
+            throw new ModifyFailedException();
+        }
+
+        QnaCommentEditResponse editResult = qnacommentMapper.qnaCommentEditFind(qnaCommentEditRequest);
+
+        return editResult;
+    }
 }
 
 

@@ -3,6 +3,7 @@ package bucheon.leafy.domain.reply.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -10,9 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class QnaReplyEditResponse {
 
-    private Date modifiedAt;
+    private LocalDateTime modifiedAt;
 
-    public QnaReplyEditResponse( Date modifiedAt) {
+    public QnaReplyEditResponse( LocalDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 }

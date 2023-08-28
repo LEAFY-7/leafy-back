@@ -9,23 +9,23 @@ import java.util.Date;
 @NoArgsConstructor
 public class QnaResponse {
     private Long qnaId;
-    private Date create_at;
-    private Date modified_at;
-    private Boolean is_delete;
+    private Date createAt;
+    private Date modifiedAt;
+    private Boolean isDelete;
     private String contents;
     private String title;
-    private Long view_count;
-    private Long user_id;
+    private Long viewCount;
+    private Long userId;
 
     public QnaResponse(Long qnaId,Date createAt,Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId) {
 
         this.qnaId = qnaId;
-        this.create_at = createAt;
-        this.modified_at = modifiedAt;
-        this.is_delete = isDelete;
+        this.createAt = createAt;
+        this.modifiedAt = modifiedAt;
+        this.isDelete = isDelete;
         this.contents =contents;
         this.title = title;
-        this.view_count =viewCount;
-        this.user_id = userId;
+        this.viewCount =viewCount;
+        this.userId = userId;
     }
 }

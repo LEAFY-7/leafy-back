@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class QnaCommentDeleteReqeust {
+public class QnaCommentDeleteRequest {
 
     private Long qnaCommentId;
     private Long userId;
 
-    public QnaCommentDeleteReqeust(Long qnaCommentId, Long userId) {
+    public QnaCommentDeleteRequest(Long qnaCommentId, Long userId) {
         this.qnaCommentId = qnaCommentId;
         this.userId = userId;
     }
