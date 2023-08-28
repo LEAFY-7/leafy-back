@@ -29,27 +29,28 @@ class QnaMapperTest {
 
     @Test
     void findById() {
+        qnaMapper.findById(1L);
 
     }
 
     @Test
     void deleteById() {
-        qnaMapper.deleteById(4L);
+        qnaMapper.deleteById(1L);
     }
 
     @Test
     void editById() {
-
+        qnaMapper.editById(1L,new QnaEditRequest("editcontens","edittitle"));
     }
 
     @Test
     void findQnaById() {
-        qnaMapper.findQnaById(4L);
+        qnaMapper.findQnaById(1L);
     }
 
     @Test
     void editByIdQnaStatus() {
-        qnaMapper.editByIdQnaStatus(4L);
+        qnaMapper.editByIdQnaStatus(1L);
     }
 
     @Test
