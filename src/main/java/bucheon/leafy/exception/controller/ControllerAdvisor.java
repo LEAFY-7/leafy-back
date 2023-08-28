@@ -6,7 +6,9 @@ import bucheon.leafy.exception.dto.ExceptionResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +37,16 @@ public class ControllerAdvisor {
                 .build();
 
         return ResponseEntity.status(500).body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleForbiddenException(AccessDeniedException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(403))
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
     @ExceptionHandler(PasswordNotMatchedException.class)

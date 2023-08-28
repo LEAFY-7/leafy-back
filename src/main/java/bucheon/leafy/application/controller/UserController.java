@@ -129,6 +129,7 @@ public class UserController {
 
     @ApiResponse(responseCode = "200", description = "수정 성공")
     @Operation(summary = "회원 정보 수정")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PutMapping
     public void editUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                   @RequestBody UserRequest userRequest) {
@@ -180,6 +181,7 @@ public class UserController {
     })
     @Operation(summary = "회원 비공개 수정")
     @PatchMapping("/hide")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void editIsHide(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
         Long userId = authUser.getUserId();
@@ -192,6 +194,7 @@ public class UserController {
     })
     @Operation(summary = "전체 알람 비공개 on, off")
     @PatchMapping("/all-notification")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void editIsAllNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
         Long userId = authUser.getUserId();
@@ -204,6 +207,7 @@ public class UserController {
     })
     @Operation(summary = "댓글 알람 on, off")
     @PatchMapping("/comment-notification")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void editIsCommentNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
         Long userId = authUser.getUserId();
@@ -215,11 +219,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "회원 권한 수정 실패"),
     })
     @Operation(summary = "회원 권한 수정")
-    @PatchMapping("/role")
+    @PatchMapping("/role/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void editRole(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                           @RequestParam UserRole userRole) {
-        Long userId = authUser.getUserId();
+    public void editRole(@PathVariable Long userId, @RequestParam UserRole userRole) {
         userService.editRole(userId, userRole);
     }
 
