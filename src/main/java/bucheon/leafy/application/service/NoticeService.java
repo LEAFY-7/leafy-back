@@ -28,13 +28,13 @@ public class NoticeService {
 
 
     public void remove(Long noticeId, AuthUser user) {
+        Long userId = user.getUserId();
+
         NoticeResponse result = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
 
         if(result == null){ throw new NoticeNotFoundException(); }
 
-        if(result.getUserId() != user.getUserId()){ throw new NoticeNotUserIdException(); }
-
-        if (noticeMapper.deleteById(noticeId) != 1) {
+        if (noticeMapper.deleteById(userId, noticeId) != 1) {
             throw new RemoveFailedException();
         }
     }
@@ -78,14 +78,13 @@ public class NoticeService {
     }
 
     public NoticeEditResponse modify(Long noticeId, NoticeEditRequest noticeEditRequest, AuthUser user)  {
+        Long userId = user.getUserId();
 
         NoticeResponse result = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
 
         if(result == null){ throw new NoticeNotFoundException(); }
 
-        if(result.getUserId() != user.getUserId()){ throw new NoticeNotUserIdException(); }
-
-        if (noticeMapper.editById(noticeId, noticeEditRequest) != 1) {
+        if (noticeMapper.editById(userId, noticeId, noticeEditRequest) != 1) {
             throw new ModifyFailedException();
         }
 

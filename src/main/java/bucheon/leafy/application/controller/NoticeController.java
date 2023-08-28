@@ -32,8 +32,6 @@ public class NoticeController {
             @ApiResponse(responseCode = "201", description = "공지사항 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 공지사항"),
-            @ApiResponse(responseCode = "405", description = "유저가 작성한 공지사항이 아님"),
             @ApiResponse(responseCode = "500", description = "공지사항 수정 실패")
     })
     @Operation(summary = "공지사항 수정")
@@ -74,8 +72,8 @@ public class NoticeController {
 
 
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Notice 글 목록 보여주기 성공"),
-            @ApiResponse(responseCode = "500", description = "Notice 글 목록 보여주기 실패")
+            @ApiResponse(responseCode = "200", description = "공지사항 리스트 조회 성공"),
+            @ApiResponse(responseCode = "500", description = "공지사항 리스트 조회 실패")
     })
     @Operation(summary = "공지사항 리스트!")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -91,7 +89,6 @@ public class NoticeController {
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 공지사항"),
-            @ApiResponse(responseCode = "405", description = "유저가 작성한 공지사항이 아님"),
             @ApiResponse(responseCode = "500", description = "공지사항 삭제 실패")
     })
     @Operation(summary = "공지사항 삭제")

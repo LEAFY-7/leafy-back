@@ -20,9 +20,9 @@ public interface NoticeMapper {
     NoticeResponse findByIdAndIsDeleteFalse(Long noticeId);
     NoticeResponse findByIdAndIsDeleteFalseAndIsHideFalse(Long noticeId);
     int viewCnt(Long noticeId);
-    int deleteById(Long noticeId);
+    int deleteById(Long userId, Long noticeId);
     Long save(@Param("userId")Long userId, @Param("noticeSaveRequest")NoticeSaveRequest noticeSaveRequest);
-    Long editById(@Param("noticeId")Long noticeId, @Param("noticeEditRequest")NoticeEditRequest noticeEditRequest);
+    Long editById(@Param("userId")Long userId, @Param("noticeId")Long noticeId, @Param("noticeEditRequest")NoticeEditRequest noticeEditRequest);
     List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);
     List<Long> findAllUserIds();
 
