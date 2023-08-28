@@ -30,11 +30,16 @@ public class UserResponse {
 
     private Boolean isAdmin;
 
+    private Boolean isAllNotifications;
+
+    private Boolean isCommentNotifications;
+
 
     @Builder
     public UserResponse(Long userId, String email, String name, String nickName,
                         String phone, String profileImage, String backgroundImage,
-                        String introduction, Boolean isAdmin, Boolean isHide) {
+                        String introduction, Boolean isAdmin, Boolean isHide,
+                        Boolean isAllNotifications, Boolean isCommentNotifications) {
 
         this.userId = userId;
         this.email = email;
@@ -46,6 +51,8 @@ public class UserResponse {
         this.introduction = introduction;
         this.isHide = isHide;
         this.isAdmin = isAdmin;
+        this.isAllNotifications = isAllNotifications;
+        this.isCommentNotifications = isCommentNotifications;
     }
 
     public static UserResponse of(User user) {
@@ -65,6 +72,8 @@ public class UserResponse {
                 )
                 .introduction(user.getIntroduction())
                 .isHide(user.getIsHide())
+                .isAllNotifications(user.getIsAllNotifications())
+                .isCommentNotifications(user.getIsCommentNotifications())
                 .isAdmin(
                         user.getUserRole().equals(ADMIN) ? true : false
                 )
