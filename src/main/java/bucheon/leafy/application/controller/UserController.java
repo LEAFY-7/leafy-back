@@ -215,11 +215,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "회원 권한 수정 실패"),
     })
     @Operation(summary = "회원 권한 수정")
-    @PatchMapping("/role")
+    @PatchMapping("/role/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void editRole(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                           @RequestParam UserRole userRole) {
-        Long userId = authUser.getUserId();
+    public void editRole(@PathVariable Long userId, @RequestParam UserRole userRole) {
         userService.editRole(userId, userRole);
     }
 
