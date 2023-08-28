@@ -6,6 +6,7 @@ import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.domain.userblock.UserBlock;
 import bucheon.leafy.exception.ExistException;
+import bucheon.leafy.exception.PrivateUserException;
 import bucheon.leafy.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -82,5 +83,18 @@ public class UserBlockService {
         Boolean isBlock = userBlockRepository.existsByUserAndBlockUser(user, blockUser);
 
         if (isBlock) throw new ExistException(USER_BLOCK);
+    }
+
+    public void isUserBlockedOrPrivate(Long userId, Long blockUserId) {
+        User blockUser = userRepository.findById(blockUserId)
+                .orElseThrow(UserNotFoundException::new);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        Boolean isBlock = userBlockRepository.existsByUserAndBlockUser(user, blockUser);
+
+        if ( blockUser.getIsHide() || isBlock)
+            throw new PrivateUserException( blockUser.getNickName() );
     }
 }
