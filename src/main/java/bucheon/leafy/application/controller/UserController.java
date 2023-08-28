@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
@@ -183,6 +184,43 @@ public class UserController {
     public void editIsHide(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
         Long userId = authUser.getUserId();
         userService.editIsHide(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "전체 알람 비공개 on, off 성공"),
+            @ApiResponse(responseCode = "500", description = "전체 알람 비공개 on, off 실패"),
+    })
+    @Operation(summary = "전체 알람 비공개 on, off")
+    @PatchMapping("/all-notification")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsAllNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsAllNotifications(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 알람 비공개 on, off 성공"),
+            @ApiResponse(responseCode = "500", description = "댓글 알람 비공개 on, off 실패"),
+    })
+    @Operation(summary = "댓글 알람 on, off")
+    @PatchMapping("/comment-notification")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsCommentNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsCommentNotifications(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 권한 수정 성공"),
+            @ApiResponse(responseCode = "500", description = "회원 권한 수정 실패"),
+    })
+    @Operation(summary = "회원 권한 수정")
+    @PatchMapping("/role")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editRole(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                           @RequestParam UserRole userRole) {
+        Long userId = authUser.getUserId();
+        userService.editRole(userId, userRole);
     }
 
     private void insertTokenInHeader(TokenResponse tokenResponse) {
