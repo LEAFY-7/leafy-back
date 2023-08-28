@@ -15,17 +15,19 @@ public class NoticeResponse {
     private Long userId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private Boolean isHide;
     private Long viewCount;
 
 
     public NoticeResponse(Long noticeId, String contents, String title, Long userId,
-                          LocalDateTime createdAt, LocalDateTime modifiedAt, Long viewCount) {
+                          LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isHide, Long viewCount) {
         this.noticeId = noticeId;
         this.contents = contents;
         this.title = title;
         this.userId = userId;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+        this.isHide = isHide;
         this.viewCount = viewCount;
     }
 }

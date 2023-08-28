@@ -28,13 +28,13 @@ public class NoticeService {
 
 
     public void remove(Long noticeId, AuthUser user) {
+        Long userId = user.getUserId();
+
         NoticeResponse result = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
 
         if(result == null){ throw new NoticeNotFoundException(); }
 
-        if(result.getUserId() != user.getUserId()){ throw new NoticeNotUserIdException(); }
-
-        if (noticeMapper.deleteById(noticeId) != 1) {
+        if (noticeMapper.deleteById(userId, noticeId) != 1) {
             throw new RemoveFailedException();
         }
     }
@@ -58,34 +58,51 @@ public class NoticeService {
         return NoticeSaveResponse.of(noticeSaveRequest.getNoticeId(), result.getCreatedAt());
     }
 
-    //TODO 어드민이랑 유저(비회원도)랑 리스트 다르게 뿌리기 (어드민은 isHide true 인것도 보여줘야함)
-    public PageResponse getList(PageRequest pageRequest)  {
-        List<NoticeResponse> list = noticeMapper.pageFindById(pageRequest);
-        long total = noticeMapper.count();
-        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
+    public PageResponse getList(PageRequest pageRequest, AuthUser user)  {
+        List<NoticeResponse> list = null;
+        long total = 0;
 
+        if(user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MEMBER"))) { // 비회원, 멤버 회원은 비공개 공지사항 제외
+            list = noticeMapper.pageFindById(pageRequest);
+            total = noticeMapper.count();
+
+        } else { // 어드민 회원은 비공개 공지사항 포함
+            list = noticeMapper.adminPageFindById(pageRequest);
+            total = noticeMapper.adminNoticeCount();
+        }
+
+        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
         return pageResponse;
     }
 
-    //TODO 어드민이랑 유저(비회원도)랑 리스트 다르게 뿌리기 (어드민은 isHide true 인것도 보여줘야함)
-    public NoticeResponse getRead(Long noticeId) {
-        if (noticeMapper.findByIdAndIsDeleteFalseAndIsHideFalse(noticeId) == null) {
-            throw new NoticeNotFoundException();
-        }
-        noticeMapper.viewCnt(noticeId);
+    public NoticeResponse getRead(Long noticeId, AuthUser user) {
 
-        return noticeMapper.findByIdAndIsDeleteFalseAndIsHideFalse(noticeId);
+        if(user != null){alarmService.readAlarm(user.getUserId(), AlarmType.NOTICE, noticeId);} // 알림 미리 읽음으로 처리
+
+        if(user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MEMBER"))){ // 비회원, 멤버 회원은 비공개 공지사항 제외
+            if (noticeMapper.findByIdAndIsDeleteFalseAndIsHideFalse(noticeId) == null) {
+                throw new NoticeNotFoundException();
+            }
+            noticeMapper.viewCnt(noticeId);
+            return noticeMapper.findByIdAndIsDeleteFalseAndIsHideFalse(noticeId);
+
+        } else { // 어드민 회원은 비공개 공지사항 포함
+            if (noticeMapper.findByIdAndIsDeleteFalse(noticeId) == null) {
+                throw new NoticeNotFoundException();
+            }
+            noticeMapper.viewCnt(noticeId);
+            return noticeMapper.findByIdAndIsDeleteFalse(noticeId);
+        }
     }
 
     public NoticeEditResponse modify(Long noticeId, NoticeEditRequest noticeEditRequest, AuthUser user)  {
+        Long userId = user.getUserId();
 
         NoticeResponse result = noticeMapper.findByIdAndIsDeleteFalse(noticeId);
 
         if(result == null){ throw new NoticeNotFoundException(); }
 
-        if(result.getUserId() != user.getUserId()){ throw new NoticeNotUserIdException(); }
-
-        if (noticeMapper.editById(noticeId, noticeEditRequest) != 1) {
+        if (noticeMapper.editById(userId, noticeId, noticeEditRequest) != 1) {
             throw new ModifyFailedException();
         }
 
