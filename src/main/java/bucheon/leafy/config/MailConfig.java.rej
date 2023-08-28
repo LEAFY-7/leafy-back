@@ -1,0 +1,9 @@
+diff a/src/main/java/bucheon/leafy/config/MailConfig.java b/src/main/java/bucheon/leafy/config/MailConfig.java	(rejected hunks)
+@@ -19,6 +19,7 @@
+     @Value("${spring.mail.port}")
+     private int port;
+ 
++
+     public JavaMailSender javaMailService() {
+         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+ 
