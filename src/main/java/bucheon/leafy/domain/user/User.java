@@ -40,7 +40,15 @@ public class User extends BaseDeleteEntity {
     private String phone;
 
     private String introduction;
+
+    @Column(name = "is_hide", nullable = false)
     private Boolean isHide;
+
+    @Column(name = "is_all_notifications", nullable = false)
+    private Boolean isAllNotifications;
+
+    @Column(name = "is_comment_notifications", nullable = false)
+    private Boolean isCommentNotifications;
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -54,13 +62,14 @@ public class User extends BaseDeleteEntity {
     private UserBackgroundImage userBackgroundImage;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false)
     private UserRole userRole;
-
 
     @Builder
     private User(String password, String email, String nickName, String phone, Boolean isHide,
                  String name, String introduction, List<Feed> feeds, UserImage userImage,
-                 UserBackgroundImage userBackgroundImage, UserRole userRole) {
+                 UserBackgroundImage userBackgroundImage, UserRole userRole,
+                 Boolean isAllNotifications, Boolean isCommentNotifications) {
 
         this.password = password;
         this.email = email;
@@ -73,6 +82,8 @@ public class User extends BaseDeleteEntity {
         this.userImage = userImage;
         this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
+        this.isAllNotifications = isAllNotifications;
+        this.isCommentNotifications = isCommentNotifications;
     }
 
     public static User of(SignUpRequest signUpRequest) {
@@ -86,6 +97,8 @@ public class User extends BaseDeleteEntity {
                 .phone(signUpRequest.getPhone())
                 .userRole(UserRole.MEMBER)
                 .isHide(false)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
                 .feeds(new ArrayList<>())
                 .build();
     }
@@ -126,12 +139,20 @@ public class User extends BaseDeleteEntity {
         return matcher.matches();
     }
 
-    public void giveRole(){
-        this.userRole = UserRole.ADMIN;
-    }
-
     public void updateIsHide(){
         this.isHide = !this.isHide;
+    }
+
+    public void giveRole(UserRole userRole){
+        this.userRole = userRole;
+    }
+
+    public void updateIsAllNotifications(){
+        this.isAllNotifications = !this.isAllNotifications;
+    }
+
+    public void updateIsCommentNotifications(){
+        this.isCommentNotifications = !this.isCommentNotifications;
     }
 
 }
