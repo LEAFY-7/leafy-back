@@ -1,10 +1,7 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.controller.response.MyPageResponse;
-import bucheon.leafy.application.service.FeedLikeInfoService;
-import bucheon.leafy.application.service.FeedService;
-import bucheon.leafy.application.service.FollowService;
-import bucheon.leafy.application.service.QnaService;
+import bucheon.leafy.application.service.*;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
@@ -41,6 +38,7 @@ public class MyPageController {
     private final QnaService qnaService;
 
     private final FeedLikeInfoService feedLikeInfoService;
+    private final UserBlockService userBlockService;
 
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
@@ -77,19 +75,23 @@ public class MyPageController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "401, 403", description = "로그인 필요"),
+            @ApiResponse(responseCode = "404", description = "상대 회원이 존재하지 않음"),
+            @ApiResponse(responseCode = "422", description = "상대 회원이 차단되거나 비공개 상태"),
             @ApiResponse(responseCode = "500", description = "서버 코드 문제")
     })
     @Operation(summary = "상대 페이지")
-    @GetMapping("/{userId}")
-    public ResponseEntity<MyPageResponse> yourPage(@PathVariable Long userId,
-                                                     @PageableDefault(page = 0, size = 8) Pageable pageable) {
-
-        Long followerCount = followService.getFollowerCount(userId);
-        Long followingCount = followService.getFollowingCount(userId);
-        List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(userId);
-        List<FollowersResponse> followers = followService.getFollowers(userId, pageable).getBody();
-        List<FollowersResponse> followings = followService.getFollowings(userId, pageable).getBody();
-        List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(userId, pageable);
+    @GetMapping("/{targetUserId}")
+    public ResponseEntity<MyPageResponse> yourPage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                   @PathVariable Long targetUserId,
+                                                   @PageableDefault(page = 0, size = 8) Pageable pageable) {
+        Long userId = authUser.getUserId();
+        userBlockService.isUserBlockedOrPrivate(userId, targetUserId);
+        Long followerCount = followService.getFollowerCount(targetUserId);
+        Long followingCount = followService.getFollowingCount(targetUserId);
+        List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(targetUserId);
+        List<FollowersResponse> followers = followService.getFollowers(targetUserId, pageable).getBody();
+        List<FollowersResponse> followings = followService.getFollowings(targetUserId, pageable).getBody();
+        List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(targetUserId, pageable);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
                 .followerCount(followerCount)
