@@ -126,6 +126,18 @@ public class UserService {
         user.changePassword(encodedPassword);
     }
 
+    public String getEmailByNameAndPhone(String name, String phone) {
+        User user = userRepository.findByNameAndPhone(name, phone)
+                .orElseThrow(UserNotFoundException::new);
+
+        return user.getEmail();
+    }
+
+    public void editIsHide(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsHide();
+    }
+
     public void updateTemporaryPassword(String email, String phone) {
         User user = userRepository.findByEmailAndPhone(email, phone)
                 .orElseThrow(UserNotFoundException::new);
@@ -188,10 +200,4 @@ public class UserService {
         }
     }
 
-    public String getEmailByNameAndPhone(String name, String phone) {
-        User user = userRepository.findByNameAndPhone(name, phone)
-                .orElseThrow(UserNotFoundException::new);
-
-        return user.getEmail();
-    }
 }

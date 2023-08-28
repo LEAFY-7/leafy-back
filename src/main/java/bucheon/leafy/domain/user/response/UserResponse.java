@@ -26,13 +26,15 @@ public class UserResponse {
 
     private String introduction;
 
+    private Boolean isHide;
+
     private Boolean isAdmin;
 
 
     @Builder
     public UserResponse(Long userId, String email, String name, String nickName,
                         String phone, String profileImage, String backgroundImage,
-                        String introduction, Boolean isAdmin) {
+                        String introduction, Boolean isAdmin, Boolean isHide) {
 
         this.userId = userId;
         this.email = email;
@@ -42,6 +44,7 @@ public class UserResponse {
         this.profileImage = profileImage;
         this.backgroundImage = backgroundImage;
         this.introduction = introduction;
+        this.isHide = isHide;
         this.isAdmin = isAdmin;
     }
 
@@ -61,6 +64,7 @@ public class UserResponse {
                                 : ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + DEFAULT_IMAGE
                 )
                 .introduction(user.getIntroduction())
+                .isHide(user.getIsHide())
                 .isAdmin(
                         user.getUserRole().equals(ADMIN) ? true : false
                 )
