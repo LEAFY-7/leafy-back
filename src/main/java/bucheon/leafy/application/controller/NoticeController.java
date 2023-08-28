@@ -66,8 +66,8 @@ public class NoticeController {
     })
     @Operation(summary = "공지사항 상세")
     @GetMapping("/{noticeId}")
-    public ResponseEntity<NoticeResponse> read(@PathVariable("noticeId") Long noticeId) {
-        return ResponseEntity.ok().body(noticeService.getRead(noticeId));
+    public ResponseEntity<NoticeResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("noticeId") Long noticeId) {
+        return ResponseEntity.ok().body(noticeService.getRead(noticeId, user));
     }
 
 
@@ -75,13 +75,14 @@ public class NoticeController {
             @ApiResponse(responseCode = "200", description = "공지사항 리스트 조회 성공"),
             @ApiResponse(responseCode = "500", description = "공지사항 리스트 조회 실패")
     })
-    @Operation(summary = "공지사항 리스트!")
+    @Operation(summary = "공지사항 리스트")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping
     public ResponseEntity<PageResponse> list(@ModelAttribute
                                              @Parameter(description = "page, limit, sortColum, sortStatus 전부 옵션, " +
-                                                     "sortColum는 CREATE_DATE, MODIFY_DATE 가능, ASC, DESC 가능")PageRequest pageRequest) {
-        return ResponseEntity.ok().body(noticeService.getList(pageRequest));
+                                                     "sortColum는 CREATE_DATE, MODIFY_DATE 가능, ASC, DESC 가능")PageRequest pageRequest,
+                                             @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
+        return ResponseEntity.ok().body(noticeService.getList(pageRequest, user));
     }
 
     @ApiResponses({
