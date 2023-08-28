@@ -56,6 +56,7 @@ public class FeedController {
     })
     @Operation(summary = "피드 등록")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                          @ModelAttribute FeedRequest request) throws IOException {

@@ -1,26 +1,27 @@
 package bucheon.leafy.application.controller;
 
-
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
-import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
-import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
+import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
+import bucheon.leafy.domain.qna.response.QnaSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-
+@Tag( name = "QNA 댓글")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/comment")
+@RequestMapping("/api/v1/qna/{qnaId}/comments")
 public class QnaCommentController {
 
     private final QnaCommentService qnacommentService;
@@ -31,17 +32,13 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
     @Operation(summary = "댓글 수정하기")
-    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{qnaCommentId}")
-    public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaReplyId") Long qnaReplyId,
-                                                         @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                                         @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void modify(@AuthenticationPrincipal AuthUser user,
+                       @RequestBody String comment ) {
         Long userId = user.getUserId();
-
-        QnaCommentEditResponse response = qnacommentService.modify(qnaReplyId, qnaCommentEditRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+        qnacommentService.modify(userId, comment);
     }
 
     @ApiResponses({
@@ -50,12 +47,17 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 쓰기")
+    @PostMapping("/{qnaCommentId}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                        @RequestBody QnaCommentSaveRequest qnaCommentSaveRequest) {
+    public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
+                                        @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.write(user ,qnaCommentSaveRequest));
+        Long userId = user.getUserId();
+
+        QnaCommentSaveResponse response = qnacommentService.write(qnaCommentSaveReqeust);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiResponses({
@@ -65,6 +67,7 @@ public class QnaCommentController {
     })
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{qnaCommentId}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
