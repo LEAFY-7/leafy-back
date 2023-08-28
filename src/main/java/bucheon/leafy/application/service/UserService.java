@@ -7,6 +7,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.CertificationNumber;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
@@ -136,6 +137,21 @@ public class UserService {
     public void editIsHide(Long userId) {
         User user = getUserById(userId);
         user.updateIsHide();
+    }
+
+    public void editIsAllNotifications(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsAllNotifications();
+    }
+
+    public void editIsCommentNotifications(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsCommentNotifications();
+    }
+
+    public void editRole(Long userId, UserRole userRole) {
+        User user = getUserById(userId);
+        user.giveRole(userRole);
     }
 
     public void updateTemporaryPassword(String email, String phone) {
