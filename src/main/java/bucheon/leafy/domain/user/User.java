@@ -40,6 +40,7 @@ public class User extends BaseDeleteEntity {
     private String phone;
 
     private String introduction;
+    private Boolean isHide;
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -57,7 +58,7 @@ public class User extends BaseDeleteEntity {
 
 
     @Builder
-    private User(String password, String email, String nickName, String phone,
+    private User(String password, String email, String nickName, String phone, Boolean isHide,
                  String name, String introduction, List<Feed> feeds, UserImage userImage,
                  UserBackgroundImage userBackgroundImage, UserRole userRole) {
 
@@ -68,6 +69,7 @@ public class User extends BaseDeleteEntity {
         this.phone = phone;
         this.introduction = introduction;
         this.feeds = feeds;
+        this.isHide = isHide;
         this.userImage = userImage;
         this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
@@ -83,6 +85,7 @@ public class User extends BaseDeleteEntity {
                 )
                 .phone(signUpRequest.getPhone())
                 .userRole(UserRole.MEMBER)
+                .isHide(false)
                 .feeds(new ArrayList<>())
                 .build();
     }
@@ -126,4 +129,9 @@ public class User extends BaseDeleteEntity {
     public void giveRole(){
         this.userRole = UserRole.ADMIN;
     }
+
+    public void updateIsHide(){
+        this.isHide = !this.isHide;
+    }
+
 }

@@ -50,6 +50,19 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(PrivateUserException.class)
+    public ResponseEntity<ExceptionResponse> privateUserException(PrivateUserException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(FollowNotFoundException.class)
     public ResponseEntity<ExceptionResponse> followNotFoundException(FollowNotFoundException e) {
         int statusCode = e.getStatusCode();
@@ -255,19 +268,6 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(WriteFailedException.class)
     public ResponseEntity<ExceptionResponse> writeFailedException(WriteFailedException e) {
-        int statusCode = e.getStatusCode();
-
-        ExceptionResponse response = ExceptionResponse.builder()
-                .code(String.valueOf(statusCode))
-                .message(e.getMessage())
-                .validation(e.getValidation())
-                .build();
-
-        return ResponseEntity.status(statusCode).body(response);
-    }
-
-    @ExceptionHandler(NoticeNotUserIdException.class)
-    public ResponseEntity<ExceptionResponse> noticeNotUserIdException(NoticeNotUserIdException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()

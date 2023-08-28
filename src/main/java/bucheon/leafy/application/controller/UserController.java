@@ -163,7 +163,6 @@ public class UserController {
         userService.updateTemporaryPassword(email, phone);
     }
 
-
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "이메일 조회"),
             @ApiResponse(responseCode = "404", description = "이름과 전화번호로 가입된 이메일이 존재하지 않음")
@@ -172,6 +171,18 @@ public class UserController {
     @GetMapping("/email")
     public String getUserEmail(@RequestParam String name, String phone) {
         return userService.getEmailByNameAndPhone(name, phone);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 비공개 수정 성공"),
+            @ApiResponse(responseCode = "500", description = "회원 비공개 수정 실패"),
+    })
+    @Operation(summary = "회원 비공개 수정")
+    @PatchMapping("/hide")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsHide(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsHide(userId);
     }
 
     private void insertTokenInHeader(TokenResponse tokenResponse) {

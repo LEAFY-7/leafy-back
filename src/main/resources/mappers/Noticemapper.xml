@@ -10,9 +10,17 @@
         WHERE is_delete = false and is_hide = false
     </select>
 
+    <select id="adminNoticeCount" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM notice
+        WHERE is_delete = false
+    </select>
+
     <update id="deleteById" parameterType="long">
         UPDATE notice
-        SET is_delete = true
+        SET is_delete = true,
+            modified_at = now(),
+            user_id = #{userId}
         WHERE notice_id = #{noticeId}
     </update>
 
@@ -47,10 +55,11 @@
 
     <update id="editById" parameterType="NoticeEditRequest">
         UPDATE notice
-        SET modified_at = now(),
-            contents = #{noticeEditRequest.contents},
-            title = #{noticeEditRequest.title},
-            is_hide = #{noticeEditRequest.isHide}
+           SET modified_at = now(),
+               contents = #{noticeEditRequest.contents},
+               title = #{noticeEditRequest.title},
+               is_hide = #{noticeEditRequest.isHide},
+               user_id = #{userId}
         WHERE notice_id = #{noticeId}
     </update>
 
@@ -64,6 +73,20 @@
         SELECT *
         FROM notice
         WHERE is_delete = false and is_hide = false
+        <if test="pageRequest.sortColumn != null">
+            ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        </if>
+        <if test="pageRequest.sortColumn == null">
+            ORDER BY modified_at desc, created_at desc
+        </if>
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
+    </select>
+
+    <select id="adminPageFindById" resultType="bucheon.leafy.domain.notice.response.NoticeResponse">
+        SELECT *
+        FROM notice
+        WHERE is_delete = false
         <if test="pageRequest.sortColumn != null">
             ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
         </if>
