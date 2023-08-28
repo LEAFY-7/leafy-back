@@ -38,8 +38,10 @@ public class AlarmService {
         User user = userRepository.findByFeedsId(feedId)
                 .orElseThrow(FeedNotFoundException::new);
 
-        Alarm alarm = Alarm.of(user, AlarmType.FEED_LIKE, feedId);
-        alarmRepository.save(alarm);
+        if (user.getIsAllNotifications()) {
+            Alarm alarm = Alarm.of(user, AlarmType.FEED_LIKE, feedId);
+            alarmRepository.save(alarm);
+        }
     }
 
     @Async

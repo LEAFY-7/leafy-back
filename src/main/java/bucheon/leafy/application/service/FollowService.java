@@ -74,8 +74,10 @@ public class FollowService {
             Follow follow = Follow.of(user, followTarget);
             followRepository.save(follow);
 
-            Alarm alarm = Alarm.of(followTarget, NEW_FOLLOW, follow.getId());
-            alarmRepository.save(alarm);
+            if (user.getIsAllNotifications()){
+                Alarm alarm = Alarm.of(followTarget, NEW_FOLLOW, follow.getId());
+                alarmRepository.save(alarm);
+            }
         }
 
     }

@@ -15,6 +15,7 @@ public class SignInRequest {
 
         @Email(message = "이메일 형식을 맞춰주세요")
         @NotBlank(message = "이메일은 필수입니다")
+        @Schema(description = "이메일", example = "test@email.com")
         String email;
 
         @NotBlank(message = "비밀번호는 필수입니다")
