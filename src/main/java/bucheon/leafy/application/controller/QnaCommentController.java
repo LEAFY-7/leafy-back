@@ -1,6 +1,5 @@
 package bucheon.leafy.application.controller;
 
-
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
@@ -11,16 +10,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-
+@Tag( name = "QNA 댓글")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/comment")
+@RequestMapping("/api/v1/qna/{qnaId}/comments")
 public class QnaCommentController {
 
     private final QnaCommentService qnacommentService;
@@ -31,14 +31,12 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
     @Operation(summary = "댓글 수정하기")
-    @PatchMapping("/modifiy/{qnaCommentId}")
+    @PutMapping("/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
                        @RequestBody String comment ) {
         Long userId = user.getUserId();
-
         qnacommentService.modify(userId, comment);
-
     }
 
     @ApiResponses({
@@ -47,7 +45,7 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 쓰기")
-    @PostMapping("/comments/{qnaCommentId}")
+    @PostMapping("/{qnaCommentId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
                                         @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
