@@ -1,19 +1,23 @@
 package bucheon.leafy.domain.feed.response;
 
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
+import static bucheon.leafy.path.S3Path.ABSOLUTE_PATH;
+import static bucheon.leafy.path.S3Path.FEED_PATH;
+
+@Getter
 public class FeedImageResponse {
+    private Long feedId;
     private Long feedImageId;
-    private String imageName;
-    private String imageUrl;
+    private String image;
+    private Integer imageHeight;
 
     @Builder
-    public FeedImageResponse(Long feedImageId, String imageName) {
+    public FeedImageResponse(Long feedId, Long feedImageId, String imageName, Integer imageHeight) {
+        this.feedId = feedId;
         this.feedImageId = feedImageId;
-        this.imageName = imageName;
+        this.image = ABSOLUTE_PATH + FEED_PATH + imageName;
+        this.imageHeight = imageHeight;
     }
 }

@@ -1,15 +1,15 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.comment.QnaCommentDto;
+import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
+import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 
 @Mapper
 public interface QnaCommentMapper {
-    QnaCommentDto select(Long id, Long userId) ;
-    void delete(Long id, Long userId) ;
-    void insert(QnaCommentDto qnaCommentDto) ;
-    void update(QnaCommentDto qnaCommentDto) ;
+    void deleteByQnaCommentId(@Param("qnaCommentId") Long qnaCommentId,@Param("userId") Long userId) ;
+    int save(QnaCommentSaveReqeust qnaCommentSaveReqeust);
+    QnaCommentSaveResponse saveResponse(QnaCommentSaveReqeust qnaCommentSaveReqeust);
+    void editByQnaCommentId(@Param("userId")Long userId ,@Param("comment")String comment) ;
 }

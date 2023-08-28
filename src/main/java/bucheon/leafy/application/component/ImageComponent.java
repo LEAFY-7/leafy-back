@@ -40,7 +40,7 @@ public class ImageComponent {
         }
     }
 
-    public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) {
+    public List<String> uploadImages(String imagePath, List<MultipartFile> imageList) throws IOException {
 
         List<String> imageNameList = new ArrayList<>();
 
@@ -67,6 +67,12 @@ public class ImageComponent {
 
     public void deleteImage(String imagePath, String imageName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
+    }
+
+    public void deleteImages(String imagePath, List<String> imageNameList) {
+        for(String imageName : imageNameList) {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, imagePath + imageName));
+        }
     }
 
     public String createUUID() {

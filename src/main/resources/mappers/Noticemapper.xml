@@ -4,85 +4,98 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bucheon.leafy.application.mapper.NoticeMapper">
 
-    <delete id="delete" parameterType="map">
+    <select id="count" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM notice
+        WHERE is_delete = false and is_hide = false
+    </select>
+
+    <select id="adminNoticeCount" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM notice
+        WHERE is_delete = false
+    </select>
+
+    <update id="deleteById" parameterType="long">
         UPDATE notice
-        SET is_delete = 1
-    </delete>
+        SET is_delete = true,
+            modified_at = now(),
+            user_id = #{userId}
+        WHERE notice_id = #{noticeId}
+    </update>
 
-    <delete id="deleteAll">
-        DELETE FROM notice
-    </delete>
-
-    <insert id="insert" parameterType="NoticeDto" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO notice (created_at, is_delete, contents, is_hide, title, user_id)
-        VALUES (now(), 0, #{contents}, #{isHide}, #{title}, #{userId})
+    <insert id="save" parameterType="NoticeSaveRequest" useGeneratedKeys="true" keyColumn="notice_id" keyProperty="noticeSaveRequest.noticeId">
+        INSERT INTO notice (created_at, modified_at, is_delete, contents, is_hide, title, view_count, user_id)
+        VALUES (now(), now(), false,  #{noticeSaveRequest.contents}, false, #{noticeSaveRequest.title}, 0, #{userId})
     </insert>
 
     <update id="viewCnt" parameterType="long">
         UPDATE notice
-        SET   view_cnt = view_cnt + 1
-        WHERE id = #{id}
+        SET   view_count = view_count + 1
+        WHERE notice_id = #{noticeId}
     </update>
 
-    <select id="selectAll" resultType="NoticeDto">
+    <select id="findById" parameterType="long" resultType="NoticeResponse">
         SELECT *
         FROM notice
-        ORDER BY created_at DESC, id DESC
+        WHERE notice_id = #{noticeId}
     </select>
 
-    <select id="select" parameterType="long" resultType="NoticeDto">
+    <select id="findByIdAndIsDeleteFalse" parameterType="long" resultType="NoticeResponse">
         SELECT *
         FROM notice
-        WHERE id = #{id}
+        WHERE notice_id = #{noticeId} and is_delete = false
     </select>
 
-
-    <select id="selectPage" parameterType="map" resultType="NoticeDto">
+    <select id="findByIdAndIsDeleteFalseAndIsHideFalse" parameterType="long" resultType="NoticeResponse">
         SELECT *
-        ORDER BY reg_date DESC, bno DESC
-            LIMIT #{offset}, #{pageSize}
+        FROM notice
+        WHERE notice_id = #{noticeId} and is_delete = false and is_hide = false
     </select>
 
-
-    <update id="update" parameterType="NoticeDto">
+    <update id="editById" parameterType="NoticeEditRequest">
         UPDATE notice
-           SET modified_at = now()
-             , contents = #{contents}
-             , is_hide = #{isHide}
-             , title = #{title}
-        WHERE id = #{id}
+           SET modified_at = now(),
+               contents = #{noticeEditRequest.contents},
+               title = #{noticeEditRequest.title},
+               is_hide = #{noticeEditRequest.isHide},
+               user_id = #{userId}
+        WHERE notice_id = #{noticeId}
     </update>
 
-    <sql id="NoticeSearchRequest">
-        <choose>
-            <when test='option=="T"'>
-                AND title LIKE concat('%', #{keyword}, '%')
-            </when>
-            <when test='option=="U"'>
-                AND userId LIKE concat('%', #{keyword}, '%')
-            </when>
-            <otherwise>
-                AND (title   LIKE concat('%', #{keyword}, '%')
-                OR   contents LIKE concat('%', #{keyword}, '%'))
-            </otherwise>
-        </choose>
-    </sql>
+    <select id="findAllUserIds" resultType="long">
+        SELECT user_id
+          FROM user
+        WHERE is_delete = false
+    </select>
 
-    <select id="searchSelectPage" parameterType="PageRequest" resultType="PageResponse">
-
+    <select id="pageFindById" resultType="bucheon.leafy.domain.notice.response.NoticeResponse">
         SELECT *
         FROM notice
-        WHERE true
-        <include refid="NoticeSearchRequest"/>
-        ORDER BY created_at DESC, id DESC
-        LIMIT #{offset}, #{limit}
+        WHERE is_delete = false and is_hide = false
+        <if test="pageRequest.sortColumn != null">
+        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        </if>
+        <if test="pageRequest.sortColumn == null">
+        ORDER BY modified_at desc, created_at desc
+        </if>
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
     </select>
 
-    <select id="findTableIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
-        SELECT table_id
-        FROM alarm
-        WHERE user_id = #{userId}
-        LIMIT #{offset}, #{pageSize}
+    <select id="adminPageFindById" resultType="bucheon.leafy.domain.notice.response.NoticeResponse">
+        SELECT *
+        FROM notice
+        WHERE is_delete = false
+        <if test="pageRequest.sortColumn != null">
+            ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        </if>
+        <if test="pageRequest.sortColumn == null">
+            ORDER BY modified_at desc, created_at desc
+        </if>
+        LIMIT #{pageRequest.limit}
+        OFFSET #{pageRequest.offset}
     </select>
+
 
 </mapper>

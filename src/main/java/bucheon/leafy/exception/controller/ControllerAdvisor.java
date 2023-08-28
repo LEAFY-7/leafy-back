@@ -1,10 +1,13 @@
 package bucheon.leafy.exception.controller;
 
-import bucheon.leafy.application.service.SlackService;
+import bucheon.leafy.slack.SlackApi;
 import bucheon.leafy.exception.*;
 import bucheon.leafy.exception.dto.ExceptionResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,15 +22,36 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ControllerAdvisor {
 
-    private final SlackService slackService;
+    private final SlackApi slackApi;
+
 
     @ExceptionHandler(Exception.class)
-    public void SlackErrorMessage(Exception e){
-        slackService.sendErrorForSlack(e);
+    public ResponseEntity<ExceptionResponse> SlackErrorMessage(Exception e){
+        slackApi.sendErrorForSlack(e);
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(500))
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(500).body(response);
     }
 
     @ExceptionHandler(PasswordNotMatchedException.class)
     public ResponseEntity<ExceptionResponse> passwordNotMatchedException(PasswordNotMatchedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(PrivateUserException.class)
+    public ResponseEntity<ExceptionResponse> privateUserException(PrivateUserException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()
@@ -210,6 +234,88 @@ public class ControllerAdvisor {
                 .build();
 
         return ResponseEntity.status(responseStatusCode).body(response);
+    }
+
+    @ExceptionHandler({SecurityException.class, MalformedJwtException.class, ExpiredJwtException.class})
+    public ResponseEntity<ExceptionResponse> jwtException(Exception e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(400))
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(400).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> badCredentialsException(BadCredentialsException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(404))
+                .message("비밀번호가 잘못되었슴니다.")
+                .build();
+
+        return ResponseEntity.status(404).body(response);
+    }
+
+    @ExceptionHandler(ReadFailedException.class)
+    public ResponseEntity<ExceptionResponse> ReadFailedException(ReadFailedException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(404))
+                .message("불러오기가 실패했습니다.")
+                .build();
+
+        return ResponseEntity.status(404).body(response);
+    }
+
+    @ExceptionHandler(WriteFailedException.class)
+    public ResponseEntity<ExceptionResponse> writeFailedException(WriteFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(NoticeNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> noticeNotFoundException(NoticeNotFoundException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(ModifyFailedException.class)
+    public ResponseEntity<ExceptionResponse> modifyFailedException(ModifyFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
+    @ExceptionHandler(RemoveFailedException.class)
+    public ResponseEntity<ExceptionResponse> removeFailedException(RemoveFailedException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
     }
 
 }

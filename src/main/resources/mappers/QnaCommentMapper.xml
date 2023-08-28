@@ -2,51 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="bucheon.leafy.application.mapper.CommentMapper">
-    <!--Test-->
-    <delete id="deleteAll">
-        DELETE FROM qna_comment
-    </delete>
+<mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
 
-    <select id="count" parameterType="int" resultType="int">
-        SELECT count(*)
-          FROM qna_comment
-    </select>
-    <!---->
-    <delete id="delete" parameterType="map">
-        DELETE
-          FROM qna_comment
-         WHERE id = #{id}
-           AND user_id = #{userId}
-    </delete>
+    <update id="deleteByQnaCommentId" parameterType="Long">
+        UPDATE  qna_comment
+           SET is_delete = 1
+         WHERE qna_comment_id = #{qnaCommentId}
+    </update>
 
-    <insert id="insert" parameterType="CommentDto">
+    <insert id="save" parameterType="QnaCommentSaveReqeust">
         INSERT INTO qna_comment
-            ( created_at, is_delete, comment, user_id, qna_id)
+            ( created_at, modified_at, is_delete, comment, user_id  )
         VALUES
-            (now(), 0, #{comment}, #{userId}, #{qnaId})
+            (now(), now(), 0, #{comment}, #{userId})
     </insert>
 
-    <select id="selectAll" resultType="CommentDto">
-        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_id
-        FROM qna_comment
-    </select>
-
-    <select id="select" parameterType="long" resultType="CommentDto">
-        SELECT *
-        FROM qna_comment
-        WHERE id = #{id}
-    </select>
-
-    <update id="update" parameterType="CommentDto">
+    <update id="editByQnaCommentId" parameterType="QnaCommentEditReqeust">
         UPDATE qna_comment
         SET comment = #{comment}
           , modified_at = now()
-        WHERE id = #{id} and user_id = #{userId}
+        WHERE qna_comment_id = #{qnaCommentId}
     </update>
 
-    <select id="selectId" parameterType="long" resultType="CommentDto">
-        SELECT id
-        FROM qna_comment
-    </select>
 </mapper>

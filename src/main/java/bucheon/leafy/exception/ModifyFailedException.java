@@ -9,7 +9,7 @@ public class ModifyFailedException extends GlobalException {
     }
     @Override
     public int getStatusCode() {
-        return 400;
+        return 500;
     }
 
 }

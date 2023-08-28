@@ -11,13 +11,13 @@ import java.util.List;
 @Mapper
 public interface SearchMapper {
 
-    List<SearchResponse> findSearchByPumName(String searchName, PageRequest pageRequest);
+    List<SearchResponse> findSearchByPumName(String keyword, PageRequest pageRequest);
 
-    int SaveSearch(LeafyApiDto req);
+    int saveSearch(List<LeafyApiDto> request);
 
     int deleteSearch();
 
-    long count(String searchName);
+    long count(String keyword);
 
-    List<goodNameResponse> findGoodNameByPumName(String searchName);
+    List<goodNameResponse> findGoodNameByPumName(String keyword);
 }

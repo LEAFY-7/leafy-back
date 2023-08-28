@@ -7,6 +7,7 @@ import bucheon.leafy.domain.follow.response.FollowersResponse;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.util.response.JpaPageResponse;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -115,11 +116,11 @@ class FollowServiceTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<FollowersResponse> followers = followService.getFollowings(user1.getId(), pageable).getContent();
+        JpaPageResponse followers = followService.getFollowings(user1.getId(), pageable);
 
         //then
-        assertThat(followers).hasSize(pageable.getPageSize())
-                .extracting("email", "nickName", "image")
+        assertThat(followers.getBody()).hasSize(pageable.getPageSize())
+                .extracting("email", "nickName", "profileImage")
                 .contains(
                         new Tuple("tyui@gmail.com", "강호동" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
                         new Tuple("zxcv@naver.com", "유재석" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
@@ -151,11 +152,11 @@ class FollowServiceTest extends IntegrationTestSupport {
         followRepository.saveAll(followList);
 
         //when
-        List<FollowersResponse> followers = followService.getFollowers(user1.getId(), pageable).getContent();
+        JpaPageResponse followers = followService.getFollowers(user1.getId(), pageable);
 
         //then
-        assertThat(followers).hasSize(pageable.getPageSize())
-                .extracting("email", "nickName", "image")
+        assertThat(followers.getBody()).hasSize(pageable.getPageSize())
+                .extracting("email", "nickName", "profileImage")
                 .contains(
                         new Tuple("tyui@gmail.com", "강호동" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
                         new Tuple("zxcv@naver.com", "유재석" , ABSOLUTE_PATH + USER_IMAGE_PATH + "이미지"),
@@ -166,21 +167,12 @@ class FollowServiceTest extends IntegrationTestSupport {
 
 
     private User createUser(String email, String nickName) {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
 
         UserImage image = UserImage.builder()
                 .image("이미지")
                 .build();
 
         return User.builder()
-                .address(address)
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")

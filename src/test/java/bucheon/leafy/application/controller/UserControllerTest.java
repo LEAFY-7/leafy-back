@@ -1,8 +1,9 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
-import bucheon.leafy.domain.user.Gender;
+import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.jwt.TokenResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -30,37 +32,33 @@ class UserControllerTest {
     protected ObjectMapper objectMapper;
 
     @MockBean
-    protected UserService authoritiesUserService;
+    protected UserService userService;
 
     @Test
     @DisplayName("사용자가 회원가입을 요청했다")
     void testSignup() throws Exception {
 
         //given
-        SignUpRequest request = SignUpRequest.builder()
+        SignUpRequest signUpRequest = SignUpRequest.builder()
                 .password("Ss12345!@")
                 .confirmPassword("Ss12345!@")
                 .email("abcd1234@gmail.com")
                 .name("김찬우")
-                .nickName("chanU kim")
-                .simpleIntroduction("안녕!~!")
                 .phone("01012345678")
-                .birthDay(LocalDate.now())
-                .gender(Gender.MALE)
-                .zoneCode("12578")
-                .address("부천")
-                .jibunAddress("상동")
-                .roadAddress("호수공원")
-                .detailAddress("1동 1호")
-                .addressIsHide(false)
                 .build();
+
+        TokenResponse tokenResponse = TokenResponse.builder().build();
+
+        SignInRequest signInRequest = SignInRequest.of(signUpRequest);
+
+        when(userService.signIn(signInRequest)).thenReturn(tokenResponse);
 
         //when //then
         mockMvc.perform(post("/api/v1/users/sign-up")
-                        .content(objectMapper.writeValueAsString(request))
+                        .content(objectMapper.writeValueAsString(signUpRequest))
                         .contentType(APPLICATION_JSON)
                 ).andDo(print())
-                .andExpect(status().isOk());
+                .andExpect( status().isCreated() );
     }
 
 }

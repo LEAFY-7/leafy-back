@@ -2,41 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="bucheon.leafy.application.mapper.ReplyMapper">
+<mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
-    <delete id="deleteAll">
-        DELETE FROM qna_reply
-    </delete>
+<!--    <select id="getCount" parameterType="long" resultType="int">-->
+<!--        SELECT count(*)-->
+<!--          FROM qna_reply-->
+<!--         WHERE qna_reply_id = #{qnaReplyId}-->
+<!--    </select>-->
 
-    <select id="getCount" parameterType="long" resultType="int">
-        SELECT count(*)
-        FROM qna_reply
-        WHERE qna_comment_id = #{qnaCommentId}
-    </select>
+    <update id="deleteByQnaReplyId" parameterType="Long">
+        UPDATE qna_reply
+           SET is_delete = 1
+         WHERE qna_reply_id = #{qnaReplyId}
+    </update>
 
-
-    <delete id="delete" parameterType="map">
-        DELETE FROM qna_reply WHERE id = #{id} AND user_id = #{userId}
-    </delete>
-
-    <insert id="insert" parameterType="ReplyDto">
+    <insert id="save" parameterType="QnaReplySaveRequest" >
         INSERT INTO qna_reply
-            ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
-        VALUES
-            ( now(), now(), false, #{comment}, #{userId}, #{qnaCommentId})
+            ( created_at, modified_at is_delete, comment, user_id, qna_comment_id)
+             VALUES
+            ( now(), now(),  0, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
 
-    <select id="selectAll" parameterType="int" resultType="ReplyDto">
-        SELECT id, created_at, modified_at, is_delete, comment, user_id, qna_comment_id
-        FROM qna_reply
-        WHERE id = #{id}
-        ORDER BY created_at ASC, id ASC
+    <select id="saveResponse" parameterType="QnaReplySaveRequest" resultType="QnaReplySaveResponse">
+        SELECT qna_reply_id, created_at
+        FROM qna
+        WHERE contnets = #{contnets}
+          AND title = #{title}
+          AND user_id = #{userId}
     </select>
 
-    <update id="update" parameterType="ReplyDto">
+    <update id="edit" parameterType="QnaReplyEditReqeust" >
         UPDATE qna_reply
-        SET user_id = #{userId}
-          , modified_at = now()
-        WHERE id = #{id} and user_id = #{userId}
+           SET  modified_at = now()
+               ,comment = #{comment}
+         WHERE qna_reply_id = #{qnaReplyId}
     </update>
+
+<!--    <select id="pageFindById`" parameterType="Long" resultType="QnaReplyResponse">-->
+<!--        SELECT comment, user_id-->
+<!--        FROM qna_reply_id-->
+<!--        ORDER BY created_at-->
+<!--         WHERE qna_comment_id =#{qnaCommentId}-->
+<!--    </select>-->
+
 </mapper>

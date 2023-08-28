@@ -3,7 +3,7 @@ package bucheon.leafy.application.controller.response;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
 import bucheon.leafy.domain.follow.response.FollowersResponse;
-import bucheon.leafy.domain.user.response.UserResponse;
+import bucheon.leafy.domain.qna.response.MyPageQnaResponse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,8 +11,6 @@ import java.util.List;
 
 @Data
 public class MyPageResponse {
-
-    private UserResponse userResponse;
 
     private Long followerCount;
 
@@ -25,27 +23,27 @@ public class MyPageResponse {
     private List<FollowersResponse> followings;
 
     private List<FeedWithLikeCountResponse> feeds;
+    private List<MyPageQnaResponse> qnas;
 
     @Builder
-    private MyPageResponse(UserResponse userResponse, Long followerCount, Long followingCount,
-                           List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
-                           List<FollowersResponse> followings, List<FeedWithLikeCountResponse> feeds) {
+    private MyPageResponse(Long followerCount, Long followingCount, List<FeedMonthlyResponse> feedMonthlyActivity,
+                           List<FollowersResponse> followers, List<FollowersResponse> followings,
+                           List<FeedWithLikeCountResponse> feeds, List<MyPageQnaResponse> qnas) {
 
-        this.userResponse = userResponse;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
         this.feedMonthlyActivity = feedMonthlyActivity;
         this.followers = followers;
         this.followings = followings;
         this.feeds = feeds;
+        this.qnas = qnas;
     }
 
-    public static MyPageResponse of(UserResponse userResponse, Long followerCount, Long followingCount,
-                                    List<FeedMonthlyResponse> feedMonthlyActivity, List<FollowersResponse> followers,
-                                    List<FollowersResponse> followings, List<FeedWithLikeCountResponse> feeds) {
+    public static MyPageResponse of(Long followerCount, Long followingCount, List<FeedMonthlyResponse> feedMonthlyActivity,
+                                    List<FollowersResponse> followers, List<FollowersResponse> followings,
+                                    List<FeedWithLikeCountResponse> feeds, List<MyPageQnaResponse> qnas) {
 
         return MyPageResponse.builder()
-                .userResponse(userResponse)
                 .followerCount(followerCount)
                 .followingCount(followingCount)
                 .feedMonthlyActivity(feedMonthlyActivity)

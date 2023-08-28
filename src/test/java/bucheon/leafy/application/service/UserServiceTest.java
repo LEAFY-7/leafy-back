@@ -37,21 +37,12 @@ class UserServiceTest extends IntegrationTestSupport {
     }
 
     private User createUser(String email, String nickName) {
-        Address address = Address.builder()
-                .zoneCode("01011")
-                .address("bucheon")
-                .jibunAddress("100")
-                .roadAddress("ref")
-                .detailAddress("hello world")
-                .isHide(false)
-                .build();
 
         UserImage image = UserImage.builder()
                 .image("이미지")
                 .build();
 
         return User.builder()
-                .address(address)
                 .userImage(image)
                 .email(email)
                 .phone("01012341234")

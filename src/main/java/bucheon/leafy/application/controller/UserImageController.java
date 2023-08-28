@@ -40,7 +40,7 @@ public class UserImageController {
                             @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
-        userImageService.createUserImage(userId, file);
+        userImageService.createOrUpdateUserImage(userId, file);
     }
 
     @ApiResponses({
@@ -58,49 +58,7 @@ public class UserImageController {
                                       @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
-        userImageService.createUserBackgroundImage(userId, file);
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "이미지 수정 성공"),
-            @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
-            @ApiResponse(responseCode = "500", description = "이미지 수정 실패")
-    })
-    @Operation(summary = "회원 이미지 수정")
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public void updateImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                            @RequestPart MultipartFile file) {
-
-        Long userId = authUser.getUserId();
-        if (file != null){
-            userImageService.editUserImage(userId, file);
-        } else {
-            userImageService.deleteUserImage(userId);
-        }
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "배경 이미지 수정 성공"),
-            @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
-            @ApiResponse(responseCode = "500", description = "배경 이미지 수정 실패")
-    })
-    @Operation(summary = "배경 이미지 수정")
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping(value = "/background-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public void updateBackgroundImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                      @RequestPart MultipartFile file) {
-
-        Long userId = authUser.getUserId();
-        if (file != null){
-            userImageService.editUserBackgroundImage(userId, file);
-        } else {
-            userImageService.deleteUserBackgroundImage(userId);
-        }
+        userImageService.createOrUpdateUserBackgroundImage(userId, file);
     }
 
     @ApiResponses({

@@ -3,16 +3,141 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.FeedMapper">
 
-    <select id="findFeedListFirst" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed where is_delete = false ORDER BY feed_id DESC LIMIT #{size}
+    <select id="findFeedsToFollowers" resultType="FeedResponse" parameterType="java.lang.Long">
+        SELECT f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+               f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+               f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        FROM feed f
+
+        INNER JOIN (
+
+                SELECT f.feed_id, f.content, f.user_id,
+                ROW_NUMBER() OVER(PARTITION BY f.user_id ORDER BY f.created_at DESC) AS row_num
+                FROM feed f
+                JOIN feed_like_count flc ON f.feed_id = flc.feed_id
+                WHERE f.is_delete = false
+                AND
+                f.user_id IN (
+                        SELECT f.following_user_id
+                        FROM user u
+                        JOIN follow f ON u.user_id = #{userId}
+                        AND u.user_id = f.follower_user_id
+                )
+
+            ) AS following_users_feeds
+        ON following_users_feeds.feed_id = f.feed_id
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        ORDER BY f.created_at DESC
+        LIMIT 10
     </select>
 
-    <select id="findFeedListScroll" resultType="FeedResponse" parameterType="ScrollRequest">
-        select * from feed where is_delete = false and feed_id &lt; #{key} ORDER BY feed_id DESC LIMIT #{size}
+    <select id="findFeedsNotInFollowersFeeds" resultType="FeedResponse">
+        SELECT f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+        f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+        f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        FROM feed f
+
+        INNER JOIN feed_like_count flc
+        ON f.feed_id = flc.feed_id
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        WHERE f.is_delete = false
+        <if test="feedIds.size != 0">
+            AND f.feed_id NOT IN
+            <foreach item="feedId" collection="feedIds" open="(" separator="," close=")">
+                #{feedId}
+            </foreach>
+        </if>
+
+        ORDER BY flc.like_count DESC, f.created_at DESC
+        LIMIT #{size};
     </select>
 
-    <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long" >
-        select * from feed where feed_id = #{feedId} and is_delete = false
+    <select id="findFeedsFirst" resultType="FeedResponse" parameterType="ScrollRequest">
+        select f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+               f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+               f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        from feed f
+
+        INNER JOIN feed_like_count flc
+        on f.feed_id = flc.feed_id
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        where f.is_delete = false
+
+        and f.feed_id &lt; #{key}
+
+        order by flc.like_count desc, f.created_at desc
+        limit #{size}
+    </select>
+
+    <select id="findFeeds" resultType="FeedResponse" parameterType="ScrollRequest">
+        select f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+               f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+               f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        from feed f
+
+        INNER JOIN feed_like_count flc
+        on f.feed_id = flc.feed_id
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        where f.is_delete = false
+
+        order by flc.like_count desc, f.created_at desc
+        limit #{size}
+    </select>
+
+    <select id="findFeedById" resultType="FeedResponse" parameterType="java.lang.Long">
+        select f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+               f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+               f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        from feed f
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        where feed_id = #{feedId}
+        and f.is_delete = false
+    </select>
+
+    <select id="findUserByFeedId" resultType="FeedAuthorResponse" parameterType="java.lang.Long">
+        select f.feed_id, f.title, f.content, f.species, f.nickname, f.temperature,
+               f.humidity, f.water_amount, f.watering_period, f.feed_type, f.created_at,
+               f.modified_at, u.user_id, u.nick_name as user_nick_name, uimg.image
+        from feed f
+
+        INNER JOIN user u
+        ON u.user_id = f.user_id
+
+        LEFT JOIN user_image uimg
+        ON u.user_id = uimg.user_id
+
+        where feed_id = #{feedId}
+        and f.is_delete = false
     </select>
 
     <insert id="saveFeed" parameterType="FeedRequest" useGeneratedKeys="true" keyColumn="feed_id" keyProperty="request.feedId">

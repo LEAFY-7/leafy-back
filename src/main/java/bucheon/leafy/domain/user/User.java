@@ -2,6 +2,7 @@ package bucheon.leafy.domain.user;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,9 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
 
 @Getter
 @Entity
@@ -37,19 +39,20 @@ public class User extends BaseDeleteEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
+    private String introduction;
 
-    private LocalDate birthDay;
+    @Column(name = "is_hide", nullable = false)
+    private Boolean isHide;
 
-    private String simpleIntroduction;
+    @Column(name = "is_all_notifications", nullable = false)
+    private Boolean isAllNotifications;
+
+    @Column(name = "is_comment_notifications", nullable = false)
+    private Boolean isCommentNotifications;
 
     @JoinColumn(name = "user_id")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Feed> feeds = new ArrayList<>();
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Address address;
 
     // 유저는 정보를 뽑아올 때 거의 대부분 이미지를 뽑아오고 추가적으로 연관관계가 설정이 되어있지 않기 때문에 FetchType.EAGER 로 수정 고려
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -59,49 +62,52 @@ public class User extends BaseDeleteEntity {
     private UserBackgroundImage userBackgroundImage;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false)
     private UserRole userRole;
 
-
     @Builder
-    private User(String password, String email, String nickName, String phone,
-                 String name, String simpleIntroduction, List<Feed> feeds,
-                 Gender gender, LocalDate birthDay, Address address, UserImage userImage,
-                 UserBackgroundImage userBackgroundImage, UserRole userRole) {
+    private User(String password, String email, String nickName, String phone, Boolean isHide,
+                 String name, String introduction, List<Feed> feeds, UserImage userImage,
+                 UserBackgroundImage userBackgroundImage, UserRole userRole,
+                 Boolean isAllNotifications, Boolean isCommentNotifications) {
 
         this.password = password;
         this.email = email;
         this.name = name;
         this.nickName = nickName;
         this.phone = phone;
-        this.simpleIntroduction = simpleIntroduction;
+        this.introduction = introduction;
         this.feeds = feeds;
-        this.address = address;
+        this.isHide = isHide;
         this.userImage = userImage;
         this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
-        this.gender = gender;
-        this.birthDay = birthDay;
+        this.isAllNotifications = isAllNotifications;
+        this.isCommentNotifications = isCommentNotifications;
     }
 
     public static User of(SignUpRequest signUpRequest) {
-        Address address = Address.of(signUpRequest);
-
-        User user = User.builder()
+        return User.builder()
                 .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .name(signUpRequest.getName())
-                .nickName(signUpRequest.getNickName())
+                .nickName(
+                        generateRandomNickname()
+                )
                 .phone(signUpRequest.getPhone())
-                .simpleIntroduction(signUpRequest.getSimpleIntroduction())
-                .gender(signUpRequest.getGender())
-                .birthDay(signUpRequest.getBirthDay())
-                .address(address)
                 .userRole(UserRole.MEMBER)
+                .isHide(false)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
                 .feeds(new ArrayList<>())
                 .build();
+    }
 
-        address.addUser(user);
-        return user;
+    public void update(UserRequest userRequest) {
+        this.name = userRequest.getName();
+        this.nickName = userRequest.getNickName();
+        this.phone = userRequest.getPhone();
+        this.introduction = userRequest.getIntroduction();
     }
 
     public void changePassword(String encodePassword){
@@ -116,8 +122,37 @@ public class User extends BaseDeleteEntity {
         this.userBackgroundImage = null;
     }
 
-    public void giveRole(){
-        this.userRole = UserRole.ADMIN;
+    private static String generateRandomNickname() {
+        String randomNickname;
+        do {
+            randomNickname = UUID.randomUUID().toString()
+                    .replace("-", "").substring(0, 12);
+        } while (!isValidNickname(randomNickname));
+        return randomNickname;
+    }
+
+    private static final java.util.regex.Pattern NICKNAME_PATTERN
+            = java.util.regex.Pattern.compile("^(?!admin|leafy)(?!.*\\s{2,})(?!.*\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\s]{3,12}$");
+
+    private static boolean isValidNickname(String nickname) {
+        Matcher matcher = NICKNAME_PATTERN.matcher(nickname);
+        return matcher.matches();
+    }
+
+    public void updateIsHide(){
+        this.isHide = !this.isHide;
+    }
+
+    public void giveRole(UserRole userRole){
+        this.userRole = userRole;
+    }
+
+    public void updateIsAllNotifications(){
+        this.isAllNotifications = !this.isAllNotifications;
+    }
+
+    public void updateIsCommentNotifications(){
+        this.isCommentNotifications = !this.isCommentNotifications;
     }
 
 }

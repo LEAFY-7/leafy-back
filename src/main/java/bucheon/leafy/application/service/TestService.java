@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +34,7 @@ public class TestService {
 
     private final ImageComponent imageComponent;
 
-    public void createDummyFeed(List<MultipartFile> files) {
+    public void createDummyFeed(List<MultipartFile> files) throws IOException {
         EasyRandomParameters parameters = new EasyRandomParameters()
                 .randomize(Long.class, () -> ThreadLocalRandom.current().nextLong(0, 501))
                 .excludeField(named("feed_id").and(ofType(Long.class)))
@@ -59,7 +62,16 @@ public class TestService {
                 fileNames.add(fileName);
             }
 
-            feed.addFeedImages(fileNames);
+            List<Integer> fileHeights = new ArrayList<>();
+            for (int j = 0; j < fileNames.size(); j++) {
+                MultipartFile file = files.get(j);
+                BufferedImage inputImage = ImageIO.read( file.getInputStream() );
+
+                int imageHeight = inputImage.getHeight();
+                fileHeights.add(imageHeight);
+            }
+
+            feed.addFeedImages(fileNames, fileHeights);
 
             User randomUser = users.get((int) (Math.random() * users.size()));
             randomUser.getFeeds().add(feed);

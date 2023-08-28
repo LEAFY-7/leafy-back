@@ -1,20 +1,29 @@
 package bucheon.leafy.application.mapper;
 
 
-import bucheon.leafy.domain.notice.NoticeDto;
+import bucheon.leafy.domain.notice.request.NoticeEditRequest;
+import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
+import bucheon.leafy.domain.notice.response.NoticeResponse;
 import bucheon.leafy.util.request.PageRequest;
-import bucheon.leafy.util.response.PageResponse;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 @Mapper
 public interface NoticeMapper {
-    NoticeDto findById(Long id);
-    int viewCnt(Long id);
-    int delete(Long id);
-    NoticeDto searchSelectPage(PageRequest pageRequest);
-    Long insert(NoticeDto noticeDto) ;
-    int update(NoticeDto noticeDto);
-    PageResponse selectAll();
-    Long findTableIdByUserId(Long userId);
+    int count();
+    int adminNoticeCount();
+    NoticeResponse findById(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalse(Long noticeId);
+    NoticeResponse findByIdAndIsDeleteFalseAndIsHideFalse(Long noticeId);
+    int viewCnt(Long noticeId);
+    int deleteById(Long userId, Long noticeId);
+    Long save(@Param("userId")Long userId, @Param("noticeSaveRequest")NoticeSaveRequest noticeSaveRequest);
+    Long editById(@Param("userId")Long userId, @Param("noticeId")Long noticeId, @Param("noticeEditRequest")NoticeEditRequest noticeEditRequest);
+    List<NoticeResponse> pageFindById(@Param("pageRequest") PageRequest pageRequest);
+    List<NoticeResponse> adminPageFindById(@Param("pageRequest") PageRequest pageRequest);
+    List<Long> findAllUserIds();
+
 }

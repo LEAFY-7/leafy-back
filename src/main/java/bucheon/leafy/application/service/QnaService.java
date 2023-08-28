@@ -1,15 +1,16 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.mapper.AlarmMapper;
 import bucheon.leafy.application.mapper.QnaMapper;
-import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.qna.QnaDto;
-import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.user.response.GetMeResponse;
-import bucheon.leafy.exception.FeedNotFoundException;
-import bucheon.leafy.exception.ReadFailedException;
-import bucheon.leafy.exception.RemoveFailedException;
-import bucheon.leafy.exception.UserNotFoundException;
+
+import bucheon.leafy.application.repository.QnaRepository;
+import bucheon.leafy.domain.qna.Qna;
+import bucheon.leafy.domain.qna.request.QnaEditRequest;
+import bucheon.leafy.domain.qna.request.QnaSaveRequest;
+import bucheon.leafy.domain.qna.response.MyPageQnaResponse;
+import bucheon.leafy.domain.qna.response.QnaEditResponse;
+import bucheon.leafy.domain.qna.response.QnaResponse;
+import bucheon.leafy.domain.qna.response.QnaSaveResponse;
+import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,33 +19,41 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class QnaService {
 
-    private final UserRepository userRepository;
     private final QnaMapper qnaMapper;
-    private final AlarmMapper alarmMapper;
+    private final QnaRepository qnaRepository;
 
-
-    public boolean remove(Long id) {
-        boolean deleteStatus = qnaMapper.deleteById(id);
+    public boolean remove(Long qnaId) {
+        boolean deleteStatus = qnaMapper.deleteById(qnaId);
         if (!deleteStatus) {
             throw new RemoveFailedException();
         }
         return true;
     }
 
-    public Long write(QnaDto qnaDto) { return qnaMapper.save(qnaDto); }
+    public QnaSaveResponse write(Long userId, QnaSaveRequest qnaSaveRequest) {
+        QnaSaveResponse qnaSaveResponse = qnaMapper.save(userId ,qnaSaveRequest);
 
-    public PageResponse admingetList(PageRequest pageRequest,Long id){
-//        qnaMapper.pageFindById(id);
-        return qnaMapper.adminSelectAll(pageRequest);
+        if (qnaSaveResponse == null) {
+            throw new WriteFailedException();
+        }
+        return qnaSaveResponse;
     }
-    public PageResponse getList(Long userId, PageRequest pageRequest, Long id){
-        List<PageResponse> list = qnaMapper.pageFindById(id, pageRequest);
+
+    public PageResponse admingetList(PageRequest pageRequest){
+        List<PageResponse> list = qnaMapper.adminSelectAll(pageRequest);
+        long total = qnaMapper.count();
+        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
+        return pageResponse;
+    }
+    public PageResponse getList(Long qnaId, Long userId, PageRequest pageRequest){
+        List<PageResponse> list = qnaMapper.pageFindById(qnaId, userId, pageRequest);
         long total = qnaMapper.count();
         PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
@@ -53,36 +62,32 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaDto getRead(Long id) {
+    public QnaResponse getRead(Long qnaId) {
 
-        QnaDto qnaDto = qnaMapper.findById(id);
+        QnaResponse qnaResponse = qnaMapper.findById(qnaId);
 
-        if (qnaDto == null) {
+        if (qnaResponse == null) {
             throw new ReadFailedException();
         }
+        qnaMapper.viewCnt(qnaId);
+        qnaMapper.editByIdQnaStatus(qnaId);
 
-        String msg = "답장이 완료 됬습니다.";
-
-        qnaMapper.viewCnt(id);
-        qnaMapper.qnaStatusModify(id);
-
-        return qnaMapper.findById(id);
+        return qnaMapper.findById(qnaId);
     }
-    public int modify(QnaDto qnaDto,Long id) {
-        return qnaMapper.editById(qnaDto, id);
+    public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest) {
+        return qnaMapper.editById(qnaId, qnaEditRequest );
     }
 
-    public QnaDto getQnaById(Long qnaId) {
+    public Long getQnaById( Long qnaId) {
         return Optional.of(qnaMapper.findQnaById(qnaId)).orElseThrow(FeedNotFoundException::new);
     }
 
-    public User getUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public List<MyPageQnaResponse> getQnasByUserId(Long userId) {
+        List<Qna> qnas = qnaRepository.findTop10ByUserIdOrderByCreatedAtDesc(userId);
+        return qnas.stream()
+                .map(MyPageQnaResponse::of)
+                .collect(Collectors.toList());
     }
 
-    public GetMeResponse getMe(Long userId) {
-        User user = getUserById(userId);
-        int alarmCount = alarmMapper.countByUserId(userId);
-        return GetMeResponse.of(user, alarmCount);
-    }
+
 }

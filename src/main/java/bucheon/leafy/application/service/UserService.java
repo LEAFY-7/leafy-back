@@ -7,9 +7,11 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.user.CertificationNumber;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.domain.user.response.UserResponse;
@@ -70,25 +72,27 @@ public class UserService {
     public void signUp(SignUpRequest signUpRequest) {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
-        duplicationNickNameCheck(signUpRequest.getNickName());
         duplicationEmailCheck(signUpRequest.getEmail());
 
         User user = User.of(signUpRequest);
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
-        User saveUser = userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public CertificationNumberResponse sendCertificationNumber(String email) {
-        String number = mailComponent.sendCode(email);
-        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
+    public void updateUser(Long userId, UserRequest userRequest) {
+        User user = getUserById(userId);
 
-        CertificationNumberResponse response = CertificationNumberResponse.builder()
-                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
-        return response;
+        if ( !user.getNickName().equals( userRequest.getNickName() ) ) {
+            duplicationNickNameCheck( userRequest.getNickName() );
+        }
+
+        user.update(userRequest);
+
+        PasswordRequest passwordRequest = PasswordRequest.of(userRequest);
+        editPassword(userId, passwordRequest);
     }
-
 
     public void duplicationEmailCheck(String email) {
         Boolean exists = userRepository.existsByEmail(email);
@@ -123,6 +127,33 @@ public class UserService {
         user.changePassword(encodedPassword);
     }
 
+    public String getEmailByNameAndPhone(String name, String phone) {
+        User user = userRepository.findByNameAndPhone(name, phone)
+                .orElseThrow(UserNotFoundException::new);
+
+        return user.getEmail();
+    }
+
+    public void editIsHide(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsHide();
+    }
+
+    public void editIsAllNotifications(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsAllNotifications();
+    }
+
+    public void editIsCommentNotifications(Long userId) {
+        User user = getUserById(userId);
+        user.updateIsCommentNotifications();
+    }
+
+    public void editRole(Long userId, UserRole userRole) {
+        User user = getUserById(userId);
+        user.giveRole(userRole);
+    }
+
     public void updateTemporaryPassword(String email, String phone) {
         User user = userRepository.findByEmailAndPhone(email, phone)
                 .orElseThrow(UserNotFoundException::new);
@@ -137,6 +168,15 @@ public class UserService {
         if(returnPassword != password){
             throw new PasswordEmailSendException();
         }
+    }
+
+    public CertificationNumberResponse sendCertificationNumber(String email) {
+        String number = mailComponent.sendCode(email);
+        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
+
+        CertificationNumberResponse response = CertificationNumberResponse.builder()
+                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
+        return response;
     }
 
     private String randomPassword(int length){
@@ -175,4 +215,5 @@ public class UserService {
             throw new PasswordNotMatchedException();
         }
     }
+
 }

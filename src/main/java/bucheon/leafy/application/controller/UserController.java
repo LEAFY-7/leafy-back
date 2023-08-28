@@ -2,9 +2,11 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.UserService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
+import bucheon.leafy.domain.user.request.UserRequest;
 import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.jwt.JwtFilter;
@@ -67,8 +69,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
-            @ApiResponse(responseCode = "401", description = "비밀번호가 틀림"),
-            @ApiResponse(responseCode = "404", description = "아이디가 틀림"),
+            @ApiResponse(responseCode = "401, 404", description = "아이디나 비밀번호가 틀림"),
             @ApiResponse(responseCode = "500", description = "서버 코드 문제로 로그인 실패")
     })
     @Operation(summary = "로그인")
@@ -126,6 +127,15 @@ public class UserController {
         return ResponseEntity.ok().body(getMe);
     }
 
+    @ApiResponse(responseCode = "200", description = "수정 성공")
+    @Operation(summary = "회원 정보 수정")
+    @PutMapping
+    public void editUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                  @RequestBody UserRequest userRequest) {
+        Long userId = authUser.getUserId();
+        userService.updateUser(userId, userRequest);
+    }
+
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "비밀번호 변경 성공"),
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
@@ -152,6 +162,65 @@ public class UserController {
     @PatchMapping("/temporary-password")
     public void updateTemporaryPassword(@RequestParam String email, String phone) {
         userService.updateTemporaryPassword(email, phone);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "이메일 조회"),
+            @ApiResponse(responseCode = "404", description = "이름과 전화번호로 가입된 이메일이 존재하지 않음")
+    })
+    @Operation(summary = "아이디 찾기")
+    @GetMapping("/email")
+    public String getUserEmail(@RequestParam String name, String phone) {
+        return userService.getEmailByNameAndPhone(name, phone);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 비공개 수정 성공"),
+            @ApiResponse(responseCode = "500", description = "회원 비공개 수정 실패"),
+    })
+    @Operation(summary = "회원 비공개 수정")
+    @PatchMapping("/hide")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsHide(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsHide(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "전체 알람 비공개 on, off 성공"),
+            @ApiResponse(responseCode = "500", description = "전체 알람 비공개 on, off 실패"),
+    })
+    @Operation(summary = "전체 알람 비공개 on, off")
+    @PatchMapping("/all-notification")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsAllNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsAllNotifications(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 알람 비공개 on, off 성공"),
+            @ApiResponse(responseCode = "500", description = "댓글 알람 비공개 on, off 실패"),
+    })
+    @Operation(summary = "댓글 알람 on, off")
+    @PatchMapping("/comment-notification")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editIsCommentNotifications(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.editIsCommentNotifications(userId);
+    }
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 권한 수정 성공"),
+            @ApiResponse(responseCode = "500", description = "회원 권한 수정 실패"),
+    })
+    @Operation(summary = "회원 권한 수정")
+    @PatchMapping("/role")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void editRole(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                           @RequestParam UserRole userRole) {
+        Long userId = authUser.getUserId();
+        userService.editRole(userId, userRole);
     }
 
     private void insertTokenInHeader(TokenResponse tokenResponse) {

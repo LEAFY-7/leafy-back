@@ -1,19 +1,18 @@
 package bucheon.leafy.domain.feed.response;
 
 import bucheon.leafy.domain.feed.FeedType;
+import bucheon.leafy.domain.user.response.FeedAuthorResponse;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
-@NoArgsConstructor
+@Getter
 public class FeedResponse {
 
     private Long feedId;
-    private Long userId;
-    private String userName;
     private String title;
     private String content;
     private String species;
@@ -25,17 +24,17 @@ public class FeedResponse {
     private FeedType feedType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private FeedAuthorResponse feedAuthorResponse;
+    private List<FeedImageResponse> feedImages = new ArrayList<>();
 
-    // JPA 에서 DTO 타입으로 값을 받기 위해 public 으로 생성자를 열어 놓음
     @Builder
-    public FeedResponse(Long feedId, Long userId, String userName, String title,
-                        String content, String species, String nickname, Double temperature,
+    public FeedResponse(Long feedId, String title, String content,
+                        String species, String nickname, Double temperature,
                         Integer humidity, Double waterAmount, String wateringPeriod,
-                        FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+                        FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt,
+                        Long userId, String userNickName, String profileImage) {
 
         this.feedId = feedId;
-        this.userId = userId;
-        this.userName = userName;
         this.title = title;
         this.content = content;
         this.species = species;
@@ -47,6 +46,12 @@ public class FeedResponse {
         this.feedType = feedType;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+
+        this.feedAuthorResponse = FeedAuthorResponse.builder()
+                .userId(userId)
+                .userNickName(userNickName)
+                .profileImage(profileImage)
+                .build();
     }
 
 }

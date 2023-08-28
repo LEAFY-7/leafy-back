@@ -1,22 +1,18 @@
 package bucheon.leafy.domain.user.response;
 
-import bucheon.leafy.domain.user.Gender;
 import bucheon.leafy.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-
+import static bucheon.leafy.domain.user.UserRole.ADMIN;
 import static bucheon.leafy.path.S3Path.*;
 
 @Data
 public class UserResponse {
 
+    private Long userId;
+
     private String email;
-
-    private Gender gender;
-
-    private LocalDate birthDay;
 
     private String name;
 
@@ -28,63 +24,59 @@ public class UserResponse {
 
     private String backgroundImage;
 
-    private String simpleIntroduction;
+    private String introduction;
 
-    private String zoneCode;
+    private Boolean isHide;
 
-    private String address;
+    private Boolean isAdmin;
 
-    private String jibunAddress;
+    private Boolean isAllNotifications;
 
-    private String roadAddress;
-
-    private String detailAddress;
+    private Boolean isCommentNotifications;
 
 
     @Builder
-    public UserResponse(String email, Gender gender, LocalDate birthDay,
-                        String name, String nickName, String phone,
-                        String profileImage, String backgroundImage,
-                        String simpleIntroduction, String zoneCode,
-                        String address, String jibunAddress,
-                        String roadAddress, String detailAddress) {
+    public UserResponse(Long userId, String email, String name, String nickName,
+                        String phone, String profileImage, String backgroundImage,
+                        String introduction, Boolean isAdmin, Boolean isHide,
+                        Boolean isAllNotifications, Boolean isCommentNotifications) {
 
+        this.userId = userId;
         this.email = email;
-        this.gender = gender;
-        this.birthDay = birthDay;
         this.name = name;
         this.nickName = nickName;
         this.phone = phone;
         this.profileImage = profileImage;
         this.backgroundImage = backgroundImage;
-        this.simpleIntroduction = simpleIntroduction;
-        this.zoneCode = zoneCode;
-        this.address = address;
-        this.jibunAddress = jibunAddress;
-        this.roadAddress = roadAddress;
-        this.detailAddress = detailAddress;
+        this.introduction = introduction;
+        this.isHide = isHide;
+        this.isAdmin = isAdmin;
+        this.isAllNotifications = isAllNotifications;
+        this.isCommentNotifications = isCommentNotifications;
     }
 
     public static UserResponse of(User user) {
         return UserResponse.builder()
+                .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickName(user.getNickName())
                 .phone(user.getPhone())
-                .birthDay(user.getBirthDay())
-                .gender(user.getGender())
                 .profileImage(
-                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage() : ""
+                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage()
+                                : ABSOLUTE_PATH + USER_IMAGE_PATH + DEFAULT_IMAGE
                 )
                 .backgroundImage(
-                        user.getUserBackgroundImage() != null ? ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + user.getUserBackgroundImage().getImage() : ""
+                        user.getUserBackgroundImage() != null ? ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + user.getUserBackgroundImage().getImage()
+                                : ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + DEFAULT_IMAGE
                 )
-                .simpleIntroduction(user.getSimpleIntroduction())
-                .zoneCode(user.getAddress().getDetailAddress())
-                .address(user.getAddress().getAddress())
-                .jibunAddress(user.getAddress().getJibunAddress())
-                .roadAddress(user.getAddress().getRoadAddress())
-                .detailAddress(user.getAddress().getDetailAddress())
+                .introduction(user.getIntroduction())
+                .isHide(user.getIsHide())
+                .isAllNotifications(user.getIsAllNotifications())
+                .isCommentNotifications(user.getIsCommentNotifications())
+                .isAdmin(
+                        user.getUserRole().equals(ADMIN) ? true : false
+                )
                 .build();
     }
 

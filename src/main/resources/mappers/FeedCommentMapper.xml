@@ -6,7 +6,7 @@
         select * from feed_comment where is_delete = false and feed_id = #{feedId} ORDER BY feed_comment_id DESC LIMIT #{scrollRequest.size}
     </select>
 
-    <select id="findCommentListScroll" resultType="FeedCommentResponse" parameterType="ScrollRequest">
+    <select id="findCommentList" resultType="FeedCommentResponse" parameterType="ScrollRequest">
         select * from feed_comment where is_delete = false and feed_id = #{feedId} and feed_comment_id &lt; #{scrollRequest.key} ORDER BY feed_comment_id DESC LIMIT #{scrollRequest.size}
     </select>
 

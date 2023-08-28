@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 @Entity
@@ -24,18 +25,23 @@ public class Feed extends BaseDeleteEntity {
     private Long id;
 
     private String title;
-
+    // 학명
     @Length(max = 50)
     @Pattern(regexp = "^[a-zA-Z가-힣\\s]*$", message = "숫자와 특수문자는 입력할 수 없습니다.")
     private String species;
+    // 별명
     @Length(max = 50)
     @Pattern(regexp = "^[a-zA-Z가-힣\\s]*$", message = "숫자와 특수문자는 입력할 수 없습니다.")
     private String nickname;
+    // 온도
     private Double temperature;
+    // 습도
     private Integer humidity;
+    // 물양
     private Double waterAmount;
+    // 물주는기간
     private String wateringPeriod;
-
+    // 상세입력
     private String content;
 
     @OneToOne(mappedBy = "feed", cascade = CascadeType.ALL)
@@ -87,10 +93,16 @@ public class Feed extends BaseDeleteEntity {
         this.feedLikeCount = feedLikeCount;
     }
 
-    public void addFeedImages(List<String> imageNames){
-        List<FeedImage> feedImages = imageNames.stream()
-                .map(FeedImage::of)
-                .collect(Collectors.toList());
+    public void addFeedImages(List<String> imageNames, List<Integer> imageHeights){
+        if (imageNames.size() != imageHeights.size()) {
+            throw new RuntimeException();
+        }
+
+        List<FeedImage> feedImages = new ArrayList<>();
+        for (int i = 0; i < imageNames.size(); i++) {
+            FeedImage feedImage = FeedImage.of(imageNames.get(i), imageHeights.get(i));
+            feedImages.add(feedImage);
+        }
 
         this.feedImages = feedImages;
     }

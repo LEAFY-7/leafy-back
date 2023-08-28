@@ -5,7 +5,10 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.request.FeedCommentRequest;
 import bucheon.leafy.domain.feed.response.FeedCommentResponse;
 import bucheon.leafy.util.request.ScrollRequest;
+import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +27,13 @@ public class FeedCommentController {
 
     private final FeedCommentService service;
 
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "피드 댓글 리스트 조회 성공"),
+            @ApiResponse(responseCode = "500", description = "서버 코드 문제")
+    })
     @Operation(summary = "피드 댓글 리스트")
     @GetMapping
-    public ResponseEntity<List<FeedCommentResponse>> getComments(@PathVariable Long feedId, ScrollRequest scrollRequest) {
+    public ResponseEntity<ScrollResponse> getComments(@PathVariable Long feedId, ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(service.getComments(feedId, scrollRequest));
     }
 
