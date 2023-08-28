@@ -33,7 +33,6 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
     })
     @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
-    @PreAuthorize("hasAnyRole('MEMBER, READ_ONLY')")
     @GetMapping("/{qnaReplyId}")
     public ResponseEntity<QnaReplyResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                  @PathVariable Long qnaReplyId) {
@@ -48,6 +47,7 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 수정 실패")
     })
     @Operation(summary = "대댓글 수정")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PutMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify( @AuthenticationPrincipal AuthUser user,
@@ -63,6 +63,7 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 쓰기 실패")
     })
     @Operation(summary = "대댓글 쓰기")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<QnaReplySaveResponse> write(@AuthenticationPrincipal AuthUser user,
@@ -79,6 +80,7 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 삭제 실패")
     })
     @Operation(summary = "대댓글 삭제")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @DeleteMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove( @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,

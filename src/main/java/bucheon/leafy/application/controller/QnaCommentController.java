@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class QnaCommentController {
     })
     @Operation(summary = "댓글 수정하기")
     @PutMapping("/{qnaCommentId}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public void modify(@AuthenticationPrincipal AuthUser user,
                        @RequestBody String comment ) {
@@ -46,6 +48,7 @@ public class QnaCommentController {
     })
     @Operation(summary = "댓글 쓰기")
     @PostMapping("/{qnaCommentId}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
                                         @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
@@ -64,6 +67,7 @@ public class QnaCommentController {
     })
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{qnaCommentId}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
