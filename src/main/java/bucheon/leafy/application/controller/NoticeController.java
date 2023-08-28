@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +35,8 @@ public class NoticeController {
             @ApiResponse(responseCode = "500", description = "공지사항 수정 실패")
     })
     @Operation(summary = "공지사항 수정")
-    @PutMapping("/{noticeId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{noticeId}")
     public ResponseEntity<NoticeEditResponse> modify(@PathVariable("noticeId")  Long noticeId,
                                                      @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                      @RequestBody NoticeEditRequest noticeEditRequest) {
@@ -53,9 +51,8 @@ public class NoticeController {
             @ApiResponse(responseCode = "500", description = "공지사항 등록 실패")
     })
     @Operation(summary = "공지사항 등록")
-    @PostMapping
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
     public ResponseEntity<NoticeSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                     @RequestBody NoticeSaveRequest noticeSaveRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(noticeService.write(noticeSaveRequest, user));
@@ -96,9 +93,8 @@ public class NoticeController {
             @ApiResponse(responseCode = "500", description = "공지사항 삭제 실패")
     })
     @Operation(summary = "공지사항 삭제")
-    @DeleteMapping("/{noticeId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{noticeId}")
     public void remove(@PathVariable("noticeId") Long noticeId, @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
         noticeService.remove(noticeId, user);
     }
