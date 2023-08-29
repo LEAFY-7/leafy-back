@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
+    Boolean existsByPhone(String phone);
+
     Optional<User> findByEmailAndPhone(String email, String phone);
 
     @EntityGraph( attributePaths = {"userImage", "userBackgroundImage"} )
@@ -33,4 +35,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findWithFeedsById(Long userId);
 
     Optional<User> findByNameAndPhone(String name, String phone);
+
+
 }

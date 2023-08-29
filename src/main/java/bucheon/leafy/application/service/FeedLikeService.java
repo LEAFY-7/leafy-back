@@ -5,7 +5,7 @@ import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
-import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
+import bucheon.leafy.domain.feedlikeinfo.FeedLikeInfo;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.exception.UserLikeNotFoundException;

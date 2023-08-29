@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.UUID;
+import java.util.regex.Matcher;
 
 @Data
 @NoArgsConstructor
@@ -38,6 +41,8 @@ public class SignUpRequest {
         @Schema(description = "전화번호", example = "01012345678")
         private String phone;
 
+        @JsonIgnore
+        private String nickName = generateRandomNickname();
 
         @Builder
         private SignUpRequest(String password, String confirmPassword,
@@ -48,6 +53,23 @@ public class SignUpRequest {
                 this.email = email;
                 this.name = name;
                 this.phone = phone;
+        }
+
+        public static String generateRandomNickname() {
+                String randomNickname;
+                do {
+                        randomNickname = UUID.randomUUID().toString()
+                                .replace("-", "").substring(0, 12);
+                } while (!isValidNickname(randomNickname));
+                return randomNickname;
+        }
+
+        private static final java.util.regex.Pattern NICKNAME_PATTERN
+                = java.util.regex.Pattern.compile("^(?!admin|leafy)(?!.*\\s{2,})(?!.*\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\s]{3,12}$");
+
+        private static boolean isValidNickname(String nickname) {
+                Matcher matcher = NICKNAME_PATTERN.matcher(nickname);
+                return matcher.matches();
         }
 
 }

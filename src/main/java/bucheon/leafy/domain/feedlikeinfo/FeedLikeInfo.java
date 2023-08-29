@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.feedLikeInfo;
+package bucheon.leafy.domain.feedlikeinfo;
 
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
