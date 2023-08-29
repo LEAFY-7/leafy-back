@@ -48,6 +48,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/v1/users/sign**").permitAll()
                 .antMatchers("/api/v1/users/check/**").permitAll()
+                .antMatchers("/api/v1/users/email").permitAll()
+                .antMatchers("/api/v1/users//email-send").permitAll()
                 .antMatchers("/api/v1/users/email-confirm").permitAll()
                 .antMatchers("/api/v1/users//temporary-password").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()

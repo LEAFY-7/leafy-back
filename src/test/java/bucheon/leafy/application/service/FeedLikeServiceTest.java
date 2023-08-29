@@ -4,7 +4,7 @@ import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.application.repository.*;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
-import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
+import bucheon.leafy.domain.feedlikeinfo.FeedLikeInfo;
 import bucheon.leafy.domain.user.User;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;

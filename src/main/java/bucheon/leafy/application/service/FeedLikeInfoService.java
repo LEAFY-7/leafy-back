@@ -3,7 +3,7 @@ package bucheon.leafy.application.service;
 import bucheon.leafy.application.repository.FeedLikeInfoRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.response.FeedWithLikeCountResponse;
-import bucheon.leafy.domain.feedLikeInfo.FeedLikeInfo;
+import bucheon.leafy.domain.feedlikeinfo.FeedLikeInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

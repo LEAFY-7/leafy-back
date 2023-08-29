@@ -1,22 +1,16 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.component.MailComponent;
 import bucheon.leafy.application.mapper.AlarmMapper;
-import bucheon.leafy.application.repository.CertificationNumberRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.user.CertificationNumber;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.request.UserRequest;
-import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
-import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.exception.ExistException;
-import bucheon.leafy.exception.PasswordEmailSendException;
 import bucheon.leafy.exception.PasswordNotMatchedException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.TokenProvider;
@@ -31,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Random;
-
-import static bucheon.leafy.exception.enums.ExceptionKey.EMAIL;
-import static bucheon.leafy.exception.enums.ExceptionKey.NICKNAME;
+import static bucheon.leafy.exception.enums.ExceptionKey.*;
 
 @Slf4j
 @Service
@@ -42,8 +33,6 @@ import static bucheon.leafy.exception.enums.ExceptionKey.NICKNAME;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final MailComponent mailComponent;
-    private final CertificationNumberRepository certificationNumberRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
@@ -72,10 +61,19 @@ public class UserService {
     public void signUp(SignUpRequest signUpRequest) {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
+        while (true) {
+            try {
+                duplicationNickNameCheck( signUpRequest.getNickName() );
+                break;
+            } catch (ExistException e) {
+                signUpRequest.setNickName( SignUpRequest.generateRandomNickname() );
+            }
+        }
+
         duplicationEmailCheck(signUpRequest.getEmail());
+        duplicationPhoneCheck(signUpRequest.getPhone());
 
         User user = User.of(signUpRequest);
-
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
         user.changePassword(encodedPassword);
         userRepository.save(user);
@@ -94,6 +92,11 @@ public class UserService {
         editPassword(userId, passwordRequest);
     }
 
+    public void duplicationPhoneCheck(String phone) {
+        Boolean exists = userRepository.existsByPhone(phone);
+        if (exists) throw new ExistException(PHONE);
+    }
+
     public void duplicationEmailCheck(String email) {
         Boolean exists = userRepository.existsByEmail(email);
         if (exists) throw new ExistException(EMAIL);
@@ -106,11 +109,6 @@ public class UserService {
 
     public User getUserById(Long userId){
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-    }
-
-    public UserResponse getUserResponseByUserId(Long userId) {
-        User user = getUserById(userId);
-        return UserResponse.of(user);
     }
 
     public GetMeResponse getMe(Long userId) {
@@ -154,61 +152,6 @@ public class UserService {
         user.giveRole(userRole);
     }
 
-    public void updateTemporaryPassword(String email, String phone) {
-        User user = userRepository.findByEmailAndPhone(email, phone)
-                .orElseThrow(UserNotFoundException::new);
-
-        String password = randomPassword(10);
-
-        String encodedPassword = passwordEncoder.encode(password);
-        user.changePassword(encodedPassword);
-        userRepository.save(user);
-
-        String returnPassword = mailComponent.sendPassword(email, password);
-        if(returnPassword != password){
-            throw new PasswordEmailSendException();
-        }
-    }
-
-    public CertificationNumberResponse sendCertificationNumber(String email) {
-        String number = mailComponent.sendCode(email);
-        CertificationNumber certificationNumber = CertificationNumber.builder().email(email).number(number).build();
-
-        CertificationNumberResponse response = CertificationNumberResponse.builder()
-                .number(number).createdAt(certificationNumberRepository.save(certificationNumber).getCreatedAt()).build();
-        return response;
-    }
-
-    private String randomPassword(int length){
-        String upperAlphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowerAlphabets = upperAlphabets.toLowerCase();
-        String numbers = "0123456789";
-        String specialCharacters = "!@#$%^&*()";
-
-        String allCharacters = upperAlphabets + lowerAlphabets + numbers + specialCharacters;
-
-        Random random = new Random();
-        StringBuilder randomString = new StringBuilder();
-
-        randomString.append(upperAlphabets.charAt(random.nextInt(upperAlphabets.length())));
-        randomString.append(lowerAlphabets.charAt(random.nextInt(lowerAlphabets.length())));
-        randomString.append(numbers.charAt(random.nextInt(numbers.length())));
-        randomString.append(specialCharacters.charAt(random.nextInt(specialCharacters.length())));
-
-        for (int i = 4; i < length; i++) {
-            randomString.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
-        }
-
-        char[] charArray = randomString.toString().toCharArray();
-        for (int i = charArray.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-            char temp = charArray[index];
-            charArray[index] = charArray[i];
-            charArray[i] = temp;
-        }
-
-        return new String(charArray);
-    }
 
     private void comparePasswords(String password, String confirmPassword) {
         if ( !password.equals(confirmPassword) ){

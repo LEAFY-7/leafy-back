@@ -49,6 +49,17 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ExceptionResponse> authenticationFailedException(AuthenticationFailedException e) {
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(403))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(PasswordNotMatchedException.class)
     public ResponseEntity<ExceptionResponse> passwordNotMatchedException(PasswordNotMatchedException e) {
         int statusCode = e.getStatusCode();
@@ -204,8 +215,8 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
-    @ExceptionHandler(PasswordEmailSendException.class)
-    public ResponseEntity<ExceptionResponse> passwordEmailSendException(PasswordEmailSendException e) {
+    @ExceptionHandler(EmailSendException.class)
+    public ResponseEntity<ExceptionResponse> passwordEmailSendException(EmailSendException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()
