@@ -59,8 +59,8 @@ public class NoticeService {
     }
 
     public PageResponse getList(PageRequest pageRequest, AuthUser user)  {
-        List<NoticeResponse> list = null;
-        long total = 0;
+        List<NoticeResponse> list;
+        long total;
 
         if(user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MEMBER"))) { // 비회원, 멤버 회원은 비공개 공지사항 제외
             list = noticeMapper.pageFindById(pageRequest);
@@ -71,8 +71,7 @@ public class NoticeService {
             total = noticeMapper.adminNoticeCount();
         }
 
-        PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
-        return pageResponse;
+        return PageResponse.of(pageRequest, list, total);
     }
 
     public NoticeResponse getRead(Long noticeId, AuthUser user) {
