@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.regex.Matcher;
 
 @Getter
 @Entity
@@ -36,7 +34,7 @@ public class User extends BaseDeleteEntity {
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
     private String introduction;
@@ -91,9 +89,7 @@ public class User extends BaseDeleteEntity {
                 .password(signUpRequest.getPassword())
                 .email(signUpRequest.getEmail())
                 .name(signUpRequest.getName())
-                .nickName(
-                        generateRandomNickname()
-                )
+                .nickName(signUpRequest.getNickName())
                 .phone(signUpRequest.getPhone())
                 .userRole(UserRole.MEMBER)
                 .isHide(false)
@@ -122,22 +118,6 @@ public class User extends BaseDeleteEntity {
         this.userBackgroundImage = null;
     }
 
-    private static String generateRandomNickname() {
-        String randomNickname;
-        do {
-            randomNickname = UUID.randomUUID().toString()
-                    .replace("-", "").substring(0, 12);
-        } while (!isValidNickname(randomNickname));
-        return randomNickname;
-    }
-
-    private static final java.util.regex.Pattern NICKNAME_PATTERN
-            = java.util.regex.Pattern.compile("^(?!admin|leafy)(?!.*\\s{2,})(?!.*\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\s]{3,12}$");
-
-    private static boolean isValidNickname(String nickname) {
-        Matcher matcher = NICKNAME_PATTERN.matcher(nickname);
-        return matcher.matches();
-    }
 
     public void updateIsHide(){
         this.isHide = !this.isHide;

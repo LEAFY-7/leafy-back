@@ -23,8 +23,15 @@ public class CertificationNumber extends BaseEntity {
     private String number;
 
     @Builder
-    public CertificationNumber(String email, String number) {
+    private CertificationNumber(String email, String number) {
         this.email = email;
         this.number = number;
+    }
+
+    public static CertificationNumber of(String email, String number) {
+        return CertificationNumber.builder()
+                .email(email)
+                .number(number)
+                .build();
     }
 }
