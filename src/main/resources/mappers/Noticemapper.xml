@@ -65,8 +65,8 @@
 
     <select id="findAllUserIds" resultType="long">
         SELECT user_id
-        FROM user
-        WHERE is_delete = false
+          FROM user
+        WHERE is_delete = false and is_all_notifications = true
     </select>
 
     <select id="pageFindById" resultType="bucheon.leafy.domain.notice.response.NoticeResponse">
@@ -74,10 +74,10 @@
         FROM notice
         WHERE is_delete = false and is_hide = false
         <if test="pageRequest.sortColumn != null">
-            ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
+        ORDER BY ${pageRequest.sortColumn} ${pageRequest.sortStatus}
         </if>
         <if test="pageRequest.sortColumn == null">
-            ORDER BY modified_at desc, created_at desc
+        ORDER BY modified_at desc, created_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
