@@ -39,7 +39,7 @@
 <br/>
 
 ## 🏢 DB 명세서
-![DB ERD](https://bucket-leafy.s3.ap-northeast-2.amazonaws.com/db_erd.jpg)
+![DB_ERD](https://github.com/LEAFY-7/leafy-back/assets/96738163/f8b2976c-05b7-4df3-bfbc-8fa7ab8e95f4)
 
 <br/>
 
