@@ -5,11 +5,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class QnaCommentEditReqeust {
+public class QnaCommentEditRequest {
 
     private String comment;
 
-    public QnaCommentEditReqeust( String comment) {
+    public QnaCommentEditRequest( String comment) {
         this.comment = comment;
     }
 

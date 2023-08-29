@@ -4,24 +4,36 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaCommentMapper">
 
-    <update id="deleteByQnaCommentId" parameterType="Long">
+    <update id="deleteByQnaCommentId" parameterType="long" >
         UPDATE  qna_comment
-           SET is_delete = 1
+           SET is_delete = true
          WHERE qna_comment_id = #{qnaCommentId}
     </update>
 
-    <insert id="save" parameterType="QnaCommentSaveReqeust">
+    <insert id="save" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
-            ( created_at, modified_at, is_delete, comment, user_id  )
+            (created_at, modified_at, is_delete, comment, user_id, qna_id)
         VALUES
-            (now(), now(), 0, #{comment}, #{userId})
+            (now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaCommentSaveRequest.qnaId})
     </insert>
 
-    <update id="editByQnaCommentId" parameterType="QnaCommentEditReqeust">
+    <select id="qnaSaveFind" resultType="QnaCommentSaveRequest">
+        SELECT qna_comment_id, created_at, qna_id
+        FROM qna_comment
+        WHERE comment = #{comment}
+    </select>
+
+    <update id="editByQnaCommentId" >
         UPDATE qna_comment
         SET comment = #{comment}
           , modified_at = now()
         WHERE qna_comment_id = #{qnaCommentId}
     </update>
+
+    <select id="qnaCommentEditFind" resultType="QnaCommentEditResponse">
+        SELECT  modified_at
+        FROM qna_comment
+        WHERE comment = #{qnaCommentSaveRequest.comment}
+    </select>
 
 </mapper>

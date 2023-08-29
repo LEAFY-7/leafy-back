@@ -2,10 +2,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.request.QnaCommentEditReqeust;
-import bucheon.leafy.domain.comment.request.QnaCommentSaveReqeust;
+import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
+import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
+import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
-import bucheon.leafy.domain.qna.response.QnaSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,18 +27,19 @@ public class QnaCommentController {
     private final QnaCommentService qnacommentService;
 
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "댓글 수정 성공"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
+            @ApiResponse(responseCode = "201", description = "댓글 수정 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
     @Operation(summary = "댓글 수정하기")
-    @PutMapping("/{qnaCommentId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
-    public void modify(@AuthenticationPrincipal AuthUser user,
-                       @RequestBody String comment ) {
-        Long userId = user.getUserId();
-        qnacommentService.modify(userId, comment);
+    @PutMapping("/{qnaCommentId}")
+    public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaCommentId")  Long qnaCommentId,
+                                                          @AuthenticationPrincipal AuthUser user,
+                                                          @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentId, qnaCommentEditRequest, user));
     }
 
     @ApiResponses({
@@ -47,17 +48,12 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 쓰기")
-    @PostMapping("/{qnaCommentId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
     public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
-                                        @RequestBody QnaCommentSaveReqeust qnaCommentSaveReqeust) {
+                                        @RequestBody QnaCommentSaveRequest qnaCommentSaveRequest) {
 
-        Long userId = user.getUserId();
-
-        QnaCommentSaveResponse response = qnacommentService.write(qnaCommentSaveReqeust);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.write(user,qnaCommentSaveRequest));
     }
 
     @ApiResponses({
@@ -66,13 +62,11 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 삭제")
-    @DeleteMapping("/{qnaCommentId}")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
+    @DeleteMapping("/{qnaCommentId}")
     public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
 
-        Long userId = user.getUserId();
-        qnacommentService.remove(qnaCommentId, userId);
+        qnacommentService.remove(qnaCommentId, user);
     }
 }
