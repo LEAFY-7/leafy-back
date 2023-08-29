@@ -17,12 +17,10 @@
             (now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaCommentSaveRequest.qnaId})
     </insert>
 
-
     <select id="qnaSaveFind" resultType="QnaCommentSaveRequest">
         SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
-        WHERE comment = #{qnaCommentSaveRequest.comment}
-          AND user_id = #{userId}
+        WHERE comment = #{comment}
     </select>
 
     <update id="editByQnaCommentId" >

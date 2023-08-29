@@ -4,21 +4,15 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaReplyMapper">
 
-<!--    <select id="getCount" parameterType="long" resultType="int">-->
-<!--        SELECT count(*)-->
-<!--          FROM qna_reply-->
-<!--         WHERE qna_reply_id = #{qnaReplyId}-->
-<!--    </select>-->
-
     <update id="deleteByQnaReplyId" parameterType="Long">
         UPDATE qna_reply
-           SET is_delete = 1
+           SET is_delete = true
          WHERE qna_reply_id = #{qnaReplyId}
     </update>
 
     <insert id="save" parameterType="QnaReplySaveRequest" >
         INSERT INTO qna_reply
-            ( created_at, modified_at is_delete, comment, user_id, qna_comment_id)
+            ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
              VALUES
             ( now(), now(),  0, #{comment}, #{userId}, #{qnaCommentId})
     </insert>
@@ -27,8 +21,6 @@
         SELECT qna_reply_id, created_at
         FROM qna
         WHERE contnets = #{contnets}
-          AND title = #{title}
-          AND user_id = #{userId}
     </select>
 
     <update id="edit" >
@@ -38,11 +30,10 @@
          WHERE qna_reply_id = #{qnaReplyId}
     </update>
 
-<!--    <select id="pageFindById`" parameterType="Long" resultType="QnaReplyResponse">-->
-<!--        SELECT comment, user_id-->
-<!--        FROM qna_reply_id-->
-<!--        ORDER BY created_at-->
-<!--         WHERE qna_comment_id =#{qnaCommentId}-->
-<!--    </select>-->
+    <select id="qnaReplyEditFind" resultType="QnaReplyEditResponse">
+        SELECT  modified_at
+        FROM qna_reply
+        WHERE comment = #{qnaReplyEditResponse.comment}
+    </select>
 
 </mapper>
