@@ -7,7 +7,6 @@ import bucheon.leafy.domain.user.request.PasswordRequest;
 import bucheon.leafy.domain.user.request.SignInRequest;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.request.UserRequest;
-import bucheon.leafy.domain.user.response.CertificationNumberResponse;
 import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenResponse;
@@ -41,7 +40,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "회원가입 성공"),
             @ApiResponse(responseCode = "400", description = "유효성 체크 불통과"),
-            @ApiResponse(responseCode = "409", description = "아이디나 닉네임이 이미 존재"),
+            @ApiResponse(responseCode = "409", description = "아이디나 전화번호가 이미 존재"),
             @ApiResponse(responseCode = "401, 500", description = "서버 코드 문제로 회원가입 실패")
     })
     @Operation(summary = "회원가입")
@@ -53,17 +52,6 @@ public class UserController {
         TokenResponse tokenResponse = userService.signIn(signInRequest);
         insertTokenInHeader(tokenResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "이메일 전송 성공"),
-            @ApiResponse(responseCode = "409", description = "이메일 전송 실패")
-    })
-    @Operation(summary = "이메일 인증")
-    @GetMapping("/email-confirm")
-    public ResponseEntity<CertificationNumberResponse> emailConfirm(@RequestParam @Valid String email) {
-        CertificationNumberResponse certificationNumberResponse =  userService.sendCertificationNumber(email);
-        return ResponseEntity.status(HttpStatus.CREATED).body(certificationNumberResponse);
     }
 
     @ApiResponses({
@@ -152,17 +140,6 @@ public class UserController {
 
         Long userId = authUser.getUserId();
         userService.editPassword(userId, passwordRequest);
-    }
-
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "임시 비밀번호 발급 성공"),
-            @ApiResponse(responseCode = "400", description = "임시 비밀번호 이메일 발송 실패"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 email or phone")
-    })
-    @Operation(summary = "임시 비밀번호 발급")
-    @PatchMapping("/temporary-password")
-    public void updateTemporaryPassword(@RequestParam String email, String phone) {
-        userService.updateTemporaryPassword(email, phone);
     }
 
     @ApiResponses({
