@@ -31,15 +31,21 @@
 
     <select id="findById" parameterType="long" resultType="QnaResponse">
         SELECT
-        q.*,
-        qc.qna_comment_id AS qnaCommentId,
-        qc.comment AS comment,
-        (SELECT COUNT(qr.qna_comment_id) FROM qna_reply qr WHERE qr.qna_comment_id = qc.qna_comment_id) AS qnaReplyCount
+            q.*,
+            qc.* AS qnaComment,
+            (
+                SELECT qc.*, COUNT(qr.qna_comment_id)
+                FROM qna_reply qr
+                         LEFT JOIN qna_comment qc ON qc.qna_comment_id = qr.qna_comment_id
+                WHERE qr.qna_comment_id = qc.qna_comment_id
+                  AND qr.is_delete = false;
+            ) AS qnaReplyInfo
         FROM qna q
-        LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
+                 LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
         WHERE q.qna_id = #{qnaId}
-        LIMIT 1
+          AND q.is_delete = false;
     </select>
+
 
     <select id="findQnaById" parameterType="Long" resultType="QnaResponse" >
         select user_id

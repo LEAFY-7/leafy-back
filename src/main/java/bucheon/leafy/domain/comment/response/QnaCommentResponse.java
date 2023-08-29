@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 public class QnaCommentResponse {
 
     private Long qnaCommentId;
+    private Long createdAt;
+    private Long modifiedAt;
     private String comment;
     private Long userId;
     private Long qnaId;
 
-    public QnaCommentResponse(Long qnaCommentId, String comment, Long userId) {
+    public QnaCommentResponse(Long qnaCommentId, Long createdAt, Long modifiedAt, String comment, Long userId, Long qnaId) {
         this.qnaCommentId = qnaCommentId;
-        this.comment = comment;
-        this.userId = userId;
-    }
-    public QnaCommentResponse(String comment, Long userId, Long qnaId) {
+        this.createdAt = createdAt;
+        this.modifiedAt =modifiedAt;
         this.comment = comment;
         this.userId = userId;
         this.qnaId = qnaId;
-
     }
+
 
 }

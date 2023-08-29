@@ -11,9 +11,9 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface QnaCommentMapper {
     int deleteByQnaCommentId(@Param("qnaCommentId") Long qnaCommentId,@Param("userId") Long userId) ;
-    Long save(@Param("qnaCommentSaveRequest") QnaCommentSaveRequest qnaCommentSaveRequest, @Param("userId") Long userId);
+    int save(@Param("qnaCommentSaveRequest") QnaCommentSaveRequest qnaCommentSaveRequest, @Param("userId") Long userId);
     QnaCommentSaveResponse qnaSaveFind(QnaCommentSaveRequest qnaCommentSaveRequest);
-    Long editByQnaCommentId(@Param("qnaCommentId")Long qnaCommentId , @Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest) ;
+    int editByQnaCommentId(@Param("qnaCommentId")Long qnaCommentId , @Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest) ;
     QnaCommentEditResponse qnaCommentEditFind(QnaCommentEditRequest qnaCommentEditRequest);    //수정 조회오기
 
 }

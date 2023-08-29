@@ -3,7 +3,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.reply.request.QnaReplyEditReqeust;
 import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
+import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
 import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +36,7 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
     })
     @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
+    @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/{qnaReplyId}")
     public ResponseEntity<QnaReplyResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                  @PathVariable Long qnaReplyId) {
@@ -47,14 +51,13 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 수정 실패")
     })
     @Operation(summary = "대댓글 수정")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PutMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void modify( @AuthenticationPrincipal AuthUser user,
-                        @PathVariable("qnaReplyId") Long qnaReplyId,
-                        @RequestBody String comment) {
-        Long userId = user.getUserId();
-        qnareplyService.modify(qnaReplyId, comment);
+    @PutMapping("/{qnaReplyId}")
+    public ResponseEntity<QnaReplyEditResponse> modify(@AuthenticationPrincipal AuthUser user,
+                                                       @PathVariable("qnaReplyId") Long qnaReplyId,
+                                                       @RequestBody QnaReplyEditReqeust qnaReplyEditReqeust) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.modify(qnaReplyId, qnaReplyEditReqeust, user));
     }
 
     @ApiResponses({
@@ -63,15 +66,12 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 쓰기 실패")
     })
     @Operation(summary = "대댓글 쓰기")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @PostMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{qnaReplyId}")
     public ResponseEntity<QnaReplySaveResponse> write(@AuthenticationPrincipal AuthUser user,
                                                       @RequestBody QnaReplySaveRequest qnaReplySaveRequest) {
 
-        Long userId = user.getUserId();
-        QnaReplySaveResponse response = qnareplyService.write(qnaReplySaveRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.write(user, qnaReplySaveRequest));
     }
 
     @ApiResponses({
@@ -80,13 +80,12 @@ public class QnaReplyController {
             @ApiResponse(responseCode = "500", description = "대댓글 삭제 실패")
     })
     @Operation(summary = "대댓글 삭제")
-    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    @DeleteMapping("/{qnaReplyId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{qnaReplyId}")
     public void remove( @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                         @PathVariable("qnaReplyId") Long qnaReplyId) {
-        Long userId = user.getUserId();
-        qnareplyService.remove(qnaReplyId);
+
+        qnareplyService.remove(qnaReplyId, user);
     }
 }
 

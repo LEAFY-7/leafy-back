@@ -8,10 +8,12 @@ import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
 import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
 import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
 
 
 import bucheon.leafy.exception.ModifyFailedException;
+import bucheon.leafy.exception.RemoveFailedException;
 import bucheon.leafy.exception.WriteFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,12 @@ public class QnaCommentService {
     private final QnaCommentMapper qnacommentMapper;
     private final QnaMapper qnaMapper;
 
-    public void remove(Long qnaCommentId, Long userId) {
-        qnacommentMapper.deleteByQnaCommentId(qnaCommentId, userId);
+    public void remove(Long qnaCommentId, AuthUser user) {
+        Long userId = user.getUserId();
+
+        if( qnacommentMapper.deleteByQnaCommentId(qnaCommentId, userId) !=1 ){
+            throw new RemoveFailedException();
+        }
     }
 
     public QnaCommentSaveResponse write(AuthUser user, QnaCommentSaveRequest qnaCommentSaveRequest) {
@@ -47,7 +53,8 @@ public class QnaCommentService {
 
     }
 
-    public QnaCommentEditResponse modify(Long qnaReplyId, QnaCommentEditRequest qnaCommentEditRequest) {
+    public QnaCommentEditResponse modify(Long qnaReplyId, QnaCommentEditRequest qnaCommentEditRequest , AuthUser user) {
+        Long userId = user.getUserId();
 
         if(qnacommentMapper.editByQnaCommentId(qnaReplyId, qnaCommentEditRequest) != 1){
             throw new ModifyFailedException();
