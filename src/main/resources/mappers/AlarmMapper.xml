@@ -31,17 +31,19 @@
     </delete>
 
     <select id="findByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, created_at
-        from alarm
-        where user_id = #{userId}
+        select alarm_id, a.user_id, alarm_type, checked, table_id, a.created_at
+        from alarm a inner join user u on a.user_id = u.user_id
+        where a.user_id = #{userId}
+          and u.is_all_notifications = true
           and alarm_id &lt; #{scrollRequest.key}
         order by created_at desc limit #{scrollRequest.size}
     </select>
 
     <select id="countByUserId" resultType="int">
         select ifnull(count(case when checked ='false' then 1 end), 0) as count
-        from alarm
-        where user_id = #{userId}
+        from alarm a inner join user u on a.user_id = u.user_id
+        where a.user_id = #{userId}
+          and u.is_all_notifications = true
     </select>
 
     <select id="findById" resultType="Hashmap">
@@ -51,9 +53,10 @@
     </select>
 
     <select id="findFirstByUserId" parameterType="bucheon.leafy.util.request.ScrollRequest" resultType="bucheon.leafy.domain.alarm.response.AlarmResponse">
-        select alarm_id, user_id, alarm_type, checked, table_id, created_at
-        from alarm
-        where user_id = #{userId}
+        select alarm_id, a.user_id, alarm_type, checked, table_id, a.created_at
+        from alarm a inner join user u on a.user_id = u.user_id
+        where a.user_id = #{userId}
+          and u.is_all_notifications = true
         order by created_at desc limit #{scrollRequest.size}
     </select>
 
