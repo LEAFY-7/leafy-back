@@ -17,7 +17,6 @@ public interface QnaCommentMapper {
     int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId) ;
     QnaCommentEditResponse qnaCommentEditFind(Long userId);    //수정 조회오기
     int  editByIdQnaStatus(Long qnaId);//상태 변경
-
     Long findUserIdByQnaId(Long qnaCommentId);
 
 }
