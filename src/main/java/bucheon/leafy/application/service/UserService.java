@@ -66,7 +66,7 @@ public class UserService {
             String newNickname = SignUpRequest.generateRandomNickname();
             signUpRequest.setNickName(newNickname);
 
-            if (i++ > 100) throw new ExistException(NICKNAME);
+            if (i++ > 10) throw new ExistException(NICKNAME);
         }
 
 //        while (true) {
