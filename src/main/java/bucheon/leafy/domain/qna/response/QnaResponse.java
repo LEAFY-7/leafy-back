@@ -11,7 +11,7 @@ import bucheon.leafy.domain.comment.response.QnaCommentResponse;  // 패키지 �
 @NoArgsConstructor
 public class QnaResponse {
     private Long qnaId;
-    private Date createAt;
+    private Date createdAt;
     private Date modifiedAt;
     private Boolean isDelete;
     private String contents;
@@ -21,9 +21,9 @@ public class QnaResponse {
     private List<QnaCommentResponse> comment;  // QnaCommentResponse 객체의 리스트
     private List<QnaReplyResponse> qnaReply;
 
-    public QnaResponse(Long qnaId, Date createAt, Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comment, List<QnaReplyResponse> qnaReply) {
+    public QnaResponse(Long qnaId, Date createdAt, Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comment, List<QnaReplyResponse> qnaReply) {
         this.qnaId = qnaId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.isDelete = isDelete;
         this.contents = contents;

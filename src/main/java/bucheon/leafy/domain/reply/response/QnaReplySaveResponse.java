@@ -11,11 +11,11 @@ import java.util.Date;
 public class QnaReplySaveResponse {
 
     private Long qnaReplyId;
-    private Date createAt;
+    private Date createdAt;
 
 
-    public QnaReplySaveResponse(Long qnaReplyId, Date createAt) {
+    public QnaReplySaveResponse(Long qnaReplyId, Date createdAt) {
         this.qnaReplyId = qnaReplyId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 }

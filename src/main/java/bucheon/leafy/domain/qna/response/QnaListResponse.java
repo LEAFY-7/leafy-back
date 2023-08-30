@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class QnaListResponse {
     private Long qnaId;
-    private Date createAt;
+    private Date createdAt;
     private Date modifiedAt;
     private Boolean isDelete;
     private String contents;
@@ -20,9 +20,9 @@ public class QnaListResponse {
     private Long viewCount;
     private Long userId;
 
-    public QnaListResponse(Long qnaId, Date createAt, Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId) {
+    public QnaListResponse(Long qnaId, Date createdAt, Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId) {
         this.qnaId = qnaId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.isDelete = isDelete;
         this.contents = contents;
