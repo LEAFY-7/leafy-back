@@ -15,15 +15,15 @@
 
     <insert id="saveQnaComment" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
-            (create_at, modified_at, is_delete, comment, user_id, qna_id)
+            (created_at, modified_at, is_delete, comment, user_id, qna_id)
         VALUES
             (now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId})
     </insert>
     <select id="qnaSaveFind" resultType="QnaCommentSaveResponse">
-        SELECT qna_comment_id, create_at, qna_id
+        SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
         WHERE user_id = #{userId}
-        ORDER BY create_at DESC
+        ORDER BY created_at DESC
         LIMIT  1;
     </select>
 

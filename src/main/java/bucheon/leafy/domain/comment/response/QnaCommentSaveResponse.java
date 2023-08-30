@@ -12,12 +12,12 @@ public class QnaCommentSaveResponse {
     @JsonIgnore
     private Long qnaId;
     private Long qnaCommentId;
-    private Date createAt;
+    private Date createdAt;
 
-    public QnaCommentSaveResponse(Long qnaId, Long qnaCommentId, Date createAt) {
+    public QnaCommentSaveResponse(Long qnaId, Long qnaCommentId, Date createdAt) {
         this.qnaId = qnaId;
         this.qnaCommentId = qnaCommentId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
 
     }
 }

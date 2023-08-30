@@ -14,16 +14,16 @@
 
     <insert id="saveQnaReply" parameterType="QnaReplySaveRequest" useGeneratedKeys="true" keyColumn="qna_reply_id" keyProperty="qnaReplySaveRequest.qnaReplyId">
         INSERT INTO qna_reply
-            ( create_at, modified_at, is_delete, comment, user_id, qna_comment_id)
+            ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
              VALUES
             ( now(), now(),  0, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId})
     </insert>
 
     <select id="saveQnaReplyResponse" parameterType="Long" resultType="QnaReplySaveResponse">
-        SELECT qna_reply_id, create_at
+        SELECT qna_reply_id, created_at
         FROM qna_reply
         WHERE user_id = #{userId}
-        ORDER BY create_at DESC
+        ORDER BY created_at DESC
         LIMIT  1;
     </select>
 
