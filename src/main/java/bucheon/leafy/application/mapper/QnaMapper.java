@@ -22,7 +22,7 @@ public interface QnaMapper {
     Long save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
     QnaSaveResponse savefind(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장 조회오기
     Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest, @Param("userId")Long userId);//수정
-    QnaEditResponse eidtfind(QnaEditRequest qnaEditRequest);    //수정 조회오기
+    QnaEditResponse eidtfind(Long userId);    //수정 조회오기
     QnaResponse findQnaById(Long qnaId); //qnaId가지고 오기
     List<PageResponse> adminSelectAll(PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
