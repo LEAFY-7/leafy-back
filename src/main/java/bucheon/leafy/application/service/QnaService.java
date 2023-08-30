@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,27 +53,25 @@ public class QnaService {
         return qnaSaveResponse;
     }
     public PageResponse getList(AuthUser user,PageRequest pageRequest){
-
         Long userId = user.getUserId();
 
-         if (user.getAuthorities().contains("ROLE_ADMIN")) {
+        List<PageResponse> list ;
+        long total ;
 
-             List<PageResponse> list = qnaMapper.adminSelectAll(pageRequest);
-             long total = qnaMapper.count();
-             PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
+         if (user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            list = qnaMapper.adminSelectAll(pageRequest);
+            total = qnaMapper.adminCount();
 
-            return pageResponse;
         }else{
-             List<PageResponse> list = qnaMapper.pageFindById(userId, pageRequest);
-             long total = qnaMapper.count();
-             PageResponse pageResponse = PageResponse.of(pageRequest, list, total);
 
-             return pageResponse;
+             list = qnaMapper.pageFindById(userId ,pageRequest);
+             total = qnaMapper.count(userId);
+
          }
+
+        return PageResponse.of(pageRequest, list, total);
     }
-
-
-    @Transactional
+    
     public QnaResponse getRead(Long qnaId) {
 
         QnaResponse qnaResponse = qnaMapper.findById(qnaId);
@@ -83,14 +80,13 @@ public class QnaService {
             throw new ReadFailedException();
         }
         qnaMapper.viewCnt(qnaId);
-        qnaMapper.editByIdQnaStatus(qnaId);
 
         return qnaMapper.findById(qnaId);
     }
-    public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest) {
+    public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user) {
+        Long userId = user.getUserId();
 
-
-        if (qnaMapper.editById(qnaId, qnaEditRequest) != 1) {
+        if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
             throw new WriteFailedException();
         }
         QnaEditResponse qnaEditResponse = qnaMapper.eidtfind(qnaEditRequest);

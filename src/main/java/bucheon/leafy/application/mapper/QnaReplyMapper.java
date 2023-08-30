@@ -13,13 +13,13 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface QnaReplyMapper {
-    void deleteByQnaReplyId(Long qnaReplyId) ;
-    int save(@Param("qnaReplySaveRequest") QnaReplySaveRequest qnaReplySaveRequest,@Param("userId") Long userId);
-    QnaReplySaveResponse saveResponse(QnaReplySaveRequest qnaReplySaveRequest);
-    int edit(@Param("qnaReplyId")Long qnaReplyId,@Param("qnaReplyEditReqeust") QnaReplyEditReqeust qnaReplyEditReqeust);
+    void deleteByQnaReplyId(@Param("qnaReplyId") Long qnaReplyId,@Param("userId") Long userId, @Param("qnaCommentId")Long qnaCommentId) ;
+    int saveQnaReply(@Param("qnaReplySaveRequest") QnaReplySaveRequest qnaReplySaveRequest,@Param("userId") Long userId, @Param("qnaCommentId")Long qnaCommentId);
+    QnaReplySaveResponse saveQnaReplyResponse(Long userId);
+    int editQnaReply(@Param("qnaReplyId")Long qnaReplyId,@Param("qnaReplyEditReqeust") QnaReplyEditReqeust qnaReplyEditReqeust, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
+    QnaReplyEditResponse qnaReplyEditFind(Long userId);    //수정 조회오기
+//    QnaReplyResponse findByQnaCommentId(@Param("qnaCommentId")Long qnaCommentId);   //클릭해서 읽기(select)
+    Long findUserIdByQnaCommentId(Long qnaCommentId);
 
-    QnaReplyEditResponse qnaReplyEditFind(QnaReplyEditReqeust qnaReplyEditReqeust);    //수정 조회오기
-
-    QnaReplyResponse findByQnaCommentId(@Param("qnaCommentId")Long qnaCommentId);   //클릭해서 읽기(select)
 
 }

@@ -10,20 +10,19 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class QnaSaveResponse {
-
     private Long qnaId;
-    private Date createdAt;
+    private Date createAt;
     @Builder
-    public QnaSaveResponse(Long qnaId, Date createdAt) {
+    public QnaSaveResponse(Long qnaId, Date createAt) {
         this.qnaId = qnaId;
-        this.createdAt = createdAt;
+        this.createAt = createAt;
 
     }
 
     public static QnaSaveResponse of(Long qnaId, Date createdAt) {
         return QnaSaveResponse.builder()
                 .qnaId(qnaId)
-                .createdAt(createdAt)
+                .createAt(createdAt)
                 .build();
     }
 
