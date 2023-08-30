@@ -48,7 +48,7 @@ public class QnaService {
 
         if (qnaMapper.save(userId, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
 
-        QnaSaveResponse qnaSaveResponse = qnaMapper.savefind(userId, qnaSaveRequest);
+        QnaSaveResponse qnaSaveResponse = qnaMapper.savefind(userId);
 
         return qnaSaveResponse;
     }
