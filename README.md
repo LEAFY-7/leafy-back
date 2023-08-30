@@ -87,8 +87,10 @@
 - update 쿼리를 실행하기 전 조회 쿼리를 Beta Lock(Pessimistic Lock)으로 로직을 변경 하였습니다. ( 데드락을 대비하기 위해 좋아요 집계 테이블을 정규화 )
 
 ### 테스트하기 어려운 영역을 구분하고 분리하기
-- 인증 번호를 받고 나서 3분 동안 인증을 완료를 해야하는 로직을 작성중 DB의 Date Format을 사용하게 되면 예외 케이스 작성이 거의 불가능했습니다. 테스트 하기 어려운 부분을 메서드 밖 매개변수로 넘겨서 해결을 했습니다.
- - 예시 : between 되는 시간을 받아 예외적인 상황에서 정상적으로 메서드가 실행되는지 테스트 작성 -> boolean existsByEmailAndNumberAndCreatedAtBetween(String email, String number, LocalDateTime startTime, LocalDateTime endTime);
+- 인증 번호를 받고 나서 3분 동안 인증을 완료를 해야하는 로직을 작성중 DB의 Date Format을 사용하게 되면 예외 케이스 작성이 거의 불가능했습니다.
+ 테스트 하기 어려운 부분을 메서드 밖 매개변수로 넘겨서 해결을 했습니다.
+
+- 예시 : between 되는 시간을 받아 예외적인 상황에서 정상적으로 메서드가 실행되는지 테스트 작성 -> CertificationNumberRepositoryTest
 
 ### GitHub Action과 AWS를 통한 백엔드, 프론트엔드 자동 배포
 - 경로 충돌 이슈: 자동 빌드 전 수동 배포된 파일이 경로 충돌을 일으켜 배포에 실패하는 문제가 발생했습니다. 수동 배포 파일을 삭제하여 문제를 해결했습니다.

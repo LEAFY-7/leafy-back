@@ -59,7 +59,7 @@ public class FeedController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                         @ModelAttribute FeedRequest request) throws IOException {
+                         @ModelAttribute FeedRequest request) throws IOException {
         Long userId = user.getUserId();
         service.saveFeed(userId, request);
     }
@@ -75,8 +75,8 @@ public class FeedController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public void updateFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                             @PathVariable Long feedId,
-                                             @ModelAttribute FeedRequest request) throws IOException {
+                           @PathVariable Long feedId,
+                           @ModelAttribute FeedRequest request) throws IOException {
         Long userId = user.getUserId();
         service.updateFeed(feedId, userId, request);
     }
@@ -91,7 +91,8 @@ public class FeedController {
     @DeleteMapping("/{feedId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable Long feedId) {
+    public void deleteFeed(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                           @PathVariable Long feedId) {
         Long userId = user.getUserId();
         service.deleteFeed(feedId, userId);
     }

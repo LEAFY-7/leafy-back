@@ -30,7 +30,8 @@ public class AlarmController {
     })
     @Operation(summary = "유저의 알림 리스트 조회")
     @GetMapping
-    public ResponseEntity<ScrollResponse> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, ScrollRequest scrollRequest) {
+    public ResponseEntity<ScrollResponse> getAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                   ScrollRequest scrollRequest) {
         return ResponseEntity.ok().body(alarmService.getAlarm(user, scrollRequest));
     }
 
@@ -54,7 +55,7 @@ public class AlarmController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAlarm(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                              @PathVariable @Parameter(description = "삭제할 알림 id") long id){
+                            @PathVariable @Parameter(description = "삭제할 알림 id") long id){
         alarmService.deleteAlarm(user, id);
     }
 
