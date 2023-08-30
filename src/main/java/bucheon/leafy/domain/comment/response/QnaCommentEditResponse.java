@@ -9,8 +9,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class QnaCommentEditResponse {
 
-    private String comment;
+    private String modified_at;
     public QnaCommentEditResponse(String comment) {
-        this.comment = comment;
+        this.modified_at = modified_at;
     }
 }

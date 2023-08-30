@@ -24,26 +24,27 @@ import org.springframework.web.bind.annotation.*;
 @Tag( name = "QNA 대댓글")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/qna/{qnaId}/comments/{qnaCommentId}/replies")
+@RequestMapping("/api/v1/qna/comments/{qnaCommentId}/replies")
 public class QnaReplyController {
 
     private final QnaReplyService qnareplyService;
 
 
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
-            @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
-    })
-    @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
-    @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping("/{qnaReplyId}")
-    public ResponseEntity<QnaReplyResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                                 @PathVariable Long qnaReplyId) {
-
-        Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnareplyService.getRead(qnaReplyId));
-    }
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
+//            @ApiResponse(responseCode = "404", description = "로그인 필요"),
+//            @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
+//    })
+//    @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @GetMapping("/{qnaReplyId}")
+//    public ResponseEntity<QnaReplyResponse> read(@PathVariable("qnaCommentId")  Long qnaCommentId,
+//                                                 @PathVariable("qnaReplyId")  Long qnaReplyId,
+//                                                 @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user
+//                                                 ) {
+//
+//        return ResponseEntity.ok().body(qnareplyService.getRead(qnaReplyId, user, qnaCommentId));
+//    }
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 수정 성공"),
@@ -53,11 +54,12 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 수정")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{qnaReplyId}")
-    public ResponseEntity<QnaReplyEditResponse> modify(@AuthenticationPrincipal AuthUser user,
-                                                       @PathVariable("qnaReplyId") Long qnaReplyId,
+    public ResponseEntity<QnaReplyEditResponse> modify(@PathVariable("qnaCommentId")  Long qnaCommentId,
+                                                       @PathVariable("qnaReplyId")  Long qnaReplyId,
+                                                       @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
                                                        @RequestBody QnaReplyEditReqeust qnaReplyEditReqeust) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.modify(qnaReplyId, qnaReplyEditReqeust, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.modify(qnaReplyId, qnaReplyEditReqeust, user, qnaCommentId));
     }
 
     @ApiResponses({
@@ -67,11 +69,12 @@ public class QnaReplyController {
     })
     @Operation(summary = "대댓글 쓰기")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{qnaReplyId}")
-    public ResponseEntity<QnaReplySaveResponse> write(@AuthenticationPrincipal AuthUser user,
+    @PostMapping()
+    public ResponseEntity<QnaReplySaveResponse> write(@PathVariable("qnaCommentId")  Long qnaCommentId,
+                                                      @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
                                                       @RequestBody QnaReplySaveRequest qnaReplySaveRequest) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.write(user, qnaReplySaveRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.write(qnaReplySaveRequest, user, qnaCommentId));
     }
 
     @ApiResponses({
@@ -82,10 +85,11 @@ public class QnaReplyController {
     @Operation(summary = "대댓글 삭제")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{qnaReplyId}")
-    public void remove( @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                        @PathVariable("qnaReplyId") Long qnaReplyId) {
+    public void remove( @PathVariable("qnaCommentId")  Long qnaCommentId,
+                        @PathVariable("qnaReplyId")  Long qnaReplyId,
+                        @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
 
-        qnareplyService.remove(qnaReplyId, user);
+        qnareplyService.remove(qnaReplyId, user, qnaCommentId);
     }
 }
 

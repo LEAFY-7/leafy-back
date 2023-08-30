@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +35,10 @@ public class QnaCommentController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{qnaCommentId}")
     public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaCommentId")  Long qnaCommentId,
-                                                          @AuthenticationPrincipal AuthUser user,
+                                                          @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
                                                           @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentId, qnaCommentEditRequest, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentEditRequest, qnaCommentId, user));
     }
 
     @ApiResponses({
@@ -50,10 +49,11 @@ public class QnaCommentController {
     @Operation(summary = "댓글 쓰기")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public ResponseEntity<QnaCommentSaveResponse> write(@AuthenticationPrincipal AuthUser user,
-                                        @RequestBody QnaCommentSaveRequest qnaCommentSaveRequest) {
+    public ResponseEntity<QnaCommentSaveResponse> write(@PathVariable("qnaId") Long qnaId,
+                                                        @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
+                                                        @RequestBody QnaCommentSaveRequest qnaCommentSaveRequest) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.write(user,qnaCommentSaveRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.write(qnaCommentSaveRequest, user , qnaId));
     }
 
     @ApiResponses({
@@ -65,8 +65,9 @@ public class QnaCommentController {
     @ResponseStatus(HttpStatus.CREATED)
     @DeleteMapping("/{qnaCommentId}")
     public void remove(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                       @PathVariable("qnaId") Long qnaId,
                        @PathVariable("qnaCommentId") Long qnaCommentId) {
 
-        qnacommentService.remove(qnaCommentId, user);
+        qnacommentService.remove(user, qnaId , qnaCommentId );
     }
 }

@@ -5,10 +5,19 @@
 
 <mapper namespace="bucheon.leafy.application.mapper.QnaMapper">
 
-    <select id="count" parameterType="int" resultType="int">
+    <select id="count" parameterType="Long" resultType="int">
         SELECT count(*)
           FROM qna
+         WHERE is_delete = false
+           AND user_id =#{userId}
     </select>
+
+    <select id="adminCount" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM qna
+        WHERE is_delete = false
+    </select>
+
 
     <update id="deleteById" parameterType="long" >
         UPDATE qna
@@ -17,35 +26,34 @@
     </update>
 
     <insert id="save" parameterType="QnaSaveRequest" useGeneratedKeys="true" keyColumn="qna_id" keyProperty="qnaSaveRequest.qnaId">
-        INSERT INTO qna (created_at ,modified_at,is_delete , contents, qna_status, title, view_count, user_id)
+        INSERT INTO qna (create_at ,modified_at,is_delete , contents, qna_status, title, view_count, user_id)
         VALUES (now(), now(), 0, #{qnaSaveRequest.contents}, 0, #{qnaSaveRequest.title}, 0, #{userId})
     </insert>
 
     <select id="savefind" resultType="QnaSaveResponse">
-        SELECT qna_id, created_at
+        SELECT qna_id, create_at
         FROM qna
-        WHERE contents = #{qnaSaveRequest.contents}
-        AND title = #{qnaSaveRequest.title}
-        AND user_id = #{userId}
+        WHERE user_id = #{userId}
+        ORDER BY create_at DESC
+        LIMIT  1;
     </select>
 
     <select id="findById" parameterType="long" resultType="QnaResponse">
         SELECT
             q.*,
-            qc.* AS qnaComment,
+            qc.*,
             (
-                SELECT qc.*, COUNT(qr.qna_comment_id)
+                SELECT COUNT(qr.qna_comment_id)
                 FROM qna_reply qr
-                         LEFT JOIN qna_comment qc ON qc.qna_comment_id = qr.qna_comment_id
                 WHERE qr.qna_comment_id = qc.qna_comment_id
-                  AND qr.is_delete = false;
-            ) AS qnaReplyInfo
+                  AND qr.is_delete = false
+            ) AS qnaReplyCount
         FROM qna q
                  LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
         WHERE q.qna_id = #{qnaId}
           AND q.is_delete = false;
-    </select>
 
+    </select>
 
     <select id="findQnaById" parameterType="Long" resultType="QnaResponse" >
         select user_id
@@ -66,22 +74,18 @@
           , title = #{qnaEditRequest.title}
           , modified_at = now()
         WHERE qna_id = #{qnaId}
+          AND user_id = #{userId}
     </update>
 
-    <select id="eidtfind" parameterType="QnaEditRequest" resultType="QnaEditResponse">
+    <select id="eidtfind" resultType="QnaEditResponse">
         SELECT  modified_at
         FROM qna
-        WHERE contents = #{contents}
-          AND title = #{title}
+        WHERE user_id = #{userId}
+        ORDER BY modified_at DESC
+        LIMIT 1;
     </select>
 
-    <update id="editByIdQnaStatus" parameterType="QnaStatusRequest">
-        UPDATE qna
-        SET   qna_status = "답변 완료"
-        WHERE  qna_id = #{qnaId}
-    </update>
-
-    <select id="pageFindById" resultType="QnaResponse">
+    <select id="pageFindById" resultType="QnaListResponse">
         SELECT *
         FROM qna
         WHERE user_id = #{userId}
@@ -90,13 +94,13 @@
             ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
         </if>
         <if test="pageRequest.sortColumn == null">
-            ORDER BY modified_at desc, created_at desc
+            ORDER BY modified_at desc, create_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
     </select>
 
-    <select id="adminSelectAll"  resultType="QnaResponse">
+    <select id="adminSelectAll"  resultType="QnaListResponse">
         SELECT *
         FROM qna
         WHERE is_delete = false
@@ -104,7 +108,7 @@
             ORDER BY #{pageRequest.sortColumn} #{pageRequest.sortStatus}
         </if>
         <if test="pageRequst.sortColumn == null">
-            ORDER BY moidied_at desc, created_at desc
+            ORDER BY moidied_at desc, create_at desc
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
