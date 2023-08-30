@@ -20,7 +20,7 @@ public interface QnaMapper {
     QnaResponse findById(Long qnaId);   //클릭해서 읽기(select)
     int deleteById(Long qnaId);  //삭제
     Long save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
-    QnaSaveResponse savefind(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장 조회오기
+    QnaSaveResponse savefind(Long userId);   //저장 조회오기
     Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest, @Param("userId")Long userId);//수정
     QnaEditResponse eidtfind(Long userId);    //수정 조회오기
     QnaResponse findQnaById(Long qnaId); //qnaId가지고 오기
