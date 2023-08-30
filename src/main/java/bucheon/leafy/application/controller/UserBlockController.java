@@ -38,6 +38,9 @@ public class UserBlockController {
     @Operation(summary = "회원 차단 목록")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getBlockedUsers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+                                                              @Parameter(description = "page : 1 부터 시작 (첫 요청만 생략가능)," +
+                                                                      "size : 한 페이지에 들어갈 데이터의 양 (첫 요청만 생략가능)," +
+                                                                      "sort : 정렬할 데이터명, 오름차순 내림차순은 백과 상의해야함 (완전 생략 가능)")
                                                               @PageableDefault(page = 0, size = 20) Pageable pageable) {
 
         Long userId = authUser.getUserId();
@@ -60,9 +63,7 @@ public class UserBlockController {
 
         Long userId = authUser.getUserId();
 
-        if (userId == blockUserId) {
-            throw new SelfTargetException();
-        }
+        if (userId == blockUserId) throw new SelfTargetException();
 
         userBlockService.isBlockedUser(userId, blockUserId);
     }
@@ -83,9 +84,7 @@ public class UserBlockController {
 
         Long userId = authUser.getUserId();
 
-        if (userId == blockUserId) {
-            throw new SelfTargetException();
-        }
+        if (userId == blockUserId) throw new SelfTargetException();
 
         userBlockService.blockUser(userId, blockUserId);
         followService.unfollow(userId, blockUserId);
@@ -107,9 +106,7 @@ public class UserBlockController {
 
         Long userId = authUser.getUserId();
 
-        if (userId == blockUserId) {
-            throw new SelfTargetException();
-        }
+        if (userId == blockUserId) throw new SelfTargetException();
 
         userBlockService.noneBlockUser(userId, blockUserId);
     }

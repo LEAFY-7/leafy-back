@@ -66,7 +66,8 @@ public class NoticeController {
     })
     @Operation(summary = "공지사항 상세")
     @GetMapping("/{noticeId}")
-    public ResponseEntity<NoticeResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("noticeId") Long noticeId) {
+    public ResponseEntity<NoticeResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                               @PathVariable("noticeId") Long noticeId) {
         return ResponseEntity.ok().body(noticeService.getRead(noticeId, user));
     }
 
@@ -94,7 +95,8 @@ public class NoticeController {
     @Operation(summary = "공지사항 삭제")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{noticeId}")
-    public void remove(@PathVariable("noticeId") Long noticeId, @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
+    public void remove(@PathVariable("noticeId") Long noticeId,
+                       @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user) {
         noticeService.remove(noticeId, user);
     }
 

@@ -7,6 +7,7 @@ import bucheon.leafy.domain.feed.response.FeedCommentResponse;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +41,9 @@ public class FeedCommentController {
     @Operation(summary = "피드 댓글 등록")
     @PostMapping
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<Long> saveComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @RequestBody FeedCommentRequest request) {
+    public ResponseEntity<Long> saveComment(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                            @PathVariable Long feedId,
+                                            @RequestBody FeedCommentRequest request) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.saveComment(userId, feedId, request));
     }
@@ -48,7 +51,10 @@ public class FeedCommentController {
     @Operation(summary = "피드 댓글 수정")
     @PutMapping("/{commentId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<FeedCommentResponse> updateComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId, @RequestBody FeedCommentRequest request) {
+    public ResponseEntity<FeedCommentResponse> updateComment(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                             @PathVariable Long feedId,
+                                                             @PathVariable Long commentId,
+                                                             @RequestBody FeedCommentRequest request) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.updateComment(userId, feedId, commentId, request));
     }
@@ -56,7 +62,9 @@ public class FeedCommentController {
     @Operation(summary = "피드 댓글 삭제")
     @DeleteMapping("/{commentId}")
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public ResponseEntity<String> deleteComment(@AuthenticationPrincipal AuthUser user, @PathVariable Long feedId, @PathVariable Long commentId) {
+    public ResponseEntity<String> deleteComment(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                @PathVariable Long feedId,
+                                                @PathVariable Long commentId) {
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(service.deleteComment(userId, feedId, commentId));
     }

@@ -34,7 +34,7 @@ public class FeedLikeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void like(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                       @PathVariable Long feedId) {
+                     @PathVariable Long feedId) {
         Long userId = user.getUserId();
         feedLikeService.saveLike(userId, feedId);
         alarmService.saveFeedLikeAlarm(feedId);
@@ -51,7 +51,7 @@ public class FeedLikeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void deleteLike(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                             @PathVariable Long feedId) {
+                           @PathVariable Long feedId) {
         Long userId = user.getUserId();
         feedLikeService.deleteLike(userId, feedId);
     }

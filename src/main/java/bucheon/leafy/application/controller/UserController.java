@@ -120,7 +120,7 @@ public class UserController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PutMapping
     public void editUser(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                  @RequestBody UserRequest userRequest) {
+                         @RequestBody UserRequest userRequest) {
         Long userId = authUser.getUserId();
         userService.updateUser(userId, userRequest);
     }

@@ -34,7 +34,10 @@ public class FollowController {
     @Operation(summary = "나를 팔로우한 회원들")
     @GetMapping("/followers")
     public ResponseEntity<JpaPageResponse> getFollowers(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                                @PageableDefault(page = 0, size = 20) Pageable pageable) {
+                                                        @Parameter(description = "page : 1 부터 시작 (첫 요청만 생략가능)," +
+                                                                "size : 한 페이지에 들어갈 데이터의 양 (첫 요청만 생략가능)," +
+                                                                "sort : 정렬할 데이터명, 오름차순 내림차순은 백과 상의해야함 (완전 생략 가능)")
+                                                        @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
         JpaPageResponse result = followService.getFollowers(userId, pageable);
         return ResponseEntity.ok().body(result);
@@ -48,7 +51,10 @@ public class FollowController {
     @Operation(summary = "내가 팔로우한 회원들")
     @GetMapping("/followings")
     public ResponseEntity<JpaPageResponse> getFollowings(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                                                 @PageableDefault(page = 0, size = 20) Pageable pageable) {
+                                                         @Parameter(description = "page : 1 부터 시작 (첫 요청만 생략가능)," +
+                                                                 "size : 한 페이지에 들어갈 데이터의 양 (첫 요청만 생략가능)," +
+                                                                 "sort : 정렬할 데이터명, 오름차순 내림차순은 백과 상의해야함 (완전 생략 가능)")
+                                                         @PageableDefault(page = 0, size = 20) Pageable pageable) {
         Long userId = authUser.getUserId();
         JpaPageResponse result = followService.getFollowings(userId, pageable);
         return ResponseEntity.ok().body(result);
@@ -89,7 +95,7 @@ public class FollowController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     public void unfollow(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                           @PathVariable Long targetUserId) {
+                         @PathVariable Long targetUserId) {
         Long userId = authUser.getUserId();
 
         if (userId == targetUserId) {
