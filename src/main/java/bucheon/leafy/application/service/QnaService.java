@@ -89,7 +89,7 @@ public class QnaService {
         if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
             throw new WriteFailedException();
         }
-        QnaEditResponse qnaEditResponse = qnaMapper.eidtfind(qnaEditRequest);
+        QnaEditResponse qnaEditResponse = qnaMapper.eidtfind(userId);
         return qnaEditResponse;
     }
 
