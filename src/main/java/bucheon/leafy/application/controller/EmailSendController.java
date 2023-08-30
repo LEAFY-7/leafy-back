@@ -2,6 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.EmailSendService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,7 +45,8 @@ public class EmailSendController {
     })
     @Operation(summary = "이메일 인증 번호 확인")
     @GetMapping("/email-confirm")
-    public void emailConfirm(@RequestParam String email, @RequestParam String number) {
+    public void emailConfirm(@RequestParam String email,
+                             @Parameter(description = "인증 번호") @RequestParam String number) {
         emailSendService.confirmCertificationNumber(email, number);
     }
 

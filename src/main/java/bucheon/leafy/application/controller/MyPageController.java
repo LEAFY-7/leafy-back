@@ -48,7 +48,10 @@ public class MyPageController {
     @Operation(summary = "마이페이지")
     @GetMapping
     public ResponseEntity<MyPageResponse> myPage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
-                                  @PageableDefault(page = 0, size = 6) Pageable pageable) {
+                                                 @Parameter(description = "page : 1 부터 시작 (첫 요청만 생략가능)," +
+                                                         "size : 한 페이지에 들어갈 데이터의 양 (첫 요청만 생략가능)," +
+                                                         "sort : 정렬할 데이터명, 오름차순 내림차순은 백과 상의해야함 (완전 생략 가능)")
+                                                 @PageableDefault(page = 0, size = 6) Pageable pageable) {
 
         Long userId = authUser.getUserId();
         Long followerCount = followService.getFollowerCount(userId);
@@ -83,6 +86,9 @@ public class MyPageController {
     @GetMapping("/{targetUserId}")
     public ResponseEntity<MyPageResponse> yourPage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                                                    @PathVariable Long targetUserId,
+                                                   @Parameter(description = "page : 1 부터 시작 (첫 요청만 생략가능)," +
+                                                           "size : 한 페이지에 들어갈 데이터의 양 (첫 요청만 생략가능)," +
+                                                           "sort : 정렬할 데이터명, 오름차순 내림차순은 백과 상의해야함 (완전 생략 가능)")
                                                    @PageableDefault(page = 0, size = 8) Pageable pageable) {
         Long userId = authUser.getUserId();
         userBlockService.isUserBlockedOrPrivate(userId, targetUserId);
