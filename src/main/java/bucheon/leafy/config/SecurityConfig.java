@@ -1,5 +1,6 @@
 package bucheon.leafy.config;
 
+import bucheon.leafy.application.service.Oauth2UserService;
 import bucheon.leafy.jwt.JwtAccessDeniedHandler;
 import bucheon.leafy.jwt.JwtAuthenticationEntryPoint;
 import bucheon.leafy.jwt.JwtSecurityConfig;
@@ -30,6 +31,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private final Oauth2UserService oauth2UserService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,6 +49,11 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/static/image/**", "/static/css/**", "/static/js/**", "/image/**").permitAll()
+                .antMatchers("/login/oauth2/**").permitAll()
+                .antMatchers("/user/oauth-login-success").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/v1/users/sign**").permitAll()
                 .antMatchers("/api/v1/users/check/**").permitAll()
                 .antMatchers("/api/v1/users/email").permitAll()
@@ -65,7 +73,12 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(tokenProvider))
+
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oauth2UserService);
 
         return http.build();
     }

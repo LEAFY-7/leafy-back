@@ -3,6 +3,7 @@ package bucheon.leafy.domain.user;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.request.UserRequest;
+import bucheon.leafy.oauth.OauthRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,9 +35,10 @@ public class User extends BaseDeleteEntity {
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
 
-    @Column(name = "phone", nullable = false, unique = true)
+    @Column(name = "phone", unique = true)
     private String phone;
 
+    private LoginType loginType;
     private String introduction;
 
     @Column(name = "is_hide", nullable = false)
@@ -66,7 +68,7 @@ public class User extends BaseDeleteEntity {
     @Builder
     private User(String password, String email, String nickName, String phone, Boolean isHide,
                  String name, String introduction, List<Feed> feeds, UserImage userImage,
-                 UserBackgroundImage userBackgroundImage, UserRole userRole,
+                 UserBackgroundImage userBackgroundImage, UserRole userRole, LoginType loginType,
                  Boolean isAllNotifications, Boolean isCommentNotifications) {
 
         this.password = password;
@@ -80,6 +82,7 @@ public class User extends BaseDeleteEntity {
         this.userImage = userImage;
         this.userBackgroundImage = userBackgroundImage;
         this.userRole = userRole;
+        this.loginType = loginType;
         this.isAllNotifications = isAllNotifications;
         this.isCommentNotifications = isCommentNotifications;
     }
@@ -93,6 +96,22 @@ public class User extends BaseDeleteEntity {
                 .phone(signUpRequest.getPhone())
                 .userRole(UserRole.MEMBER)
                 .isHide(false)
+                .loginType(LoginType.NORMAL)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .feeds(new ArrayList<>())
+                .build();
+    }
+
+    public static User of(OauthRequest oauthRequest) {
+        return User.builder()
+                .password(oauthRequest.getPassword())
+                .email(oauthRequest.getEmail())
+                .name(oauthRequest.getName())
+                .nickName(oauthRequest.getNickName())
+                .userRole(UserRole.MEMBER)
+                .isHide(false)
+                .loginType(oauthRequest.getLoginType())
                 .isAllNotifications(true)
                 .isCommentNotifications(true)
                 .feeds(new ArrayList<>())
