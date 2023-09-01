@@ -34,11 +34,12 @@ public class QnaCommentController {
     @Operation(summary = "댓글 수정하기")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{qnaCommentId}")
-    public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaCommentId")  Long qnaCommentId,
+    public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaId")  Long qnaId,
+                                                         @PathVariable("qnaCommentId")  Long qnaCommentId,
                                                           @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
                                                           @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentEditRequest, qnaCommentId, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentEditRequest, qnaCommentId, user, qnaId));
     }
 
     @ApiResponses({

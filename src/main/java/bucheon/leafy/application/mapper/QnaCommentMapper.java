@@ -19,7 +19,7 @@ public interface QnaCommentMapper {
     int deleteByQnaCommentId(@Param("userId")Long userId, @Param("qnaId")Long qnaId, @Param("qnaCommentId") Long qnaCommentId) ;
     int saveQnaComment(@Param("qnaCommentSaveRequest")QnaCommentSaveRequest qnaCommentSaveRequest, @Param("userId") Long userId, @Param("qnaId")Long qnaId);
     QnaCommentSaveResponse selectAfterQnaCommentSave(Long qnaCommentId);    //저장 조회하기
-    int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId) ;
+    int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId,@Param("userId")Long userId,@Param("qnaId")Long qnaId) ;
     QnaCommentEditResponse selectAfterQnaCommentEdit(Long qnaCommentId);    //수정 조회오기
     int editByIdQnaStatus(@Param("qnaId")Long qnaId, @Param("defaultStatus")QnaStatus defaultStatus);//상태 변경
     List<QnaCommentResponse> selectByQnaId(Long qnaId);

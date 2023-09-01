@@ -38,14 +38,14 @@
         SET comment = #{qnaCommentEditRequest.comment}
           , modified_at = now()
         WHERE qna_comment_id = #{qnaCommentId}
+          AND user_id = #{userId}
+          AND qna_id =  #{qnaId}
     </update>
 
     <select id="selectAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
         SELECT  modified_at
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
-        ORDER BY modified_at DESC
-        LIMIT 1;
     </select>
 
     <update id="editByIdQnaStatus" parameterType="QnaCommentStatusChangeRequest">

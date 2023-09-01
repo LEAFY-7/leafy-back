@@ -61,10 +61,10 @@ public class QnaCommentService {
 
 
 
-    public QnaCommentEditResponse modify(QnaCommentEditRequest qnaCommentEditRequest , Long qnaCommentId,  AuthUser user) {
+    public QnaCommentEditResponse modify(QnaCommentEditRequest qnaCommentEditRequest , Long qnaCommentId,  AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
 
-        if(qnacommentMapper.editByQnaCommentId(qnaCommentEditRequest, qnaCommentId) != 1){
+        if(qnacommentMapper.editByQnaCommentId(qnaCommentEditRequest, qnaCommentId, userId, qnaId) != 1){
             throw new ModifyFailedException();
         }
 

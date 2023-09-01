@@ -3,11 +3,9 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
-import bucheon.leafy.domain.reply.request.QnaReplyEditReqeust;
+import bucheon.leafy.domain.reply.request.QnaReplyEditRequest;
 import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
 import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
-import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,9 +55,9 @@ public class QnaReplyController {
     public ResponseEntity<QnaReplyEditResponse> modify(@PathVariable("qnaCommentId")  Long qnaCommentId,
                                                        @PathVariable("qnaReplyId")  Long qnaReplyId,
                                                        @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
-                                                       @RequestBody QnaReplyEditReqeust qnaReplyEditReqeust) {
+                                                       @RequestBody QnaReplyEditRequest qnaReplyEditRequest) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.modify(qnaReplyId, qnaReplyEditReqeust, user, qnaCommentId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnareplyService.modify(qnaReplyId, qnaReplyEditRequest, user, qnaCommentId));
     }
 
     @ApiResponses({

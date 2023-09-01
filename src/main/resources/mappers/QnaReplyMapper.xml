@@ -37,15 +37,14 @@
                ,comment = #{qnaReplyEditReqeust.comment}
          WHERE qna_reply_id = #{qnaReplyId}
            AND user_id = #{userId}
-           AND qna_comment_id =${qnaCommentId}
+           AND qna_comment_id =#{qnaCommentId}
     </update>
 
     <select id="selectAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
         SELECT  modified_at
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
-        ORDER BY modified_at DESC
-        LIMIT 1;
+
     </select>
 
     <select id="findUserIdByQnaCommentId" parameterType="Long" resultType="Long">
