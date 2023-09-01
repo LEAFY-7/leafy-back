@@ -38,7 +38,9 @@ public class User extends BaseDeleteEntity {
     @Column(name = "phone", unique = true)
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private LoginType loginType;
+
     private String introduction;
 
     @Column(name = "is_hide", nullable = false)
@@ -105,10 +107,10 @@ public class User extends BaseDeleteEntity {
 
     public static User of(OauthRequest oauthRequest) {
         return User.builder()
-                .password(oauthRequest.getPassword())
                 .email(oauthRequest.getEmail())
                 .name(oauthRequest.getName())
                 .nickName(oauthRequest.getNickName())
+                .password(oauthRequest.getEncodedPassword())
                 .userRole(UserRole.MEMBER)
                 .isHide(false)
                 .loginType(oauthRequest.getLoginType())
