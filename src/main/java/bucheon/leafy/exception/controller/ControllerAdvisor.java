@@ -39,6 +39,18 @@ public class ControllerAdvisor {
 //        return ResponseEntity.status(500).body(response);
 //    }
 
+    @ExceptionHandler(OAuth2InfoNotExistException.class)
+    public ResponseEntity<ExceptionResponse> oauth2InfoNotExistException(OAuth2InfoNotExistException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ExceptionResponse> handleForbiddenException(AccessDeniedException e) {
         ExceptionResponse response = ExceptionResponse.builder()
