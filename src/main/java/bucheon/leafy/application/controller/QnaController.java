@@ -33,6 +33,7 @@ public class QnaController {
     private final QnaService qnaService;
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시글 수정 성공"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "유저의 알림 삭제 실패")
     })
@@ -46,16 +47,16 @@ public class QnaController {
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 쓰기 성공"),
+            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시파 글 쓰기 실패")
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @PostMapping("/{qnaId}")
+    @PostMapping()
     public ResponseEntity<QnaSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                                 @PathVariable("qnaId") Long qnaId,
                                                  @RequestBody QnaSaveRequest qnaSaveRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user, qnaId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
