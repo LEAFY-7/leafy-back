@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.reply.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,14 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class QnaReplySaveRequest {
-
+    @JsonIgnore
+    private Long qnaReplyId;
     private String comment;
-    private Long userId;
-    private Long qnaCommentId;
 
-    public QnaReplySaveRequest(String comment, Long userId, Long qnaCommentId) {
+
+    public QnaReplySaveRequest(Long qnaReplyId, String comment) {
+        this.qnaReplyId = qnaReplyId;
         this.comment = comment;
-        this.userId = userId;
-        this.qnaCommentId = qnaCommentId;
+
     }
 }

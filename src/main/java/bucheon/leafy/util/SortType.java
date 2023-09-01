@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SortType {
 
-    CREATE_DATE("created_at"),
+    CREATE_DATE("create_at"),
     FAVORITE("like_count"),
     MODIFY_DATE("modified_at");
 

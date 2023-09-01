@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
-
+@Tag(name = "QNA")
 @RestController
 @RequestMapping("/api/v1/qna")
 @RequiredArgsConstructor
@@ -37,22 +39,23 @@ public class QnaController {
     @Operation(summary = "Qna 게시물 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("{qnaId}")
-    public ResponseEntity<QnaEditResponse> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("qnaId") Long qnaId, @RequestBody QnaEditRequest qnaEditRequest) {
-
-        Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.modify(qnaId, qnaEditRequest));
-
-    }    @ApiResponses({
+    public ResponseEntity<QnaEditResponse> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                  @PathVariable("qnaId") Long qnaId,
+                                                  @RequestBody QnaEditRequest qnaEditRequest) {
+        return ResponseEntity.ok().body(qnaService.modify(qnaId, qnaEditRequest, user));
+    }
+    @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 쓰기 성공"),
             @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시파 글 쓰기 실패")
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @PostMapping()
+    @PostMapping("/{qnaId}")
     public ResponseEntity<QnaSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                 @PathVariable("qnaId") Long qnaId,
                                                  @RequestBody QnaSaveRequest qnaSaveRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user, qnaId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
@@ -60,10 +63,9 @@ public class QnaController {
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
     })
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
-    @PreAuthorize("hasAnyRole('MEMBER')")
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                            @PathVariable Long qnaId) {
+    public ResponseEntity<List<QnaResponse>> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                  @PathVariable("qnaId") Long qnaId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnaService.getRead(qnaId));

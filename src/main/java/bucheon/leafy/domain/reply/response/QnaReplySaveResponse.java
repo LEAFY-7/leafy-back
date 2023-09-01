@@ -3,6 +3,7 @@ package bucheon.leafy.domain.reply.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -11,11 +12,11 @@ import java.util.Date;
 public class QnaReplySaveResponse {
 
     private Long qnaReplyId;
-    private Date createAt;
+    private LocalDateTime createdAt;
 
 
-    public QnaReplySaveResponse(Long qnaReplyId, Date createAt) {
+    public QnaReplySaveResponse(Long qnaReplyId, LocalDateTime createdAt) {
         this.qnaReplyId = qnaReplyId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
     }
 }

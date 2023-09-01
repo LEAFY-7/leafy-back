@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 public class QnaEditRequest {
     private String contents;     // 게시물 내용
     private String title;        // 제목
-
-    // 게시물 내용과 제목, 작성자 ID를 받아서 초기화하는 생성자
     public QnaEditRequest(String contents, String title) {
         this.contents = contents;
         this.title = title;
-
     }
 }

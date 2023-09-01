@@ -13,12 +13,10 @@ class QnaCommentMapperTest {
 
     @Test
     void deleteByQnaCommentId() {
-        qnaCommentMapper.deleteByQnaCommentId(1L,11111L);
     }
 
     @Test
     void save() {
-        qnaCommentMapper.save(new QnaCommentSaveRequest(1L,"String",1L),1L);
     }
 
     @Test

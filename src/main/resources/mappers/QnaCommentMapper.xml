@@ -8,32 +8,64 @@
         UPDATE  qna_comment
            SET is_delete = true
          WHERE qna_comment_id = #{qnaCommentId}
+           AND user_id = #{userId}
+           AND qna_id = #{qnaId}
+
     </update>
 
-    <insert id="save" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
+    <insert id="saveQnaComment" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
             (created_at, modified_at, is_delete, comment, user_id, qna_id)
-        VALUES
-            (now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaCommentSaveRequest.qnaId})
+        SELECT
+            now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId}
+        FROM
+            qna q
+        WHERE q.qna_id = #{qnaId}
+          AND q.is_delete = false;
+
     </insert>
 
-    <select id="qnaSaveFind" resultType="QnaCommentSaveRequest">
+    <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
         SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
-        WHERE comment = #{comment}
+        WHERE qna_comment_id = #{qnaCommentId}
+        ORDER BY created_at DESC
+        LIMIT  1;
     </select>
 
     <update id="editByQnaCommentId" >
         UPDATE qna_comment
-        SET comment = #{comment}
+        SET comment = #{qnaCommentEditRequest.comment}
           , modified_at = now()
         WHERE qna_comment_id = #{qnaCommentId}
+          AND user_id = #{userId}
+          AND qna_id =  #{qnaId}
     </update>
 
-    <select id="qnaCommentEditFind" resultType="QnaCommentEditResponse">
+    <select id="selectAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
         SELECT  modified_at
         FROM qna_comment
-        WHERE comment = #{qnaCommentSaveRequest.comment}
+        WHERE qna_comment_id = #{qnaCommentId}
     </select>
+
+    <update id="editByIdQnaStatus" parameterType="QnaCommentStatusChangeRequest">
+        UPDATE qna
+        SET   qna_status = #{defaultStatus.text}
+        WHERE  qna_id = #{qnaId}
+    </update>
+
+    <select id="findUserIdByQnaId" parameterType="Long" resultType="Long">
+        SELECT user_id
+        FROM qna
+        WHERE qna_id = #{qnaId}
+    </select>
+
+    <select id="selectByQnaId" parameterType="Long" resultType="QnaCommentResponse">
+        SELECT qc.*
+        FROM qna_comment qc
+        WHERE qc.qna_id = #{qnaId}
+          AND qc.is_delete = false;
+    </select>
+
 
 </mapper>
