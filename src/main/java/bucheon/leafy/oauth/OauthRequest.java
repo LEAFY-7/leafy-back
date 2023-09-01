@@ -15,16 +15,23 @@ public class OauthRequest {
     private String name;
 
     private String password;
+    private String encodedPassword;
+    private String image;
+    private String provider;
     private LoginType loginType;
 
     private String nickName = generateRandomNickname();
 
     @Builder
-    private OauthRequest(String email, String name, String password, LoginType loginType) {
+    private OauthRequest(String email, String name, String password, String encodedPassword,
+                         LoginType loginType, String provider, String image) {
         this.password = password;
+        this.encodedPassword = encodedPassword;
         this.email = email;
         this.name = name;
         this.loginType = loginType;
+        this.provider = provider;
+        this.image = image;
     }
 
     public static String generateRandomNickname() {
