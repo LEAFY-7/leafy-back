@@ -10,6 +10,7 @@ import bucheon.leafy.domain.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.qna.QnaComment;
 import bucheon.leafy.domain.qna.QnaReply;
+import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
 import bucheon.leafy.domain.qna.response.MyPageQnaResponse;
@@ -51,12 +52,13 @@ public class QnaService {
 
     }
 
-    public QnaSaveResponse write( QnaSaveRequest qnaSaveRequest, AuthUser user, Long qnaId) {
+    public QnaSaveResponse write( QnaSaveRequest qnaSaveRequest, AuthUser user) {
         Long userId = user.getUserId();
+        QnaStatus defaultStatus = QnaStatus.HOLD;
 
-        if (qnaMapper.save(userId, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
+        if (qnaMapper.save(userId, defaultStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
 
-        QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaId);
+        QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
 
         return qnaSaveResponse;
     }
@@ -66,14 +68,13 @@ public class QnaService {
         List<PageResponse> list ;
         long total ;
 
-         if (user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-            list = qnaMapper.adminSelectAll(pageRequest);
-            total = qnaMapper.adminCount();
-
-        }else{
-
+         if (user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MEMBER"))) {
              list = qnaMapper.pageFindById(userId ,pageRequest);
              total = qnaMapper.count(userId);
+
+        }else{
+             list = qnaMapper.adminSelectAll(pageRequest);
+             total = qnaMapper.adminCount();
 
          }
 
