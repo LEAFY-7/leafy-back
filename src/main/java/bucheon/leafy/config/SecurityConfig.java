@@ -5,6 +5,7 @@ import bucheon.leafy.jwt.JwtAuthenticationEntryPoint;
 import bucheon.leafy.jwt.JwtSecurityConfig;
 import bucheon.leafy.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final Oauth2UserService oauth2UserService;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,6 +50,10 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/static/image/**", "/static/css/**", "/static/js/**", "/image/**").permitAll()
+                .antMatchers("/login/oauth2/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/v1/users/sign**").permitAll()
                 .antMatchers("/api/v1/users/check/**").permitAll()
                 .antMatchers("/api/v1/users/email").permitAll()
@@ -62,10 +70,16 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
 
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new JwtSecurityConfig(tokenProvider))
+
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oauth2UserService);
 
         return http.build();
     }
