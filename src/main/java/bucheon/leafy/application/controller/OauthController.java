@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
 
 
 @Slf4j
@@ -43,12 +46,20 @@ public class OauthController {
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
     private String userInfoUri;
 
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
+
+    @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
+    private String googleRedirectUri;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    private String googleClientSecret;
+
 
     @GetMapping("/oauth2/code/{provider}")
     public ResponseEntity<TokenResponse> oauth2Code(@PathVariable String provider,
                                              @RequestParam String code,
                                              @RequestParam String state) throws JsonProcessingException {
-
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("grant_type", "authorization_code");
@@ -96,6 +107,60 @@ public class OauthController {
                 .password(password)
                 .encodedPassword(encodePassword)
                 .provider(provider)
+                .build();
+
+        TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
+        return ResponseEntity.ok().body(tokenResponse);
+    }
+
+    @GetMapping("/oauth2/code/google")
+    public ResponseEntity<TokenResponse> googleOauth2Code(@RequestParam String code) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<MultiValueMap<String, String>> request =
+                new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v4/token" +
+                        "?client_id=" + googleClientId +
+                        "&client_secret=" + googleClientSecret +
+                        "&code=" + code +
+                        "&grant_type=authorization_code" +
+                        "&redirect_uri=" + googleRedirectUri,
+                        HttpMethod.POST,
+                        request,
+                        String.class
+        );
+
+        String tokenJson = response.getBody();
+        JSONObject rjson = new JSONObject(tokenJson);
+        String accessToken = rjson.getString("access_token");
+
+        HttpHeaders userInfoHeaders = new HttpHeaders();
+        userInfoHeaders.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<MultiValueMap<String, Object>> userInfoRequest =
+                new HttpEntity<>(null, userInfoHeaders);
+
+        ResponseEntity<String> userResponse = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v1/userinfo?client_id="+googleClientId,
+                HttpMethod.GET,
+                userInfoRequest,
+                String.class
+        );
+
+        JSONObject info = new JSONObject(userResponse.getBody());
+
+        OauthRequest oauthRequest = OauthRequest.builder()
+                .email(info.getString("email"))
+                .image(info.getString("picture"))
+                .name(info.getString("name"))
+                .password("oauth login password")
+                .encodedPassword(passwordEncoder.encode("oauth login password"))
+                .provider("google")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
