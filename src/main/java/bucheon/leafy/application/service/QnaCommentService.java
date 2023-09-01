@@ -38,7 +38,7 @@ public class QnaCommentService {
 
     public QnaCommentSaveResponse write(QnaCommentSaveRequest qnaCommentSaveRequest, AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
-        QnaStatus defaultStatus = QnaStatus.DONE;
+        QnaStatus qnaStatus = QnaStatus.DONE;
 
         if (qnacommentMapper.saveQnaComment(qnaCommentSaveRequest, userId, qnaId) != 1) {
             throw new WriteFailedException();
@@ -53,7 +53,7 @@ public class QnaCommentService {
 
         // 사용자가 관리자 권한을 가지고 있거나, 로그인한 경우
         if (user != null && user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
-            qnacommentMapper.editByIdQnaStatus(qnaId, defaultStatus); // 상태 업데이트
+            qnacommentMapper.editByIdQnaStatus(qnaId, qnaStatus); // 상태 업데이트
         }
 
         return qnaSaveResponse;

@@ -54,9 +54,9 @@ public class QnaService {
 
     public QnaSaveResponse write( QnaSaveRequest qnaSaveRequest, AuthUser user) {
         Long userId = user.getUserId();
-        QnaStatus defaultStatus = QnaStatus.HOLD;
+        QnaStatus qnaStatus = QnaStatus.HOLD;
 
-        if (qnaMapper.save(userId, defaultStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
+        if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
 
         QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
 

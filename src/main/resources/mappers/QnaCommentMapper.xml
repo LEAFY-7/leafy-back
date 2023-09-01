@@ -50,7 +50,7 @@
 
     <update id="editByIdQnaStatus" parameterType="QnaCommentStatusChangeRequest">
         UPDATE qna
-        SET   qna_status = #{defaultStatus.text}
+        SET   qna_status = #{qnaStatus.text}
         WHERE  qna_id = #{qnaId}
     </update>
 
