@@ -1,16 +1,17 @@
 package bucheon.leafy.domain.qna.response;
 
+import bucheon.leafy.domain.qna.QnaStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 public class QnaStatusResponse {
 
-    private String qnaStatus;
+    private QnaStatus qnaStatus;
 
-    public QnaStatusResponse(String qnaStatus ) {
+    public QnaStatusResponse(QnaStatus qnaStatus ) {
+        this.qnaStatus = qnaStatus == null ?  QnaStatus.HOLD : QnaStatus.DONE;
     }
 }

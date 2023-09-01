@@ -12,8 +12,4 @@ public class QnaCommentSaveRequest {
     private Long qnaCommentId;
     private String comment;
 
-    public QnaCommentSaveRequest(Long qnaCommentId, String comment) {
-        this.qnaCommentId = qnaCommentId;
-        this.comment = comment;
-    }
 }

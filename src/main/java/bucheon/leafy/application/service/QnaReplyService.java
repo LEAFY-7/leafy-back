@@ -4,10 +4,9 @@ import bucheon.leafy.application.mapper.QnaReplyMapper;
 
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.reply.request.QnaReplyEditReqeust;
+import bucheon.leafy.domain.reply.request.QnaReplyEditRequest;
 import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
 import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
-import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
 import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.WriteFailedException;
@@ -42,7 +41,7 @@ public class QnaReplyService {
         alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaCommentId);
 ;
 
-        QnaReplySaveResponse qnaReplyResponse = qnareplyMapper.saveQnaReplyResponse(userId);
+        QnaReplySaveResponse qnaReplyResponse = qnareplyMapper.selectAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
 
         return qnaReplyResponse;
 
@@ -51,12 +50,12 @@ public class QnaReplyService {
 //       Long userId = user.getAuthorities();
 //
 //        return qnareplyMapper.findByQnaCommentId(qnaReplyId, userId, qnaCommentId);}
-    public QnaReplyEditResponse modify(Long qnaReplyId, QnaReplyEditReqeust qnaReplyEditReqeust, AuthUser user, Long qnaCommentId) {
+    public QnaReplyEditResponse modify(Long qnaReplyId, QnaReplyEditRequest qnaReplyEditRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
-        if(qnareplyMapper.editQnaReply(qnaReplyId, qnaReplyEditReqeust, userId, qnaCommentId) != 1){
+        if(qnareplyMapper.editQnaReply(qnaReplyId, qnaReplyEditRequest, userId, qnaCommentId) != 1){
             throw new ModifyFailedException();
         }
-        QnaReplyEditResponse editResult = qnareplyMapper.qnaReplyEditFind(userId);
+        QnaReplyEditResponse editResult = qnareplyMapper.selectAfterQnaReplyEdit(qnaReplyId);
 
         return editResult;
     }

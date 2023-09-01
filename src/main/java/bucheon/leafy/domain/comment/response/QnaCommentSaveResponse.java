@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -12,9 +13,9 @@ public class QnaCommentSaveResponse {
     @JsonIgnore
     private Long qnaId;
     private Long qnaCommentId;
-    private Date createdAt;
+    private LocalDateTime  createdAt;
 
-    public QnaCommentSaveResponse(Long qnaId, Long qnaCommentId, Date createdAt) {
+    public QnaCommentSaveResponse(Long qnaId, Long qnaCommentId, LocalDateTime createdAt) {
         this.qnaId = qnaId;
         this.qnaCommentId = qnaCommentId;
         this.createdAt = createdAt;
