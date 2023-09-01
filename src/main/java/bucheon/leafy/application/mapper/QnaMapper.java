@@ -17,14 +17,14 @@ import java.util.List;
 public interface QnaMapper {
     int count(Long userId);
     int adminCount();
-    QnaResponse findById(Long qnaId);   //클릭해서 읽기(select)
+    List<QnaResponse> selectById(Long qnaId);   //클릭해서 읽기(select)
     int deleteById(Long qnaId);  //삭제
     Long save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
-    QnaSaveResponse savefind(Long userId);   //저장 조회오기
+    QnaSaveResponse selectAfterSave(Long qnaId);   //저장 조회오기
     Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest, @Param("userId")Long userId);//수정
-    QnaEditResponse eidtfind(Long userId);    //수정 조회오기
+    QnaEditResponse selectAfterEdit(Long qnaId);    //수정 조회오기
     QnaResponse findQnaById(Long qnaId); //qnaId가지고 오기
     List<PageResponse> adminSelectAll(PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
-    int viewCnt(Long qnaId);
+    int viewCount(Long qnaId);
 }

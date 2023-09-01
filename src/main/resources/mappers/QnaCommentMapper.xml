@@ -16,13 +16,19 @@
     <insert id="saveQnaComment" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
             (created_at, modified_at, is_delete, comment, user_id, qna_id)
-        VALUES
-            (now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId})
+        SELECT
+            now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId}
+        FROM
+            qna q
+        WHERE q.qna_id = #{qnaId}
+          AND q.is_delete = false;
+
     </insert>
-    <select id="qnaSaveFind" resultType="QnaCommentSaveResponse">
+
+    <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
         SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
-        WHERE user_id = #{userId}
+        WHERE qna_comment_id = #{qnaCommentId}
         ORDER BY created_at DESC
         LIMIT  1;
     </select>
@@ -34,17 +40,17 @@
         WHERE qna_comment_id = #{qnaCommentId}
     </update>
 
-    <select id="qnaCommentEditFind" resultType="QnaCommentEditResponse">
+    <select id="selectAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
         SELECT  modified_at
         FROM qna_comment
-        WHERE user_id = #{userId}
+        WHERE qna_comment_id = #{qnaCommentId}
         ORDER BY modified_at DESC
         LIMIT 1;
     </select>
 
-    <update id="editByIdQnaStatus" parameterType="QnaStatusRequest">
+    <update id="editByIdQnaStatus" parameterType="QnaCommentStatusChangeRequest">
         UPDATE qna
-        SET   qna_status = "답변 완료"
+        SET   qna_status = #{defaultStatus.text}
         WHERE  qna_id = #{qnaId}
     </update>
 
@@ -53,5 +59,13 @@
         FROM qna
         WHERE qna_id = #{qnaId}
     </select>
+
+    <select id="selectByQnaId" parameterType="Long" resultType="QnaCommentResponse">
+        SELECT qc.*
+        FROM qna_comment qc
+        WHERE qc.qna_id = #{qnaId}
+          AND qc.is_delete = false;
+    </select>
+
 
 </mapper>

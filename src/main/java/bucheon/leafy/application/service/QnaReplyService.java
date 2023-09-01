@@ -42,7 +42,7 @@ public class QnaReplyService {
         alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaCommentId);
 ;
 
-        QnaReplySaveResponse qnaReplyResponse = qnareplyMapper.saveQnaReplyResponse(userId);
+        QnaReplySaveResponse qnaReplyResponse = qnareplyMapper.selectAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
 
         return qnaReplyResponse;
 
@@ -56,7 +56,7 @@ public class QnaReplyService {
         if(qnareplyMapper.editQnaReply(qnaReplyId, qnaReplyEditReqeust, userId, qnaCommentId) != 1){
             throw new ModifyFailedException();
         }
-        QnaReplyEditResponse editResult = qnareplyMapper.qnaReplyEditFind(userId);
+        QnaReplyEditResponse editResult = qnareplyMapper.selectAfterQnaReplyEdit(qnaReplyId);
 
         return editResult;
     }

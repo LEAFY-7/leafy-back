@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @Tag(name = "QNA")
@@ -38,7 +39,9 @@ public class QnaController {
     @Operation(summary = "Qna 게시물 수정")
     @PreAuthorize("hasAnyRole('MEMBER')")
     @PutMapping("{qnaId}")
-    public ResponseEntity<QnaEditResponse> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user, @PathVariable("qnaId") Long qnaId, @RequestBody QnaEditRequest qnaEditRequest) {
+    public ResponseEntity<QnaEditResponse> modify(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                  @PathVariable("qnaId") Long qnaId,
+                                                  @RequestBody QnaEditRequest qnaEditRequest) {
         return ResponseEntity.ok().body(qnaService.modify(qnaId, qnaEditRequest, user));
     }
     @ApiResponses({
@@ -48,10 +51,11 @@ public class QnaController {
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    @PostMapping()
+    @PostMapping("/{qnaId}")
     public ResponseEntity<QnaSaveResponse> write(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                 @PathVariable("qnaId") Long qnaId,
                                                  @RequestBody QnaSaveRequest qnaSaveRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(qnaService.write(qnaSaveRequest, user, qnaId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
@@ -60,8 +64,8 @@ public class QnaController {
     })
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @GetMapping("/{qnaId}")
-    public ResponseEntity<QnaResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
-                                            @PathVariable Long qnaId) {
+    public ResponseEntity<List<QnaResponse>> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+                                                  @PathVariable("qnaId") Long qnaId) {
 
         Long userId = user.getUserId();
         return ResponseEntity.ok().body(qnaService.getRead(qnaId));
