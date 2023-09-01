@@ -3,6 +3,8 @@ package bucheon.leafy.domain.qna.response;  // 패키지 경로가 맞는지 확
 import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import bucheon.leafy.domain.comment.response.QnaCommentResponse;  // 패키지 경로가 맞는지 확인해주세요.
@@ -11,8 +13,8 @@ import bucheon.leafy.domain.comment.response.QnaCommentResponse;  // 패키지 �
 @NoArgsConstructor
 public class QnaResponse {
     private Long qnaId;
-    private Date createAt;
-    private Date modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime  modifiedAt;
     private Boolean isDelete;
     private String contents;
     private String title;
@@ -21,9 +23,9 @@ public class QnaResponse {
     private List<QnaCommentResponse> comment;  // QnaCommentResponse 객체의 리스트
     private List<QnaReplyResponse> qnaReply;
 
-    public QnaResponse(Long qnaId, Date createAt, Date modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comment, List<QnaReplyResponse> qnaReply) {
+    public QnaResponse(Long qnaId, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comment, List<QnaReplyResponse> qnaReply) {
         this.qnaId = qnaId;
-        this.createAt = createAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.isDelete = isDelete;
         this.contents = contents;

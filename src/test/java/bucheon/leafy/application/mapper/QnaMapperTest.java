@@ -40,17 +40,12 @@ class QnaMapperTest {
 
     @Test
     void editById() {
-        qnaMapper.editById(1L,new QnaEditRequest("editcontens","edittitle"));
+        qnaMapper.editById(1L,new QnaEditRequest("editcontens","edittitle"),1L);
     }
 
     @Test
     void findQnaById() {
         qnaMapper.findQnaById(1L);
-    }
-
-    @Test
-    void editByIdQnaStatus() {
-        qnaMapper.editByIdQnaStatus(1L);
     }
 
     @Test

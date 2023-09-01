@@ -8,32 +8,60 @@
         UPDATE qna_reply
            SET is_delete = true
          WHERE qna_reply_id = #{qnaReplyId}
+           AND user_id = #{userId}
+           AND qna_comment_id =${qnaCommentId}
     </update>
 
-    <insert id="save" parameterType="QnaReplySaveRequest" >
+    <insert id="saveQnaReply" parameterType="QnaReplySaveRequest" useGeneratedKeys="true" keyColumn="qna_reply_id" keyProperty="qnaReplySaveRequest.qnaReplyId">
         INSERT INTO qna_reply
             ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
-             VALUES
-            ( now(), now(),  0, #{comment}, #{userId}, #{qnaCommentId})
+        SELECT
+             now(), now(),  0, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId}
+        FROM
+            qna_comment qc
+        WHERE qc.qna_comment_id = #{qnaCommentId}
+        AND qc.is_delete = false;
     </insert>
 
-    <select id="saveResponse" parameterType="QnaReplySaveRequest" resultType="QnaReplySaveResponse">
+    <select id="selectAfterQnaReplySave" parameterType="Long" resultType="QnaReplySaveResponse">
         SELECT qna_reply_id, created_at
-        FROM qna
-        WHERE contnets = #{contnets}
+        FROM qna_reply
+        WHERE qna_reply_id = #{qnaReplyId}
+        ORDER BY created_at DESC
+        LIMIT  1;
     </select>
 
-    <update id="edit" >
+    <update id="editQnaReply" >
         UPDATE qna_reply
            SET  modified_at = now()
-               ,comment = #{comment}
+               ,comment = #{qnaReplyEditReqeust.comment}
          WHERE qna_reply_id = #{qnaReplyId}
+           AND user_id = #{userId}
+           AND qna_comment_id =#{qnaCommentId}
     </update>
 
-    <select id="qnaReplyEditFind" resultType="QnaReplyEditResponse">
+    <select id="selectAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
         SELECT  modified_at
         FROM qna_reply
-        WHERE comment = #{qnaReplyEditResponse.comment}
+        WHERE qna_reply_id = #{qnaReplyId}
+
     </select>
+
+    <select id="findUserIdByQnaCommentId" parameterType="Long" resultType="Long">
+        SELECT user_id
+        FROM qna_comment
+        WHERE qna_comment_id = #{qnaCommentId}
+    </select>
+
+    <select id="selectByQnaId" parameterType="Long" resultType="QnaReplyResponse">
+        SELECT qr.*
+        FROM qna_reply qr
+        WHERE qr.qna_comment_id IN (
+            SELECT qc.qna_comment_id
+            FROM qna_comment qc
+            WHERE qc.qna_id = #{qnaId}
+        ) AND qr.is_delete = false;
+    </select>
+
 
 </mapper>

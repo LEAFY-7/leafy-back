@@ -9,8 +9,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class QnaEditResponse {
-    private Date modifiedAt;
-    public QnaEditResponse(Date modifiedAt){
+    private LocalDateTime  modifiedAt;
+    public QnaEditResponse(LocalDateTime  modifiedAt){
         this.modifiedAt = modifiedAt;
 
     }

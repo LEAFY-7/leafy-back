@@ -1,14 +1,11 @@
 package bucheon.leafy.application.mapper;
 
-import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
-import bucheon.leafy.domain.notice.response.NoticeSaveResponse;
+
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
 import bucheon.leafy.domain.qna.response.QnaEditResponse;
 import bucheon.leafy.domain.qna.response.QnaResponse;
 import bucheon.leafy.domain.qna.response.QnaSaveResponse;
-import bucheon.leafy.domain.qna.response.QnaStatusResponse;
-import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,16 +15,16 @@ import java.util.List;
 
 @Mapper
 public interface QnaMapper {
-    int count();
-    QnaResponse findById(Long qnaId);   //클릭해서 읽기(select)
+    int count(Long userId);
+    int adminCount();
+    List<QnaResponse> selectById(Long qnaId);   //클릭해서 읽기(select)
     int deleteById(Long qnaId);  //삭제
     Long save(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
-    QnaSaveResponse savefind(@Param("userId")Long userId ,@Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장 조회오기
-    Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest);//수정
-    QnaEditResponse eidtfind(QnaEditRequest qnaEditRequest);    //수정 조회오기
+    QnaSaveResponse selectAfterSave(Long qnaId);   //저장 조회오기
+    Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest, @Param("userId")Long userId);//수정
+    QnaEditResponse selectAfterEdit(Long qnaId);    //수정 조회오기
     QnaResponse findQnaById(Long qnaId); //qnaId가지고 오기
-    int  editByIdQnaStatus(Long qnaId);//상태 변경
     List<PageResponse> adminSelectAll(PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
-    int viewCnt(Long qnaId);
+    int viewCount(Long qnaId);
 }

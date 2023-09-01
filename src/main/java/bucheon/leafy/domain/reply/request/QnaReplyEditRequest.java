@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class QnaReplyEditReqeust {
+public class QnaReplyEditRequest {
 
     private String comment;
 
-    public QnaReplyEditReqeust( String comment) {
+    public QnaReplyEditRequest( String comment) {
         this.comment = comment;
 
     }

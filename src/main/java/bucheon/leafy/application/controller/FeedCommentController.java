@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@Tag(name = "피드 댓글")
+ @Tag(name = "피드 댓글")
 @RestController
 @RequestMapping("/api/v1/feeds/{feedId}/comments")
 @RequiredArgsConstructor
