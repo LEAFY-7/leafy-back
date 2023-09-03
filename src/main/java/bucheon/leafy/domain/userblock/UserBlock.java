@@ -12,6 +12,11 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "block_user_id"})
+        }
+)
 public class UserBlock extends BaseEntity {
 
     @Id

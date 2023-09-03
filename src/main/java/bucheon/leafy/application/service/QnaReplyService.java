@@ -4,19 +4,15 @@ import bucheon.leafy.application.mapper.QnaReplyMapper;
 
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.reply.request.QnaReplyEditRequest;
-import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
-import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
-import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
+import bucheon.leafy.domain.qna.reply.request.QnaReplyEditRequest;
+import bucheon.leafy.domain.qna.reply.request.QnaReplySaveRequest;
+import bucheon.leafy.domain.qna.reply.response.QnaReplyEditResponse;
+import bucheon.leafy.domain.qna.reply.response.QnaReplySaveResponse;
 import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.WriteFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @Transactional

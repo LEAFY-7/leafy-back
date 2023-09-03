@@ -31,7 +31,7 @@ public interface FeedMapper {
 
     void deleteAllFeeds();
 
-    int deleteFeed(Long feedId, Long userId);
+    int deleteFeed(@Param("feedId") Long feedId, @Param("userId") Long userId);
 
 
     FeedAuthorResponse findUserByFeedId(Long feedId);

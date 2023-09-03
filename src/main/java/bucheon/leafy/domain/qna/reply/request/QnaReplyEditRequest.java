@@ -1,16 +1,17 @@
-package bucheon.leafy.domain.comment.request;
+package bucheon.leafy.domain.qna.reply.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @NoArgsConstructor
-public class QnaCommentEditRequest {
+public class QnaReplyEditRequest {
 
     private String comment;
 
-    public QnaCommentEditRequest( String comment) {
+    public QnaReplyEditRequest( String comment) {
         this.comment = comment;
-    }
 
+    }
 }
