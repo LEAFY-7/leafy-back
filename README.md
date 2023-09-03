@@ -87,6 +87,14 @@
 ### 게시글 좋아요 동시성 이슈
 - update 쿼리를 실행하기 전 조회 쿼리를 Beta Lock(Pessimistic Lock)으로 로직을 변경 하였습니다. ( 데드락을 대비하기 위해 좋아요 집계 테이블을 정규화 )
 
+### 따닥 방지 (중복 요청 방지)
+- insert 쿼리를 한번만 요청해야하지만 서버에서는 여러번의 동일한 insert 요청을 방어해야 했습니다.
+- redis의 lock과 같은 기능을 사용한다면 보다 쉽게 해결이 가능했지만 캐시 서버를 둘 정도로 리소스가 많지 않았기 때문에 아래와 같은 방법을 고안했습니다.
+  1. OneToMany - ManyToOne,ManyToOne - OneToMany 와 같이 다대다 구조에서 중간다리 테이블에 동일한 insert 요청시 (ManyToOne,ManyToOne) 키 두개를 하나의 unique 키로 감싸서 문제를 해결했습니다.
+  2. OneToMany인 구조에서는 특정 컬럼을 unique 키로 감싸기 애매하기 때문에 두가지 방법중 하나를 생각했습니다.
+     - version 컬럼 추가 후 unique 키로 지정 : 프론트에서 random uuid 값을 요청에 넣어서 보내게 하는 방법
+     - insert 하기 전 shared lock으로 가장 최근 사용자의 데이터를 조회를 한 뒤 created_at column을 확인하고 5초 이내로 동일한 insert 요청이 있었다면 exception을 발생시키는 방법
+
 ### 테스트하기 어려운 영역을 구분하고 분리하기
 - 인증 번호를 받고 나서 3분 동안 인증을 완료를 해야하는 로직을 작성중 DB의 Date Format을 사용하게 되면 예외 케이스 작성이 거의 불가능했습니다.
  테스트 하기 어려운 부분을 메서드 밖 매개변수로 넘겨서 해결을 했습니다.
