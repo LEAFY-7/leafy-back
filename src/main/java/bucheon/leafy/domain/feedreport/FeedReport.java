@@ -13,6 +13,11 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "feed_id"})
+        }
+)
 public class FeedReport extends BaseEntity {
 
     @Id
