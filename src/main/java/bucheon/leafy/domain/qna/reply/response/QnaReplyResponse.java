@@ -1,30 +1,27 @@
-package bucheon.leafy.domain.comment.response;
+package bucheon.leafy.domain.qna.reply.response;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class QnaCommentResponse {
+public class QnaReplyResponse {
 
-    private Long qnaCommentId;
+    private Long qnaReplyId;
     private LocalDateTime  createdAt;
     private LocalDateTime modifiedAt;
     private String comment;
     private Long userId;
-    private Long qnaId;
+    private Long qnaCommentId;
 
-    public QnaCommentResponse(Long qnaCommentId, LocalDateTime  createdAt, LocalDateTime  modifiedAt, String comment, Long userId, Long qnaId) {
-        this.qnaCommentId = qnaCommentId;
+    public QnaReplyResponse(Long qnaReplyId, LocalDateTime  createdAt, LocalDateTime  modifiedAt, String comment, Long userId, Long qnaCommentId) {
+        this.qnaReplyId = qnaReplyId;
         this.createdAt = createdAt;
         this.modifiedAt =modifiedAt;
         this.comment = comment;
         this.userId = userId;
-        this.qnaId = qnaId;
+        this.qnaCommentId = qnaCommentId;
     }
-
-
 }

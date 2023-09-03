@@ -3,10 +3,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaReplyService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.reply.request.QnaReplyEditRequest;
-import bucheon.leafy.domain.reply.request.QnaReplySaveRequest;
-import bucheon.leafy.domain.reply.response.QnaReplyEditResponse;
-import bucheon.leafy.domain.reply.response.QnaReplySaveResponse;
+import bucheon.leafy.domain.qna.reply.request.QnaReplyEditRequest;
+import bucheon.leafy.domain.qna.reply.request.QnaReplySaveRequest;
+import bucheon.leafy.domain.qna.reply.response.QnaReplyEditResponse;
+import bucheon.leafy.domain.qna.reply.response.QnaReplySaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

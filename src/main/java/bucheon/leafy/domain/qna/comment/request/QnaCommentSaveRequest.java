@@ -1,4 +1,4 @@
-package bucheon.leafy.domain.comment.request;
+package bucheon.leafy.domain.qna.comment.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

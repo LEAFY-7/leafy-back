@@ -5,10 +5,10 @@ import bucheon.leafy.application.mapper.QnaCommentMapper;
 
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
-import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
-import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
-import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
-import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
+import bucheon.leafy.domain.qna.comment.request.QnaCommentEditRequest;
+import bucheon.leafy.domain.qna.comment.request.QnaCommentSaveRequest;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentSaveResponse;
 
 
 import bucheon.leafy.domain.qna.QnaStatus;
