@@ -85,13 +85,23 @@ public class FeedService {
     // getFeeds 에 findFeedsToFollowers 조회 데이터 not in 으로 필터링 추가 해야함
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
-            LinkedList<FeedResponse> responseList = feedMapper.findFeedsFirst(scrollRequest);
-            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
-            return ScrollResponse.of(nextScrollRequest, responseList);
+            LinkedList<FeedResponse> feedResponses = feedMapper.findFeedsFirst(scrollRequest);
+            List<Long> feedIds = getFeedIds(feedResponses);
+
+            List<FeedImageResponse> feedImages = getFeedImages(feedIds);
+            injectFeedImages(feedResponses, feedImages);
+
+            ScrollRequest nextScrollRequest = getNextKey(feedResponses, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, feedResponses);
         } else {
-            LinkedList<FeedResponse> responseList = feedMapper.findFeeds(scrollRequest);
-            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
-            return ScrollResponse.of(nextScrollRequest, responseList);
+            LinkedList<FeedResponse> feedResponses = feedMapper.findFeeds(scrollRequest);
+            List<Long> feedIds = getFeedIds(feedResponses);
+
+            List<FeedImageResponse> feedImages = getFeedImages(feedIds);
+            injectFeedImages(feedResponses, feedImages);
+
+            ScrollRequest nextScrollRequest = getNextKey(feedResponses, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, feedResponses);
         }
     }
 
