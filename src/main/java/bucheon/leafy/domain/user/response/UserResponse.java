@@ -4,6 +4,7 @@ import bucheon.leafy.domain.user.LoginType;
 import bucheon.leafy.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import static bucheon.leafy.domain.user.UserRole.ADMIN;
 import static bucheon.leafy.path.S3Path.*;
@@ -61,16 +62,27 @@ public class UserResponse {
     }
 
     public static UserResponse of(User user) {
+        String profileImage;
+
+        if(user.getUserImage() != null) {
+
+            if (StringUtils.startsWithIgnoreCase(user.getUserImage().getImage(), "http")) {
+                profileImage = user.getUserImage().getImage();
+            } else {
+                profileImage = ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage();
+            }
+
+        } else {
+            profileImage = ABSOLUTE_PATH + USER_IMAGE_PATH + DEFAULT_IMAGE;
+        }
+
         return UserResponse.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickName(user.getNickName())
                 .phone(user.getPhone())
-                .profileImage(
-                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage()
-                                : ABSOLUTE_PATH + USER_IMAGE_PATH + DEFAULT_IMAGE
-                )
+                .profileImage(profileImage)
                 .backgroundImage(
                         user.getUserBackgroundImage() != null ? ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + user.getUserBackgroundImage().getImage()
                                 : ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + DEFAULT_IMAGE
