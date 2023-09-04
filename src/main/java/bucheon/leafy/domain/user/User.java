@@ -23,7 +23,7 @@ public class User extends BaseDeleteEntity {
     @Column(name="user_id")
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -42,6 +42,8 @@ public class User extends BaseDeleteEntity {
     private LoginType loginType;
 
     private String introduction;
+
+    private String providerId;
 
     @Column(name = "is_hide", nullable = false)
     private Boolean isHide;
@@ -71,7 +73,7 @@ public class User extends BaseDeleteEntity {
     private User(String password, String email, String nickName, String phone, Boolean isHide,
                  String name, String introduction, List<Feed> feeds, UserImage userImage,
                  UserBackgroundImage userBackgroundImage, UserRole userRole, LoginType loginType,
-                 Boolean isAllNotifications, Boolean isCommentNotifications) {
+                 Boolean isAllNotifications, Boolean isCommentNotifications, String providerId) {
 
         this.password = password;
         this.email = email;
@@ -79,6 +81,7 @@ public class User extends BaseDeleteEntity {
         this.nickName = nickName;
         this.phone = phone;
         this.introduction = introduction;
+        this.providerId = providerId;
         this.feeds = feeds;
         this.isHide = isHide;
         this.userImage = userImage;
@@ -107,10 +110,11 @@ public class User extends BaseDeleteEntity {
 
     public static User of(OauthRequest oauthRequest) {
         return User.builder()
-                .email(oauthRequest.getEmail())
+//                .email(oauthRequest.getEmail())
                 .name(oauthRequest.getName())
                 .nickName(oauthRequest.getNickName())
                 .password(oauthRequest.getEncodedPassword())
+                .providerId(oauthRequest.getProviderId())
                 .userRole(UserRole.MEMBER)
                 .isHide(false)
                 .loginType(oauthRequest.getLoginType())
