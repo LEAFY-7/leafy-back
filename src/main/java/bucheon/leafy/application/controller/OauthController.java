@@ -1,8 +1,9 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.config.Oauth2UserService;
+import bucheon.leafy.domain.user.LoginType;
 import bucheon.leafy.jwt.TokenResponse;
-import bucheon.leafy.oauth.OauthRequest;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,20 +98,18 @@ public class OauthController {
         JsonNode token = objectMapper.readTree(userResponse.getBody());
 
         String id = token.path("id").asText();
-//        String email = token.path("kakao_account").path("email").asText();
         String image = token.path("properties").path("profile_image").asText();
         String nickname = token.path("properties").path("nickname").asText();
 
         String encodePassword = passwordEncoder.encode(PASSWORD);
 
         OauthRequest oauthRequest = OauthRequest.builder()
-//                .email(email)
                 .providerId(id)
                 .image(image)
                 .name(nickname)
+                .loginType(LoginType.KAKAO)
                 .password(PASSWORD)
                 .encodedPassword(encodePassword)
-                .provider("kakao")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
@@ -160,13 +159,12 @@ public class OauthController {
         JSONObject info = new JSONObject(userResponse.getBody());
 
         OauthRequest oauthRequest = OauthRequest.builder()
-//                .email(info.getString("email"))
                 .providerId(info.getString("id"))
                 .image(info.getString("picture"))
                 .name(info.getString("name"))
                 .password(PASSWORD)
+                .loginType(LoginType.GOOGLE)
                 .encodedPassword(passwordEncoder.encode(PASSWORD))
-                .provider("google")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);

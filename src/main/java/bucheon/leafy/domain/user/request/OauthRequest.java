@@ -1,4 +1,4 @@
-package bucheon.leafy.oauth;
+package bucheon.leafy.domain.user.request;
 
 import bucheon.leafy.domain.user.LoginType;
 import lombok.Builder;
@@ -16,21 +16,19 @@ public class OauthRequest {
     private String password;
     private String encodedPassword;
     private String image;
-    private String provider;
     private LoginType loginType;
 
     private String nickName = generateRandomNickname();
 
     @Builder
     private OauthRequest(String email, String providerId, String name, String password,
-                         String encodedPassword, LoginType loginType, String provider, String image) {
+                         String encodedPassword, LoginType loginType, String image) {
         this.email = email;
         this.name = name;
         this.providerId = providerId;
         this.password = password;
         this.encodedPassword = encodedPassword;
         this.loginType = loginType;
-        this.provider = provider;
         this.image = image;
     }
 

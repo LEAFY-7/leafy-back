@@ -3,6 +3,7 @@ package bucheon.leafy.domain.follow.response;
 import bucheon.leafy.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import static bucheon.leafy.path.S3Path.*;
 
@@ -24,14 +25,25 @@ public class FollowersResponse {
     }
 
     public static FollowersResponse of(User user) {
+        String profileImage;
+
+        if(user.getUserImage() != null) {
+
+            if (StringUtils.startsWithIgnoreCase(user.getUserImage().getImage(), "http")) {
+                profileImage = user.getUserImage().getImage();
+            } else {
+                profileImage = ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage();
+            }
+
+        } else {
+            profileImage = ABSOLUTE_PATH + USER_IMAGE_PATH + DEFAULT_IMAGE;
+        }
+
         return FollowersResponse.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .nickName(user.getNickName())
-                .profileImage(
-                        user.getUserImage() != null ? ABSOLUTE_PATH + USER_IMAGE_PATH + user.getUserImage().getImage()
-                                : ABSOLUTE_PATH + USER_IMAGE_PATH + DEFAULT_IMAGE
-                )
+                .profileImage(profileImage)
                 .build();
     }
 

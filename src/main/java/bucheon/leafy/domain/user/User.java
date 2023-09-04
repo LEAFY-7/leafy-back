@@ -3,7 +3,7 @@ package bucheon.leafy.domain.user;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.request.UserRequest;
-import bucheon.leafy.oauth.OauthRequest;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -109,8 +109,7 @@ public class User extends BaseDeleteEntity {
     }
 
     public static User of(OauthRequest oauthRequest) {
-        return User.builder()
-//                .email(oauthRequest.getEmail())
+        User user = User.builder()
                 .name(oauthRequest.getName())
                 .nickName(oauthRequest.getNickName())
                 .password(oauthRequest.getEncodedPassword())
@@ -122,6 +121,10 @@ public class User extends BaseDeleteEntity {
                 .isCommentNotifications(true)
                 .feeds(new ArrayList<>())
                 .build();
+
+        UserImage userImage = UserImage.of(oauthRequest.getImage(), user);
+        user.addImage(userImage);
+        return user;
     }
 
     public void update(UserRequest userRequest) {
@@ -133,6 +136,10 @@ public class User extends BaseDeleteEntity {
 
     public void changePassword(String encodePassword){
         this.password = encodePassword;
+    }
+
+    public void addImage(UserImage userImage){
+        this.userImage = userImage;
     }
 
     public void deleteImage(){
