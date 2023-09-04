@@ -6,6 +6,8 @@ import bucheon.leafy.oauth.OauthRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -15,14 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 
-
+@Tag(name = "OAuth2 Login")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -55,11 +55,13 @@ public class OauthController {
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String googleClientSecret;
 
+    private static final String PASSWORD = "oauth login password";
 
-    @GetMapping("/oauth2/code/{provider}")
-    public ResponseEntity<TokenResponse> oauth2Code(@PathVariable String provider,
-                                             @RequestParam String code,
-                                             @RequestParam String state) throws JsonProcessingException {
+
+    @GetMapping("/oauth2/code/kakao")
+    @Operation(summary = "카카오 로그인 Redirect 주소")
+    public ResponseEntity<TokenResponse> oauth2Code(@RequestParam String code) throws JsonProcessingException {
+
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("grant_type", "authorization_code");
@@ -94,19 +96,21 @@ public class OauthController {
 
         JsonNode token = objectMapper.readTree(userResponse.getBody());
 
-        String email = token.path("kakao_account").path("email").asText();
+        String id = token.path("id").asText();
+//        String email = token.path("kakao_account").path("email").asText();
         String image = token.path("properties").path("profile_image").asText();
         String nickname = token.path("properties").path("nickname").asText();
-        String password = "oauth login password";
-        String encodePassword = passwordEncoder.encode(password);
+
+        String encodePassword = passwordEncoder.encode(PASSWORD);
 
         OauthRequest oauthRequest = OauthRequest.builder()
-                .email(email)
+//                .email(email)
+                .providerId(id)
                 .image(image)
                 .name(nickname)
-                .password(password)
+                .password(PASSWORD)
                 .encodedPassword(encodePassword)
-                .provider(provider)
+                .provider("kakao")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
@@ -114,6 +118,7 @@ public class OauthController {
     }
 
     @GetMapping("/oauth2/code/google")
+    @Operation(summary = "구글 로그인 Redirect 주소")
     public ResponseEntity<TokenResponse> googleOauth2Code(@RequestParam String code) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -155,17 +160,17 @@ public class OauthController {
         JSONObject info = new JSONObject(userResponse.getBody());
 
         OauthRequest oauthRequest = OauthRequest.builder()
-                .email(info.getString("email"))
+//                .email(info.getString("email"))
+                .providerId(info.getString("id"))
                 .image(info.getString("picture"))
                 .name(info.getString("name"))
-                .password("oauth login password")
-                .encodedPassword(passwordEncoder.encode("oauth login password"))
+                .password(PASSWORD)
+                .encodedPassword(passwordEncoder.encode(PASSWORD))
                 .provider("google")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
         return ResponseEntity.ok().body(tokenResponse);
     }
-
 
 }
