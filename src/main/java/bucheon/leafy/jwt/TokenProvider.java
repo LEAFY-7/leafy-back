@@ -22,6 +22,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -84,10 +85,19 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User user = userRepository.findByEmail(claims.getSubject())
-                .orElseThrow(UserNotFoundException::new);
+        AuthUser authUser;
+        Optional<User> optionalUser = userRepository.findByProviderId(claims.getSubject());
 
-        AuthUser authUser = new AuthUser(user);
+        if (optionalUser.isEmpty()) {
+
+            User user = userRepository.findByEmail(claims.getSubject())
+                    .orElseThrow(UserNotFoundException::new);
+
+            authUser = new AuthUser(user);
+
+        } else {
+            authUser = new AuthUser( optionalUser.get() );
+        }
 
         return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
     }
