@@ -110,7 +110,6 @@ public class OauthController {
                 .loginType(LoginType.KAKAO)
                 .password(PASSWORD)
                 .encodedPassword(encodePassword)
-                .provider("kakao")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
@@ -166,7 +165,6 @@ public class OauthController {
                 .password(PASSWORD)
                 .loginType(LoginType.GOOGLE)
                 .encodedPassword(passwordEncoder.encode(PASSWORD))
-                .provider("google")
                 .build();
 
         TokenResponse tokenResponse = oauth2UserService.oauthLogin(oauthRequest);
