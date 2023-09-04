@@ -33,8 +33,8 @@ public class QnaController {
     private final QnaService qnaService;
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시글 수정 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "유저의 알림 삭제 실패")
     })
     @Operation(summary = "Qna 게시물 수정")
@@ -47,8 +47,8 @@ public class QnaController {
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 쓰기 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시파 글 쓰기 실패")
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
@@ -60,20 +60,19 @@ public class QnaController {
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
     })
     @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @GetMapping("/{qnaId}")
-    public ResponseEntity<List<QnaResponse>> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
+    public ResponseEntity<QnaResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                   @PathVariable("qnaId") Long qnaId) {
 
-        Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.getRead(qnaId));
+        return ResponseEntity.ok().body(qnaService.getRead(qnaId, user));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 삭제 실패")
     })
 
@@ -88,7 +87,7 @@ public class QnaController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna List 보여주기 성공"),
-            @ApiResponse(responseCode = "404", description = "로그인 필요"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna List 보여주기 실패")
     })
     @Operation(summary = "Mypage에 자신이 올린 Qna 보여주기")

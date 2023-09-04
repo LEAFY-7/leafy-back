@@ -24,5 +24,6 @@ public interface QnaCommentMapper {
     int editByIdQnaStatus(@Param("qnaId")Long qnaId, @Param("qnaStatus")QnaStatus qnaStatus);//상태 변경
     List<QnaCommentResponse> selectByQnaId(Long qnaId);
     Long findUserIdByQnaId(Long qnaCommentId);
+    QnaCommentResponse selectIsDeleteTrueAndFalseById(Long qnaCommentId);
 
 }

@@ -10,27 +10,27 @@
          WHERE qna_comment_id = #{qnaCommentId}
            AND user_id = #{userId}
            AND qna_id = #{qnaId}
-
+           AND is_delete = false;
     </update>
 
     <insert id="saveQnaComment" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
             (created_at, modified_at, is_delete, comment, user_id, qna_id)
-        SELECT
-            now(), now(), 0, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId}
-        FROM
-            qna q
-        WHERE q.qna_id = #{qnaId}
-          AND q.is_delete = false;
-
+        value
+            (now(), now(), false, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId})
     </insert>
+
+    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaCommentResponse" >
+        SELECT *
+          FROM qna_comment
+         WHERE qna_comment_id = #{qnaCommentId}
+           AND is_delete = false;
+    </select>
 
     <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
         SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
-        ORDER BY created_at DESC
-        LIMIT  1;
     </select>
 
     <update id="editByQnaCommentId" >
@@ -40,6 +40,7 @@
         WHERE qna_comment_id = #{qnaCommentId}
           AND user_id = #{userId}
           AND qna_id =  #{qnaId}
+          AND is_delete = false;
     </update>
 
     <select id="selectAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
@@ -66,6 +67,4 @@
         WHERE qc.qna_id = #{qnaId}
           AND qc.is_delete = false;
     </select>
-
-
 </mapper>

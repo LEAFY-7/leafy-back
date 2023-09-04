@@ -46,6 +46,7 @@ public class QnaReplyController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 수정 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "대댓글 수정 실패")
     })
@@ -62,6 +63,7 @@ public class QnaReplyController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 쓰기 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "대댓글 쓰기 실패")
     })
@@ -77,6 +79,7 @@ public class QnaReplyController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "대댓글 삭제 실패")
     })
