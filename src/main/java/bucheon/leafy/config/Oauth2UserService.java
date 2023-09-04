@@ -42,7 +42,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
             oauthRequest.setLoginType(LoginType.GOOGLE);
         }
 
-        if (oauthRequest.getEmail() == null || oauthRequest.getName() == null) {
+        if (oauthRequest.getProviderId() == null || oauthRequest.getName() == null) {
             throw new OAuth2InfoNotExistException();
         }
 
