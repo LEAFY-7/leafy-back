@@ -35,18 +35,11 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
     private final TokenProvider tokenProvider;
 
     public TokenResponse oauthLogin(OauthRequest oauthRequest) throws OAuth2AuthenticationException {
-
-        if (oauthRequest.getProvider().equals("kakao")){
-            oauthRequest.setLoginType(LoginType.KAKAO);
-        } else if (oauthRequest.getProvider().equals("google")) {
-            oauthRequest.setLoginType(LoginType.GOOGLE);
-        }
-
         if (oauthRequest.getProviderId() == null || oauthRequest.getName() == null) {
             throw new OAuth2InfoNotExistException();
         }
 
-        Optional<User> optionalUser = userRepository.findByProviderId( oauthRequest.getProviderId() );
+        Optional<User> optionalUser = userRepository.findByProviderId(oauthRequest.getProviderId());
         oauthRequest.setPassword(oauthRequest.getPassword());
 
         User user;
