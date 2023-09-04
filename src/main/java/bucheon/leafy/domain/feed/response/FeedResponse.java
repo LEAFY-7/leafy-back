@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bucheon.leafy.path.S3Path.*;
+
 @Getter
 public class FeedResponse {
 
@@ -55,6 +57,19 @@ public class FeedResponse {
                 .userNickName(userNickName)
                 .profileImage(profileImage)
                 .build();
+    }
+
+    public void insertDefaultImage(){
+        if ( this.feedImages.isEmpty() ) {
+            this.feedImages.add(
+                    FeedImageResponse.builder()
+                            .feedId(this.feedId)
+                            .feedImageId(0L)
+                            .imageName(DEFAULT_IMAGE)
+                            .imageHeight(100)
+                            .build()
+            );
+        }
     }
 
 }
