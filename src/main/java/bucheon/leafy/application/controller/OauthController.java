@@ -55,6 +55,7 @@ public class OauthController {
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String googleClientSecret;
 
+    private static final String PASSWORD = "oauth login password";
 
 
     @GetMapping("/oauth2/code/kakao")
@@ -95,17 +96,19 @@ public class OauthController {
 
         JsonNode token = objectMapper.readTree(userResponse.getBody());
 
-        String email = token.path("kakao_account").path("email").asText();
+        String id = token.path("id").asText();
+//        String email = token.path("kakao_account").path("email").asText();
         String image = token.path("properties").path("profile_image").asText();
         String nickname = token.path("properties").path("nickname").asText();
-        String password = "oauth login password";
-        String encodePassword = passwordEncoder.encode(password);
+
+        String encodePassword = passwordEncoder.encode(PASSWORD);
 
         OauthRequest oauthRequest = OauthRequest.builder()
-                .email(email)
+//                .email(email)
+                .providerId(id)
                 .image(image)
                 .name(nickname)
-                .password(password)
+                .password(PASSWORD)
                 .encodedPassword(encodePassword)
                 .provider("kakao")
                 .build();
@@ -157,11 +160,12 @@ public class OauthController {
         JSONObject info = new JSONObject(userResponse.getBody());
 
         OauthRequest oauthRequest = OauthRequest.builder()
-                .email(info.getString("email"))
+//                .email(info.getString("email"))
+                .providerId(info.getString("id"))
                 .image(info.getString("picture"))
                 .name(info.getString("name"))
-                .password("oauth login password")
-                .encodedPassword(passwordEncoder.encode("oauth login password"))
+                .password(PASSWORD)
+                .encodedPassword(passwordEncoder.encode(PASSWORD))
                 .provider("google")
                 .build();
 
