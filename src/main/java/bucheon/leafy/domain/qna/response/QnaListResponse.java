@@ -1,13 +1,9 @@
 package bucheon.leafy.domain.qna.response;  // 패키지 경로가 맞는지 확인해주세요.
 
-import bucheon.leafy.domain.comment.response.QnaCommentResponse;
-import bucheon.leafy.domain.reply.response.QnaReplyResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

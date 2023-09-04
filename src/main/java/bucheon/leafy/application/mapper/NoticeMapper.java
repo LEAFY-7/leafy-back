@@ -1,7 +1,6 @@
 package bucheon.leafy.application.mapper;
 
 
-import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
 import bucheon.leafy.domain.notice.request.NoticeEditRequest;
 import bucheon.leafy.domain.notice.request.NoticeSaveRequest;
 import bucheon.leafy.domain.notice.response.NoticeResponse;

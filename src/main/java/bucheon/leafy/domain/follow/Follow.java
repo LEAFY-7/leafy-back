@@ -12,8 +12,12 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"follower_user_id", "following_user_id"})
+        }
+)
 public class Follow extends BaseEntity {
-
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id")

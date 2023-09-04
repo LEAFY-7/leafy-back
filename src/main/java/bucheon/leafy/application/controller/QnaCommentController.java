@@ -2,10 +2,10 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.service.QnaCommentService;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.comment.request.QnaCommentEditRequest;
-import bucheon.leafy.domain.comment.request.QnaCommentSaveRequest;
-import bucheon.leafy.domain.comment.response.QnaCommentEditResponse;
-import bucheon.leafy.domain.comment.response.QnaCommentSaveResponse;
+import bucheon.leafy.domain.qna.comment.request.QnaCommentEditRequest;
+import bucheon.leafy.domain.qna.comment.request.QnaCommentSaveRequest;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentSaveResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

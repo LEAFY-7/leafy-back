@@ -11,9 +11,8 @@ import java.util.regex.Matcher;
 public class OauthRequest {
 
     private String email;
-
+    private String providerId;
     private String name;
-
     private String password;
     private String encodedPassword;
     private String image;
@@ -23,12 +22,13 @@ public class OauthRequest {
     private String nickName = generateRandomNickname();
 
     @Builder
-    private OauthRequest(String email, String name, String password, String encodedPassword,
-                         LoginType loginType, String provider, String image) {
-        this.password = password;
-        this.encodedPassword = encodedPassword;
+    private OauthRequest(String email, String providerId, String name, String password,
+                         String encodedPassword, LoginType loginType, String provider, String image) {
         this.email = email;
         this.name = name;
+        this.providerId = providerId;
+        this.password = password;
+        this.encodedPassword = encodedPassword;
         this.loginType = loginType;
         this.provider = provider;
         this.image = image;

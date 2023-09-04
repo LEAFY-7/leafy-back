@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.user.response;
 
+import bucheon.leafy.domain.user.LoginType;
 import bucheon.leafy.domain.user.User;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,8 @@ public class UserResponse {
 
     private String introduction;
 
+    private LoginType loginType;
+
     private Boolean isHide;
 
     private Boolean isAdmin;
@@ -39,7 +42,8 @@ public class UserResponse {
     public UserResponse(Long userId, String email, String name, String nickName,
                         String phone, String profileImage, String backgroundImage,
                         String introduction, Boolean isAdmin, Boolean isHide,
-                        Boolean isAllNotifications, Boolean isCommentNotifications) {
+                        Boolean isAllNotifications, Boolean isCommentNotifications,
+                        LoginType loginType) {
 
         this.userId = userId;
         this.email = email;
@@ -49,6 +53,7 @@ public class UserResponse {
         this.profileImage = profileImage;
         this.backgroundImage = backgroundImage;
         this.introduction = introduction;
+        this.loginType = loginType;
         this.isHide = isHide;
         this.isAdmin = isAdmin;
         this.isAllNotifications = isAllNotifications;
@@ -77,6 +82,7 @@ public class UserResponse {
                 .isAdmin(
                         user.getUserRole().equals(ADMIN) ? true : false
                 )
+                .loginType(user.getLoginType())
                 .build();
     }
 

@@ -55,6 +55,7 @@ public class UserService {
 
         String role = authority.replace("ROLE_", "");
         String jwt = tokenProvider.createToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
         return TokenResponse.of(jwt, role, authUser.getUserId());
     }
 

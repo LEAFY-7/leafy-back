@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bucheon.leafy.path.S3Path.*;
+
 @Getter
 public class FeedResponse {
 
@@ -24,6 +26,7 @@ public class FeedResponse {
     private FeedType feedType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private Long likeCount;
     private FeedAuthorResponse feedAuthorResponse;
     private List<FeedImageResponse> feedImages = new ArrayList<>();
 
@@ -32,7 +35,8 @@ public class FeedResponse {
                         String species, String nickname, Double temperature,
                         Integer humidity, Double waterAmount, String wateringPeriod,
                         FeedType feedType, LocalDateTime createdAt, LocalDateTime modifiedAt,
-                        Long userId, String userNickName, String profileImage) {
+                        Long userId, String userNickName, String profileImage,
+                        Long likeCount) {
 
         this.feedId = feedId;
         this.title = title;
@@ -46,12 +50,26 @@ public class FeedResponse {
         this.feedType = feedType;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+        this.likeCount = likeCount;
 
         this.feedAuthorResponse = FeedAuthorResponse.builder()
                 .userId(userId)
                 .userNickName(userNickName)
                 .profileImage(profileImage)
                 .build();
+    }
+
+    public void insertDefaultImage(){
+        if ( this.feedImages.isEmpty() ) {
+            this.feedImages.add(
+                    FeedImageResponse.builder()
+                            .feedId(this.feedId)
+                            .feedImageId(0L)
+                            .imageName(DEFAULT_IMAGE)
+                            .imageHeight(100)
+                            .build()
+            );
+        }
     }
 
 }

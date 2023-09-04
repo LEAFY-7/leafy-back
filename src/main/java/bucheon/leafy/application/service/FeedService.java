@@ -51,7 +51,6 @@ public class FeedService {
     private final FeedImageMapper feedImageMapper;
     private final FeedTagMapper feedTagMapper;
 
-    private String imagePath = FEED_PATH;
 
     // 피드 리스트 조회
     public ScrollResponse getMainFeedsWhenNotLogin(ScrollRequest scrollRequest) {
@@ -85,13 +84,23 @@ public class FeedService {
     // getFeeds 에 findFeedsToFollowers 조회 데이터 not in 으로 필터링 추가 해야함
     public ScrollResponse getFeeds(ScrollRequest scrollRequest) {
         if(scrollRequest.hasKey()){
-            LinkedList<FeedResponse> responseList = feedMapper.findFeedsFirst(scrollRequest);
-            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
-            return ScrollResponse.of(nextScrollRequest, responseList);
+            LinkedList<FeedResponse> feedResponses = feedMapper.findFeedsFirst(scrollRequest);
+            List<Long> feedIds = getFeedIds(feedResponses);
+
+            List<FeedImageResponse> feedImages = getFeedImages(feedIds);
+            injectFeedImages(feedResponses, feedImages);
+
+            ScrollRequest nextScrollRequest = getNextKey(feedResponses, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, feedResponses);
         } else {
-            LinkedList<FeedResponse> responseList = feedMapper.findFeeds(scrollRequest);
-            ScrollRequest nextScrollRequest = getNextKey(responseList, scrollRequest);
-            return ScrollResponse.of(nextScrollRequest, responseList);
+            LinkedList<FeedResponse> feedResponses = feedMapper.findFeeds(scrollRequest);
+            List<Long> feedIds = getFeedIds(feedResponses);
+
+            List<FeedImageResponse> feedImages = getFeedImages(feedIds);
+            injectFeedImages(feedResponses, feedImages);
+
+            ScrollRequest nextScrollRequest = getNextKey(feedResponses, scrollRequest);
+            return ScrollResponse.of(nextScrollRequest, feedResponses);
         }
     }
 
@@ -178,25 +187,29 @@ public class FeedService {
 
     // 피드 태그 저장
     public void saveFeedTags(Long feedId, List<String> saveFeedList) {
-        feedTagMapper.saveFeedTag(feedId, saveFeedList);
+        if (saveFeedList != null){
+            feedTagMapper.saveFeedTag(feedId, saveFeedList);
+        }
     }
 
     // 피드 이미지 저장
     public void saveFeedImages(Long feedId, List<MultipartFile> imageList) throws IOException {
-        List<FeedImageRequest> requestList = new ArrayList<>();
-        List<String> imageNameList = imageComponent.uploadImages(imagePath, imageList);
+        if (imageList != null) {
+            List<FeedImageRequest> requestList = new ArrayList<>();
+            List<String> imageNameList = imageComponent.uploadImages(FEED_PATH, imageList);
 
-        for(MultipartFile image : imageList) {
-            BufferedImage inputImage = ImageIO.read(image.getInputStream());
-            int imageHeight = inputImage.getHeight();
+            for (MultipartFile image : imageList) {
+                BufferedImage inputImage = ImageIO.read(image.getInputStream());
+                int imageHeight = inputImage.getHeight();
 
-            for(String imageName : imageNameList) {
-                FeedImageRequest request = FeedImageRequest.builder().imageName(imageName).imageHeight(imageHeight).build();
-                requestList.add(request);
+                for (String imageName : imageNameList) {
+                    FeedImageRequest request = FeedImageRequest.builder().imageName(imageName).imageHeight(imageHeight).build();
+                    requestList.add(request);
+                }
             }
-        }
 
-        feedImageMapper.saveFeedImage(feedId, requestList);
+            feedImageMapper.saveFeedImage(feedId, requestList);
+        }
     }
 
     // 피드 태그 삭제
@@ -274,5 +287,7 @@ public class FeedService {
                 }
             }
         }
+
+        feeds.stream().forEach(FeedResponse::insertDefaultImage);
     }
 }

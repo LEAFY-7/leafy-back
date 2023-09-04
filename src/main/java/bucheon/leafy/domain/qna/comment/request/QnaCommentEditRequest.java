@@ -1,4 +1,5 @@
-package bucheon.leafy.domain.comment.request;
+package bucheon.leafy.domain.qna.comment.request;
+
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
