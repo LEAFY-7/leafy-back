@@ -46,7 +46,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2InfoNotExistException();
         }
 
-        Optional<User> optionalUser = userRepository.findByEmail( oauthRequest.getEmail() );
+        Optional<User> optionalUser = userRepository.findByProviderId( oauthRequest.getProviderId() );
         oauthRequest.setPassword(oauthRequest.getPassword());
 
         User user;
@@ -55,10 +55,10 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
             user = userRepository.save(newUser);
         }
         else {
-            if (optionalUser.get().getLoginType().equals(LoginType.KAKAO)) {
-                user = optionalUser.get();
-            } else {
+            if (optionalUser.get().getLoginType().equals(LoginType.NORMAL)) {
                 throw new ExistException(EMAIL);
+            } else {
+                user = optionalUser.get();
             }
         }
 
