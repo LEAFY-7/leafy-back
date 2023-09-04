@@ -8,7 +8,7 @@ import bucheon.leafy.exception.OAuth2InfoNotExistException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
-import bucheon.leafy.oauth.OauthRequest;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

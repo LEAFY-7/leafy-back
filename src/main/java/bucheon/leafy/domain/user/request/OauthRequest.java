@@ -1,4 +1,4 @@
-package bucheon.leafy.oauth;
+package bucheon.leafy.domain.user.request;
 
 import bucheon.leafy.domain.user.LoginType;
 import lombok.Builder;

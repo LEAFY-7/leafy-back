@@ -2,7 +2,7 @@ package bucheon.leafy.application.controller;
 
 import bucheon.leafy.config.Oauth2UserService;
 import bucheon.leafy.jwt.TokenResponse;
-import bucheon.leafy.oauth.OauthRequest;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
