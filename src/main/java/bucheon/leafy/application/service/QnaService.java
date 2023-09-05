@@ -93,8 +93,8 @@ public class QnaService {
             List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
             List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
 
-            qnaResponse.setComment(comments);
-            qnaResponse.setQnaReply(replies);
+            qnaResponse.setComments(comments);
+            qnaResponse.setQnaReplies(replies);
         }
 
         return qnaResponses;
