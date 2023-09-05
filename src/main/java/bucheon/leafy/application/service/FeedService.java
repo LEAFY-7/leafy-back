@@ -253,14 +253,8 @@ public class FeedService {
                 .collect(Collectors.toList());
     }
 
-    public Integer getCountByUserId(Long userId) {
-        User user = userRepository.findWithFeedsById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        List<Feed> feeds = user.getFeeds();
-
-        if (feeds == null) return 0;
-        return feeds.size();
+    public Long countByUserId(Long userId) {
+        return userRepository.countFeedById(userId);
     }
 
     // 피드 이미지 조회
