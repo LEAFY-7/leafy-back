@@ -9,6 +9,7 @@ import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,10 @@ class AlarmRepositoryTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 
@@ -80,6 +85,10 @@ class AlarmRepositoryTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 

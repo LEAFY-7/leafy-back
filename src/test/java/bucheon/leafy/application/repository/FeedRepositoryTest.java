@@ -4,6 +4,7 @@ import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.feed.response.FeedResponse;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserRole;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
@@ -62,6 +63,10 @@ class FeedRepositoryTest extends IntegrationTestSupport {
                 .nickName(nickName)
                 .password("비밀번호")
                 .feeds(feeds)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 
