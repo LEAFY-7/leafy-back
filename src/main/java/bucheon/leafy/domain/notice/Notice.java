@@ -6,11 +6,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@SQLDelete(sql = "update notice set is_delete = true where notice_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notice extends BaseDeleteEntity {
 
