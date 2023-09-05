@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,12 @@ public class UserImageController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
-    public void createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
+    public ResponseEntity<String> createImage(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser,
                             @RequestPart MultipartFile file) {
 
         Long userId = authUser.getUserId();
-        userImageService.createOrUpdateUserImage(userId, file);
+        String image = userImageService.createOrUpdateUserImage(userId, file);
+        return ResponseEntity.status(HttpStatus.CREATED).body(image);
     }
 
     @ApiResponses({
