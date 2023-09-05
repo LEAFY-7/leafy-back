@@ -54,6 +54,7 @@ public class MyPageController {
                                                  @PageableDefault(page = 0, size = 6) Pageable pageable) {
 
         Long userId = authUser.getUserId();
+        Long feedCount = feedService.countByUserId(userId);
         Long followerCount = followService.getFollowerCount(userId);
         Long followingCount = followService.getFollowingCount(userId);
         List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(userId);
@@ -63,6 +64,7 @@ public class MyPageController {
         List<MyPageQnaResponse> qnas = qnaService.getQnasByUserId(userId);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
+                .feedCount(feedCount)
                 .followerCount(followerCount)
                 .followingCount(followingCount)
                 .feedMonthlyActivity(feedMonthlyResponses)
@@ -92,6 +94,7 @@ public class MyPageController {
                                                    @PageableDefault(page = 0, size = 8) Pageable pageable) {
         Long userId = authUser.getUserId();
         userBlockService.isUserBlockedOrPrivate(userId, targetUserId);
+        Long feedCount = feedService.countByUserId(targetUserId);
         Long followerCount = followService.getFollowerCount(targetUserId);
         Long followingCount = followService.getFollowingCount(targetUserId);
         List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(targetUserId);
@@ -100,6 +103,7 @@ public class MyPageController {
         List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(targetUserId, pageable);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
+                .feedCount(feedCount)
                 .followerCount(followerCount)
                 .followingCount(followingCount)
                 .feedMonthlyActivity(feedMonthlyResponses)

@@ -69,6 +69,17 @@ public class UserController {
     }
 
     @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공")
+    })
+    @Operation(summary = "회원 탈퇴")
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void withdrawal(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser authUser) {
+        Long userId = authUser.getUserId();
+        userService.deleteUser(userId);
+    }
+
+    @ApiResponses({
             @ApiResponse(responseCode = "204", description = "중복되는 아이디 (이메일)이 존재하지 않음"),
             @ApiResponse(responseCode = "409", description = "아이디 (이메일)이 이미 존재")
     })

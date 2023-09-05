@@ -5,6 +5,7 @@ import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@SQLDelete(sql = "update qna set is_delete = true where qna_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Qna extends BaseDeleteEntity {
 

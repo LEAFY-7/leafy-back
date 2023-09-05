@@ -6,6 +6,7 @@ import bucheon.leafy.domain.feed.FeedLikeCount;
 import bucheon.leafy.domain.feedlikeinfo.FeedLikeInfo;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.exception.FeedLikeInfoNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -126,6 +127,10 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 

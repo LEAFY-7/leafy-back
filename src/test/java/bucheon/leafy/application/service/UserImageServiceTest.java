@@ -5,10 +5,7 @@ import bucheon.leafy.application.component.ImageComponent;
 import bucheon.leafy.application.repository.UserBackgroundImageRepository;
 import bucheon.leafy.application.repository.UserImageRepository;
 import bucheon.leafy.application.repository.UserRepository;
-import bucheon.leafy.domain.user.Address;
-import bucheon.leafy.domain.user.User;
-import bucheon.leafy.domain.user.UserBackgroundImage;
-import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +147,10 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 
@@ -171,6 +172,9 @@ class UserImageServiceTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
                 .build();
     }
 

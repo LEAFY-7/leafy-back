@@ -4,6 +4,7 @@ import bucheon.leafy.application.IntegrationTestSupport;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.UserRole;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,6 +155,10 @@ class UserRepositoryTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 
