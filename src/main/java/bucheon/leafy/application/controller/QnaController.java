@@ -62,14 +62,14 @@ public class QnaController {
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
             @ApiResponse(responseCode = "404", description = "로그인 필요"),
             @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
-    })
-    @Operation(summary = "Qna 게시판 클릭 글 읽기")
+    })    @Operation(summary = "Qna 게시판 클릭 글 읽기")
     @GetMapping("/{qnaId}")
     public ResponseEntity<List<QnaResponse>> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                   @PathVariable("qnaId") Long qnaId) {
 
         Long userId = user.getUserId();
-        return ResponseEntity.ok().body(qnaService.getRead(qnaId));
+
+       return ResponseEntity.ok().body(qnaService.getRead(qnaId));
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 삭제 성공"),

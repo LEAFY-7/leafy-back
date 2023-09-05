@@ -19,10 +19,10 @@ public class QnaResponse {
     private String title;
     private Long viewCount;
     private Long userId;
-    private List<QnaCommentResponse> comment;  // QnaCommentResponse 객체의 리스트
-    private List<QnaReplyResponse> qnaReply;
+    private List<QnaCommentResponse> comments;  // QnaCommentResponse 객체의 리스트
+    private List<QnaReplyResponse> qnaReplies;
 
-    public QnaResponse(Long qnaId, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comment, List<QnaReplyResponse> qnaReply) {
+    public QnaResponse(Long qnaId, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comments, List<QnaReplyResponse> qnaReplies) {
         this.qnaId = qnaId;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
@@ -31,7 +31,7 @@ public class QnaResponse {
         this.title = title;
         this.viewCount = viewCount;
         this.userId = userId;
-        this.comment = comment;
-        this.qnaReply = qnaReply;
+        this.comments = comments;
+        this.qnaReplies = qnaReplies;
     }
 }
