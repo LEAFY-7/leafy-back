@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +19,7 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -58,10 +58,13 @@ public class OauthController {
 
     private static final String PASSWORD = "oauth login password";
 
-
-    @GetMapping("/oauth2/code/kakao")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "OAuth2 로그인 성공"),
+            @ApiResponse(responseCode = "401, 404, 409, 500", description = "OAuth2 로그인 실패")
+    })
+    @PostMapping("/oauth2/code/kakao")
     @Operation(summary = "카카오 로그인 Redirect 주소")
-    public ResponseEntity<TokenResponse> oauth2Code(@RequestParam String code) throws JsonProcessingException {
+    public ResponseEntity<TokenResponse> oauth2Code(@RequestBody String code) throws JsonProcessingException {
 
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
@@ -116,9 +119,13 @@ public class OauthController {
         return ResponseEntity.ok().body(tokenResponse);
     }
 
-    @GetMapping("/oauth2/code/google")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "OAuth2 로그인 성공"),
+            @ApiResponse(responseCode = "401, 404, 500", description = "OAuth2 로그인 실패")
+    })
+    @PostMapping("/oauth2/code/google")
     @Operation(summary = "구글 로그인 Redirect 주소")
-    public ResponseEntity<TokenResponse> googleOauth2Code(@RequestParam String code) {
+    public ResponseEntity<TokenResponse> googleOauth2Code(@RequestBody String code) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
