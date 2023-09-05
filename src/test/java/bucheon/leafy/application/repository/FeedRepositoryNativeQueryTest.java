@@ -11,6 +11,7 @@ import bucheon.leafy.domain.feed.response.PopularTagResponse.PopularTagInformati
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import org.assertj.core.groups.Tuple;
 import org.jeasy.random.EasyRandom;
@@ -172,6 +173,10 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
                 .nickName(nickName)
                 .password("비밀번호")
                 .feeds(feeds)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 

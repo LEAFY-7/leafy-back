@@ -12,9 +12,7 @@ import java.util.List;
 @Data
 public class MyPageResponse {
 
-    private Long followerCount;
-
-    private Long followingCount;
+    private TotalCountResponse totalCountResponse;
 
     private List<FeedMonthlyResponse> feedMonthlyActivity;
 
@@ -26,12 +24,14 @@ public class MyPageResponse {
     private List<MyPageQnaResponse> qnas;
 
     @Builder
-    private MyPageResponse(Long followerCount, Long followingCount, List<FeedMonthlyResponse> feedMonthlyActivity,
-                           List<FollowersResponse> followers, List<FollowersResponse> followings,
-                           List<FeedWithLikeCountResponse> feeds, List<MyPageQnaResponse> qnas) {
+    private MyPageResponse(TotalCountResponse totalCountResponse,
+                           List<FeedMonthlyResponse> feedMonthlyActivity,
+                           List<FollowersResponse> followers,
+                           List<FollowersResponse> followings,
+                           List<FeedWithLikeCountResponse> feeds,
+                           List<MyPageQnaResponse> qnas) {
 
-        this.followerCount = followerCount;
-        this.followingCount = followingCount;
+        this.totalCountResponse = totalCountResponse;
         this.feedMonthlyActivity = feedMonthlyActivity;
         this.followers = followers;
         this.followings = followings;
@@ -39,13 +39,14 @@ public class MyPageResponse {
         this.qnas = qnas;
     }
 
-    public static MyPageResponse of(Long followerCount, Long followingCount, List<FeedMonthlyResponse> feedMonthlyActivity,
-                                    List<FollowersResponse> followers, List<FollowersResponse> followings,
-                                    List<FeedWithLikeCountResponse> feeds, List<MyPageQnaResponse> qnas) {
+    public static MyPageResponse of(TotalCountResponse totalCountResponse,
+                                    List<FeedMonthlyResponse> feedMonthlyActivity,
+                                    List<FollowersResponse> followers,
+                                    List<FollowersResponse> followings,
+                                    List<FeedWithLikeCountResponse> feeds) {
 
         return MyPageResponse.builder()
-                .followerCount(followerCount)
-                .followingCount(followingCount)
+                .totalCountResponse(totalCountResponse)
                 .feedMonthlyActivity(feedMonthlyActivity)
                 .followers(followers)
                 .followings(followings)

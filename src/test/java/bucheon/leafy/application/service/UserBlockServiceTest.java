@@ -8,6 +8,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.domain.user.response.UserResponse;
 import bucheon.leafy.domain.userblock.UserBlock;
 import org.assertj.core.api.Assertions;
@@ -145,6 +146,10 @@ class UserBlockServiceTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 }

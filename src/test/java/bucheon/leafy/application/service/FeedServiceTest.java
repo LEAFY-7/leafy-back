@@ -5,6 +5,7 @@ import bucheon.leafy.application.repository.FeedRepository;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.UserRole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +26,6 @@ class FeedServiceTest extends IntegrationTestSupport {
     @Autowired
     private FeedRepository feedRepository;
 
-
-    @AfterEach
-    void tearDown(){
-        feedRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-    }
-
     @Test
     @DisplayName("회원 아이디로 게시물이 몇개인지 조회한다.")
     void testGetCountByUserId(){
@@ -49,7 +43,7 @@ class FeedServiceTest extends IntegrationTestSupport {
         userRepository.save( user );
 
         //when
-        Integer count = feedService.getCountByUserId(user.getId());
+        Long count = feedService.countByUserId(user.getId());
 
         //then
         Assertions.assertThat(count).isEqualTo(7);
@@ -63,6 +57,10 @@ class FeedServiceTest extends IntegrationTestSupport {
                 .nickName(nickName)
                 .password("비밀번호")
                 .feeds(feeds)
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 

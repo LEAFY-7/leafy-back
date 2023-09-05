@@ -19,6 +19,10 @@ public class FeedLikeInfoService {
 
     private final FeedLikeInfoRepository feedLikeInfoRepository;
 
+    public Long countByUserId(Long userId) {
+        return feedLikeInfoRepository.countByUserId(userId);
+    }
+
     public List<FeedWithLikeCountResponse> getFeedByUserId(Long userId, Pageable pageable) {
         List<FeedLikeInfo> feedLikeInfos = feedLikeInfoRepository.findAllWithFeedByUserId(userId, pageable).getContent();
 

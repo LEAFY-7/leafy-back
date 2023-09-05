@@ -14,8 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static bucheon.leafy.exception.enums.ExceptionKey.USER_BACKGROUND_IMAGE;
 import static bucheon.leafy.exception.enums.ExceptionKey.USER_IMAGE;
-import static bucheon.leafy.path.S3Path.USER_BACKGROUND_IMAGE_PATH;
-import static bucheon.leafy.path.S3Path.USER_IMAGE_PATH;
+import static bucheon.leafy.path.S3Path.*;
 
 @Service
 @Transactional
@@ -30,14 +29,18 @@ public class UserImageService {
 
     private final ImageComponent imageComponent;
 
-    public void createOrUpdateUserImage(Long userId, MultipartFile file) {
+    public String createOrUpdateUserImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
 
+        String image;
+
         if(user.getUserImage() == null){
-            createUserImage(user, file);
+            image = createUserImage(user, file);
         } else {
-            editUserImage(user, file);
+            image = editUserImage(user, file);
         }
+
+        return ABSOLUTE_PATH + USER_IMAGE_PATH + image;
     }
 
     public void createOrUpdateUserBackgroundImage(Long userId, MultipartFile file) {
@@ -50,13 +53,14 @@ public class UserImageService {
         }
     }
 
-    public void createUserImage(User user, MultipartFile file) {
+    public String createUserImage(User user, MultipartFile file) {
         String renamedFile = imageComponent.createUUID();
 
         UserImage userImage = UserImage.of(renamedFile, user);
         userImageRepository.save(userImage);
 
         imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
+        return renamedFile;
     }
 
     public void createUserBackgroundImage(User user, MultipartFile file) {
@@ -68,27 +72,30 @@ public class UserImageService {
         imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
     }
 
-    public void editUserImage(User user, MultipartFile file) {
+    public String editUserImage(User user, MultipartFile file) {
         UserImage userImage = user.getUserImage();
+        String deleteImage = userImage.getImage();
 
         String renamedFile = imageComponent.createUUID();
         userImage.update(renamedFile);
         userImageRepository.save(userImage);
 
-        imageComponent.deleteImage(USER_IMAGE_PATH, userImage.getImage());
+        imageComponent.deleteImage(USER_IMAGE_PATH, deleteImage);
         imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
+        return renamedFile;
     }
 
 
     public void editUserBackgroundImage(User user, MultipartFile file) {
         UserBackgroundImage userBackgroundImage = user.getUserBackgroundImage();
+        String deleteImage = userBackgroundImage.getImage();
 
         String renamedFile = imageComponent.createUUID();
         userBackgroundImage.update(renamedFile);
 
         userBackgroundImageRepository.save(userBackgroundImage);
 
-        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, userBackgroundImage.getImage());
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, deleteImage);
         imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
     }
 

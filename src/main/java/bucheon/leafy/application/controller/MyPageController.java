@@ -1,6 +1,7 @@
 package bucheon.leafy.application.controller;
 
 import bucheon.leafy.application.controller.response.MyPageResponse;
+import bucheon.leafy.application.controller.response.TotalCountResponse;
 import bucheon.leafy.application.service.*;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.feed.response.FeedMonthlyResponse;
@@ -54,8 +55,19 @@ public class MyPageController {
                                                  @PageableDefault(page = 0, size = 6) Pageable pageable) {
 
         Long userId = authUser.getUserId();
+
+        Long feedCount = feedService.countByUserId(userId);
+        Long likeCount = feedLikeInfoService.countByUserId(userId);
         Long followerCount = followService.getFollowerCount(userId);
         Long followingCount = followService.getFollowingCount(userId);
+
+        TotalCountResponse totalCountResponse = TotalCountResponse.builder()
+                .feedCount(feedCount)
+                .likeCount(likeCount)
+                .followerCount(followerCount)
+                .followingCount(followingCount)
+                .build();
+
         List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(userId);
         List<FollowersResponse> followers = followService.getFollowers(userId, pageable).getBody();
         List<FollowersResponse> followings = followService.getFollowings(userId, pageable).getBody();
@@ -63,8 +75,7 @@ public class MyPageController {
         List<MyPageQnaResponse> qnas = qnaService.getQnasByUserId(userId);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
-                .followerCount(followerCount)
-                .followingCount(followingCount)
+                .totalCountResponse(totalCountResponse)
                 .feedMonthlyActivity(feedMonthlyResponses)
                 .followers(followers)
                 .followings(followings)
@@ -92,16 +103,26 @@ public class MyPageController {
                                                    @PageableDefault(page = 0, size = 8) Pageable pageable) {
         Long userId = authUser.getUserId();
         userBlockService.isUserBlockedOrPrivate(userId, targetUserId);
+
+        Long feedCount = feedService.countByUserId(targetUserId);
+        Long likeCount = feedLikeInfoService.countByUserId(userId);
         Long followerCount = followService.getFollowerCount(targetUserId);
         Long followingCount = followService.getFollowingCount(targetUserId);
+
+        TotalCountResponse totalCountResponse = TotalCountResponse.builder()
+                .feedCount(feedCount)
+                .likeCount(likeCount)
+                .followerCount(followerCount)
+                .followingCount(followingCount)
+                .build();
+
         List<FeedMonthlyResponse> feedMonthlyResponses = feedService.getCountGroupByMonthly(targetUserId);
         List<FollowersResponse> followers = followService.getFollowers(targetUserId, pageable).getBody();
         List<FollowersResponse> followings = followService.getFollowings(targetUserId, pageable).getBody();
         List<FeedWithLikeCountResponse> feeds = feedLikeInfoService.getFeedByUserId(targetUserId, pageable);
 
         MyPageResponse myPageResponse = MyPageResponse.builder()
-                .followerCount(followerCount)
-                .followingCount(followingCount)
+                .totalCountResponse(totalCountResponse)
                 .feedMonthlyActivity(feedMonthlyResponses)
                 .followers(followers)
                 .followings(followings)
