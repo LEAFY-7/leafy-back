@@ -6,11 +6,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@SQLDelete(sql = "update feedReply set is_delete = true where feed_reply_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedReply extends BaseDeleteEntity {
 

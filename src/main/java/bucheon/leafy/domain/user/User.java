@@ -3,12 +3,13 @@ package bucheon.leafy.domain.user;
 import bucheon.leafy.domain.feed.Feed;
 import bucheon.leafy.domain.user.request.SignUpRequest;
 import bucheon.leafy.domain.user.request.UserRequest;
-import bucheon.leafy.oauth.OauthRequest;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import bucheon.leafy.util.entity.BaseDeleteEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Getter
 @Entity
+@SQLDelete(sql = "update user set is_delete = true where user_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseDeleteEntity {
 

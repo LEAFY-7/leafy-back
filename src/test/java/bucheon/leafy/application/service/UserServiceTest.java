@@ -5,6 +5,7 @@ import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.Address;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserImage;
+import bucheon.leafy.domain.user.UserRole;
 import bucheon.leafy.exception.ExistException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -49,6 +50,10 @@ class UserServiceTest extends IntegrationTestSupport {
                 .name("홍길동")
                 .nickName(nickName)
                 .password("비밀번호")
+                .isAllNotifications(true)
+                .isCommentNotifications(true)
+                .isHide(false)
+                .userRole(UserRole.MEMBER)
                 .build();
     }
 
