@@ -40,8 +40,7 @@
 <br/>
 
 ## 🏢 DB 명세서
-![image](https://github.com/LEAFY-7/leafy-back/assets/96738163/04e21315-9e1b-43e8-8ad3-d749e99cc6d4)
-
+![DB_ERD](https://github.com/LEAFY-7/leafy-back/assets/96738163/f8b2976c-05b7-4df3-bfbc-8fa7ab8e95f4)
 
 <br/>
 
