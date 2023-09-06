@@ -10,6 +10,7 @@ import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentEditRequest;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentSaveRequest;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentEditResponse;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentSaveResponse;
 
 

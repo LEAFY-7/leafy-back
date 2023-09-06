@@ -5,9 +5,11 @@ import bucheon.leafy.application.mapper.QnaReplyMapper;
 
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
+import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.reply.request.QnaReplyEditRequest;
 import bucheon.leafy.domain.qna.reply.request.QnaReplySaveRequest;
 import bucheon.leafy.domain.qna.reply.response.QnaReplyEditResponse;
+import bucheon.leafy.domain.qna.reply.response.QnaReplyResponse;
 import bucheon.leafy.domain.qna.reply.response.QnaReplySaveResponse;
 import bucheon.leafy.exception.ModifyFailedException;
 import bucheon.leafy.exception.QnaCommentNotFoundException;

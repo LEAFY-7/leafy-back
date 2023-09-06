@@ -6,6 +6,7 @@ import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.mapper.QnaReplyMapper;
 import bucheon.leafy.application.repository.QnaRepository;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.qna.QnaStatus;
