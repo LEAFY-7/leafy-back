@@ -63,14 +63,9 @@ public class QnaController {
     @GetMapping("/{qnaId}")
     public ResponseEntity<QnaResponse> read(@AuthenticationPrincipal @Parameter(hidden = true) AuthUser user,
                                                   @PathVariable("qnaId") Long qnaId) {
-
-<<<<<<< HEAD
+        
         return ResponseEntity.ok().body(qnaService.getRead(qnaId, user));
-=======
-        Long userId = user.getUserId();
 
-       return ResponseEntity.ok().body(qnaService.getRead(qnaId));
->>>>>>> 485f2d045f4bf943286dcf8c8b58772a12d19092
     }
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 삭제 성공"),
