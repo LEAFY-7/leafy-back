@@ -26,7 +26,7 @@ public class QnaCommentController {
     private final QnaCommentService qnacommentService;
 
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "댓글 수정 성공"),
+            @ApiResponse(responseCode = "204", description = "댓글 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
@@ -44,6 +44,7 @@ public class QnaCommentController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "댓글 삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
@@ -59,6 +60,7 @@ public class QnaCommentController {
 
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "댓글 삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })

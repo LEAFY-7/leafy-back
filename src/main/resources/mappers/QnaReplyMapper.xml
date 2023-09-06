@@ -10,25 +10,27 @@
          WHERE qna_reply_id = #{qnaReplyId}
            AND user_id = #{userId}
            AND qna_comment_id =${qnaCommentId}
+           AND is_delete = false;
     </update>
 
     <insert id="saveQnaReply" parameterType="QnaReplySaveRequest" useGeneratedKeys="true" keyColumn="qna_reply_id" keyProperty="qnaReplySaveRequest.qnaReplyId">
         INSERT INTO qna_reply
             ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
-        SELECT
-             now(), now(),  0, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId}
-        FROM
-            qna_comment qc
-        WHERE qc.qna_comment_id = #{qnaCommentId}
-        AND qc.is_delete = false;
+        VALUES
+            (now(), now(), false, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId})
     </insert>
 
     <select id="selectAfterQnaReplySave" parameterType="Long" resultType="QnaReplySaveResponse">
         SELECT qna_reply_id, created_at
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
-        ORDER BY created_at DESC
-        LIMIT  1;
+    </select>
+
+    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaReplyResponse" >
+        SELECT *
+        FROM qna_reply
+        WHERE qna_reply_id = #{qnaReplyId}
+          AND is_delete = false;
     </select>
 
     <update id="editQnaReply" >
@@ -37,17 +39,17 @@
                ,comment = #{qnaReplyEditReqeust.comment}
          WHERE qna_reply_id = #{qnaReplyId}
            AND user_id = #{userId}
-           AND qna_comment_id =#{qnaCommentId}
+           AND qna_comment_id = #{qnaCommentId}
+           AND is_delete = false;
     </update>
 
     <select id="selectAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
         SELECT  modified_at
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
-
     </select>
 
-    <select id="findUserIdByQnaCommentId" parameterType="Long" resultType="Long">
+    <select id="selectUserIdByQnaCommentId" parameterType="Long" resultType="Long">
         SELECT user_id
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}

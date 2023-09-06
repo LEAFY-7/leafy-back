@@ -18,9 +18,9 @@ import java.util.List;
 public interface QnaMapper {
     int count(Long userId);
     int adminCount();
-    List<QnaResponse> selectById(Long qnaId);   //클릭해서 읽기(select)
+    QnaResponse selectById(Long qnaId);   //클릭해서 읽기(select)
     int deleteById(Long qnaId);  //삭제
-    Long save(@Param("userId")Long userId , @Param("defaultStatus") QnaStatus defaultStatus, @Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
+    Long save(@Param("userId")Long userId , @Param("qnaStatus") QnaStatus qnaStatus, @Param("qnaSaveRequest")QnaSaveRequest qnaSaveRequest);   //저장
     QnaSaveResponse selectAfterSave(Long qnaId);   //저장 조회오기
     Long editById(@Param("qnaId")Long qnaId, @Param("qnaEditRequest") QnaEditRequest qnaEditRequest, @Param("userId")Long userId);//수정
     QnaEditResponse selectAfterEdit(Long qnaId);    //수정 조회오기
@@ -28,4 +28,5 @@ public interface QnaMapper {
     List<PageResponse> adminSelectAll(@Param("pageRequest")PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
     int viewCount(Long qnaId);
+    QnaResponse selectIsDeleteTrueAndFalseById(Long qnaId);
 }

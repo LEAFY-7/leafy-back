@@ -1,5 +1,6 @@
 package bucheon.leafy.domain.qna.reply.response;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
