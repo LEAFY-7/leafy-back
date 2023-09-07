@@ -30,20 +30,15 @@ public class UserResponse {
 
     private LoginType loginType;
 
-    private Boolean isHide;
-
     private Boolean isAdmin;
 
-    private Boolean isAllNotifications;
-
-    private Boolean isCommentNotifications;
+    private UserSettingResponse userSettingResponse;
 
 
     @Builder
     public UserResponse(Long userId, String email, String name, String nickName,
                         String phone, String profileImage, String backgroundImage,
-                        String introduction, Boolean isAdmin, Boolean isHide,
-                        Boolean isAllNotifications, Boolean isCommentNotifications,
+                        String introduction, Boolean isAdmin, UserSettingResponse userSettingResponse,
                         LoginType loginType) {
 
         this.userId = userId;
@@ -55,10 +50,8 @@ public class UserResponse {
         this.backgroundImage = backgroundImage;
         this.introduction = introduction;
         this.loginType = loginType;
-        this.isHide = isHide;
+        this.userSettingResponse = userSettingResponse;
         this.isAdmin = isAdmin;
-        this.isAllNotifications = isAllNotifications;
-        this.isCommentNotifications = isCommentNotifications;
     }
 
     public static UserResponse of(User user) {
@@ -88,9 +81,7 @@ public class UserResponse {
                                 : ABSOLUTE_PATH + USER_BACKGROUND_IMAGE_PATH + DEFAULT_IMAGE
                 )
                 .introduction(user.getIntroduction())
-                .isHide(user.getIsHide())
-                .isAllNotifications(user.getIsAllNotifications())
-                .isCommentNotifications(user.getIsCommentNotifications())
+                .userSettingResponse( UserSettingResponse.of(user) )
                 .isAdmin(
                         user.getUserRole().equals(ADMIN) ? true : false
                 )
