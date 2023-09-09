@@ -79,8 +79,4 @@ public class ImageComponent {
         return UUID.randomUUID().toString();
     }
 
-    public String getImageUrl(String imagePath, String imageName) {
-        return amazonS3Client.getUrl(bucket, imagePath + imageName).toString();
-    }
-
 }

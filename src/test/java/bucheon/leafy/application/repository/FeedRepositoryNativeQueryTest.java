@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.jeasy.random.FieldPredicates.named;
 import static org.jeasy.random.FieldPredicates.ofType;
 
-
+@Transactional
 class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
 
     @Autowired
@@ -46,7 +46,6 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("회원의 1년 동안의 월별 활동 내역을 카운트하여 가져온다.")
-    @Transactional
     void testGroupByMonthlyCountByUserId(){
         //given
         Feed feed1 = createFeed("1월 게시물");
@@ -86,7 +85,6 @@ class FeedRepositoryNativeQueryTest extends IntegrationTestSupport {
     }
 
     @Test
-    @Transactional
     @DisplayName("일주일 동안 가장 인기 있는 게시물 100개 중에 가장 많이 존재하는 태그 10개를 조회한다.")
     void testGetPopular10TagsInTop100Feeds(){
         // given
