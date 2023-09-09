@@ -6,6 +6,7 @@ import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.application.mapper.QnaReplyMapper;
 import bucheon.leafy.application.repository.QnaRepository;
 import bucheon.leafy.config.AuthUser;
+import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.Qna;
 import bucheon.leafy.domain.qna.QnaStatus;
@@ -35,11 +36,12 @@ public class QnaService {
     private final QnaCommentMapper qnaCommentMapper;
     private final QnaReplyMapper qnaReplyMapper;
     private final QnaRepository qnaRepository;
+    private final AlarmService alarmService;
 
     public void remove(Long qnaId, AuthUser user) {
          Long userId = user.getUserId();
         QnaResponse result = qnaMapper.findQnaById(qnaId);
-         if(result == null){ throw new NoticeNotFoundException(); }
+         if(result == null){ throw new QnaNotFoundException(); }
 
 
          if(result.getUserId() != user.getUserId()){ throw new QnaNotFoundException(); }
@@ -52,9 +54,9 @@ public class QnaService {
 
     public QnaSaveResponse write( QnaSaveRequest qnaSaveRequest, AuthUser user) {
         Long userId = user.getUserId();
-        QnaStatus defaultStatus = QnaStatus.HOLD;
+        QnaStatus qnaStatus = QnaStatus.HOLD;
 
-        if (qnaMapper.save(userId, defaultStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
+        if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
 
         QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
 
@@ -80,29 +82,40 @@ public class QnaService {
     }
 
 
-    public List<QnaResponse> getRead(Long qnaId) {
-        List<QnaResponse> qnaResponses = qnaMapper.selectById(qnaId);
+    public QnaResponse getRead(Long qnaId, AuthUser user) {
 
-        if (qnaResponses == null || qnaResponses.isEmpty()) {
+        if (user != null) {
+
+            alarmService.readAlarm(user.getUserId(), AlarmType.QNA_REPLY, qnaId);
+            alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, qnaId);
+        }
+
+        QnaResponse qnaResponse = qnaMapper.selectById(qnaId);
+
+        if (qnaResponse == null || qnaResponse.equals(0)) {
             throw new ReadFailedException();
         }
 
         qnaMapper.viewCount(qnaId);
 
-        for (QnaResponse qnaResponse : qnaResponses) {
-            List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
-            List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
+        List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
+        List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
 
-            qnaResponse.setComments(comments);
-            qnaResponse.setQnaReplies(replies);
-        }
 
-        return qnaResponses;
+        qnaResponse.setComments(comments);
+        qnaResponse.setReplies(replies);
+
+        return qnaResponse;
     }
+
+
 
 
     public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user) {
         Long userId = user.getUserId();
+
+        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
+        if (result == null) { throw new QnaNotFoundException(); }
 
         if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
             throw new WriteFailedException();

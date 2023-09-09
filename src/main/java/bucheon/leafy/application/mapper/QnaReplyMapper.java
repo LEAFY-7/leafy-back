@@ -20,7 +20,9 @@ public interface QnaReplyMapper {
     QnaReplyEditResponse selectAfterQnaReplyEdit(Long qnaReplyId);    //수정 조회오기
 //    QnaReplyResponse findByQnaCommentId(@Param("qnaCommentId")Long qnaCommentId);   //클릭해서 읽기(select)
     List<QnaReplyResponse> selectByQnaId(Long qnaId);
-    Long findUserIdByQnaCommentId(Long qnaCommentId);
+    Long selectUserIdByQnaCommentId(Long qnaCommentId);
+    QnaReplyResponse selectIsDeleteTrueAndFalseById(Long qnaReplyId);
+
 
 
 }

@@ -22,46 +22,58 @@
         UPDATE qna
         SET is_delete = true
         WHERE qna_id = #{qnaId}
+          AND is_delete = false;
     </update>
 
     <insert id="save" parameterType="QnaSaveRequest" useGeneratedKeys="true" keyColumn="qna_id" keyProperty="qnaSaveRequest.qnaId">
         INSERT INTO qna (created_at ,modified_at, is_delete , qna_status, contents,  title, view_count, user_id)
-        VALUES (now(), now(), 0, #{defaultStatus.text}, #{qnaSaveRequest.contents},  #{qnaSaveRequest.title}, 0, #{userId})
+        VALUES (now(), now(), false, #{qnaStatus.text}, #{qnaSaveRequest.contents},  #{qnaSaveRequest.title}, 0, #{userId})
     </insert>
 
     <select id="selectAfterSave" resultType="QnaSaveResponse">
         SELECT qna_id, created_at
         FROM qna
-        WHERE qna_id = #{qndId}
-        ORDER BY created_at DESC
-        LIMIT  1;
+        WHERE qna_id = #{qnaId}
     </select>
+
+<!--    <select id="selectById" parameterType="long" resultType="QnaResponse">-->
+<!--        SELECT-->
+<!--            q.*,-->
+<!--            qc.*,-->
+<!--            qr.*,-->
+<!--            (-->
+<!--                SELECT COUNT(qr.qna_reply_id)-->
+<!--                FROM qna_reply qr-->
+<!--                WHERE qr.qna_comment_id = qc.qna_comment_id-->
+<!--                  AND qr.is_delete = false-->
+<!--            ) AS qnaReplyCount-->
+<!--        FROM qna q-->
+<!--                 LEFT JOIN qna_comment qc-->
+<!--                        ON q.qna_id = qc.qna_id-->
+<!--                 LEFT JOIN qna_reply qr-->
+<!--                        ON qc.qna_comment_id = qr.qna_comment_id-->
+<!--        WHERE q.qna_id = #{qnaId}-->
+<!--          AND q.is_delete = false;-->
+<!--    </select>-->
 
     <select id="selectById" parameterType="long" resultType="QnaResponse">
-        SELECT
-            q.*,
-            qc.*,
-            qr.*,
-            (
-                SELECT COUNT(qr.qna_reply_id)
-                FROM qna_reply qr
-                WHERE qr.qna_comment_id = qc.qna_comment_id
-                  AND qr.is_delete = false
-            ) AS qnaReplyCount
-        FROM qna q
-                 LEFT JOIN qna_comment qc ON q.qna_id = qc.qna_id
-                 LEFT JOIN qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
-        WHERE q.qna_id = #{qnaId}
-          AND q.is_delete = false;
+        select * from qna
+        where qna_id = #{qnaId}
+          and is_delete = false;
     </select>
-
-
 
     <select id="findQnaById" parameterType="Long" resultType="QnaResponse" >
         select user_id
           from qna
-         where qna_id = #{qndId}
+         where qna_id = #{qnaId}
            and is_delete = false
+    </select>
+
+    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaResponse" >
+        select *
+        from qna
+        where qna_id = #{qnaId}
+          and is_delete = false
     </select>
 
     <update id="viewCount" parameterType="long">
@@ -77,14 +89,13 @@
           , modified_at = now()
         WHERE qna_id = #{qnaId}
           AND user_id = #{userId}
+          AND is_delete = false;
     </update>
 
     <select id="selectAfterEdit" resultType="QnaEditResponse">
         SELECT  modified_at
         FROM qna
         WHERE qna_id = #{qnaId}
-        ORDER BY modified_at DESC
-        LIMIT 1;
     </select>
 
     <select id="pageFindById" resultType="QnaListResponse">
