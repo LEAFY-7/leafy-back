@@ -6,18 +6,17 @@
 
     <update id="deleteByQnaReplyId" parameterType="Long">
         UPDATE qna_reply
-           SET is_delete = true
-         WHERE qna_reply_id = #{qnaReplyId}
-           AND user_id = #{userId}
-           AND qna_comment_id =${qnaCommentId}
-           AND is_delete = false;
+        SET is_delete = true
+        WHERE qna_reply_id = #{qnaReplyId}
+          AND user_id = #{userId}
+          AND qna_comment_id =${qnaCommentId}
     </update>
 
     <insert id="saveQnaReply" parameterType="QnaReplySaveRequest" useGeneratedKeys="true" keyColumn="qna_reply_id" keyProperty="qnaReplySaveRequest.qnaReplyId">
         INSERT INTO qna_reply
             ( created_at, modified_at, is_delete, comment, user_id, qna_comment_id)
         VALUES
-            (now(), now(), false, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId})
+            (now(), now(),  0, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId})
     </insert>
 
     <select id="selectAfterQnaReplySave" parameterType="Long" resultType="QnaReplySaveResponse">
@@ -26,30 +25,29 @@
         WHERE qna_reply_id = #{qnaReplyId}
     </select>
 
-    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaReplyResponse" >
-        SELECT *
-        FROM qna_reply
-        WHERE qna_reply_id = #{qnaReplyId}
-          AND is_delete = false;
-    </select>
-
     <update id="editQnaReply" >
         UPDATE qna_reply
-           SET  modified_at = now()
-               ,comment = #{qnaReplyEditReqeust.comment}
-         WHERE qna_reply_id = #{qnaReplyId}
-           AND user_id = #{userId}
-           AND qna_comment_id = #{qnaCommentId}
-           AND is_delete = false;
+        SET  modified_at = now()
+          ,comment = #{qnaReplyEditRequest.comment}
+        WHERE qna_reply_id = #{qnaReplyId}
+          AND user_id = #{userId}
+          AND qna_comment_id =#{qnaCommentId}
     </update>
+
+    <select id="selectUserIdByQnaCommentId" parameterType="Long" resultType="Long">
+        SELECT user_id
+        FROM qna_comment
+        WHERE qna_comment_id = #{qnaCommentId}
+    </select>
 
     <select id="selectAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
         SELECT  modified_at
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
+
     </select>
 
-    <select id="selectUserIdByQnaCommentId" parameterType="Long" resultType="Long">
+    <select id="findUserIdByQnaCommentId" parameterType="Long" resultType="Long">
         SELECT user_id
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
@@ -65,5 +63,19 @@
         ) AND qr.is_delete = false;
     </select>
 
+    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaReplyResponse" >
+        SELECT *
+        FROM qna_reply
+        WHERE qna_reply_id = #{qnaReplyId}
+          AND is_delete = false
+    </select>
+
+    <select id="findUserId" resultType="long">
+        SELECT *
+        FROM user
+        WHERE is_delete = false
+          AND is_comment_notifications = true
+          AND user_id = #{userId}
+    </select>
 
 </mapper>

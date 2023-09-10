@@ -29,6 +29,7 @@ public class QnaCommentController {
             @ApiResponse(responseCode = "204", description = "댓글 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "403", description = "권한이 없음"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 댓글 입니다."),
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
     @Operation(summary = "댓글 수정하기")
@@ -36,14 +37,14 @@ public class QnaCommentController {
     @PutMapping("/{qnaCommentId}")
     public ResponseEntity<QnaCommentEditResponse> modify(@PathVariable("qnaId")  Long qnaId,
                                                          @PathVariable("qnaCommentId")  Long qnaCommentId,
-                                                          @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
-                                                          @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
+                                                         @AuthenticationPrincipal @Parameter(hidden = true)AuthUser user,
+                                                         @RequestBody QnaCommentEditRequest qnaCommentEditRequest ) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(qnacommentService.modify(qnaCommentEditRequest, qnaCommentId, user, qnaId));
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "댓글 삭제 성공"),
+            @ApiResponse(responseCode = "204", description = "댓글 쓰기 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
             @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
@@ -61,7 +62,7 @@ public class QnaCommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "댓글 삭제 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 Qna"),
             @ApiResponse(responseCode = "500", description = "댓글 삭제 실패")
     })
     @Operation(summary = "댓글 삭제")

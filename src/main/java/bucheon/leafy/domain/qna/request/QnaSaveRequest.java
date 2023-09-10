@@ -1,11 +1,9 @@
 package bucheon.leafy.domain.qna.request;
-
-import bucheon.leafy.domain.qna.QnaStatus;
+import bucheon.leafy.domain.qna.QnaType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static bucheon.leafy.domain.qna.QnaType.DONE;
 import static bucheon.leafy.domain.qna.QnaType.HOLD;
 
 @Data
@@ -16,7 +14,7 @@ public class QnaSaveRequest {
     private Long qnaId;
 
     @JsonIgnore
-    private String qnaStatus = HOLD.getText();
+    private QnaType qnaStatus = HOLD;
 
     private String contents;     // 게시물 내용
     private String title;        // 제목
