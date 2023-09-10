@@ -27,26 +27,10 @@ public class QnaReplyController {
     private final QnaReplyService qnareplyService;
 
 
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "204", description = "Qna 게시판 글 읽기 성공"),
-//            @ApiResponse(responseCode = "404", description = "로그인 필요"),
-//            @ApiResponse(responseCode = "500", description = "Qna 게시판 글 읽기 실패")
-//    })
-//    @Operation(summary = "QnaReply 게시판 클릭 글 읽기")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @GetMapping("/{qnaReplyId}")
-//    public ResponseEntity<QnaReplyResponse> read(@PathVariable("qnaCommentId")  Long qnaCommentId,
-//                                                 @PathVariable("qnaReplyId")  Long qnaReplyId,
-//                                                 @AuthenticationPrincipal @Parameter(hidden = true) AuthUser user
-//                                                 ) {
-//
-//        return ResponseEntity.ok().body(qnareplyService.getRead(qnaReplyId, user, qnaCommentId));
-//    }
-
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 대댓글 입니다."),
             @ApiResponse(responseCode = "500", description = "대댓글 수정 실패")
     })
     @Operation(summary = "대댓글 수정")
@@ -79,7 +63,7 @@ public class QnaReplyController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "대댓글 삭제 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "404", description = "유효하지 않은 회원 ID"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 Qna"),
             @ApiResponse(responseCode = "500", description = "대댓글 삭제 실패")
     })
     @Operation(summary = "대댓글 삭제")

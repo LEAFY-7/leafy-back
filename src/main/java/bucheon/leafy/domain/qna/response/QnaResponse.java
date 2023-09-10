@@ -3,6 +3,7 @@ package bucheon.leafy.domain.qna.response;
 import bucheon.leafy.domain.qna.reply.response.QnaReplyResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;

@@ -1,5 +1,6 @@
 package bucheon.leafy.application.mapper;
 
+import bucheon.leafy.domain.qna.QnaType;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentEditRequest;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentSaveRequest;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentEditResponse;
@@ -18,11 +19,12 @@ public interface QnaCommentMapper {
     int deleteByQnaCommentId(@Param("userId")Long userId, @Param("qnaId")Long qnaId, @Param("qnaCommentId") Long qnaCommentId) ;
     int saveQnaComment(@Param("qnaCommentSaveRequest")QnaCommentSaveRequest qnaCommentSaveRequest, @Param("userId") Long userId, @Param("qnaId")Long qnaId);
     QnaCommentSaveResponse selectAfterQnaCommentSave(Long qnaCommentId);    //저장 조회하기
-    int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId,@Param("userId")Long userId,@Param("qnaId")Long qnaId) ;
+    int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId, @Param("userId")Long userId, @Param("qnaId")Long qnaId) ;
     QnaCommentEditResponse selectAfterQnaCommentEdit(Long qnaCommentId);    //수정 조회오기
-    int editByIdQnaStatus(@Param("qnaId")Long qnaId, @Param("qnaStatus")QnaStatus qnaStatus);//상태 변경
+    int editByIdQnaStatus(@Param("qnaId")Long qnaId, @Param("qnaStatus")QnaType qnaStatus);//상태 변경
     List<QnaCommentResponse> selectByQnaId(Long qnaId);
     Long findUserIdByQnaId(Long qnaCommentId);
-    QnaCommentResponse selectIsDeleteTrueAndFalseById(Long qnaCommentId);
+    QnaCommentResponse selectIsDeleteTrueAndFalseById(@Param("qnaCommentId")Long qnaCommentId, @Param("userId")Long userId);
+    Long findUserId(Long userId);
 
 }

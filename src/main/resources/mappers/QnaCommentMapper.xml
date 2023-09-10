@@ -6,25 +6,26 @@
 
     <update id="deleteByQnaCommentId" parameterType="long" >
         UPDATE  qna_comment
-           SET is_delete = true
-         WHERE qna_comment_id = #{qnaCommentId}
-           AND user_id = #{userId}
-           AND qna_id = #{qnaId}
-           AND is_delete = false;
+        SET is_delete = true
+        WHERE qna_comment_id = #{qnaCommentId}
+          AND user_id = #{userId}
+          AND qna_id = #{qnaId}
+          AND is_delete = false;
     </update>
 
     <insert id="saveQnaComment" parameterType="QnaCommentSaveRequest" useGeneratedKeys="true" keyColumn="qna_comment_id" keyProperty="qnaCommentSaveRequest.qnaCommentId">
         INSERT INTO qna_comment
             (created_at, modified_at, is_delete, comment, user_id, qna_id)
-        value
+            value
             (now(), now(), false, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId})
     </insert>
 
     <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaCommentResponse" >
         SELECT *
-          FROM qna_comment
-         WHERE qna_comment_id = #{qnaCommentId}
-           AND is_delete = false;
+        FROM qna_comment
+        WHERE qna_comment_id = #{qnaCommentId}
+          AND is_delete = false
+          AND user_id = #{userId};
     </select>
 
     <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
@@ -51,7 +52,7 @@
 
     <update id="editByIdQnaStatus" parameterType="QnaCommentStatusChangeRequest">
         UPDATE qna
-        SET   qna_status = #{qnaStatus.text}
+        SET   qna_status = #{qnaStatus}
         WHERE  qna_id = #{qnaId}
     </update>
 
@@ -66,5 +67,13 @@
         FROM qna_comment qc
         WHERE qc.qna_id = #{qnaId}
           AND qc.is_delete = false;
+    </select>
+
+    <select id="findUserId" resultType="long">
+        SELECT *
+        FROM user
+        WHERE is_delete = false
+          AND is_comment_notifications = true
+          AND user_id = #{userId}
     </select>
 </mapper>
