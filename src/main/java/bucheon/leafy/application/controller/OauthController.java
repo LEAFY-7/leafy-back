@@ -33,30 +33,31 @@ public class OauthController {
     private final PasswordEncoder passwordEncoder;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String clientId;
+    private final String clientId;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirectUri;
+    private final String redirectUri;
 
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
-    private String tokenUri;
+    private final String tokenUri;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private String clientSecret;
+    private final String clientSecret;
 
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
-    private String userInfoUri;
+    private final String userInfoUri;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
-    private String googleClientId;
+    private final String googleClientId;
 
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
-    private String googleRedirectUri;
+    private final String googleRedirectUri;
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-    private String googleClientSecret;
+    private final String googleClientSecret;
 
-    private static final String PASSWORD = "oauth login password";
+    @Value("${spring.security.oauth2.client.password}")
+    private final String PASSWORD;
 
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "OAuth2 로그인 성공"),
