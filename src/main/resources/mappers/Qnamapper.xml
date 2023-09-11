@@ -36,7 +36,7 @@
         WHERE qna_id = #{qnaId}
     </select>
 
-    <select id="selectQnaCommentIdAndQnaReplyIdByQnaId" parameterType="long" resultType="QnaResponse">
+    <select id="selectQnaCommentIdAndQnaReplyIdByQnaId" parameterType="long" resultType="QnaAlamResponse">
         SELECT
             qc.qna_comment_id,
             qr.qna_reply_id

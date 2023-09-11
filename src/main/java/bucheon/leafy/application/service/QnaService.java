@@ -10,7 +10,6 @@ import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.qna.QnaType;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.Qna;
-import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
 import bucheon.leafy.domain.qna.response.*;
@@ -41,38 +40,45 @@ public class QnaService {
     public void remove(Long qnaId, AuthUser user) {
         Long userId = user.getUserId();
         QnaResponse result = qnaMapper.findQnaById(qnaId);
-        if(result == null){ throw new QnaNotFoundException(); }
+        if (result == null) {
+            throw new QnaNotFoundException();
+        }
 
 
-        if(result.getUserId() != user.getUserId()){ throw new QnaNotFoundException(); }
+        if (result.getUserId() != user.getUserId()) {
+            throw new QnaNotFoundException();
+        }
 
-        if(qnaMapper.deleteById(qnaId) != 1){
+        if (qnaMapper.deleteById(qnaId) != 1) {
             throw new RemoveFailedException();
         }
 
     }
 
-    public QnaSaveResponse write( QnaSaveRequest qnaSaveRequest, AuthUser user) {
+    public QnaSaveResponse write(QnaSaveRequest qnaSaveRequest, AuthUser user) {
         Long userId = user.getUserId();
         QnaType qnaStatus = HOLD;
 
-        if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) { throw new WriteFailedException(); }
+        if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) {
+            throw new WriteFailedException();
+        }
 
         QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
 
         return qnaSaveResponse;
     }
-    public PageResponse getList(AuthUser user,PageRequest pageRequest){
+
+    public PageResponse getList(AuthUser user, PageRequest pageRequest) {
         Long userId = user.getUserId();
 
-        List<PageResponse> list ;
-        long total ;
+        List<PageResponse> list;
+        long total;
 
         if (user == null || user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_MEMBER"))) {
-            list = qnaMapper.pageFindById(userId ,pageRequest);
+            list = qnaMapper.pageFindById(userId, pageRequest);
             total = qnaMapper.count(userId);
 
-        }else{
+        } else {
             list = qnaMapper.adminSelectAll(pageRequest);
             total = qnaMapper.adminCount();
 
@@ -81,20 +87,25 @@ public class QnaService {
         return PageResponse.of(pageRequest, list, total);
     }
 
-
     public QnaResponse getRead(Long qnaId, AuthUser user) {
+        Long userId = user.getUserId();
+        // 유저가 인증되어 있고, 알림을 처리해야 할 경우
+        if (userId != null) {
+            List<QnaAlamResponse> resultIds = qnaMapper.selectQnaCommentIdAndQnaReplyIdByQnaId(qnaId);
 
-        if (user != null) {
-
-            QnaAlamResponse resultId = qnaMapper.selectQnaCommentIdAndQnaReplyIdByQnaId(qnaId);
-
-            alarmService.readAlarm(user.getUserId(), AlarmType.QNA_REPLY, resultId.getQnaReplyId());
-            alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, resultId.getQnaCommentId());
+            if (resultIds != null) {
+                for (QnaAlamResponse response : resultIds) {
+                    if (response != null) {
+                        alarmService.createAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaCommentIds());
+                        alarmService.createAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaReplyIds());
+                    }
+                }
+            }
         }
 
         QnaResponse qnaResponse = qnaMapper.selectById(qnaId);
 
-        if (qnaResponse == null || qnaResponse.equals(0)) {
+        if (qnaResponse == null) {
             throw new ReadFailedException();
         }
 
@@ -103,12 +114,31 @@ public class QnaService {
         List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
         List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
 
-
         qnaResponse.setComments(comments);
         qnaResponse.setReplies(replies);
 
         return qnaResponse;
     }
+
+
+    private void createAlarms(Long qnaId, AuthUser user) {
+        Long userId = user.getUserId();
+
+        // 유저가 인증되어 있고, 알림을 처리해야 할 경우
+        if (userId != null) {
+            List<QnaAlamResponse> resultIds = qnaMapper.selectQnaCommentIdAndQnaReplyIdByQnaId(qnaId);
+
+            if (resultIds != null) {
+                for (QnaAlamResponse response : resultIds) {
+                    if (response != null) {
+                        alarmService.createAlarm(userId, AlarmType.QNA_COMMENT, response.getQnaCommentIds());
+                        alarmService.createAlarm(userId, AlarmType.QNA_COMMENT, response.getQnaReplyIds());
+                    }
+                }
+            }
+        }
+    }
+
 
     public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user) {
         Long userId = user.getUserId();

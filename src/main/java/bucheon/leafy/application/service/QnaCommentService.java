@@ -15,7 +15,6 @@ import bucheon.leafy.domain.qna.comment.response.QnaCommentResponse;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentSaveResponse;
 
 
-import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.domain.qna.response.QnaResponse;
 import bucheon.leafy.exception.*;
 import lombok.RequiredArgsConstructor;

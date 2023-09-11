@@ -31,7 +31,6 @@ public class QnaController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시글 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "500", description = "유저의 알림 삭제 실패")
     })
     @Operation(summary = "Qna 게시물 수정")
@@ -45,7 +44,6 @@ public class QnaController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Qna 게시판 글 쓰기 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "500", description = "Qna 게시파 글 쓰기 실패")
     })
     @Operation(summary = "Qna 게시판 글 쓰기")
