@@ -353,6 +353,18 @@ public class ControllerAdvisor {
         return ResponseEntity.status(statusCode).body(response);
     }
 
+    @ExceptionHandler(QnaReplyNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> QnaReplyNotFoundException(QnaReplyNotFoundException e) {
+        int statusCode = e.getStatusCode();
+
+        ExceptionResponse response = ExceptionResponse.builder()
+                .code(String.valueOf(statusCode))
+                .message(e.getMessage())
+                .validation(e.getValidation())
+                .build();
+
+        return ResponseEntity.status(statusCode).body(response);
+    }
     @ExceptionHandler(ModifyFailedException.class)
     public ResponseEntity<ExceptionResponse> modifyFailedException(ModifyFailedException e) {
         int statusCode = e.getStatusCode();

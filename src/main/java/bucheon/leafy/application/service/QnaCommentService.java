@@ -7,6 +7,7 @@ import bucheon.leafy.application.mapper.QnaMapper;
 import bucheon.leafy.config.AuthUser;
 import bucheon.leafy.domain.alarm.AlarmType;
 
+import bucheon.leafy.domain.qna.QnaType;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentEditRequest;
 import bucheon.leafy.domain.qna.comment.request.QnaCommentSaveRequest;
 import bucheon.leafy.domain.qna.comment.response.QnaCommentEditResponse;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static bucheon.leafy.domain.qna.QnaType.DONE;
 
 
 @Service
@@ -41,9 +43,9 @@ public class QnaCommentService {
 
     public QnaCommentSaveResponse write(QnaCommentSaveRequest qnaCommentSaveRequest, AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
-        QnaStatus qnaStatus = QnaStatus.DONE;
+        QnaType qnaStatus = DONE;
 
-        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
+        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
         if (result == null) { throw new QnaNotFoundException(); }
         if (qnacommentMapper.saveQnaComment(qnaCommentSaveRequest, userId, qnaId) != 1) {
             throw new WriteFailedException();
@@ -51,7 +53,8 @@ public class QnaCommentService {
 
         // 알림 발송
         Long userIdByQnaId = qnacommentMapper.findUserIdByQnaId(qnaId);
-        alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaId);
+        if(qnacommentMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaId); }
+
 
         // 기본 상태로 업데이트된 Qna 정보 조회
         QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.selectAfterQnaCommentSave(qnaCommentSaveRequest.getQnaCommentId());
@@ -64,13 +67,11 @@ public class QnaCommentService {
         return qnaSaveResponse;
     }
 
-
-
     public QnaCommentEditResponse modify(QnaCommentEditRequest qnaCommentEditRequest , Long qnaCommentId,  AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnacommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId);
-        if (result == null) { throw new QnaNotFoundException(); }
+        QnaCommentResponse result = qnacommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId, userId);
+        if (result == null) { throw new QnaCommentNotFoundException(); }
 
         if(qnacommentMapper.editByQnaCommentId(qnaCommentEditRequest, qnaCommentId, userId, qnaId) != 1){
             throw new ModifyFailedException();

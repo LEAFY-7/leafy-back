@@ -11,10 +11,7 @@ import bucheon.leafy.domain.qna.reply.request.QnaReplySaveRequest;
 import bucheon.leafy.domain.qna.reply.response.QnaReplyEditResponse;
 import bucheon.leafy.domain.qna.reply.response.QnaReplyResponse;
 import bucheon.leafy.domain.qna.reply.response.QnaReplySaveResponse;
-import bucheon.leafy.exception.ModifyFailedException;
-import bucheon.leafy.exception.QnaCommentNotFoundException;
-import bucheon.leafy.exception.QnaNotFoundException;
-import bucheon.leafy.exception.WriteFailedException;
+import bucheon.leafy.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,44 +21,41 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QnaReplyService {
 
-    private final QnaReplyMapper qnareplyMapper;
+    private final QnaReplyMapper qnaReplyMapper;
     private final AlarmService alarmService;
     private final QnaCommentMapper qnaCommentMapper;
     public void remove(Long qnaReplyId,AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        qnareplyMapper.deleteByQnaReplyId(qnaReplyId, userId, qnaCommentId); }
+        qnaReplyMapper.deleteByQnaReplyId(qnaReplyId, userId, qnaCommentId); }
     public QnaReplySaveResponse write( QnaReplySaveRequest qnaReplySaveRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnaCommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId) ;
+        QnaCommentResponse result = qnaCommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId, userId) ;
         if ( result == null ) { throw new QnaCommentNotFoundException(); }
-        if (qnareplyMapper.saveQnaReply(qnaReplySaveRequest, userId, qnaCommentId) != 1) {
+        if (qnaReplyMapper.saveQnaReply(qnaReplySaveRequest, userId, qnaCommentId) != 1) {
             throw new WriteFailedException();
         }
 
         // 알림 발송
-        Long userIdByQnaId = qnareplyMapper.selectUserIdByQnaCommentId(qnaCommentId);
-        alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaCommentId);
+        Long userIdByQnaId = qnaReplyMapper.selectUserIdByQnaCommentId(qnaCommentId);
 
-        QnaReplySaveResponse qnaReplyResponse = qnareplyMapper.selectAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
+        if(qnaReplyMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaCommentId); }
+
+        QnaReplySaveResponse qnaReplyResponse = qnaReplyMapper.selectAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
 
         return qnaReplyResponse;
 
     }
-//    public QnaReplyResponse getRead(Long qnaReplyId, AuthUser user,Long qnaCommentId){
-//       Long userId = user.getAuthorities();
-//
-//        return qnareplyMapper.findByQnaCommentId(qnaReplyId, userId, qnaCommentId);}
     public QnaReplyEditResponse modify(Long qnaReplyId, QnaReplyEditRequest qnaReplyEditRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        QnaReplyResponse result = qnareplyMapper.selectIsDeleteTrueAndFalseById(qnaReplyId);
-        if (result == null || result.equals(0)) { throw new QnaNotFoundException(); }
-        if(qnareplyMapper.editQnaReply(qnaReplyId, qnaReplyEditRequest, userId, qnaCommentId) != 1){
+        QnaReplyResponse result = qnaReplyMapper.selectIsDeleteTrueAndFalseById(qnaReplyId);
+        if (result == null || result.equals(0)) { throw new QnaReplyNotFoundException(); }
+        if(qnaReplyMapper.editQnaReply(qnaReplyId, qnaReplyEditRequest, userId, qnaCommentId) != 1){
             throw new ModifyFailedException();
         }
-        QnaReplyEditResponse editResult = qnareplyMapper.selectAfterQnaReplyEdit(qnaReplyId);
+        QnaReplyEditResponse editResult = qnaReplyMapper.selectAfterQnaReplyEdit(qnaReplyId);
 
         return editResult;
     }
