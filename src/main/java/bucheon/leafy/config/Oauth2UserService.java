@@ -3,12 +3,12 @@ package bucheon.leafy.config;
 import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.domain.user.LoginType;
 import bucheon.leafy.domain.user.User;
+import bucheon.leafy.domain.user.request.OauthRequest;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.OAuth2InfoNotExistException;
 import bucheon.leafy.exception.UserNotFoundException;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
-import bucheon.leafy.domain.user.request.OauthRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
 
-    public TokenResponse oauthLogin(OauthRequest oauthRequest) throws OAuth2AuthenticationException {
+    public TokenResponse oauthLogin(OauthRequest oauthRequest) {
         if (oauthRequest.getProviderId() == null || oauthRequest.getName() == null) {
             throw new OAuth2InfoNotExistException();
         }
