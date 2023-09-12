@@ -34,7 +34,7 @@ public class UserImageService {
 
         String image;
 
-        if(user.getUserImage() == null){
+        if(user.getUserImage() == null) {
             image = createUserImage(user, file);
         } else {
             image = editUserImage(user, file);
@@ -80,8 +80,8 @@ public class UserImageService {
         userImage.update(renamedFile);
         userImageRepository.save(userImage);
 
-        imageComponent.deleteImage(USER_IMAGE_PATH, deleteImage);
         imageComponent.uploadImage(USER_IMAGE_PATH, file, renamedFile);
+        imageComponent.deleteImage(USER_IMAGE_PATH, deleteImage);
         return renamedFile;
     }
 
@@ -95,8 +95,8 @@ public class UserImageService {
 
         userBackgroundImageRepository.save(userBackgroundImage);
 
-        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, deleteImage);
         imageComponent.uploadImage(USER_BACKGROUND_IMAGE_PATH, file, renamedFile);
+        imageComponent.deleteImage(USER_BACKGROUND_IMAGE_PATH, deleteImage);
     }
 
     public void deleteUserImage(Long userId) {
