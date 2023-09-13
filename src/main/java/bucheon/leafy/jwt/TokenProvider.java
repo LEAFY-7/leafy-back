@@ -93,10 +93,10 @@ public class TokenProvider implements InitializingBean {
             User user = userRepository.findByEmail(claims.getSubject())
                     .orElseThrow(UserNotFoundException::new);
 
-            authUser = new AuthUser(user);
+            authUser = AuthUser.of(user);
 
         } else {
-            authUser = new AuthUser( optionalUser.get() );
+            authUser = AuthUser.of( optionalUser.get() );
         }
 
         return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
