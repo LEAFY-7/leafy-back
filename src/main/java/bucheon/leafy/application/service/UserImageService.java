@@ -6,14 +6,11 @@ import bucheon.leafy.application.repository.UserImageRepository;
 import bucheon.leafy.domain.user.User;
 import bucheon.leafy.domain.user.UserBackgroundImage;
 import bucheon.leafy.domain.user.UserImage;
-import bucheon.leafy.exception.ExistException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import static bucheon.leafy.exception.enums.ExceptionKey.USER_BACKGROUND_IMAGE;
-import static bucheon.leafy.exception.enums.ExceptionKey.USER_IMAGE;
 import static bucheon.leafy.path.S3Path.*;
 
 @Service
@@ -46,7 +43,7 @@ public class UserImageService {
     public void createOrUpdateUserBackgroundImage(Long userId, MultipartFile file) {
         User user = userService.getUserById(userId);
 
-        if(user.getUserBackgroundImage() == null){
+        if(user.getUserBackgroundImage() == null) {
             createUserBackgroundImage(user, file);
         } else {
             editUserBackgroundImage(user, file);

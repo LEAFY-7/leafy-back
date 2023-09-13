@@ -19,15 +19,17 @@ public class AuthUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> oauthUser = userRepository.findByProviderId(username);
-        if (oauthUser.isPresent()){
-            return new AuthUser(oauthUser.get());
+        User user;
+
+        if (username.contains("@")){
+            user = userRepository.findByEmail(username)
+                    .orElseThrow(UserNotFoundException::new);
+        } else {
+            user = userRepository.findByProviderId(username)
+                    .orElseThrow(UserNotFoundException::new);
         }
 
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(UserNotFoundException::new);
-
-        return new AuthUser(user);
+        return AuthUser.of(user);
     }
 
 }

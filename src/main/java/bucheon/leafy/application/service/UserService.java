@@ -13,10 +13,12 @@ import bucheon.leafy.domain.user.response.GetMeResponse;
 import bucheon.leafy.exception.ExistException;
 import bucheon.leafy.exception.PasswordNotMatchedException;
 import bucheon.leafy.exception.UserNotFoundException;
+import bucheon.leafy.jwt.JwtFilter;
 import bucheon.leafy.jwt.TokenProvider;
 import bucheon.leafy.jwt.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -41,7 +43,6 @@ public class UserService {
 
 
     public TokenResponse signIn(SignInRequest signInRequest) {
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword());
 
@@ -56,6 +57,10 @@ public class UserService {
         String role = authority.replace("ROLE_", "");
         String jwt = tokenProvider.createToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
         return TokenResponse.of(jwt, role, authUser.getUserId());
     }
 
