@@ -39,6 +39,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByProviderId(String username);
 
-    @Query("select count(f) from User u left join u.feeds f")
+    @Query("select count(f) from User u left join u.feeds f where u.id = :userId")
     Long countFeedById(Long userId);
 }

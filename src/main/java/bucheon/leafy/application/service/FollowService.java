@@ -35,7 +35,7 @@ public class FollowService {
 
         Page<Follow> followers = followRepository.findAllByFollowing(user, pageable);
 
-        List<User> followUsers = getFollowerInfo( followers.getContent() );
+        List<User> followUsers = getFollowersInfo( followers.getContent() );
 
         List<FollowersResponse> followersResponses = followUsers.stream()
                 .map(FollowersResponse::of)
@@ -74,7 +74,7 @@ public class FollowService {
             Follow follow = Follow.of(user, followTarget);
             followRepository.save(follow);
 
-            if (user.getIsAllNotifications()){
+            if (user.getIsAllNotifications()) {
                 Alarm alarm = Alarm.of(followTarget, NEW_FOLLOW, follow.getId());
                 alarmRepository.save(alarm);
             }
@@ -109,8 +109,7 @@ public class FollowService {
 
 
     // fetch 조인을 하기 위해서 id를 추출 ( N+1 문제 때문에 )
-
-    private List<User> getFollowerInfo(List<Follow> followers) {
+    private List<User> getFollowersInfo(List<Follow> followers) {
         List<Long> ids = followers.stream()
                 .map(f -> f.getFollower().getId())
                 .collect(Collectors.toList());

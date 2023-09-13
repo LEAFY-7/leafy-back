@@ -10,23 +10,28 @@
                flc.like_count
 
         FROM feed f
-
         INNER JOIN (
 
-                SELECT f.feed_id, f.content, f.user_id,
-                ROW_NUMBER() OVER(PARTITION BY f.user_id ORDER BY f.created_at DESC) AS row_num
-                FROM feed f
-                JOIN feed_like_count flc ON f.feed_id = flc.feed_id
-                WHERE f.is_delete = false
-                AND
-                f.user_id IN (
-                        SELECT f.following_user_id
-                        FROM user u
-                        JOIN follow f ON u.user_id = #{userId}
-                        AND u.user_id = f.follower_user_id
-                )
+            SELECT f.feed_id,
+            ROW_NUMBER() OVER(PARTITION BY f.user_id ORDER BY f.created_at DESC) AS row_num
+            FROM feed f
+            WHERE f.is_delete = false
+            AND f.feed_type = 'PUBLIC'
+            AND
+            f.user_id IN (
 
-            ) AS following_users_feeds
+                SELECT f.following_user_id
+                FROM user u
+                JOIN follow f
+                ON u.user_id = #{userId} AND u.user_id = f.follower_user_id
+
+            )
+            ORDER BY f.created_at DESC
+            LIMIT 10
+
+        )
+
+        AS following_users_feeds
         ON following_users_feeds.feed_id = f.feed_id
 
         INNER JOIN user u
@@ -37,12 +42,6 @@
 
         LEFT JOIN user_image uimg
         ON u.user_id = uimg.user_id
-
-        WHERE f.is_delete = false
-        and f.feed_type = 'PUBLIC'
-
-        ORDER BY f.created_at DESC
-        LIMIT 10
     </select>
 
     <select id="findFeedsNotInFollowersFeeds" resultType="FeedResponse">
@@ -177,7 +176,7 @@
                            #{request.content}, false, #{request.feedType}, now(), now())
     </insert>
 
-    <update id="editFeed"  parameterType="FeedRequest">
+    <update id="editFeed" parameterType="FeedRequest">
         update feed set title = #{request.title}, species = #{request.species}, nickname = #{request.nickname}, temperature = #{request.temperature},
                         humidity = #{request.humidity}, water_amount = #{request.waterAmount}, watering_period = #{request.wateringPeriod},
                         content = #{request.content}, feed_type = #{request.feedType}, modified_at = now() where feed_id = #{feedId} and user_id = #{userId}

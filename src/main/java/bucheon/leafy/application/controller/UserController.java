@@ -50,7 +50,6 @@ public class UserController {
         SignInRequest signInRequest = SignInRequest.of(signUpRequest);
 
         TokenResponse tokenResponse = userService.signIn(signInRequest);
-        insertTokenInHeader(tokenResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
 
@@ -64,7 +63,6 @@ public class UserController {
     @PostMapping("/sign-in")
     public ResponseEntity<TokenResponse> authorize(@Valid @RequestBody SignInRequest signInRequest) {
         TokenResponse tokenResponse = userService.signIn(signInRequest);
-        insertTokenInHeader(tokenResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(tokenResponse);
     }
 
@@ -212,11 +210,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void editRole(@PathVariable Long userId, @RequestParam UserRole userRole) {
         userService.editRole(userId, userRole);
-    }
-
-    private void insertTokenInHeader(TokenResponse tokenResponse) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenResponse.getToken());
     }
 
 }
