@@ -17,8 +17,12 @@ public class AuthUser implements UserDetails, OAuth2User {
     private final User user;
     private Map<String, Object> attributes;
 
-    public AuthUser(User user) {
+    private AuthUser(User user) {
         this.user = user;
+    }
+
+    public static AuthUser of(User user) {
+        return new AuthUser(user);
     }
 
     public AuthUser(User user, Map<String, Object> attributes) {

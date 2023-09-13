@@ -29,7 +29,7 @@ public class AuthUserDetailService implements UserDetailsService {
                     .orElseThrow(UserNotFoundException::new);
         }
 
-        return new AuthUser(user);
+        return AuthUser.of(user);
     }
 
 }
