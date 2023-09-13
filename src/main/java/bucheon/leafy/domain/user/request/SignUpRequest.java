@@ -55,7 +55,7 @@ public class SignUpRequest {
                 this.phone = phone;
         }
 
-        public static String generateRandomNickname() {
+        public String generateRandomNickname() {
                 String randomNickname;
                 do {
                         randomNickname = UUID.randomUUID().toString()
@@ -64,10 +64,10 @@ public class SignUpRequest {
                 return randomNickname;
         }
 
-        private static final java.util.regex.Pattern NICKNAME_PATTERN
+        private final java.util.regex.Pattern NICKNAME_PATTERN
                 = java.util.regex.Pattern.compile("^(?!admin|leafy)(?!.*\\s{2,})(?!.*\\s$)(?=.*[a-zA-Z0-9가-힣])[a-zA-Z0-9_가-힣\\s]{3,12}$");
 
-        private static boolean isValidNickname(String nickname) {
+        private boolean isValidNickname(String nickname) {
                 Matcher matcher = NICKNAME_PATTERN.matcher(nickname);
                 return matcher.matches();
         }
