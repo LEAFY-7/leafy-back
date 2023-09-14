@@ -152,13 +152,12 @@ public class User extends BaseDeleteEntity {
         this.userBackgroundImage = null;
     }
 
+    public void giveRole(UserRole userRole){
+        this.userRole = userRole;
+    }
 
     public void updateIsHide(){
         this.isHide = !this.isHide;
-    }
-
-    public void giveRole(UserRole userRole){
-        this.userRole = userRole;
     }
 
     public void updateIsAllNotifications(){
