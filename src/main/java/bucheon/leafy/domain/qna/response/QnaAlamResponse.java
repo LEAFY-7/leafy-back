@@ -10,11 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 public class QnaAlamResponse {
 
-    private Long qnaCommentIds;
-    private Long qnaReplyIds;
+    private Long qnaComment;
+    private Long qnaReply;
 
-    public QnaAlamResponse(Long qnaCommentIds, Long qnaReplyIds) {
-        this.qnaCommentIds = qnaCommentIds;
-        this.qnaReplyIds = qnaReplyIds;
+    public QnaAlamResponse(Long qnaComment, Long qnaReply) {
+        this.qnaComment = qnaComment;
+        this.qnaReply = qnaReply;
     }
 }

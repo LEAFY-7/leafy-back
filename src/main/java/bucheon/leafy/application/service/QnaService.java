@@ -18,6 +18,7 @@ import bucheon.leafy.exception.*;
 import bucheon.leafy.util.request.PageRequest;
 import bucheon.leafy.util.response.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,9 +63,7 @@ public class QnaService {
         if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) {
             throw new WriteFailedException();
         }
-
         QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
-
         return qnaSaveResponse;
     }
 
@@ -89,56 +88,64 @@ public class QnaService {
 
     public QnaResponse getRead(Long qnaId, AuthUser user) {
         Long userId = user.getUserId();
-        // 유저가 인증되어 있고, 알림을 처리해야 할 경우
-        if (userId != null) {
-            List<QnaAlamResponse> resultIds = qnaMapper.selectQnaCommentIdAndQnaReplyIdByQnaId(qnaId);
 
-            if (resultIds != null) {
-                for (QnaAlamResponse response : resultIds) {
-                    if (response != null) {
-                        alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaCommentIds());
-                        alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaReplyIds());
-                    }
+        if (userId != null) {
+            List<Long> qnaComments = qnaCommentMapper.selectQnaCommentIdByQnaId(qnaId);
+            if (qnaComments != null) {
+                for (Long qnaComment : qnaComments) {
+                    alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, qnaComment);
                 }
             }
+
+            List<Long> qnaReplies = qnaReplyMapper.selectQnaReplyIdByQnaId(qnaId);
+            if (qnaReplies != null) {
+                for (Long qnaReply : qnaReplies) {
+                    alarmService.readAlarm(user.getUserId(), AlarmType.QNA_REPLY, qnaReply);
+                }
+            }
+
+            QnaResponse qnaResponse = qnaMapper.selectById(qnaId);
+
+            if (qnaResponse == null) {
+                throw new ReadFailedException();
+            }
+
+            qnaMapper.viewCount(qnaId);
+
+            List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
+            List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
+
+            qnaResponse.setComments(comments);
+            qnaResponse.setReplies(replies);
+
+            return qnaResponse;
         }
 
-        QnaResponse qnaResponse = qnaMapper.selectById(qnaId);
-
-        if (qnaResponse == null) {
-            throw new ReadFailedException();
-        }
-
-        qnaMapper.viewCount(qnaId);
-
-        List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
-        List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
-
-        qnaResponse.setComments(comments);
-        qnaResponse.setReplies(replies);
-
-        return qnaResponse;
-    }
-
-    public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user) {
-        Long userId = user.getUserId();
-
-        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
-        if (result == null) { throw new QnaNotFoundException(); }
-
-        if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
-            throw new WriteFailedException();
-        }
-        QnaEditResponse qnaEditResponse = qnaMapper.selectAfterEdit(qnaId);
-        return qnaEditResponse;
-    }
-
-    public List<MyPageQnaResponse> getQnasByUserId(Long userId) {
-        List<Qna> qnas = qnaRepository.findTop10ByUserIdOrderByCreatedAtDesc(userId);
-        return qnas.stream()
-                .map(MyPageQnaResponse::of)
-                .collect(Collectors.toList());
+        // 유저가 인증되지 않은 경우 403 오류를 던집니다.
+        throw new ReadFailedException();
     }
 
 
-}
+
+        public QnaEditResponse modify (Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user){
+            Long userId = user.getUserId();
+
+            QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
+            if (result == null) {
+                throw new QnaNotFoundException();
+            }
+
+            if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
+                throw new WriteFailedException();
+            }
+            QnaEditResponse qnaEditResponse = qnaMapper.selectAfterEdit(qnaId);
+            return qnaEditResponse;
+        }
+
+        public List<MyPageQnaResponse> getQnasByUserId (Long userId){
+            List<Qna> qnas = qnaRepository.findTop10ByUserIdOrderByCreatedAtDesc(userId);
+            return qnas.stream()
+                    .map(MyPageQnaResponse::of)
+                    .collect(Collectors.toList());
+        }
+    }

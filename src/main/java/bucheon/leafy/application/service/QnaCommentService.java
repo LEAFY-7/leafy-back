@@ -46,6 +46,7 @@ public class QnaCommentService {
 
         QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
         if (result == null) { throw new QnaNotFoundException(); }
+
         if (qnacommentMapper.saveQnaComment(qnaCommentSaveRequest, userId, qnaId) != 1) {
             throw new WriteFailedException();
         }

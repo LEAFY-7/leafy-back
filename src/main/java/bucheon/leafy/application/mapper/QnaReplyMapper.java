@@ -27,7 +27,7 @@ public interface QnaReplyMapper {
     Long selectUserIdByQnaCommentId(Long qnaCommentId);
 
     QnaReplyResponse selectIsDeleteTrueAndFalseById(Long qnaReplyId);
-
     Long findUserId(Long userId);
+    List<Long>selectQnaReplyIdByQnaId(Long qnaId);
 
 }

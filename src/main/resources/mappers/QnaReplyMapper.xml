@@ -78,4 +78,12 @@
           AND user_id = #{userId}
     </select>
 
+    <select id="selectQnaReplyIdByQnaId" parameterType="long" resultType="QnaAlamResponse">
+        SELECT qna_reply_id
+        FROM qna_reply
+                 LEFT JOIN qna_comment qc ON qna_reply.qna_comment_id = qc.qna_comment_id
+        WHERE qc.qna_id = #{qnaId}
+
+    </select>
+
 </mapper>

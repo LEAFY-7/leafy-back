@@ -30,5 +30,5 @@ public interface QnaMapper {
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
     int viewCount(Long qnaId);
     QnaResponse selectIsDeleteTrueAndFalseById(@Param("qnaId")Long qnaId, @Param("userId")Long userId);
-    List<QnaAlamResponse> selectQnaCommentIdAndQnaReplyIdByQnaId(Long qnaId);
+
 }
