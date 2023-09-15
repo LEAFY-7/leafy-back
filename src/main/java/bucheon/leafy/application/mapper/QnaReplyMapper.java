@@ -13,7 +13,7 @@ import java.util.List;
 
 @Mapper
 public interface QnaReplyMapper {
-    void deleteByQnaReplyId(@Param("qnaReplyId") Long qnaReplyId, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
+    int deleteByQnaReplyId(@Param("qnaReplyId") Long qnaReplyId, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
 
     int saveQnaReply(@Param("qnaReplySaveRequest") QnaReplySaveRequest qnaReplySaveRequest, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
 
