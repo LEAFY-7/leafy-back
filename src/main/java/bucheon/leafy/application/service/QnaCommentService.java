@@ -52,7 +52,7 @@ public class QnaCommentService {
 
         // 알림 발송
         Long userIdByQnaId = qnacommentMapper.findUserIdByQnaId(qnaId);
-        if(qnacommentMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaId); }
+        if(qnacommentMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaCommentSaveRequest.getQnaCommentId()); }
 
 
         // 기본 상태로 업데이트된 Qna 정보 조회

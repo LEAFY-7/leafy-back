@@ -96,8 +96,8 @@ public class QnaService {
             if (resultIds != null) {
                 for (QnaAlamResponse response : resultIds) {
                     if (response != null) {
-                        alarmService.createAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaCommentIds());
-                        alarmService.createAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaReplyIds());
+                        alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaCommentIds());
+                        alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, response.getQnaReplyIds());
                     }
                 }
             }
@@ -119,26 +119,6 @@ public class QnaService {
 
         return qnaResponse;
     }
-
-
-    private void createAlarms(Long qnaId, AuthUser user) {
-        Long userId = user.getUserId();
-
-        // 유저가 인증되어 있고, 알림을 처리해야 할 경우
-        if (userId != null) {
-            List<QnaAlamResponse> resultIds = qnaMapper.selectQnaCommentIdAndQnaReplyIdByQnaId(qnaId);
-
-            if (resultIds != null) {
-                for (QnaAlamResponse response : resultIds) {
-                    if (response != null) {
-                        alarmService.createAlarm(userId, AlarmType.QNA_COMMENT, response.getQnaCommentIds());
-                        alarmService.createAlarm(userId, AlarmType.QNA_COMMENT, response.getQnaReplyIds());
-                    }
-                }
-            }
-        }
-    }
-
 
     public QnaEditResponse modify(Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user) {
         Long userId = user.getUserId();
