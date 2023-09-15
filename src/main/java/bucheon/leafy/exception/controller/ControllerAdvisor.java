@@ -27,17 +27,17 @@ public class ControllerAdvisor {
     private final SlackApi slackApi;
 
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> SlackErrorMessage(Exception e){
-        slackApi.sendErrorForSlack(e);
-
-        ExceptionResponse response = ExceptionResponse.builder()
-                .code(String.valueOf(500))
-                .message(e.getMessage())
-                .build();
-
-        return ResponseEntity.status(500).body(response);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ExceptionResponse> SlackErrorMessage(Exception e){
+//        slackApi.sendErrorForSlack(e);
+//
+//        ExceptionResponse response = ExceptionResponse.builder()
+//                .code(String.valueOf(500))
+//                .message(e.getMessage())
+//                .build();
+//
+//        return ResponseEntity.status(500).body(response);
+//    }
 
     @ExceptionHandler(OAuth2InfoNotExistException.class)
     public ResponseEntity<ExceptionResponse> oauth2InfoNotExistException(OAuth2InfoNotExistException e) {

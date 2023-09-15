@@ -90,16 +90,16 @@ public class QnaService {
         Long userId = user.getUserId();
 
         if (userId != null) {
-            List<Long> qnaComments = qnaCommentMapper.selectQnaCommentIdByQnaId(qnaId);
-            if (qnaComments != null) {
-                for (Long qnaComment : qnaComments) {
-                    alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, qnaComment);
+            List<Long> qnaCommentIds = qnaCommentMapper.selectQnaCommentIdByQnaId(qnaId);
+            if (qnaCommentIds != null) {
+                for (long qnaCommentId : qnaCommentIds) {
+                    alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, qnaCommentId);
                 }
             }
 
-            List<Long> qnaReplies = qnaReplyMapper.selectQnaReplyIdByQnaId(qnaId);
-            if (qnaReplies != null) {
-                for (Long qnaReply : qnaReplies) {
+            List<Long> qnaReplyIds = qnaReplyMapper.selectQnaReplyIdByQnaId(qnaId);
+            if (qnaReplyIds != null) {
+                for (Long qnaReply : qnaReplyIds) {
                     alarmService.readAlarm(user.getUserId(), AlarmType.QNA_REPLY, qnaReply);
                 }
             }
