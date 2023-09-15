@@ -26,5 +26,6 @@ public interface QnaCommentMapper {
     Long findUserIdByQnaId(Long qnaCommentId);
     QnaCommentResponse selectIsDeleteTrueAndFalseById(@Param("qnaCommentId")Long qnaCommentId, @Param("userId")Long userId);
     Long findUserId(Long userId);
+    List<Long>selectQnaCommentIdByQnaId(Long qnaId);
 
 }

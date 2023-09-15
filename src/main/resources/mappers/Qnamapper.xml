@@ -36,18 +36,6 @@
         WHERE qna_id = #{qnaId}
     </select>
 
-    <select id="selectQnaCommentIdAndQnaReplyIdByQnaId" parameterType="long" resultType="QnaAlamResponse">
-        SELECT
-            qc.qna_comment_id,
-            qr.qna_reply_id
-        FROM
-            qna_comment qc
-                LEFT JOIN
-            qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
-        WHERE
-            qc.qna_id = #{qnaId};
-    </select>
-
     <select id="selectById" parameterType="long" resultType="QnaResponse">
         select * from qna
         where qna_id = #{qnaId}
@@ -118,6 +106,15 @@
         </if>
         LIMIT #{pageRequest.limit}
         OFFSET #{pageRequest.offset}
+    </select>
+
+
+    <select id="findUserId" resultType="long">
+        SELECT *
+        FROM user
+        WHERE is_delete = false
+          AND is_comment_notifications = true
+          AND user_id = #{userId}
     </select>
 
 </mapper>

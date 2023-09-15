@@ -76,4 +76,14 @@
           AND is_comment_notifications = true
           AND user_id = #{userId}
     </select>
+
+    <select id="selectQnaCommentIdByQnaId" parameterType="long" resultType="Long">
+        SELECT qc.qna_comment_id
+        FROM qna_comment qc
+                 LEFT JOIN qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
+        WHERE qc.qna_id = #{qnaId}
+
+    </select>
+
+
 </mapper>
