@@ -29,6 +29,6 @@ public interface QnaMapper {
     List<PageResponse> adminSelectAll(@Param("pageRequest")PageRequest pageRequest);   //관리자리스트
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
     int viewCount(Long qnaId);
-    QnaResponse selectIsDeleteTrueAndFalseById(@Param("qnaId")Long qnaId, @Param("userId")Long userId);
+    QnaResponse selectIsDeleteTrueAndFalseById(@Param("qnaId")Long qnaId);
 
 }

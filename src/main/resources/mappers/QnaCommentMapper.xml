@@ -25,7 +25,6 @@
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
           AND is_delete = false
-          AND user_id = #{userId};
     </select>
 
     <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">

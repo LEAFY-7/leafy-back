@@ -130,7 +130,7 @@ public class QnaService {
         public QnaEditResponse modify (Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user){
             Long userId = user.getUserId();
 
-            QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
+            QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
             if (result == null) {
                 throw new QnaNotFoundException();
             }

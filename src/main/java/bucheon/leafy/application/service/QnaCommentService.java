@@ -44,7 +44,7 @@ public class QnaCommentService {
         Long userId = user.getUserId();
         QnaType qnaStatus = DONE;
 
-        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId, userId);
+        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
         if (result == null) { throw new QnaNotFoundException(); }
 
         if (qnacommentMapper.saveQnaComment(qnaCommentSaveRequest, userId, qnaId) != 1) {
@@ -70,7 +70,7 @@ public class QnaCommentService {
     public QnaCommentEditResponse modify(QnaCommentEditRequest qnaCommentEditRequest , Long qnaCommentId,  AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnacommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId, userId);
+        QnaCommentResponse result = qnacommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId);
         if (result == null) { throw new QnaCommentNotFoundException(); }
 
         if(qnacommentMapper.editByQnaCommentId(qnaCommentEditRequest, qnaCommentId, userId, qnaId) != 1){

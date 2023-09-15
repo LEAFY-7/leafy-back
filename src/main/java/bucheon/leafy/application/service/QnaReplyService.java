@@ -35,7 +35,7 @@ public class QnaReplyService {
     public QnaReplySaveResponse write( QnaReplySaveRequest qnaReplySaveRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnaCommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId, userId) ;
+        QnaCommentResponse result = qnaCommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId) ;
         if ( result == null ) { throw new QnaCommentNotFoundException(); }
         if (qnaReplyMapper.saveQnaReply(qnaReplySaveRequest, userId, qnaCommentId) != 1) {
             throw new WriteFailedException();
