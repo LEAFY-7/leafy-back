@@ -39,8 +39,6 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         }
 
         Optional<User> optionalUser = userRepository.findByProviderId(oauthRequest.getProviderId());
-        oauthRequest.setPassword(oauthRequest.getPassword());
-
         User user;
         if (optionalUser.isEmpty()) {
             User newUser = User.of(oauthRequest);

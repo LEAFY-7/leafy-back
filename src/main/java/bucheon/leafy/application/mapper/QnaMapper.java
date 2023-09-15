@@ -1,7 +1,6 @@
 package bucheon.leafy.application.mapper;
 
 
-import bucheon.leafy.domain.qna.QnaStatus;
 import bucheon.leafy.domain.qna.QnaType;
 import bucheon.leafy.domain.qna.request.QnaEditRequest;
 import bucheon.leafy.domain.qna.request.QnaSaveRequest;
@@ -31,5 +30,5 @@ public interface QnaMapper {
     List<PageResponse> pageFindById(@Param("userId")Long userId, @Param("pageRequest")PageRequest pageRequest);//리스트
     int viewCount(Long qnaId);
     QnaResponse selectIsDeleteTrueAndFalseById(@Param("qnaId")Long qnaId, @Param("userId")Long userId);
-    QnaAlamResponse selectQnaCommentIdAndQnaReplyIdByQnaId(Long qnaId);
+    List<QnaAlamResponse> selectQnaCommentIdAndQnaReplyIdByQnaId(Long qnaId);
 }
