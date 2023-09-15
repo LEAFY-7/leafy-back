@@ -35,18 +35,17 @@ public class QnaReplyService {
     public QnaReplySaveResponse write( QnaReplySaveRequest qnaReplySaveRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnaCommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId) ;
+        QnaCommentResponse result = qnaCommentMapper.findIsDeleteById(qnaCommentId) ;
         if ( result == null ) { throw new QnaCommentNotFoundException(); }
         if (qnaReplyMapper.saveQnaReply(qnaReplySaveRequest, userId, qnaCommentId) != 1) {
             throw new WriteFailedException();
         }
 
+
+        QnaReplySaveResponse qnaReplyResponse = qnaReplyMapper.findAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
         // 알림 발송
-        Long userIdByQnaId = qnaReplyMapper.selectUserIdByQnaCommentId(qnaCommentId);
-
-        if(qnaReplyMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaCommentId); }
-
-        QnaReplySaveResponse qnaReplyResponse = qnaReplyMapper.selectAfterQnaReplySave(qnaReplySaveRequest.getQnaReplyId());
+        Long userIdByQnaId = qnaReplyMapper.findUserIdByQnaCommentId(qnaCommentId);
+        if(qnaReplyMapper.findUserId(userIdByQnaId) != null){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_REPLY, qnaReplyResponse.getQnaReplyId()); }
 
         return qnaReplyResponse;
 
@@ -54,12 +53,12 @@ public class QnaReplyService {
     public QnaReplyEditResponse modify(Long qnaReplyId, QnaReplyEditRequest qnaReplyEditRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
-        QnaReplyResponse result = qnaReplyMapper.selectIsDeleteTrueAndFalseById(qnaReplyId);
+        QnaReplyResponse result = qnaReplyMapper.findIsDeleteById(qnaReplyId);
         if (result == null) { throw new QnaReplyNotFoundException(); }
         if(qnaReplyMapper.editQnaReply(qnaReplyId, qnaReplyEditRequest, userId, qnaCommentId) != 1){
             throw new ModifyFailedException();
         }
-        QnaReplyEditResponse editResult = qnaReplyMapper.selectAfterQnaReplyEdit(qnaReplyId);
+        QnaReplyEditResponse editResult = qnaReplyMapper.findAfterQnaReplyEdit(qnaReplyId);
 
         return editResult;
     }

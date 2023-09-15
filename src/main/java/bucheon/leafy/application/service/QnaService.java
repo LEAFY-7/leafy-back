@@ -63,7 +63,7 @@ public class QnaService {
         if (qnaMapper.save(userId, qnaStatus, qnaSaveRequest) != 1) {
             throw new WriteFailedException();
         }
-        QnaSaveResponse qnaSaveResponse = qnaMapper.selectAfterSave(qnaSaveRequest.getQnaId());
+        QnaSaveResponse qnaSaveResponse = qnaMapper.findAfterSave(qnaSaveRequest.getQnaId());
         return qnaSaveResponse;
     }
 
@@ -90,21 +90,21 @@ public class QnaService {
         Long userId = user.getUserId();
 
         if (userId != null) {
-            List<Long> qnaCommentIds = qnaCommentMapper.selectQnaCommentIdByQnaId(qnaId);
+            List<Long> qnaCommentIds = qnaCommentMapper.findQnaCommentIdByQnaId(qnaId);
             if (qnaCommentIds != null) {
                 for (long qnaCommentId : qnaCommentIds) {
                     alarmService.readAlarm(user.getUserId(), AlarmType.QNA_COMMENT, qnaCommentId);
                 }
             }
 
-            List<Long> qnaReplyIds = qnaReplyMapper.selectQnaReplyIdByQnaId(qnaId);
+            List<Long> qnaReplyIds = qnaReplyMapper.findQnaReplyIdByQnaId(qnaId);
             if (qnaReplyIds != null) {
                 for (Long qnaReply : qnaReplyIds) {
                     alarmService.readAlarm(user.getUserId(), AlarmType.QNA_REPLY, qnaReply);
                 }
             }
 
-            QnaResponse qnaResponse = qnaMapper.selectById(qnaId);
+            QnaResponse qnaResponse = qnaMapper.findIsDeleteById(qnaId);
 
             if (qnaResponse == null) {
                 throw new ReadFailedException();
@@ -112,8 +112,8 @@ public class QnaService {
 
             qnaMapper.viewCount(qnaId);
 
-            List<QnaCommentResponse> comments = qnaCommentMapper.selectByQnaId(qnaResponse.getQnaId());
-            List<QnaReplyResponse> replies = qnaReplyMapper.selectByQnaId(qnaResponse.getQnaId());
+            List<QnaCommentResponse> comments = qnaCommentMapper.findByQnaId(qnaResponse.getQnaId());
+            List<QnaReplyResponse> replies = qnaReplyMapper.findByQnaId(qnaResponse.getQnaId());
 
             qnaResponse.setComments(comments);
             qnaResponse.setReplies(replies);
@@ -130,7 +130,7 @@ public class QnaService {
         public QnaEditResponse modify (Long qnaId, QnaEditRequest qnaEditRequest, AuthUser user){
             Long userId = user.getUserId();
 
-            QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
+            QnaResponse result = qnaMapper.findIsDeleteById(qnaId);
             if (result == null) {
                 throw new QnaNotFoundException();
             }
@@ -138,7 +138,7 @@ public class QnaService {
             if (qnaMapper.editById(qnaId, qnaEditRequest, userId) != 1) {
                 throw new WriteFailedException();
             }
-            QnaEditResponse qnaEditResponse = qnaMapper.selectAfterEdit(qnaId);
+            QnaEditResponse qnaEditResponse = qnaMapper.findAfterEdit(qnaId);
             return qnaEditResponse;
         }
 

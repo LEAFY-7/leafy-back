@@ -18,14 +18,14 @@ public interface QnaCommentMapper {
 
     int deleteByQnaCommentId(@Param("userId")Long userId, @Param("qnaId")Long qnaId, @Param("qnaCommentId") Long qnaCommentId) ;
     int saveQnaComment(@Param("qnaCommentSaveRequest")QnaCommentSaveRequest qnaCommentSaveRequest, @Param("userId") Long userId, @Param("qnaId")Long qnaId);
-    QnaCommentSaveResponse selectAfterQnaCommentSave(Long qnaCommentId);    //저장 조회하기
+    QnaCommentSaveResponse findAfterQnaCommentSave(Long qnaCommentId);    //저장 조회하기
     int editByQnaCommentId(@Param("qnaCommentEditRequest") QnaCommentEditRequest qnaCommentEditRequest, @Param("qnaCommentId")Long qnaCommentId, @Param("userId")Long userId, @Param("qnaId")Long qnaId) ;
-    QnaCommentEditResponse selectAfterQnaCommentEdit(Long qnaCommentId);    //수정 조회오기
+    QnaCommentEditResponse findAfterQnaCommentEdit(Long qnaCommentId);    //수정 조회오기
     int editByIdQnaStatus(@Param("qnaId")Long qnaId, @Param("qnaStatus")QnaType qnaStatus);//상태 변경
-    List<QnaCommentResponse> selectByQnaId(Long qnaId);
+    List<QnaCommentResponse> findByQnaId(Long qnaId);
     Long findUserIdByQnaId(Long qnaCommentId);
-    QnaCommentResponse selectIsDeleteTrueAndFalseById(@Param("qnaCommentId")Long qnaCommentId);
+    QnaCommentResponse findIsDeleteById(@Param("qnaCommentId")Long qnaCommentId);
     Long findUserId(Long userId);
-    List<Long>selectQnaCommentIdByQnaId(Long qnaId);
+    List<Long>findQnaCommentIdByQnaId(Long qnaId);
 
 }

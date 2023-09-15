@@ -44,21 +44,21 @@ public class QnaCommentService {
         Long userId = user.getUserId();
         QnaType qnaStatus = DONE;
 
-        QnaResponse result = qnaMapper.selectIsDeleteTrueAndFalseById(qnaId);
+        QnaResponse result = qnaMapper.findIsDeleteById(qnaId);
         if (result == null) { throw new QnaNotFoundException(); }
 
         if (qnacommentMapper.saveQnaComment(qnaCommentSaveRequest, userId, qnaId) != 1) {
             throw new WriteFailedException();
         }
 
-        // 알림 발송
-        Long userIdByQnaId = qnacommentMapper.findUserIdByQnaId(qnaId);
-        if(qnacommentMapper.findUserId(userId) != 0){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaCommentSaveRequest.getQnaCommentId()); }
+
 
 
         // 기본 상태로 업데이트된 Qna 정보 조회
-        QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.selectAfterQnaCommentSave(qnaCommentSaveRequest.getQnaCommentId());
-
+        QnaCommentSaveResponse qnaSaveResponse = qnacommentMapper.findAfterQnaCommentSave(qnaCommentSaveRequest.getQnaCommentId());
+        // 알림 발송
+        Long userIdByQnaId = qnacommentMapper.findUserIdByQnaId(qnaId);
+        if(qnacommentMapper.findUserId(userIdByQnaId) != null){ alarmService.createAlarm(userIdByQnaId , AlarmType.QNA_COMMENT, qnaSaveResponse.getQnaCommentId()); }
         // 사용자가 관리자 권한을 가지고 있거나, 로그인한 경우
         if (user != null && user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
             qnacommentMapper.editByIdQnaStatus(qnaId, qnaStatus); // 상태 업데이트
@@ -70,14 +70,14 @@ public class QnaCommentService {
     public QnaCommentEditResponse modify(QnaCommentEditRequest qnaCommentEditRequest , Long qnaCommentId,  AuthUser user, Long qnaId) {
         Long userId = user.getUserId();
 
-        QnaCommentResponse result = qnacommentMapper.selectIsDeleteTrueAndFalseById(qnaCommentId);
+        QnaCommentResponse result = qnacommentMapper.findIsDeleteById(qnaCommentId);
         if (result == null) { throw new QnaCommentNotFoundException(); }
 
         if(qnacommentMapper.editByQnaCommentId(qnaCommentEditRequest, qnaCommentId, userId, qnaId) != 1){
             throw new ModifyFailedException();
         }
 
-        QnaCommentEditResponse editResult = qnacommentMapper.selectAfterQnaCommentEdit(qnaCommentId);
+        QnaCommentEditResponse editResult = qnacommentMapper.findAfterQnaCommentEdit(qnaCommentId);
 
         return editResult;
     }
