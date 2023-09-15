@@ -341,7 +341,7 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(QnaCommentNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> QnaCommentNotFoundException(QnaNotFoundException e) {
+    public ResponseEntity<ExceptionResponse> QnaCommentNotFoundException(QnaCommentNotFoundException e) {
         int statusCode = e.getStatusCode();
 
         ExceptionResponse response = ExceptionResponse.builder()

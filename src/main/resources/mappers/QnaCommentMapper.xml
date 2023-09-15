@@ -20,15 +20,14 @@
             (now(), now(), false, #{qnaCommentSaveRequest.comment}, #{userId}, #{qnaId})
     </insert>
 
-    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaCommentResponse" >
+    <select id="findIsDeleteById" parameterType="Long" resultType="QnaCommentResponse" >
         SELECT *
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
           AND is_delete = false
-          AND user_id = #{userId};
     </select>
 
-    <select id="selectAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
+    <select id="findAfterQnaCommentSave" resultType="QnaCommentSaveResponse">
         SELECT qna_comment_id, created_at, qna_id
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
@@ -44,7 +43,7 @@
           AND is_delete = false;
     </update>
 
-    <select id="selectAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
+    <select id="findAfterQnaCommentEdit" resultType="QnaCommentEditResponse">
         SELECT  modified_at
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
@@ -62,7 +61,7 @@
         WHERE qna_id = #{qnaId}
     </select>
 
-    <select id="selectByQnaId" parameterType="Long" resultType="QnaCommentResponse">
+    <select id="findByQnaId" parameterType="Long" resultType="QnaCommentResponse">
         SELECT qc.*
         FROM qna_comment qc
         WHERE qc.qna_id = #{qnaId}
@@ -77,13 +76,11 @@
           AND user_id = #{userId}
     </select>
 
-    <select id="selectQnaCommentIdByQnaId" parameterType="long" resultType="Long">
+    <select id="findQnaCommentIdByQnaId" parameterType="long" resultType="Long">
         SELECT qc.qna_comment_id
         FROM qna_comment qc
                  LEFT JOIN qna_reply qr ON qc.qna_comment_id = qr.qna_comment_id
         WHERE qc.qna_id = #{qnaId}
 
     </select>
-
-
 </mapper>

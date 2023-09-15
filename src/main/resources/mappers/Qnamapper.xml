@@ -30,13 +30,13 @@
         VALUES (now(), now(), false, #{qnaStatus}, #{qnaSaveRequest.contents},  #{qnaSaveRequest.title}, 0, #{userId})
     </insert>
 
-    <select id="selectAfterSave" resultType="QnaSaveResponse">
+    <select id="findAfterSave" resultType="QnaSaveResponse">
         SELECT qna_id, created_at
         FROM qna
         WHERE qna_id = #{qnaId}
     </select>
 
-    <select id="selectById" parameterType="long" resultType="QnaResponse">
+    <select id="findById" parameterType="long" resultType="QnaResponse">
         select * from qna
         where qna_id = #{qnaId}
           and is_delete = false;
@@ -49,12 +49,11 @@
           and is_delete = false
     </select>
 
-    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaResponse" >
+    <select id="findIsDeleteById" parameterType="Long" resultType="QnaResponse" >
         select *
         from qna
         where qna_id = #{qnaId}
           and is_delete = false
-          and user_id = #{userId}
     </select>
 
     <update id="viewCount" parameterType="long">
@@ -73,7 +72,7 @@
           AND is_delete = false;
     </update>
 
-    <select id="selectAfterEdit" resultType="QnaEditResponse">
+    <select id="findAfterEdit" resultType="QnaEditResponse">
         SELECT  modified_at
         FROM qna
         WHERE qna_id = #{qnaId}
@@ -108,7 +107,6 @@
         OFFSET #{pageRequest.offset}
     </select>
 
-
     <select id="findUserId" resultType="long">
         SELECT *
         FROM user
@@ -116,5 +114,4 @@
           AND is_comment_notifications = true
           AND user_id = #{userId}
     </select>
-
 </mapper>

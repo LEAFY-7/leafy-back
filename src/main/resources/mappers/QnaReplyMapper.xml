@@ -19,7 +19,7 @@
             (now(), now(),  0, #{qnaReplySaveRequest.comment}, #{userId}, #{qnaCommentId})
     </insert>
 
-    <select id="selectAfterQnaReplySave" parameterType="Long" resultType="QnaReplySaveResponse">
+    <select id="findAfterQnaReplySave" parameterType="Long" resultType="QnaReplySaveResponse">
         SELECT qna_reply_id, created_at
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
@@ -34,26 +34,20 @@
           AND qna_comment_id =#{qnaCommentId}
     </update>
 
-    <select id="selectUserIdByQnaCommentId" parameterType="Long" resultType="Long">
-        SELECT user_id
-        FROM qna_comment
-        WHERE qna_comment_id = #{qnaCommentId}
-    </select>
-
-    <select id="selectAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
-        SELECT  modified_at
-        FROM qna_reply
-        WHERE qna_reply_id = #{qnaReplyId}
-
-    </select>
-
     <select id="findUserIdByQnaCommentId" parameterType="Long" resultType="Long">
         SELECT user_id
         FROM qna_comment
         WHERE qna_comment_id = #{qnaCommentId}
     </select>
 
-    <select id="selectByQnaId" parameterType="Long" resultType="QnaReplyResponse">
+    <select id="findAfterQnaReplyEdit" resultType="QnaReplyEditResponse">
+        SELECT  modified_at
+        FROM qna_reply
+        WHERE qna_reply_id = #{qnaReplyId}
+
+    </select>
+
+    <select id="findByQnaId" parameterType="Long" resultType="QnaReplyResponse">
         SELECT qr.*
         FROM qna_reply qr
         WHERE qr.qna_comment_id IN (
@@ -63,7 +57,7 @@
         ) AND qr.is_delete = false;
     </select>
 
-    <select id="selectIsDeleteTrueAndFalseById" parameterType="Long" resultType="QnaReplyResponse" >
+    <select id="findIsDeleteById" parameterType="Long" resultType="QnaReplyResponse" >
         SELECT *
         FROM qna_reply
         WHERE qna_reply_id = #{qnaReplyId}
@@ -78,7 +72,7 @@
           AND user_id = #{userId}
     </select>
 
-    <select id="selectQnaReplyIdByQnaId" parameterType="long" resultType="QnaAlamResponse">
+    <select id="findQnaReplyIdByQnaId" parameterType="long" resultType="Long">
         SELECT qna_reply_id
         FROM qna_reply
                  LEFT JOIN qna_comment qc ON qna_reply.qna_comment_id = qc.qna_comment_id

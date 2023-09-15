@@ -17,17 +17,15 @@ public interface QnaReplyMapper {
 
     int saveQnaReply(@Param("qnaReplySaveRequest") QnaReplySaveRequest qnaReplySaveRequest, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
 
-    QnaReplySaveResponse selectAfterQnaReplySave(Long qnaReplyId);
+    QnaReplySaveResponse findAfterQnaReplySave(Long qnaReplyId);
 
     int editQnaReply(@Param("qnaReplyId") Long qnaReplyId, @Param("qnaReplyEditRequest") QnaReplyEditRequest qnaReplyEditRequest, @Param("userId") Long userId, @Param("qnaCommentId") Long qnaCommentId);
 
-    QnaReplyEditResponse selectAfterQnaReplyEdit(Long qnaReplyId);    //수정 조회오기
-    List<QnaReplyResponse> selectByQnaId(Long qnaId);
-
-    Long selectUserIdByQnaCommentId(Long qnaCommentId);
-
-    QnaReplyResponse selectIsDeleteTrueAndFalseById(Long qnaReplyId);
+    QnaReplyEditResponse findAfterQnaReplyEdit(Long qnaReplyId);    //수정 조회오기
+    List<QnaReplyResponse> findByQnaId(Long qnaId);
+    Long findUserIdByQnaCommentId(Long qnaCommentId);
+    QnaReplyResponse findIsDeleteById(Long qnaReplyId);
     Long findUserId(Long userId);
-    List<Long>selectQnaReplyIdByQnaId(Long qnaId);
+    List<Long>findQnaReplyIdByQnaId(Long qnaId);
 
 }
