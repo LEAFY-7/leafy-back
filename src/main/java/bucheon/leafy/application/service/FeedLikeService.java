@@ -37,7 +37,6 @@ public class FeedLikeService {
         saveLikeInfo(user, feed);
     }
 
-
     public Feed increaseLikeCount(Long feedId) {
         FeedLikeCount feedLikeCount = feedLikeRepository.findByFeedId(feedId)
                 .orElseThrow(FeedNotFoundException::new);
@@ -46,6 +45,10 @@ public class FeedLikeService {
         return feedLikeCount.getFeed();
     }
 
+    public void saveLikeInfo(User user, Feed feed) {
+        FeedLikeInfo userLike = FeedLikeInfo.of(user, feed);
+        feedLikeInfoRepository.save(userLike);
+    }
 
     public void deleteLike(Long userId, Long feedId) {
         User user = userRepository.findById(userId)
@@ -62,12 +65,6 @@ public class FeedLikeService {
 
         feedLikeCount.likeCancel();
         return feedLikeCount.getFeed();
-    }
-
-
-    public void saveLikeInfo(User user, Feed feed) {
-        FeedLikeInfo userLike = FeedLikeInfo.of(user, feed);
-        feedLikeInfoRepository.save(userLike);
     }
 
     public void deleteLikeInfo(User user, Feed feed) {

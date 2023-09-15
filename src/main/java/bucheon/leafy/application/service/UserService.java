@@ -69,7 +69,7 @@ public class UserService {
 
         int i = 0;
         while ( userRepository.existsByNickName( signUpRequest.getNickName() ) ) {
-            String newNickname = SignUpRequest.generateRandomNickname();
+            String newNickname = signUpRequest.generateRandomNickname();
             signUpRequest.setNickName(newNickname);
 
             if (i++ > 10) throw new ExistException(NICKNAME);
@@ -168,9 +168,7 @@ public class UserService {
 
 
     private void comparePasswords(String password, String confirmPassword) {
-        if ( !password.equals(confirmPassword) ){
-            throw new PasswordNotMatchedException();
-        }
+        if ( !password.equals(confirmPassword) ) throw new PasswordNotMatchedException();
     }
 
     public void deleteUser(Long userId) {

@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     private final UserRepository userRepository;
-    private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
     private final long tokenValidityInMilliseconds;
@@ -89,14 +88,12 @@ public class TokenProvider implements InitializingBean {
         Optional<User> optionalUser = userRepository.findByProviderId(claims.getSubject());
 
         if (optionalUser.isEmpty()) {
-
             User user = userRepository.findByEmail(claims.getSubject())
                     .orElseThrow(UserNotFoundException::new);
 
-            authUser = new AuthUser(user);
-
+            authUser = AuthUser.of(user);
         } else {
-            authUser = new AuthUser( optionalUser.get() );
+            authUser = AuthUser.of( optionalUser.get() );
         }
 
         return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
@@ -110,9 +107,9 @@ public class TokenProvider implements InitializingBean {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException | ExpiredJwtException e) {
             log.info("JWT 토큰이 만료되었습니다, detail: {}", e.toString());
         } catch (UnsupportedJwtException e) {
-            logger.info("지원되지 않는 JWT 토큰입니다.");
+            log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
-            logger.info("JWT 토큰이 잘못되었습니다.");
+            log.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
     }
