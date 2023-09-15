@@ -25,9 +25,13 @@ public class QnaReplyService {
     private final AlarmService alarmService;
     private final QnaCommentMapper qnaCommentMapper;
     public void remove(Long qnaReplyId,AuthUser user, Long qnaCommentId) {
+
         Long userId = user.getUserId();
 
-        qnaReplyMapper.deleteByQnaReplyId(qnaReplyId, userId, qnaCommentId); }
+        if(qnaReplyMapper.deleteByQnaReplyId(qnaReplyId, userId, qnaCommentId) !=1 ) {
+            throw new RemoveFailedException();
+        }
+    }
     public QnaReplySaveResponse write( QnaReplySaveRequest qnaReplySaveRequest, AuthUser user, Long qnaCommentId) {
         Long userId = user.getUserId();
 
@@ -51,7 +55,7 @@ public class QnaReplyService {
         Long userId = user.getUserId();
 
         QnaReplyResponse result = qnaReplyMapper.selectIsDeleteTrueAndFalseById(qnaReplyId);
-        if (result == null || result.equals(0)) { throw new QnaReplyNotFoundException(); }
+        if (result == null) { throw new QnaReplyNotFoundException(); }
         if(qnaReplyMapper.editQnaReply(qnaReplyId, qnaReplyEditRequest, userId, qnaCommentId) != 1){
             throw new ModifyFailedException();
         }

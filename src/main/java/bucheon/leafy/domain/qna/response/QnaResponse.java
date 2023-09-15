@@ -22,6 +22,7 @@ public class QnaResponse {
     private List<QnaCommentResponse> comments;
     private List<QnaReplyResponse> replies;
 
+
     public QnaResponse(Long qnaId, LocalDateTime createdAt, LocalDateTime modifiedAt, Boolean isDelete, String contents, String title, Long viewCount, Long userId, List<QnaCommentResponse> comments, List<QnaReplyResponse> replies) {
         this.qnaId = qnaId;
         this.createdAt = createdAt;

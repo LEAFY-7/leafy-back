@@ -28,7 +28,6 @@ public class QnaCommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "댓글 수정 성공"),
             @ApiResponse(responseCode = "401", description = "로그인 필요"),
-            @ApiResponse(responseCode = "403", description = "권한이 없음"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 댓글 입니다."),
             @ApiResponse(responseCode = "500", description = "댓글 수정 실패")
     })
