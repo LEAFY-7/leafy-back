@@ -67,7 +67,8 @@ public class UserController {
     }
 
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공")
+            @ApiResponse(responseCode = "204", description = "회원 탈퇴 성공"),
+            @ApiResponse(responseCode = "401", description = "로그인 필요"),
     })
     @Operation(summary = "회원 탈퇴")
     @DeleteMapping

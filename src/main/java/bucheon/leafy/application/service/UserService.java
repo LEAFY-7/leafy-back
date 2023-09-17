@@ -166,12 +166,12 @@ public class UserService {
         user.giveRole(userRole);
     }
 
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 
     private void comparePasswords(String password, String confirmPassword) {
         if ( !password.equals(confirmPassword) ) throw new PasswordNotMatchedException();
     }
 
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
-    }
 }
