@@ -1,31 +1,29 @@
 package bucheon.leafy.domain.qna.comment.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 public class QnaCommentResponse {
-
+    @JsonProperty(index = 1, value = "id")
     private Long qnaCommentId;
-    private LocalDateTime  createdAt;
-    private LocalDateTime modifiedAt;
-    private String comment;
     private Long userId;
     private Long qnaId;
+    private String comment;
+    private Date createdAt;
+    private Date modifiedAt;
 
-    public QnaCommentResponse(Long qnaCommentId, LocalDateTime  createdAt, LocalDateTime  modifiedAt, String comment, Long userId, Long qnaId) {
+
+    public QnaCommentResponse(Long qnaCommentId, Long qnaId, String comment, Long userId, Date createdAt, Date  modifiedAt) {
         this.qnaCommentId = qnaCommentId;
-        this.createdAt = createdAt;
-        this.modifiedAt =modifiedAt;
-        this.comment = comment;
         this.userId = userId;
         this.qnaId = qnaId;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.modifiedAt =modifiedAt;
     }
-
-
 }
