@@ -1,7 +1,7 @@
 package bucheon.leafy.application.service;
 
-import bucheon.leafy.application.event.LikeCancelEvent;
-import bucheon.leafy.application.event.LikeEvent;
+import bucheon.leafy.application.event.request.LikeCancelEvent;
+import bucheon.leafy.application.event.request.LikeEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

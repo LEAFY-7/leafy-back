@@ -1,5 +1,7 @@
 package bucheon.leafy.application.event;
 
+import bucheon.leafy.application.event.request.LikeCancelEvent;
+import bucheon.leafy.application.event.request.LikeEvent;
 import bucheon.leafy.application.repository.FeedLikeInfoRepository;
 import bucheon.leafy.application.repository.FeedLikeRepository;
 import bucheon.leafy.application.repository.FeedRepository;
