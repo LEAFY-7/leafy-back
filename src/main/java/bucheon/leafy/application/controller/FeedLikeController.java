@@ -36,7 +36,6 @@ public class FeedLikeController {
                      @PathVariable Long feedId) {
         Long userId = user.getUserId();
         feedLikeService.saveLike(userId, feedId);
-        alarmService.saveFeedLikeAlarm(feedId);
     }
 
     @ApiResponses({

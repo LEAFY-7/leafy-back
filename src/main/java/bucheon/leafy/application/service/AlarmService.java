@@ -1,18 +1,13 @@
 package bucheon.leafy.application.service;
 
 import bucheon.leafy.application.mapper.AlarmMapper;
-import bucheon.leafy.application.repository.AlarmRepository;
-import bucheon.leafy.application.repository.UserRepository;
 import bucheon.leafy.config.AuthUser;
-import bucheon.leafy.domain.alarm.Alarm;
 import bucheon.leafy.domain.alarm.AlarmType;
 import bucheon.leafy.domain.alarm.request.AlarmCheckRequest;
 import bucheon.leafy.domain.alarm.request.AlarmRequest;
 import bucheon.leafy.domain.alarm.response.AlarmResponse;
-import bucheon.leafy.domain.user.User;
 import bucheon.leafy.exception.AlarmDataAccessException;
 import bucheon.leafy.exception.AlarmNotExistException;
-import bucheon.leafy.exception.FeedNotFoundException;
 import bucheon.leafy.util.request.ScrollRequest;
 import bucheon.leafy.util.response.ScrollResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +24,7 @@ import java.util.Optional;
 public class AlarmService {
 
     private final AlarmMapper alarmMapper;
-    private final AlarmRepository alarmRepository;
-    private final UserRepository userRepository;
 
-
-    @Transactional
-    public void saveFeedLikeAlarm(Long feedId){
-        User user = userRepository.findByFeedsId(feedId)
-                .orElseThrow(FeedNotFoundException::new);
-
-        if (user.getIsAllNotifications()) {
-            Alarm alarm = Alarm.of(user, AlarmType.FEED_LIKE, feedId);
-            alarmRepository.save(alarm);
-        }
-    }
 
     @Async
     @Transactional
@@ -87,17 +69,6 @@ public class AlarmService {
         }
     }
 
-//    private ScrollRequest getNextKey(List<AlarmResponse> alarms, ScrollRequest scrollRequest){
-//        if(alarms.size() < ScrollRequest.size){
-//            return scrollRequest.next(ScrollRequest.NONE_KEY);
-//        } else {
-//            long nextKey = alarms.stream()
-//                    .reduce((first, second) -> second)
-//                    .map(AlarmResponse::getAlarmId)
-//                    .get();
-//            return scrollRequest.next(nextKey);
-//        }
-//    }
 
     private ScrollRequest getNextKey(LinkedList<AlarmResponse> alarms, ScrollRequest scrollRequest){
         if(alarms.size() < ScrollRequest.size){
