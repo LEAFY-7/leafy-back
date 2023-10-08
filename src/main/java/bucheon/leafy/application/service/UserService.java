@@ -68,21 +68,11 @@ public class UserService {
         comparePasswords( signUpRequest.getPassword(), signUpRequest.getConfirmPassword() );
 
         int i = 0;
-        while ( userRepository.existsByNickName( signUpRequest.getNickName() ) ) {
-            String newNickname = signUpRequest.generateRandomNickname();
-            signUpRequest.setNickName(newNickname);
-
+        String nickName = signUpRequest.getNickName();
+        while ( userRepository.existsByNickName(nickName) ) {
+            nickName = signUpRequest.generateRandomNickname();
             if (i++ > 10) throw new ExistException(NICKNAME);
         }
-
-//        while (true) {
-//            try {
-//                duplicationNickNameCheck( signUpRequest.getNickName() );
-//                break;
-//            } catch (ExistException e) {
-//                signUpRequest.setNickName( SignUpRequest.generateRandomNickname() );
-//            }
-//        }
 
         duplicationEmailCheck(signUpRequest.getEmail());
         duplicationPhoneCheck(signUpRequest.getPhone());
