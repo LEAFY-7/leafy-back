@@ -49,7 +49,7 @@ class FeedLikeInfoRepositoryTest extends IntegrationTestSupport {
         feedLikeInfoRepository.save(feedLikeInfo);
 
         //when
-        FeedLikeInfo findFeedLikeInfo = feedLikeInfoRepository.findByUserAndFeed(user, feed)
+        FeedLikeInfo findFeedLikeInfo = feedLikeInfoRepository.findByUserIdAndFeedId(user.getId(), feed.getId())
                 .orElseThrow(FeedLikeInfoNotFoundException::new);
 
         //then

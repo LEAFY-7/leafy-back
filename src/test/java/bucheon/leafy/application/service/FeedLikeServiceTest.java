@@ -49,83 +49,6 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("게시글에 좋아요를 눌렀을 때 좋아요가 1 증가한다.")
-    void testIncreaseLikeCount(){
-        //given
-        User user = createUser("email@email.com", "별명1");
-        userRepository.save(user);
-
-        Feed feed = createFeed(0L);
-        feedRepository.save(feed);
-
-        //when
-        Feed result = feedLikeService.increaseLikeCount(feed.getId());
-
-        //then
-        assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("게시글에 좋아요를 눌렀을 때 좋아요가 1 감소한다.")
-    void testDecreaseLikeCount(){
-        //given
-        User user = createUser("email@email.com", "별명1");
-        userRepository.save(user);
-
-        Feed feed = createFeed(1L);
-        feedRepository.save(feed);
-
-        //when
-        Feed result = feedLikeService.decreaseLikeCount(feed.getId());
-
-        //then
-        assertThat(result.getFeedLikeCount().getLikeCount()).isEqualTo(0);
-    }
-
-    @Test
-    @DisplayName("좋아요를 눌렀을 때 좋아요 정보 테이블에 사용자와 게시글의 정보가 입력된다.")
-    void testSaveLikeInfo(){
-        //given
-        User user = createUser("email@email.com", "별명1");
-        userRepository.save(user);
-
-        Feed feed = createFeed(0L);
-        feedRepository.save(feed);
-
-        //when
-        feedLikeService.saveLikeInfo(user, feed);
-        List<FeedLikeInfo> result = feedLikeInfoRepository.findAll();
-
-        //then
-        assertThat(result).hasSize(1)
-                .extracting("user.id", "feed.id")
-                .containsExactlyInAnyOrder(
-                        Tuple.tuple(user.getId(), feed.getId())
-                );
-    }
-
-    @Test
-    @DisplayName("좋아요 취소를 눌렀을 때 좋아요 정보 테이블에 사용자와 게시글의 정보가 삭제된다.")
-    void testDeleteLikeInfo(){
-        //given
-        User user = createUser("email@email.com", "별명1");
-        userRepository.save(user);
-
-        Feed feed = createFeed(1L);
-        feedRepository.save(feed);
-
-        FeedLikeInfo feedLikeInfo = FeedLikeInfo.of(user, feed);
-        feedLikeInfoRepository.save(feedLikeInfo);
-
-        //when
-        feedLikeService.deleteLikeInfo(user, feed);
-        List<FeedLikeInfo> result = feedLikeInfoRepository.findAll();
-
-        //then
-        assertThat(result).hasSize(0);
-    }
-
-    @Test
     @DisplayName("좋아요를 눌렀을 때 게시글의 좋아요가 1 증가되고 좋아요 정보 테이블에 사용자와 게시글의 정보가 입력된다.")
     void testSaveLike(){
         //given
@@ -200,6 +123,4 @@ class FeedLikeServiceTest extends IntegrationTestSupport {
                 .userRole(UserRole.MEMBER)
                 .build();
     }
-
-
 }
