@@ -83,14 +83,7 @@ public class FollowService {
     }
 
     public void unfollow(Long userId, Long targetUserId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-
-        User followTarget = userRepository.findById(targetUserId)
-                .orElseThrow(UserNotFoundException::new);
-
-        followRepository.findByFollowerAndFollowing(user, followTarget)
-                .ifPresent(f -> followRepository.delete(f));
+        followRepository.deleteByFollowerIdAndFollowingId(userId, targetUserId);
     }
 
     public Long getFollowerCount(Long userId) {

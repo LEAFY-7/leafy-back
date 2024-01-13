@@ -10,6 +10,7 @@
                flc.like_count
 
         FROM feed f
+
         INNER JOIN (
 
             SELECT f.feed_id,
@@ -22,16 +23,15 @@
 
                 SELECT f.following_user_id
                 FROM user u
-                JOIN follow f
-                ON u.user_id = #{userId} AND u.user_id = f.follower_user_id
+                INNER JOIN follow f
+                ON u.user_id = #{userId}
+                AND u.user_id = f.follower_user_id
 
             )
             ORDER BY f.created_at DESC
             LIMIT 10
 
-        )
-
-        AS following_users_feeds
+        ) AS following_users_feeds
         ON following_users_feeds.feed_id = f.feed_id
 
         INNER JOIN user u
